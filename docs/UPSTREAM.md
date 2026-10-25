@@ -761,3 +761,97 @@ What we would ask for: the final ه of a pronounced word transliterated as
 **The other sixteen items above are not drafted.** They are older, several are
 gaps rather than faults, and a first batch of two questions is easier to answer
 than a tracker filled in one afternoon.
+
+---
+
+### A10. Two rows carry a leading space in a stem, and every form built from them inherits it
+
+Found 2026-08-25 by the امکان coining run. Measured over all 45,579 active
+rows of `lexicon-20260808`: **exactly two** have a stem that begins with a
+space.
+
+| headword | `present_stem_fa` | `past_stem_fa` |
+|---|---|---|
+| توانستن | `' توان'` | `'توانست'` |
+| گرایستن | `' گرای'` | `'گرایست'` |
+
+Two rows in 45,579 is a typo, not a pattern — which is why it is worth one
+line of a pull request. **What makes it worth reporting rather than trimming
+silently** is that the engine builds off the stem verbatim, so every form
+derived from توانستن carries the space out with it: `' توانش'`, `' توانه'`,
+`' توانمان'`. توانستن is not an obscure verb, and the ability sense is exactly
+what a modal coining run reaches for.
+
+Trimming on read would hide a data fault we would then never fix. Carried as
+karbon has it, per the project's working rule.
+
+### A11. درباید is filed as a وام‌واژه and is pure Persian
+
+Found 2026-08-25 by the ضرورت run. karbon files **درباید** as `وام‌واژه` and
+glosses it, in its own words, «لازم در کار. ضرور». It is **در + باید** — a
+preverb and the present of بایستن, both Persian. 26 occurrences in 26
+documents by 15 authors, 12th–17th century.
+
+The cost is not cosmetic: a سره query filters on `pos = 'وام‌واژه'`, so the
+misfiling makes a pure-Persian word invisible to exactly the search that wants
+it.
+
+**Also, and separately measured:** **روا** has one reading only — `Revā`,
+اسم معنی, «بارداری. برومندی. || فراوانی». The ordinary روا, *permitted,
+allowable*, is absent, although the compound **دست‌روا** is a headword glossed
+«ممکن. مجاز. مختار». And **لزوم** is a headword filed اسم ذات meaning کباده,
+an archery practice-bow; the Arabic لزوم is not in the lexicon, so a reader
+searching for it gets a homograph with no warning.
+
+### B6. Regular deverbal derivations are not headwords, and one of them has 4,488 occurrences
+
+Measured 2026-08-25 across the three coining runs. karbon headwords
+**compounds** and does not headword **regular derivations off a verb**:
+
+| | a headword? | corpus |
+|---|---|---|
+| مرزبوم، سپهسالار، ساختمان، گلبن | **yes** | — |
+| **دانش** | **no** | **4,488 occurrences, 3,136 documents, 186 authors** |
+| **هستی** | **no** | **8,710 / 6,390 / 211** |
+| کردار | no | 2,863 / 2,023 / 161 |
+| کنش | no | 297 / 205 / 62 |
+| کارگر | no | 461 / 405 / 111 |
+| زندگی، کوشش، بینش، آفرینش، روش، پرسش، پذیرش، خستگی، رانندگی | none of them | — |
+| دانا، توانا، بینا، رها، دانایی، توانایی، رهایی | none of them | — |
+
+**This is a policy, not an oversight**, and it may well be the right one for a
+dictionary. It is recorded because of two consequences on our side.
+
+**It makes the tail test we rely on unusable for derivational suffixes.** ـایی
+has 21 entries and they are the ones whose meaning *drifted* — دارایی is a
+silk cloth, رهایی is a musical mode, بینایی is the eye, دایی is an uncle. A
+count over that tail reads as evidence about Persian and is evidence about
+lexicography. See the session-23 entry in FINDINGS.
+
+**And it removes the worked examples of the rules that build.** V-024's
+examples are دانا and دارا, V-025's is دانایی, V-027's is رهایی — and of those
+only رهایی is an entry, filed as a term of music. So the L30 test — *does the
+rule's own example exist as a headword?* — cannot be run on any V-rule, and a
+run that applied it mechanically would reject the best-founded derivations in
+the language.
+
+An extension, not a fault: what would close it is lemmatised derivations
+carrying a link to the verb they come from.
+
+### B7. Three function words are not headwords, and one of them has 14,869 occurrences
+
+Measured 2026-09-05 on `lexicon-20260808` and corpus v11, during L33.
+
+| word | headword? | corpus (occurrences / documents / authors) | what it blocks |
+|---|---|---|---|
+| **چرا** | **no** | **14,869 / 9,897 / 228** | چرایی — Amid's word for علت — cannot be built; `/generate?word=چرا` is 404 |
+| بر (بَر, the fruit) | no | not counted — the string is also the preposition | the folk pair بن و بر for علت و معلول cannot be checked against the engine |
+| چون | no | not counted, same reason | چونی، چگونگی cannot be taken apart |
+
+Length is not the filter — بن is a two-letter headword. What is missing
+looks like what a part-of-speech filter would drop: the question words and a
+noun spelled like a preposition. Dehkhoda has long entries for all three.
+
+An extension. What would close it: the function words as headwords with a
+category the class mapping can take — چرا and چون as چون‌واژه, بَر as اسم
+ذات — so that N-097 and N-095 can reach چرایی and چونی.

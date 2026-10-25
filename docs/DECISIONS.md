@@ -2,6 +2,119 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-09-05 (session 25 — جوهر، علت، معلول)
+
+**گوهر is recommended for جوهر, and no word is coined.** Arabic *jawhar* is
+Middle Persian *gōhr*; the L30 rule — where Persian has a good word, report
+it — covers a loan-return as much as a native word. The technical compound
+(جوهر فرد) is left to the linguist, because the corpus shows the poets kept
+the Arabic there (35 lines to 3). Unconfirmed — L33.
+
+**A cause/effect pair is coined as the two participles of one verb.** علّة /
+معلول are one Arabic root; انگیزنده / انگیخته are V-022 and V-008 on انگیختن,
+and the family (انگیزندگی، انگیزه، انگیزش) rebuilds entire. A pair split
+across two roots would need two rulings and would not read as a pair.
+
+**چرایی is offered for one sense of علت and not as half of the pair.** It is
+classical and nominal (22 lines, فردوسی first) but it names *the reason why*
+and has no partner for the effect. It cannot be built until چرا is a headword
+(B7), and that is stated rather than worked around.
+
+**شوند is not offered until L34 is ruled.** The engine cannot derive it;
+offering it would mean handing the linguist a word on a rule he has not
+written.
+
+**A Behnevis capital is part of an `/explain` query.** Adjectives and
+participles lowercase, nouns and action nouns capitalised. Recorded because
+the first pass of this run misread four `rebuilt: false` answers that were
+case mismatches; the protocol's verification step now says: query a candidate
+in the case of the class you mean, and query both before calling it
+unbuildable.
+
+**Definition-derived candidates are recorded beside the lexical ones, not instead of them.** Aristotle's definitions were read and yield جنباننده / جنبانده (V-022 / V-008 on جنباندن — the efficient-cause pair, attested in مولانا's own statement of the argument) and زیرایستا (V-076 + V-024 — the substratum, the shape of *substantia*). They stay second because a definition reaches one sense of each term — the mover, what stands under — and the tradition's words were chosen precisely because they did not. Unconfirmed; L33 addendum.
+
+## 2026-08-29 (session 24 — Windtelefon)
+
+**بادگو is recommended for the wind phone, and the slot route is now a
+precedent.** Where the front half of a concept is a concrete noun (اسم ذات),
+the V-078/V-079 slot rules coin compounds today with no ruling — the سخنگو
+shape, with بلندگو as the modern device-precedent. The verification is
+forward-only (S32), and every L32-style report must say so.
+
+**A candidate's obvious place-word gets its entry read before it is offered.**
+بادگاه is Dehkhoda's word for a toilet. The cost of not checking would have
+been the whole recommendation.
+
+## 2026-08-25 (session 23 — امکان، ضرورت، واقعیت)
+
+**Where a concept has a native verb, coin off the verb.** A مصدر is neither a
+nām nor a kārnām, so L26 does not reach it and the V-rules apply: شایستن،
+بایستن and کردن build 38 forms apiece where کار builds 1 and توان builds 2.
+This is why L31's four terms are the first set in the project's history the
+engine derives, and it is the first thing to try on the next term asked for.
+
+**Tail counts decide compounds, not derivations.** karbon headwords compounds
+(مرزبوم، سپهسالار، ساختمان) and does not headword regular deverbal derivations
+(زندگی، دانش، کوشش، کردار، هستی، گفتمان — none is an entry, and دانش alone has
+4,488 corpus occurrences). So a zero on ـستگی or ـایی measures editorial
+policy. L29's ـبوم and L30's ـسالار stand; the method does not generalise past
+compound tails, and that limit is now stated rather than discovered again.
+
+**A gloss that lands exactly on a European philosophical term is a reason to
+check provenance.** 132 lexicon entries mention دساتیر and 52 mention
+آذرکیوان. ناور «ممکن… برابر واجب» and کنشمند «صاحب عمل… کننده و فاعل» are both
+eighteenth-century forgeries and both were nearly recommended. Every سره
+candidate now gets its entry read to the end before it is offered.
+
+**واقعیت is kept out of the modal family on purpose.** Möglichkeit and
+Notwendigkeit are modalities of one copula and Persian has two native modal
+verbs for them; Wirklichkeit is ἐνέργεια against δύναμις, the other axis —
+بالفعل/بالقوه, not the مواد ثلاث. Forcing a symmetric family would make Persian
+assert Kant's classification over the one the language actually received.
+
+## 2026-08-25 (session 22 — Demokratie)
+
+**مردم‌سالاری stands; we do not offer a replacement.** It is wholly Persian,
+established, understood, and on the only tail with real lexicon support —
+ـسالار at 16 entries against ـشاهی at 5 and nothing at all on ـفرمانی or
+ـتوانی. Where a language already has a good word, the coining protocol's
+output is a question about it, not a rival for it.
+
+**A candidate the engine derives is not thereby a candidate.** مردمگانی comes
+back `rebuilt: true` on N-067 and was rejected anyway, because N-067's own
+example خدایگانی is not a headword and the ـگانی tail carries grape varieties
+and tanned leather. Buildability is a necessary test and never a sufficient
+one — stated here because the بانگا precedent in L27 makes it easy to read
+`rebuilt: true` as an endorsement.
+
+**L26 and L28 are not one question and stop being carried as a pair.**
+Rechtsstaat needs both rulings; Demokratie needs only L28, because مردم is
+filed اسم ذات and داد is filed اسم معنی. The two are separable, they differ in
+cost, and the linguist should be able to rule on either alone.
+
+## 2026-08-24 (session 21 — a Persian word for Rechtsstaat)
+
+**دادبوم is the recommended rendering, and the head was chosen on tail counts
+rather than on the calque.** دادشهر is the closer copy of the German — شهر in
+its Middle Persian sense of *realm* — but the lexicon has **3** entries ending
+in ـشهر and all three are about the city, while **14** end in ـبوم and 12 are
+اسم مرکب of the shape «[X]-land», one of which Dehkhoda glosses «کشور پاک».
+The corpus agrees: ـشهر compounds there are town names. Recorded so the
+recommendation is not re-argued from the calque alone. Unconfirmed — the
+ruling is the linguist's, as L29.
+
+**A candidate being free in the corpus is not a candidate being free.** The
+corpus is classical and the terms are modern, so every surviving candidate is
+also checked outside it before it is offered. دادمندی has 0 occurrences in
+25,497,189 words and is nonetheless in modern use meaning عدالت; it was
+withdrawn on that check alone.
+
+**Rule of law, Rechtsordnung and Rechtsstaat are kept apart in the
+candidates.** دادسالاری names a *rule* and دادسامان names an *order*; only
+دادبوم/دادشهر/دادکشور name a **state**, which is what *Rechtsstaat* is a
+predicate of. Offering the three as alternatives for one another would repeat
+in Persian the conflation the German term exists to avoid.
+
 ## 2026-08-20 (session 20 — the tables are reversed, the affixes stop doubling, and the questions screen turns pages)
 
 **The decomposer reverses the glide table, not a list of sound changes.**

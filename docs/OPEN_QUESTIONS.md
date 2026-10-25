@@ -5,6 +5,41 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-08-24 (session 21)
+
+### S33. A coinage free in the corpus is not a coinage that is free
+
+The corpus is 19.5 million lines of classical poetry and every word this
+project is asked to coin is modern. So `0 occurrences in 25,497,189 words`
+answers *the poets did not write it* and not *the word is available*, and the
+two read identically on the screen.
+
+Measured on one case rather than argued: **دادمندی has 0 occurrences in the
+corpus and is in current use meaning عدالت.** It was offered as a candidate
+and withdrawn only because somebody looked outside the corpus by hand.
+
+**The question is whether the app should say so.** Three options, in
+increasing cost: word the zero properly wherever it is shown — «در پیکره نیامده
+است» rather than anything that reads as *free* — which is a copy change and
+should probably happen regardless; add a second, modern corpus and report the
+two separately; or leave it to the caller and document it. The first is cheap
+and the wording is currently doing harm on the build screen, where an
+unattested form is what the screen is *for*.
+
+### S34. The coining protocol has no home in the repository
+
+Four coining runs have now used the same protocol — propose, verify every
+proposal through `/explain`, `/generate`, `/compound` and `/search`, report
+what could not be verified — and it exists only as prose in FINDINGS entries
+and as instructions retyped into each run. The results keep being good and the
+protocol keeps being re-derived.
+
+Whether it should become a `tools/` script, a documented recipe, or the
+coining prototype that PLAN 9.6 defers is the project lead's call. Noted here
+because the cost of not deciding is now four repeats, not one.
+
+---
+
 ## Opened 2026-08-20 (session 20)
 
 ### S31. Should the round trip be checked over the whole engine, not one table?
