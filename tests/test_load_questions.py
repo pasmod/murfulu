@@ -25,14 +25,12 @@ from murfulu.db.models import Base, User
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def _tool() -> ModuleType:
-    spec = importlib.util.spec_from_file_location(
-        "load_questions", ROOT / "tools" / "load_questions.py"
-    )
+def _tool(name: str = "load_questions") -> ModuleType:
+    spec = importlib.util.spec_from_file_location(name, ROOT / "tools" / f"{name}.py")
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     # Registered before running, because a dataclass looks its module up.
-    sys.modules["load_questions"] = module
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -85,10 +83,24 @@ def test_the_file_reads_and_every_question_offers_options(data: dict) -> None:
 
 
 def test_no_one_is_named_in_the_file() -> None:
-    """The repository is public; people are referred to by role."""
-    text = (ROOT / "rules" / "questions_fa.yaml").read_text(encoding="utf-8")
-    for name in ("Kazem", "کاظم", "Pashutan", "پشوتن"):
-        assert name not in text
+    """The repository is public; people are referred to by role.
+
+    The names come from the clone's ``.denylist`` (never committed), so this
+    test names no one itself; a clone without one skips it.
+    """
+    denylist = ROOT / ".denylist"
+    if not denylist.exists():
+        pytest.skip("no .denylist in this clone (docs/ENGINEERING.md)")
+    check = _tool("public_check")
+    denied = check.denylist_patterns(denylist.read_text(encoding="utf-8"))
+    path = "rules/questions_fa.yaml"
+    lines = (ROOT / path).read_text(encoding="utf-8").splitlines()
+    found = [
+        finding.rule
+        for number, line in enumerate(lines, 1)
+        for finding in check.check_line(path, number, line, denied)
+    ]
+    assert not found
 
 
 def test_the_explanations_asked_about_are_the_ones_on_screen(data: dict) -> None:

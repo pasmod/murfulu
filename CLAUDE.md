@@ -41,8 +41,11 @@ Drive archive or re-deriving the same conclusions.
 
 ## Roles
 
-Refer to people by role, never by name. The repository will be made public and
-naming individuals in code and docs is inappropriate.
+Refer to people by role, never by name. The repository is public (github.com/pasmod/murfulu,
+since 2026-10-25), so every commit is published: naming individuals in code and docs is
+inappropriate, and so is anything about the production host. Before the first commit in a
+clone, run `make hooks` and copy `.denylist.example` to `.denylist` with the real terms;
+`python tools/public_check.py --all` checks the whole tree (docs/ENGINEERING.md).
 
 | Role | Owns |
 |---|---|
