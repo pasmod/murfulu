@@ -278,6 +278,35 @@ raised instead of returning False — the API image has no git. Seven red tests
 that said nothing about the repository, and loud enough that a real failure
 hid behind them for a day.
 
+## Nothing private reaches the repository: `make hooks` once per clone
+
+**The repository is public since 2026-10-25**, and its history is one commit
+on purpose: the earlier one named the production host and people. What must
+stay out is the host's specifics (DEPLOY.md §0), credentials, and the names of
+the people who work on the project — the docs refer to them by role.
+
+`make hooks` points git at `tools/hooks/`, whose `pre-commit` runs
+`tools/public_check.py` over the lines and paths a commit adds. It refuses
+two kinds of thing:
+
+| | where the rule lives |
+|---|---|
+| a private IPv4 address, a real tunnel id or credentials file, a private key or token, a filled-in secret on an env-style line, a host path in the root user's home, and the local deploy files being staged at all | in the code — the patterns reveal nothing |
+| the host name, its address, the tunnel id, people's names in Latin and Persian script | in **`.denylist`**, gitignored — the terms are exactly what must not be published. `.denylist.example` is the format |
+
+**Without `.denylist` only the generic half runs**, and the hook says so on
+every commit. A false alarm on a generic pattern takes `public-check: allow`
+on its line; nothing lifts a denylist term. `python tools/public_check.py
+--all` checks every tracked file instead of the staged lines — run it after
+editing `.denylist`, since the hook only ever judges new lines. On
+2026-10-25 it reports one line, the guard list in
+`tests/test_load_questions.py`, which was public before the check existed.
+
+**Corpus lines are described, not quoted.** Ganjoor's text is not ours to
+publish (NOTICE), so a coining run that reads a verse says which poet and what
+the line does with the word, and leaves the verse out. No pattern catches that;
+it is a rule for whoever writes the entry.
+
 ## Never hand-edit the rule pack
 
 `rules/verb_stems.yaml`, `nominals.yaml`, `glides.yaml`, `stem_forms.yaml` and

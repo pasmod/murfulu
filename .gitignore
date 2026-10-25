@@ -19,6 +19,14 @@ dist/
 /deploy/cloudflared/config.yml
 /deploy/cloudflared/*.json
 
+# What tools/public_check.py refuses to let through: the host's specifics and
+# people's names. Local only, by definition; .denylist.example is the format.
+/.denylist
+
+# Database dumps taken by hand before a migration or a test run. They hold
+# whatever the store held, so they never belong here.
+/data/backup-*.csv
+
 # Node's caches. `web/.gitignore` covers web/node_modules; this covers the one
 # vitest leaves at the root when it is run from here rather than from web/.
 # Found 2026-08-17 by a results.json turning up in `git add -A`.

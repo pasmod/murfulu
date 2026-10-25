@@ -2,6 +2,26 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-10-25 — the repository is public
+
+**One commit, not the history.** The history named the production host and
+people, and a force-push does not take old commits off a public host. The
+development history stays in a private repository; this one starts at the
+cleaned tree.
+
+**The host's specifics are local files** (DEPLOY.md §0): `deploy/host.env`,
+`deploy/ssh_config` and `deploy/cloudflared/config.yml`, each from the
+`*.example` beside it.
+
+**A pre-commit check holds the line, with its sensitive half kept local.**
+`tools/public_check.py` carries the patterns that reveal nothing; the terms
+that would reveal something — host, address, tunnel, names — live in a
+gitignored `.denylist`, because a committed denylist would publish exactly
+what it protects. ENGINEERING, "Nothing private reaches the repository".
+
+**Corpus lines are described rather than quoted**, for the same reason the
+corpus is behind a password (NOTICE): Ganjoor's text is not ours to give.
+
 ## 2026-09-05 (session 25 — جوهر، علت، معلول)
 
 **گوهر is recommended for جوهر, and no word is coined.** Arabic *jawhar* is

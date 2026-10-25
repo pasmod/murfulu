@@ -1,0 +1,20 @@
+# Terms that must never be committed, for tools/public_check.py. Copy to
+# .denylist (gitignored, never committed) and put the real values in.
+#
+# One term per line. A plain term matches as a whole word, ignoring case, in
+# Latin or Persian script (Arabic ي/ك count as Persian ی/ک, harakat are
+# ignored). `re:` starts a Python regular expression, matched ignoring case.
+# Blank lines and lines starting with # are skipped.
+
+# The production host (docs/DEPLOY.md §0)
+host-name-of-the-production-machine
+203.0.113.10
+00000000-0000-0000-0000-000000000000
+
+# People, by name — the docs refer to them by role
+Firstname Lastname
+Firstname
+نام نام‌خانوادگی
+
+# The employer whose hardware or name must not appear
+re:\bexample corp\b
