@@ -1,0 +1,203 @@
+/* The filters, open. The box above is still the one clear action and these
+   write into it; they were behind a grey bar and a reader had to know to
+   press it.
+
+   **Rebuilt as a form on 2026-08-20.** It had been a stack of flex rows whose
+   controls each sized themselves, so nothing lined up down the panel and the
+   native select drew its own height, its own corner and its own arrow beside
+   inputs that had ours. The project lead's word for it was that it looked
+   like the eighties. Three things fix that and they are all about rhythm: one
+   column for the labels, one shape for every control, and the panel's own
+   ground behind its explanation and its result rather than behind everything. */
+
+.builder {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  /* The header and footer strips carry their own ground to the panel's edge,
+     and the radius has to cut them. Nothing focusable sits against the edge —
+     every control is a --space-4 inset — so no focus ring is clipped. */
+  overflow: hidden;
+}
+
+/* What the panel is for, as a strip across the top rather than a floating
+   line of small grey text. */
+.about {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  max-width: none;
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  color: var(--ink-soft);
+  background: var(--paper-sunk);
+  border-block-end: 1px solid var(--line);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+/* **Two columns, and the first is a fixed width.** Every row shares it, so
+   the controls all start on one line down the whole panel — which is the
+   difference between a form and a pile of boxes. */
+.row {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  max-width: none;
+}
+
+.label {
+  /* The labels are phrases — «بسامد در پیکره», «کجا پیدا شده» — so they wrap
+     inside their column rather than clipping to «بسامد در…», which loses the
+     part that says what is being filtered. */
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  color: var(--ink-soft);
+}
+
+/* One row's controls, held together in the second column so a row with three
+   of them starts where a row with one does. */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* **One shape for every control.** Same height, same edge, same corner — the
+   select had the platform's and sat a few pixels shorter than the input next
+   to it, which is most of what read as dated. */
+.select,
+.text,
+.number {
+  min-height: var(--touch-target);
+  min-width: 0;
+  padding: 0 var(--space-3);
+  font: inherit;
+  font-size: var(--text-base);
+  color: var(--ink);
+  background-color: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--motion-fast) var(--ease);
+}
+
+.select:hover,
+.text:hover,
+.number:hover {
+  border-color: var(--ink-soft);
+}
+
+/* **A control is never narrower than its longest word.**
+   «پایان‌یافته به» and «دربردارندهٔ» are the option text, and a select sized
+   by its container clips them to «پایان‌یافت…». `auto` lets the browser size
+   each one to its own content; the minimum keeps the short ones — «هر جا»,
+   «دقیقاً» — from reading as a different kind of control from the long ones. */
+.select {
+  width: auto;
+  min-width: 11rem;
+  max-width: 100%;
+  cursor: pointer;
+
+  /* The platform's own arrow goes with the platform's own control, so it is
+     drawn again below by the wrapper. The room it needs is reserved here. */
+  appearance: none;
+  padding-inline-end: var(--space-6);
+}
+
+/* **The arrow, drawn rather than borrowed.** A triangle cut out of a box, so
+   the shape needs no border and no rotation — the usual two-borders-turned
+   trick has to name a physical side to point downwards, and this stylesheet
+   is checked for those. Where it sits is flow-relative, so it lands at the
+   reading end of the control. */
+.picker {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.picker::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: var(--space-4);
+  inset-block-start: 50%;
+  inline-size: 0.55rem;
+  block-size: 0.34rem;
+  margin-block-start: -0.17rem;
+  background: var(--ink-soft);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  pointer-events: none;
+}
+
+.text {
+  /* A Latin form is data and is read as written; the same rule as the results
+     and the examples. */
+  flex: 1 1 12rem;
+  font-family: var(--font-latin);
+}
+
+.number {
+  flex: 0 0 6rem;
+  font-family: var(--font-latin);
+}
+
+.between {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+/* What it wrote, as the panel's result: its own strip at the foot, so the
+   reader watching the query fill in has one place to watch. */
+.written {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  max-width: none;
+  background: var(--paper-sunk);
+  border-block-start: 1px solid var(--line);
+}
+
+.writtenLabel {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.writtenQuery {
+  /* Syntax, so it is shown exactly as it must be typed: left to right and
+     isolated, the same reasoning as the examples in QueryBox. */
+  unicode-bidi: isolate;
+  font-family: var(--font-latin);
+  color: var(--accent-strong);
+  overflow-wrap: anywhere;
+}
+
+/* Narrow: a 9rem label column is a third of a 320px screen, so the label goes
+   above its control and the controls take the width. */
+@media (max-width: 34rem) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  .picker {
+    flex: 1 1 12rem;
+  }
+
+  .select {
+    width: 100%;
+    min-width: 0;
+  }
+}

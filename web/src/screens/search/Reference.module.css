@@ -1,0 +1,68 @@
+/* The syntax reference. Folded, and scannable when open. */
+
+.reference {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper-sunk);
+}
+
+.summary {
+  min-height: var(--touch-target);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+  font-weight: var(--weight-medium);
+  color: var(--accent-strong);
+  cursor: pointer;
+}
+
+.about {
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-3);
+  max-width: var(--measure);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.rows {
+  margin: 0;
+  padding: 0 var(--space-2) var(--space-2);
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-3);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: start;
+}
+
+.row:hover {
+  background: var(--accent-wash);
+}
+
+.query {
+  /* Wide enough to line the column up, and allowed to shrink at 320px rather
+     than push the row sideways. */
+  flex: 0 1 11rem;
+  min-width: 0;
+  unicode-bidi: isolate;
+  font-family: var(--font-latin);
+  color: var(--accent-strong);
+  overflow-wrap: anywhere;
+}
+
+.hint {
+  flex: 1 1 12rem;
+  min-width: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}

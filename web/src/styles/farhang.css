@@ -1,0 +1,49 @@
+/*
+ * Farhang2 — the Persian face of the interface, self-hosted like the rest.
+ *
+ * Name: Farhang2, version 2.100
+ * Author: Moslem Ebrahimi (moslemebrahimi.com)
+ * Website: http://fontiran.com
+ * Copyright: Commercial/Proprietary Software
+ *
+ * فونت فرهنگ یک نرم افزار مالکیتی محسوب می شود. جهت آگاهی از قوانین استفاده از
+ * این فونت ها لطفا به وب سایت (فونت ایران دات کام) مراجعه نمایید
+ *
+ * Farhang2 fonts are considered a proprietary software. To gain information
+ * about the laws regarding the use of these fonts, please visit
+ * www.fontiran.com
+ *
+ * This set of fonts are used in this project under the license: (.....)
+ *
+ * The font is licensed — the project lead bought it, 2026-08-18. The six-digit
+ * code goes where the dots are, and `fonts/FontLicense.txt` sits next to the
+ * files because fontiran's terms ask for it beside them.
+ *
+ * Three weights are shipped, and only three: the type scale in tokens.css asks
+ * for 400, 500 and 700 and nothing else, so the other six would be bytes every
+ * reader downloads and no screen uses.
+ */
+
+@font-face {
+  font-family: "Farhang2";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/Farhang2-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Farhang2";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/Farhang2-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Farhang2";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/Farhang2-Bold.woff2") format("woff2");
+}

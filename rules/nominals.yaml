@@ -1,0 +1,2579 @@
+version: 0.1.0
+rules:
+- id: N-001
+  source:
+    table: nominals
+    row: '1'
+  kind: suffix
+  affix: -ā
+  affix_source: -ā
+  affix_fa: ا
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nāyi
+  strength: null
+  examples:
+  - Amardād
+  label_fa: نام + -ā
+  explanation_fa: از نام با پسوند -ā نام ساخته می‌شود
+  active: true
+- id: N-002
+  source:
+    table: nominals
+    row: '2'
+  kind: prefix
+  affix: bā-
+  affix_source: bā-
+  affix_fa: با
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - bāhonar
+  - bāhuš
+  label_fa: bā- + نام
+  explanation_fa: از نام با پیشوند bā- برنام ساخته می‌شود
+  active: true
+- id: N-003
+  source:
+    table: nominals
+    row: '3'
+  kind: prefix
+  affix: bar-
+  affix_source: bar-
+  affix_fa: بر
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - barkenār
+  label_fa: bar- + نام
+  explanation_fa: از نام با پیشوند bar- برنام ساخته می‌شود
+  active: true
+- id: N-004
+  source:
+    table: nominals
+    row: '4'
+  kind: prefix
+  affix: be-
+  affix_source: be-
+  affix_fa: به
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - bexrad
+  - benām
+  label_fa: be- + نام
+  explanation_fa: از نام با پیشوند be- برنام ساخته می‌شود
+  active: true
+- id: N-005
+  source:
+    table: nominals
+    row: '5'
+  kind: prefix
+  affix: be-
+  affix_source: be-
+  affix_fa: به
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - jonvaze
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - besāmān
+  label_fa: be- + نام
+  explanation_fa: از نام با پیشوند be- چون‌واژه ساخته می‌شود
+  active: true
+- id: N-006
+  source:
+    table: nominals
+    row: '6'
+  kind: prefix
+  affix: be-
+  affix_source: be-
+  affix_fa: به
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - jonvaze
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - bexubi
+  - bezudi
+  label_fa: be- + نام
+  explanation_fa: از نام با پیشوند be- چون‌واژه ساخته می‌شود
+  active: true
+- id: N-007
+  source:
+    table: nominals
+    row: '7'
+  kind: prefix
+  affix: be-
+  affix_source: be-
+  affix_fa: به
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Bedast
+  label_fa: be- + نام
+  explanation_fa: از نام با پیشوند be- نام ساخته می‌شود
+  active: true
+- id: N-008
+  source:
+    table: nominals
+    row: '8'
+  kind: prefix
+  affix: bi-
+  affix_source: bi-
+  affix_fa: بی
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nāi
+  strength: null
+  examples:
+  - bigāne
+  - bikār
+  label_fa: bi- + نام
+  explanation_fa: از نام با پیشوند bi- برنام ساخته می‌شود
+  active: true
+- id: N-009
+  source:
+    table: nominals
+    row: '9'
+  kind: prefix
+  affix: dar-
+  affix_source: dar-
+  affix_fa: در
+  affix_variants: []
+  input:
+    types:
+    - janam
+    condition_text: Jānām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - darham
+  label_fa: dar- + جانام
+  explanation_fa: از جانام با پیشوند dar- برنام ساخته می‌شود
+  active: true
+- id: N-010
+  source:
+    table: nominals
+    row: '10'
+  kind: prefix
+  affix: doš-
+  affix_source: doš-
+  affix_fa: دش
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Badi
+  strength: null
+  examples:
+  - Došnām
+  label_fa: doš- + نام
+  explanation_fa: از نام با پیشوند doš- نام ساخته می‌شود
+  active: true
+- id: N-011
+  source:
+    table: nominals
+    row: '11'
+  kind: prefix
+  affix: dož-
+  affix_source: dož-
+  affix_fa: دژ
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Badi
+  strength: null
+  examples:
+  - Dožxim
+  label_fa: dož- + نام
+  explanation_fa: از نام با پیشوند dož- نام ساخته می‌شود
+  active: true
+- id: N-012
+  source:
+    table: nominals
+    row: '12'
+  kind: prefix
+  affix: em-
+  affix_source: em-
+  affix_fa: ام
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Ini
+  strength: null
+  examples:
+  - Emšab
+  label_fa: em- + نام
+  explanation_fa: از نام با پیشوند em- نام ساخته می‌شود
+  active: true
+- id: N-013
+  source:
+    table: nominals
+    row: '13'
+  kind: prefix
+  affix: farā-
+  affix_source: farā-
+  affix_fa: فرا
+  affix_variants: []
+  input:
+    types:
+    - janam
+    condition_text: Jānām
+  output:
+    types:
+    - jonvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - farāham
+  label_fa: farā- + جانام
+  explanation_fa: از جانام با پیشوند farā- چون‌واژه ساخته می‌شود
+  active: true
+- id: N-014
+  source:
+    table: nominals
+    row: '14'
+  kind: prefix
+  affix: foru-
+  affix_source: foru-
+  affix_fa: فرو
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - forutan
+  label_fa: foru- + نام
+  explanation_fa: از نام با پیشوند foru- برنام ساخته می‌شود
+  active: true
+- id: N-015
+  source:
+    table: nominals
+    row: '15'
+  kind: prefix
+  affix: ham-
+  affix_source: ham-
+  affix_fa: هم
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - hamkar
+  label_fa: ham- + نام
+  explanation_fa: از نام با پیشوند ham- برنام ساخته می‌شود
+  active: true
+- id: N-016
+  source:
+    table: nominals
+    row: '16'
+  kind: prefix
+  affix: ham-
+  affix_source: ham-
+  affix_fa: هم
+  affix_variants: []
+  input:
+    types:
+    - jonvaze
+    condition_text: Čonvāže
+  output:
+    types:
+    - jonvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - hamčonin
+  label_fa: ham- + چون‌واژه
+  explanation_fa: از چون‌واژه با پیشوند ham- چون‌واژه ساخته می‌شود
+  active: true
+- id: N-017
+  source:
+    table: nominals
+    row: '17'
+  kind: prefix
+  affix: ham-
+  affix_source: ham-
+  affix_fa: هم
+  affix_variants: []
+  input:
+    types:
+    - janam
+    condition_text: Jānām,
+  output:
+    types:
+    - janam
+  semantic_tags: []
+  strength: null
+  examples:
+  - hamin
+  - hamān
+  label_fa: ham- + جانام
+  explanation_fa: از جانام با پیشوند ham- جانام ساخته می‌شود
+  active: true
+- id: N-018
+  source:
+    table: nominals
+    row: '18'
+  kind: prefix
+  affix: na-
+  affix_source: na-
+  affix_fa: ن
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - nasanjide
+  label_fa: na- + برنام
+  explanation_fa: از برنام با پیشوند na- برنام ساخته می‌شود
+  active: true
+- id: N-019
+  source:
+    table: nominals
+    row: '19'
+  kind: prefix
+  affix: na-
+  affix_source: na-
+  affix_fa: ن
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - nastuh
+  label_fa: na- + نام
+  explanation_fa: از نام با پیشوند na- برنام ساخته می‌شود
+  active: true
+- id: N-020
+  source:
+    table: nominals
+    row: '20'
+  kind: infix
+  affix: -na-
+  affix_source: -na-
+  affix_fa: ن
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - xodānašnās
+  label_fa: برنام + -na-
+  explanation_fa: از برنام با میانوند -na- برنام ساخته می‌شود
+  active: true
+- id: N-021
+  source:
+    table: nominals
+    row: '21'
+  kind: prefix
+  affix: nā-
+  affix_source: nā-
+  affix_fa: نا
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - nādorost
+  label_fa: nā- + برنام
+  explanation_fa: از برنام با پیشوند nā- برنام ساخته می‌شود
+  active: true
+- id: N-022
+  source:
+    table: nominals
+    row: '22'
+  kind: prefix
+  affix: nā-
+  affix_source: nā-
+  affix_fa: نا
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - nākām
+  - nāsepās
+  label_fa: nā- + نام
+  explanation_fa: از نام با پیشوند nā- برنام ساخته می‌شود
+  active: true
+- id: N-023
+  source:
+    table: nominals
+    row: '23'
+  kind: infix
+  affix: -nā-
+  affix_source: -nā-
+  affix_fa: نا
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - delnāčasb
+  label_fa: برنام + -nā-
+  explanation_fa: از برنام با میانوند -nā- برنام ساخته می‌شود
+  active: true
+- id: N-024
+  source:
+    table: nominals
+    row: '24'
+  kind: prefix
+  affix: pād-
+  affix_source: pād-
+  affix_fa: پاد
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Āxšij
+  strength: null
+  examples:
+  - Pādzahr
+  label_fa: pād- + نام
+  explanation_fa: از نام با پیشوند pād- نام ساخته می‌شود
+  active: true
+- id: N-025
+  source:
+    table: nominals
+    row: '25'
+  kind: prefix
+  affix: pād-
+  affix_source: pād-
+  affix_fa: پاد
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Bāni
+  strength: null
+  examples:
+  - Pādšāh
+  - Pādbān
+  label_fa: pād- + نام
+  explanation_fa: از نام با پیشوند pād- نام ساخته می‌شود
+  active: true
+- id: N-026
+  source:
+    table: nominals
+    row: '26'
+  kind: prefix
+  affix: piš-
+  affix_source: piš-
+  affix_fa: پیش
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nāmen
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - pišro
+  strength: null
+  examples:
+  - Pišāhang
+  label_fa: piš- + نام
+  explanation_fa: از نام با پیشوند piš- نام ساخته می‌شود
+  active: true
+- id: N-027
+  source:
+    table: nominals
+    row: '27'
+  kind: prefix
+  affix: por-
+  affix_source: por-
+  affix_fa: پر
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nāmen
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - besyār
+  strength: null
+  examples:
+  - Porxerad
+  label_fa: por- + نام
+  explanation_fa: از نام با پیشوند por- نام ساخته می‌شود
+  active: true
+- id: N-028
+  source:
+    table: nominals
+    row: '28'
+  kind: prefix
+  affix: sar-
+  affix_source: sar-
+  affix_fa: سر
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nāmen
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Āqāz
+  strength: null
+  examples:
+  - Sarmāye
+  label_fa: sar- + نام
+  explanation_fa: از نام با پیشوند sar- نام ساخته می‌شود
+  active: true
+- id: N-029
+  source:
+    table: nominals
+    row: '29'
+  kind: prefix
+  affix: var-
+  affix_source: var-
+  affix_fa: ور
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - kenār
+  strength: null
+  examples:
+  - vardast
+  label_fa: var- + نام
+  explanation_fa: از نام با پیشوند var- برنام ساخته می‌شود
+  active: true
+- id: N-030
+  source:
+    table: nominals
+    row: '30'
+  kind: prefix
+  affix: zebar-
+  affix_source: zebar-
+  affix_fa: زبر
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - bālā
+  strength: null
+  examples:
+  - zebardast
+  label_fa: zebar- + نام
+  explanation_fa: از نام با پیشوند zebar- برنام ساخته می‌شود
+  active: true
+- id: N-031
+  source:
+    table: nominals
+    row: '31'
+  kind: prefix
+  affix: zir-
+  affix_source: zir-
+  affix_fa: زیر
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - pāyin
+  strength: null
+  examples:
+  - Zirpuš
+  label_fa: zir- + نام
+  explanation_fa: از نام با پیشوند zir- نام ساخته می‌شود
+  active: true
+- id: N-032
+  source:
+    table: nominals
+    row: '32'
+  kind: suffix
+  affix: -ā
+  affix_source: -ā
+  affix_fa: ا
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām Barnām
+  output:
+    types:
+    - nedayi
+  semantic_tags: []
+  strength: null
+  examples:
+  - xošā
+  - dardā
+  label_fa: نام + -ā
+  explanation_fa: از نام با پسوند -ā ندایی ساخته می‌شود
+  active: true
+- id: N-033
+  source:
+    table: nominals
+    row: '33'
+  kind: suffix
+  affix: -ā
+  affix_source: -ā
+  affix_fa: ا
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Pahnā
+  - Derāzā
+  label_fa: برنام + -ā
+  explanation_fa: از برنام با پسوند -ā نام ساخته می‌شود
+  active: true
+- id: N-034
+  source:
+    table: nominals
+    row: '34'
+  kind: suffix
+  affix: -āsā
+  affix_source: -āsā
+  affix_fa: آسا
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - barqāsā
+  label_fa: نام + -āsā
+  explanation_fa: از نام با پسوند -āsā برنام ساخته می‌شود
+  active: true
+- id: N-035
+  source:
+    table: nominals
+    row: '35'
+  kind: suffix
+  affix: -gin
+  affix_source: -gin
+  affix_fa: گین
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - zahrāgin
+  label_fa: نام + -gin
+  explanation_fa: از نام با پسوند -gin برنام ساخته می‌شود
+  active: true
+- id: N-036
+  source:
+    table: nominals
+    row: '36'
+  kind: suffix
+  affix: -ān
+  affix_source: -ān
+  affix_fa: ان
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - jonvaze
+  semantic_tags:
+  - Zamān
+  strength: null
+  examples:
+  - bāmdādān
+  label_fa: نام + -ān
+  explanation_fa: از نام با پسوند -ān چون‌واژه ساخته می‌شود
+  active: true
+- id: N-037
+  source:
+    table: nominals
+    row: '37'
+  kind: suffix
+  affix: -ān
+  affix_source: -ān
+  affix_fa: ان
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Jā
+  strength: null
+  examples:
+  - Biābān
+  - Gilān
+  label_fa: نام + -ān
+  explanation_fa: از نام با پسوند -ān نام ساخته می‌شود
+  active: true
+- id: N-038
+  source:
+    table: nominals
+    row: '38'
+  kind: suffix
+  affix: -andar
+  affix_source: -andar
+  affix_fa: اندر
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - nātani
+  strength: null
+  examples:
+  - Mādarandar
+  label_fa: نام + -andar
+  explanation_fa: از نام با پسوند -andar نام ساخته می‌شود
+  active: true
+- id: N-039
+  source:
+    table: nominals
+    row: '39'
+  kind: suffix
+  affix: -āne
+  affix_source: -āne
+  affix_fa: انه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - divāne
+  - zanāne
+  label_fa: نام + -āne
+  explanation_fa: از نام با پسوند -āne برنام ساخته می‌شود
+  active: true
+- id: N-040
+  source:
+    table: nominals
+    row: '40'
+  kind: suffix
+  affix: -āne
+  affix_source: -āne
+  affix_fa: انه
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - jonvaze
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - xeradmandāne
+  label_fa: برنام + -āne
+  explanation_fa: از برنام با پسوند -āne چون‌واژه ساخته می‌شود
+  active: true
+- id: N-041
+  source:
+    table: nominals
+    row: '41'
+  kind: suffix
+  affix: -āne
+  affix_source: -āne
+  affix_fa: انه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Angoštāne
+  label_fa: نام + -āne
+  explanation_fa: از نام با پسوند -āne نام ساخته می‌شود
+  active: true
+- id: N-042
+  source:
+    table: nominals
+    row: '42'
+  kind: suffix
+  affix: -āne
+  affix_source: -āne
+  affix_fa: انه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+    - jonvaze
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - māhāne
+  - ruzāne
+  label_fa: نام + -āne
+  explanation_fa: از نام با پسوند -āne برنام یا چون‌واژه ساخته می‌شود
+  active: true
+- id: N-043
+  source:
+    table: nominals
+    row: '43'
+  kind: suffix
+  affix: -bār
+  affix_source: -bār
+  affix_fa: بار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Kenār
+  strength: null
+  examples:
+  - Rudbār
+  - Juybār
+  label_fa: نام + -bār
+  explanation_fa: از نام با پسوند -bār نام ساخته می‌شود
+  active: true
+- id: N-044
+  source:
+    table: nominals
+    row: '44'
+  kind: suffix
+  affix: -bān
+  affix_source: -bān
+  affix_fa: بان
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Bāni
+  strength: null
+  examples:
+  - Drabān
+  label_fa: نام + -bān
+  explanation_fa: از نام با پسوند -bān نام ساخته می‌شود
+  active: true
+- id: N-045
+  source:
+    table: nominals
+    row: '45'
+  kind: suffix
+  affix: -tar
+  affix_source: -tar
+  affix_fa: تر
+  affix_variants:
+  - -tarin
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - xubtar
+  - xubtarin
+  label_fa: برنام + -tar
+  explanation_fa: از برنام با پسوند -tar برنام ساخته می‌شود
+  active: true
+- id: N-046
+  source:
+    table: nominals
+    row: '46'
+  kind: suffix
+  affix: -če
+  affix_source: -če
+  affix_fa: چه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Kučaki
+  strength: null
+  examples:
+  - Kuče
+  - Āluče
+  label_fa: نام + -če
+  explanation_fa: از نام با پسوند -če نام ساخته می‌شود
+  active: true
+- id: N-047
+  source:
+    table: nominals
+    row: '47'
+  kind: suffix
+  affix: -či
+  affix_source: -či
+  affix_fa: چی
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - tamāšāči
+  label_fa: نام + -či
+  explanation_fa: از نام با پسوند -či برنام ساخته می‌شود
+  active: true
+- id: N-048
+  source:
+    table: nominals
+    row: '48'
+  kind: suffix
+  affix: -dān
+  affix_source: -dān
+  affix_fa: دان
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Jā
+  strength: null
+  examples:
+  - Namakdān
+  label_fa: نام + -dān
+  explanation_fa: از نام با پسوند -dān نام ساخته می‌شود
+  active: true
+- id: N-049
+  source:
+    table: nominals
+    row: '49'
+  kind: suffix
+  affix: -dis
+  affix_source: -dis
+  affix_fa: دیس
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - Tandis
+  - Nāvdis
+  label_fa: نام + -dis
+  explanation_fa: از نام با پسوند -dis نام ساخته می‌شود
+  active: true
+- id: N-050
+  source:
+    table: nominals
+    row: '50'
+  kind: suffix
+  affix: -zār
+  affix_source: -zār
+  affix_fa: زار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Anbuhi
+  strength: null
+  examples:
+  - Čamanzār
+  label_fa: نام + -zār
+  explanation_fa: از نام با پسوند -zār نام ساخته می‌شود
+  active: true
+- id: N-051
+  source:
+    table: nominals
+    row: '51'
+  kind: suffix
+  affix: -sār
+  affix_source: -sār
+  affix_fa: سار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - divsār
+  label_fa: نام + -sār
+  explanation_fa: از نام با پسوند -sār برنام ساخته می‌شود
+  active: true
+- id: N-052
+  source:
+    table: nominals
+    row: '52'
+  kind: suffix
+  affix: -sār
+  affix_source: -sār
+  affix_fa: سار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Anbuhi
+  strength: null
+  examples:
+  - Kuhsār
+  label_fa: نام + -sār
+  explanation_fa: از نام با پسوند -sār نام ساخته می‌شود
+  active: true
+- id: N-053
+  source:
+    table: nominals
+    row: '53'
+  kind: suffix
+  affix: -sār
+  affix_source: -sār
+  affix_fa: سار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Pirāmun
+  strength: null
+  examples:
+  - Roxsār
+  label_fa: نام + -sār
+  explanation_fa: از نام با پسوند -sār نام ساخته می‌شود
+  active: true
+- id: N-054
+  source:
+    table: nominals
+    row: '54'
+  kind: suffix
+  affix: -sār
+  affix_source: -sār
+  affix_fa: سار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - šarmsār
+  label_fa: نام + -sār
+  explanation_fa: از نام با پسوند -sār برنام ساخته می‌شود
+  active: true
+- id: N-055
+  source:
+    table: nominals
+    row: '55'
+  kind: suffix
+  affix: -sār
+  affix_source: -sār
+  affix_fa: سار
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnam
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - saboksār
+  label_fa: برنام + -sār
+  explanation_fa: از برنام با پسوند -sār برنام ساخته می‌شود
+  active: true
+- id: N-056
+  source:
+    table: nominals
+    row: '56'
+  kind: suffix
+  affix: -sān
+  affix_source: -sān
+  affix_fa: سان
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - divsān
+  label_fa: نام + -sān
+  explanation_fa: از نام با پسوند -sān برنام ساخته می‌شود
+  active: true
+- id: N-057
+  source:
+    table: nominals
+    row: '57'
+  kind: suffix
+  affix: -stān
+  affix_source: -stān
+  affix_fa: ستان
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Jā
+  strength: null
+  examples:
+  - Golestān
+  label_fa: نام + -stān
+  explanation_fa: از نام با پسوند -stān نام ساخته می‌شود
+  active: true
+- id: N-058
+  source:
+    table: nominals
+    row: '58'
+  kind: suffix
+  affix: -sir
+  affix_source: -sir
+  affix_fa: سیر
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Garmsir
+  label_fa: برنام + -sir
+  explanation_fa: از برنام با پسوند -sir نام ساخته می‌شود
+  active: true
+- id: N-059
+  source:
+    table: nominals
+    row: '59'
+  kind: suffix
+  affix: -ak
+  affix_source: -ak
+  affix_fa: ک
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Kučaki
+  strength: null
+  examples:
+  - Šāxak
+  label_fa: نام + -ak
+  explanation_fa: از نام با پسوند -ak نام ساخته می‌شود
+  active: true
+- id: N-060
+  source:
+    table: nominals
+    row: '60'
+  kind: suffix
+  affix: -ak
+  affix_source: -ak
+  affix_fa: ک
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - Arusak
+  label_fa: نام + -ak
+  explanation_fa: از نام با پسوند -ak نام ساخته می‌شود
+  active: true
+- id: N-061
+  source:
+    table: nominals
+    row: '61'
+  kind: suffix
+  affix: -ak
+  affix_source: -ak
+  affix_fa: ک
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Sangak
+  - Sorxak
+  label_fa: نام + -ak
+  explanation_fa: از نام با پسوند -ak نام ساخته می‌شود
+  active: true
+- id: N-062
+  source:
+    table: nominals
+    row: '62'
+  kind: suffix
+  affix: -kade
+  affix_source: -kade
+  affix_fa: کده
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Jā
+  strength: null
+  examples:
+  - Meykade
+  label_fa: نام + -kade
+  explanation_fa: از نام با پسوند -kade نام ساخته می‌شود
+  active: true
+- id: N-063
+  source:
+    table: nominals
+    row: '63'
+  kind: suffix
+  affix: -gar
+  affix_source: -gar
+  affix_fa: گر
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Ruzgār
+  label_fa: نام + -gar
+  explanation_fa: از نام با پسوند -gar نام ساخته می‌شود
+  active: true
+- id: N-064
+  source:
+    table: nominals
+    row: '64'
+  kind: suffix
+  affix: -gān
+  affix_source: -gān
+  affix_fa: گان
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Mehrgān
+  label_fa: نام + -gān
+  explanation_fa: از نام با پسوند -gān نام ساخته می‌شود
+  active: true
+- id: N-065
+  source:
+    table: nominals
+    row: '65'
+  kind: suffix
+  affix: -gān
+  affix_source: -gān
+  affix_fa: گان
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - dahgān
+  label_fa: برنام + -gān
+  explanation_fa: از برنام با پسوند -gān برنام ساخته می‌شود
+  active: true
+- id: N-066
+  source:
+    table: nominals
+    row: '66'
+  kind: suffix
+  affix: -gāne
+  affix_source: -gāne
+  affix_fa: گانه
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - jodāgāne
+  label_fa: برنام + -gāne
+  explanation_fa: از برنام با پسوند -gāne برنام ساخته می‌شود
+  active: true
+- id: N-067
+  source:
+    table: nominals
+    row: '67'
+  kind: suffix
+  affix: -gāni
+  affix_source: -gāni
+  affix_fa: گانی
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Xodāygāni
+  label_fa: نام + -gāni
+  explanation_fa: از نام با پسوند -gāni نام ساخته می‌شود
+  active: true
+- id: N-068
+  source:
+    table: nominals
+    row: '68'
+  kind: suffix
+  affix: -gāh
+  affix_source: -gāh
+  affix_fa: گاه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Jā
+  - Zamān
+  strength: null
+  examples:
+  - Dānešgāh
+  - Sahargāh
+  label_fa: نام + -gāh
+  explanation_fa: از نام با پسوند -gāh نام ساخته می‌شود
+  active: true
+- id: N-069
+  source:
+    table: nominals
+    row: '69'
+  kind: suffix
+  affix: -gin
+  affix_source: -gin
+  affix_fa: گین
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - šarmgin
+  - xašmgin
+  label_fa: نام + -gin
+  explanation_fa: از نام با پسوند -gin برنام ساخته می‌شود
+  active: true
+- id: N-070
+  source:
+    table: nominals
+    row: '70'
+  kind: suffix
+  affix: -lāx
+  affix_source: -lāx
+  affix_fa: لاخ
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Anbuhi
+  strength: null
+  examples:
+  - Sanglāx
+  label_fa: نام + -lāx
+  explanation_fa: از نام با پسوند -lāx نام ساخته می‌شود
+  active: true
+- id: N-071
+  source:
+    table: nominals
+    row: '71'
+  kind: suffix
+  affix: -mand
+  affix_source: -mānd
+  affix_fa: مند
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - dānešmand
+  label_fa: نام + -mand
+  explanation_fa: از نام با پسوند -mand برنام ساخته می‌شود
+  active: true
+- id: N-072
+  source:
+    table: nominals
+    row: '72'
+  kind: suffix
+  affix: -nā
+  affix_source: -nā
+  affix_fa: نا
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nāmsāz
+  strength: null
+  examples:
+  - Derāznā
+  label_fa: برنام + -nā
+  explanation_fa: از برنام با پسوند -nā نام ساخته می‌شود
+  active: true
+- id: N-073
+  source:
+    table: nominals
+    row: '73'
+  kind: suffix
+  affix: -nāk
+  affix_source: -nāk
+  affix_fa: ناک
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - dardnāk
+  label_fa: نام + -nāk
+  explanation_fa: از نام با پسوند -nāk برنام ساخته می‌شود
+  active: true
+- id: N-074
+  source:
+    table: nominals
+    row: '74'
+  kind: suffix
+  affix: -vār
+  affix_source: -vār
+  affix_fa: وار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - omidvār
+  label_fa: نام + -vār
+  explanation_fa: از نام با پسوند -vār برنام ساخته می‌شود
+  active: true
+- id: N-075
+  source:
+    table: nominals
+    row: '75'
+  kind: suffix
+  affix: -vār
+  affix_source: -vār
+  affix_fa: وار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Sezāvāri
+  strength: null
+  examples:
+  - šāhvār
+  label_fa: نام + -vār
+  explanation_fa: از نام با پسوند -vār برنام ساخته می‌شود
+  active: true
+- id: N-076
+  source:
+    table: nominals
+    row: '76'
+  kind: suffix
+  affix: -vār
+  affix_source: -vār
+  affix_fa: وار
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - divānevār
+  label_fa: نام + -vār
+  explanation_fa: از نام با پسوند -vār برنام ساخته می‌شود
+  active: true
+- id: N-077
+  source:
+    table: nominals
+    row: '77'
+  kind: suffix
+  affix: -vār
+  affix_source: -vār
+  affix_fa: وار
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - bozorgvār
+  label_fa: برنام + -vār
+  explanation_fa: از برنام با پسوند -vār برنام ساخته می‌شود
+  active: true
+- id: N-078
+  source:
+    table: nominals
+    row: '78'
+  kind: suffix
+  affix: -vāre
+  affix_source: -vāre
+  affix_fa: واره
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Mānand
+  strength: null
+  examples:
+  - Sangvāre
+  label_fa: نام + -vāre
+  explanation_fa: از نام با پسوند -vāre نام ساخته می‌شود
+  active: true
+- id: N-079
+  source:
+    table: nominals
+    row: '79'
+  kind: suffix
+  affix: -vāre
+  affix_source: -vāre
+  affix_fa: واره
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Māhvāre
+  label_fa: نام + -vāre
+  explanation_fa: از نام با پسوند -vāre نام ساخته می‌شود
+  active: true
+- id: N-080
+  source:
+    table: nominals
+    row: '80'
+  kind: suffix
+  affix: -var
+  affix_source: -var
+  affix_fa: ور
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - dānešvar
+  label_fa: نام + -var
+  explanation_fa: از نام با پسوند -var برنام ساخته می‌شود
+  active: true
+- id: N-081
+  source:
+    table: nominals
+    row: '81'
+  kind: suffix
+  affix: -ur
+  affix_source: -ur
+  affix_fa: ور
+  affix_variants: []
+  input:
+    types:
+    - nam
+    - barnam
+    condition_text: Nām, Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - ranjur
+  - mozdur
+  label_fa: نام / برنام + -ur
+  explanation_fa: از نام یا برنام با پسوند -ur برنام ساخته می‌شود
+  active: true
+- id: N-082
+  source:
+    table: nominals
+    row: '82'
+  kind: suffix
+  affix: -vaš
+  affix_source: -vaš
+  affix_fa: وش
+  affix_variants: []
+  input:
+    types:
+    - nam
+    - barnam
+    condition_text: Nām, Barnam
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Mānandi
+  strength: null
+  examples:
+  - talxvaš
+  - parivaš
+  label_fa: نام / برنام + -vaš
+  explanation_fa: از نام یا برنام با پسوند -vaš برنام ساخته می‌شود
+  active: true
+- id: N-083
+  source:
+    table: nominals
+    row: '83'
+  kind: suffix
+  affix: -umand
+  affix_source: -umand
+  affix_fa: ومند
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - tanumand
+  label_fa: نام + -umand
+  explanation_fa: از نام با پسوند -umand برنام ساخته می‌شود
+  active: true
+- id: N-084
+  source:
+    table: nominals
+    row: '84'
+  kind: suffix
+  affix: -vand
+  affix_source: -vand
+  affix_fa: وند
+  affix_variants: []
+  input:
+    types:
+    - nam
+    - pisvaze
+    condition_text: Nām, Pišvāže
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Dāštan
+  strength: null
+  examples:
+  - Pišvand
+  - Xodāvand
+  label_fa: نام / پیش‌واژه + -vand
+  explanation_fa: از نام یا پیش‌واژه با پسوند -vand نام ساخته می‌شود
+  active: true
+- id: N-085
+  source:
+    table: nominals
+    row: '85'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - hičkāre
+  label_fa: نام + -e
+  explanation_fa: از نام با پسوند -e برنام ساخته می‌شود
+  active: true
+- id: N-086
+  source:
+    table: nominals
+    row: '86'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Mānandi
+  strength: null
+  examples:
+  - Čašme
+  label_fa: نام + -e
+  explanation_fa: از نام با پسوند -e نام ساخته می‌شود
+  active: true
+- id: N-087
+  source:
+    table: nominals
+    row: '87'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Afzāyeš
+  strength: null
+  examples:
+  - xodkāme
+  label_fa: برنام + -e
+  explanation_fa: از برنام با پسوند -e برنام ساخته می‌شود
+  active: true
+- id: N-088
+  source:
+    table: nominals
+    row: '88'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nāmsāz
+  strength: null
+  examples:
+  - Zarde
+  - Sade
+  label_fa: برنام + -e
+  explanation_fa: از برنام با پسوند -e نام ساخته می‌شود
+  active: true
+- id: N-089
+  source:
+    table: nominals
+    row: '89'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Ruze
+  - Pošte
+  label_fa: نام + -e
+  explanation_fa: از نام با پسوند -e نام ساخته می‌شود
+  active: true
+- id: N-090
+  source:
+    table: nominals
+    row: '90'
+  kind: suffix
+  affix: -é
+  affix_source: -é
+  affix_fa: ِ
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Vābastegi
+  strength: null
+  examples:
+  - Ketābé
+  - u
+  label_fa: نام + -é
+  explanation_fa: از نام با پسوند -é نام ساخته می‌شود
+  active: false
+  retired_reason: 'Not word formation: this is the ezāfe. The row''s own example is the argument — `Ketābé`
+    `u` is کتابِ او, two words joined by a کسره, not one word. Run as a suffix it hung a کسره on every
+    noun, stacked on itself (Balandéé), and inherited the base''s corpus count, because the corpus writes
+    no کسره: 14,074 forms in v4, 1,983 of them counted as attested. Unconfirmed, per the project''s working
+    rule — the row keeps its id and its transcription and is simply not run. Registered as FOR_THE_LINGUIST
+    L8; one line brings it back.'
+  retired_reason_fa: 'واژه‌سازی نیست: این کسرهٔ اضافه است. نمونهٔ خودِ این ردیف گواه آن است — «کتابِ او»
+    دو واژه است که با کسره به هم پیوسته‌اند، نه یک واژه. اگر همچون پسوند اجرا شود، بر هر نامی کسره می‌نشاند،
+    بر خودش سوار می‌شود، و شمار پیکرهٔ پایه را نیز به ارث می‌برد، زیرا پیکره کسره نمی‌نویسد. هنوز تأیید
+    نشده است؛ شناسه و آوانگاشتِ ردیف بر جای مانده و تنها اجرا نمی‌شود.'
+- id: N-091
+  source:
+    table: nominals
+    row: '91'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - janam
+    - pisvaze
+    condition_text: Jānām, Pišvāže
+  output:
+    types:
+    - karnam
+  semantic_tags:
+  - Čoni
+  strength: null
+  examples:
+  - Māyi
+  - Azi
+  - Rāyi
+  label_fa: جانام / پیش‌واژه + -i
+  explanation_fa: از جانام یا پیش‌واژه با پسوند -i کارنام ساخته می‌شود
+  active: true
+- id: N-092
+  source:
+    table: nominals
+    row: '92'
+  kind: suffix
+  affix: -gi
+  affix_source: -gi
+  affix_fa: گی
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām-e
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - xānegi
+  - haftegi
+  label_fa: نام + -gi
+  explanation_fa: از نام با پسوند -gi برنام ساخته می‌شود
+  active: true
+- id: N-093
+  source:
+    table: nominals
+    row: '93'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - irāni
+  - šahri
+  label_fa: نام + -i
+  explanation_fa: از نام با پسوند -i برنام ساخته می‌شود
+  active: true
+- id: N-094
+  source:
+    table: nominals
+    row: '94'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Jens
+  strength: null
+  examples:
+  - čubi
+  - āhani
+  label_fa: نام + -i
+  explanation_fa: از نام با پسوند -i برنام ساخته می‌شود
+  active: true
+- id: N-095
+  source:
+    table: nominals
+    row: '95'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - nam
+    - barnam
+    condition_text: Nām, Barnām
+  output:
+    types:
+    - karnam
+  semantic_tags:
+  - Koneši
+  strength: null
+  examples:
+  - Āmuzgāri
+  - Rāsti
+  - Šādi
+  - Šāgerdi
+  label_fa: نام / برنام + -i
+  explanation_fa: از نام یا برنام با پسوند -i کارنام ساخته می‌شود
+  active: true
+- id: N-096
+  source:
+    table: nominals
+    row: '96'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām Nām
+  output:
+    types:
+    - jonvaze
+  semantic_tags:
+  - Čoni
+  strength: null
+  examples:
+  - rāsti
+  - šabi
+  label_fa: برنام + -i
+  explanation_fa: از برنام با پسوند -i چون‌واژه ساخته می‌شود
+  active: true
+- id: N-097
+  source:
+    table: nominals
+    row: '97'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - jonvaze
+    condition_text: Čonvāže
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Čoni
+  strength: null
+  examples:
+  - nāgahāni
+  label_fa: چون‌واژه + -i
+  explanation_fa: از چون‌واژه با پسوند -i برنام ساخته می‌شود
+  active: true
+- id: N-098
+  source:
+    table: nominals
+    row: '98'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - karnam
+    condition_text: Kārnām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Sezāvāri
+  strength: null
+  examples:
+  - xordani
+  label_fa: کارنام + -i
+  explanation_fa: از کارنام با پسوند -i برنام ساخته می‌شود
+  active: true
+- id: N-099
+  source:
+    table: nominals
+    row: '99'
+  kind: suffix
+  affix: -í
+  affix_source: -í
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nāšnāi
+  strength: null
+  examples:
+  - Ketābí
+  label_fa: نام + -í
+  explanation_fa: از نام با پسوند -í نام ساخته می‌شود
+  active: false
+  retired_reason: 'Not word formation: this is the indefinite enclitic. The row''s own example is the
+    argument — `Ketābí` is کتابی, *a book*, the same word with an article on it. Run as a suffix it produced
+    14,074 forms in v4, 269 of them counted as attested against the base''s own spelling, and it reached
+    بلندی by the wrong route: بلندی is the abstract noun, not *a tall one*, so the right word arrived
+    filed under the wrong rule with a borrowed count. Unconfirmed, per the project''s working rule — the
+    row keeps its id and its transcription and is simply not run. Registered as FOR_THE_LINGUIST L8; one
+    line brings it back.'
+  retired_reason_fa: 'واژه‌سازی نیست: این «ی» نکره است. نمونهٔ خودِ این ردیف گواه آن است — «کتابی» همان
+    واژه است با نشانهٔ نکره بر آن. اگر همچون پسوند اجرا شود، به «بلندی» از راه نادرست می‌رسد: بلندی نامِ
+    معناست، نه «یک بلند». هنوز تأیید نشده است؛ شناسه و آوانگاشت بر جای مانده و تنها اجرا نمی‌شود.'
+- id: N-100
+  source:
+    table: nominals
+    row: '100'
+  kind: suffix
+  affix: -in
+  affix_source: -in
+  affix_fa: ین
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - simin
+  - zarrin
+  label_fa: نام + -in
+  explanation_fa: از نام با پسوند -in برنام ساخته می‌شود
+  active: true
+- id: N-101
+  source:
+    table: nominals
+    row: '101'
+  kind: suffix
+  affix: -in
+  affix_source: -in
+  affix_fa: ین
+  affix_variants: []
+  input:
+    types:
+    - barnam
+    condition_text: Barnām
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - rāstin
+  - čerkin
+  label_fa: برنام + -in
+  explanation_fa: از برنام با پسوند -in برنام ساخته می‌شود
+  active: true
+- id: N-102
+  source:
+    table: nominals
+    row: '102'
+  kind: suffix
+  affix: -in
+  affix_source: -in
+  affix_fa: ین
+  affix_variants: []
+  input:
+    types:
+    - jonvaze
+    condition_text: Čonvāže
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - dirin
+  label_fa: چون‌واژه + -in
+  explanation_fa: از چون‌واژه با پسوند -in برنام ساخته می‌شود
+  active: true
+- id: N-103
+  source:
+    table: nominals
+    row: '103'
+  kind: suffix
+  affix: -ine
+  affix_source: -ine
+  affix_fa: ینه
+  affix_variants: []
+  input:
+    types:
+    - nam
+    - jonvaze
+    condition_text: Nām, Čonvāže
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - dirine
+  - simine
+  label_fa: نام / چون‌واژه + -ine
+  explanation_fa: از نام یا چون‌واژه با پسوند -ine برنام ساخته می‌شود
+  active: true
+- id: N-104
+  source:
+    table: nominals
+    row: '104'
+  kind: template
+  affix: -ā-
+  affix_source: -ā-
+  affix_fa: ا
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām + ā + Nām
+  output:
+    types:
+    - nam
+    - jonvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - Sarāsar
+  - sārāsar
+  - Sarāpā
+  label_fa: نام
+  explanation_fa: از پیوندِ نام نام یا چون‌واژه ساخته می‌شود
+  active: true
+  pattern: '{a} + ā + {b}'
+  pattern_fa: '{a}ا{b}'
+  slots:
+  - name: a
+    type: nam
+  - name: b
+    type: nam
+- id: N-105
+  source:
+    table: nominals
+    row: null
+    follows_row: '84'
+  kind: suffix
+  affix: -vand
+  affix_source: -vand
+  affix_fa: وند
+  affix_variants: []
+  input:
+    types:
+    - nam
+    condition_text: Nām
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Nesbat
+  strength: null
+  examples:
+  - Damāvand
+  - Fulādvand
+  label_fa: نام + -vand
+  explanation_fa: از نام با پسوند -vand نام ساخته می‌شود
+  active: true

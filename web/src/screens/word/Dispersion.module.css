@@ -1,0 +1,83 @@
+/* A small chart. The table under it is the fact; the bars are the picture. */
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.caption {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-1);
+  block-size: 6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 1;
+  min-inline-size: 1.25rem;
+  /* A word attested in two centuries would otherwise get two bars half the
+     screen wide, which reads as a much bigger number than it is. */
+  max-inline-size: 3rem;
+  block-size: 100%;
+}
+
+.bars {
+  justify-content: flex-start;
+}
+
+.bar {
+  inline-size: 100%;
+  min-block-size: 2px;
+  background: var(--accent);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+/* A century inside the span with no occurrences is drawn as a gap, not
+   skipped: the hole in the middle is itself the evidence. */
+.empty {
+  inline-size: 100%;
+  block-size: 2px;
+  background: var(--line-strong);
+}
+
+.tick {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+.reading {
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.reading th {
+  text-align: start;
+  font-weight: var(--weight-normal);
+  color: var(--ink-soft);
+  padding-inline-end: var(--space-4);
+}
+
+.reading td {
+  text-align: start;
+}
+
+.undated,
+.none {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}

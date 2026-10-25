@@ -1,0 +1,57 @@
+/* Two groups, clearly apart. The separation is the information. */
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.groupTitle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--ink-soft);
+  padding-block-end: var(--space-2);
+}
+
+.groupCount {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* "We have not worked this out" is not "there are none". */
+.unknown {
+  padding: var(--space-4);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.none {
+  padding: var(--space-6) var(--space-5);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-lg);
+}
+
+.noneTitle {
+  font-size: var(--text-lg);
+}
+
+.noneAdvice {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+.more {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}

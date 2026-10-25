@@ -1,0 +1,154 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.filterLabel {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.filter {
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  font: inherit;
+  font-size: var(--text-lg);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+}
+
+.filter:hover {
+  border-color: var(--ink-faint);
+}
+
+/* The meanings offered as buttons. The same shape the build and compound
+   screens use for their example words, and for the same reason: a box whose
+   vocabulary is a closed set has to show some of it. */
+.suggests {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.suggestsSays {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.suggest {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  font: inherit;
+  background: var(--paper-sunk);
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.suggest[aria-pressed="true"] {
+  background: var(--accent-wash);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+.suggestCount {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.total,
+.trouble,
+.silentNote {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.meanings {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.silent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-start: var(--space-6);
+}
+
+.silentTitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--ink-soft);
+}
+
+.silentList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.silentList li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.fa {
+  color: var(--ink-soft);
+}
+
+/* The rules that build with no affix. A row rather than a chip: what there is
+   to read is the rule and its example, and a chip has nowhere to put them. */
+.joinedList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.joinedItem {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-sm);
+}
+
+.rule {
+  font-size: var(--text-sm);
+}
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.noExample {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}

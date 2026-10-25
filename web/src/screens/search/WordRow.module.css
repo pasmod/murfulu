@@ -1,0 +1,98 @@
+/*
+ * A card on a phone, a row on a wide screen — one set of markup for both.
+ * Separated by space rather than by borders, per docs/FRONTEND.md.
+ */
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) 0;
+  border-block-end: 1px solid var(--line);
+}
+
+.forms {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  color: inherit;
+  text-decoration: none;
+  /* The whole card is the target on a phone; this keeps it thumb-sized. */
+  min-height: calc(var(--touch-target) - var(--space-2));
+}
+
+.forms:hover .spelling {
+  color: var(--accent-strong);
+  text-decoration: underline;
+}
+
+.spelling {
+  font-size: var(--text-xl);
+}
+
+.latin {
+  font-size: var(--text-base);
+  color: var(--ink-soft);
+}
+
+.unread {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+/* The dictionary's second spelling of the same reading. Quieter than the
+   primary because it is an alternative and not a competitor, and never
+   hidden, because the reader who needs it is the one who heard it. */
+.variants {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.category {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.populations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.badge {
+  padding: 0 var(--space-2);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  line-height: 1.9;
+}
+
+.counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.count {
+  color: var(--ink);
+}
+
+.faint {
+  color: var(--ink-faint);
+}
+
+@media (min-width: 48rem) {
+  .row {
+    display: grid;
+    grid-template-columns: minmax(14rem, 2fr) 8rem 10rem minmax(12rem, 1fr);
+    align-items: baseline;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+  }
+
+  .counts {
+    justify-content: flex-end;
+  }
+}

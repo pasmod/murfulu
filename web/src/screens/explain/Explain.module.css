@@ -1,0 +1,105 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.label {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.input {
+  flex: 1;
+
+  /* **A flex item will not shrink below its own content**, and an <input>'s
+     content is its intrinsic size — about twenty characters. So `flex: 1` on
+     its own let the box keep that width and push the row, and the page with
+     it, sideways on a narrow screen. Same trap as the navigation row.
+
+     It only showed where the default face is a little wider than the one here:
+     green on macOS, 43px past the edge on CI's Linux Chromium, on every run
+     from 2026-08-14. Reproduced at 320px, where the row holds 351px of content
+     in 288px of space. */
+  min-width: 0;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  font: inherit;
+  font-size: var(--text-lg);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+}
+
+.input:hover {
+  border-color: var(--ink-faint);
+}
+
+.submit {
+  min-height: var(--touch-target);
+  padding: 0 var(--space-5);
+  background: var(--accent);
+  color: var(--paper);
+  border: 0;
+  border-radius: var(--radius-md);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.submit:hover {
+  background: var(--accent-strong);
+}
+
+.example {
+  align-self: flex-start;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  background: var(--paper-sunk);
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.results,
+.nothing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.resultsTitle {
+  font-size: var(--text-lg);
+}
+
+.note,
+.tried,
+.trouble {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.tried > * {
+  margin-inline-start: var(--space-2);
+}
+
+.accounts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

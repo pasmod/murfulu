@@ -1,0 +1,167 @@
+# Persian spelling for every affix in the source grammar.
+#
+# The grammar writes affixes in Latin (Behnevis). Murfulu builds the Persian
+# form of a generated word in parallel with the Latin one — there is no Latin →
+# Persian converter — so each affix needs its Persian spelling written down.
+#
+# Fields
+#   latin    exactly as the source grammar writes it
+#   fa       the Persian spelling
+#   kind     suffix · prefix · infix · none · slot
+#   note     only where something needs saying
+#
+# `kind: none` is the zero affix, written ‒ in the source: the rule makes a new
+# word without adding anything (Parhiz, Sāxt) or by joining two parts.
+# `kind: slot` is not an affix at all — the source writes "Nām-" in the affix
+# column for compounding rules, meaning "a noun goes here".
+#
+# Three entries are flagged for the linguist. Everything else is a standard
+# Persian derivational affixes.
+
+version: 0.1.0
+
+affixes:
+  # -- suffixes ------------------------------------------------------------
+  - {latin: "-ak", fa: "ک", kind: suffix}
+  - {latin: "-an", fa: "ن", kind: suffix}
+  - {latin: "-andar", fa: "اندر", kind: suffix}
+  - {latin: "-ande", fa: "نده", kind: suffix}
+  - {latin: "-bān", fa: "بان", kind: suffix}
+  - {latin: "-bār", fa: "بار", kind: suffix}
+  - {latin: "-dis", fa: "دیس", kind: suffix}
+  - {latin: "-dān", fa: "دان", kind: suffix}
+  - {latin: "-e", fa: "ه", kind: suffix}
+  - {latin: "-eš", fa: "ش", kind: suffix}
+  - {latin: "-ešt", fa: "شت", kind: suffix}
+  - {latin: "-gar", fa: "گر", kind: suffix}
+  - {latin: "-gi", fa: "گی", kind: suffix}
+  - {latin: "-gin", fa: "گین", kind: suffix}
+  - {latin: "-gāh", fa: "گاه", kind: suffix}
+  - {latin: "-gān", fa: "گان", kind: suffix}
+  - {latin: "-gāne", fa: "گانه", kind: suffix}
+  - {latin: "-gāni", fa: "گانی", kind: suffix}
+  - {latin: "-gār", fa: "گار", kind: suffix}
+  - {latin: "-i", fa: "ی", kind: suffix}
+  - {latin: "-idan", fa: "یدن", kind: suffix}
+  - {latin: "-in", fa: "ین", kind: suffix}
+  - {latin: "-ine", fa: "ینه", kind: suffix}
+  - {latin: "-kade", fa: "کده", kind: suffix}
+  - {latin: "-kār", fa: "کار", kind: suffix}
+  - {latin: "-lāx", fa: "لاخ", kind: suffix}
+  - {latin: "-mān", fa: "مان", kind: suffix}
+  - {latin: "-nā", fa: "نا", kind: suffix}
+  - {latin: "-nāk", fa: "ناک", kind: suffix}
+  - {latin: "-sir", fa: "سیر", kind: suffix}
+  - {latin: "-stān", fa: "ستان", kind: suffix}
+  - {latin: "-sār", fa: "سار", kind: suffix}
+  - {latin: "-sān", fa: "سان", kind: suffix}
+  - {latin: "-tar", fa: "تر", kind: suffix}
+  - {latin: "-tarin", fa: "ترین", kind: suffix}
+  - {latin: "-umand", fa: "ومند", kind: suffix}
+  - {latin: "-ur", fa: "ور", kind: suffix}
+  - {latin: "-vand", fa: "وند", kind: suffix}
+  - {latin: "-var", fa: "ور", kind: suffix}
+  - {latin: "-vaš", fa: "وش", kind: suffix}
+  - {latin: "-vār", fa: "وار", kind: suffix}
+  - {latin: "-vāre", fa: "واره", kind: suffix}
+  - {latin: "-zār", fa: "زار", kind: suffix}
+  - {latin: "-ā", fa: "ا", kind: suffix}
+  - {latin: "-āk", fa: "اک", kind: suffix}
+  - {latin: "-ān", fa: "ان", kind: suffix}
+  - {latin: "-āndan", fa: "اندن", kind: suffix}
+  - {latin: "-āne", fa: "انه", kind: suffix}
+  - {latin: "-ānidan", fa: "انیدن", kind: suffix}
+  - {latin: "-ār", fa: "ار", kind: suffix}
+  - {latin: "-āsā", fa: "آسا", kind: suffix}
+  - {latin: "-če", fa: "چه", kind: suffix}
+  - {latin: "-či", fa: "چی", kind: suffix}
+
+  - latin: "-é"
+    fa: "ِ"
+    kind: suffix
+    note: >-
+      The grammatical ezāfe. Written é in Behnevis precisely to keep it apart
+      from the adjective-forming e, and it is a diacritic in Persian script.
+
+  - latin: "-í"
+    fa: "ی"
+    kind: suffix
+    note: >-
+      The indefinite marker. Written í in Behnevis to keep it apart from the
+      other i suffixes; the same letter ی in Persian script.
+
+  - latin: "-mānd"
+    corrected_latin: "-mand"
+    fa: "مند"
+    kind: suffix
+    ruled_on: 2026-08-11
+    note: >-
+      **Settled: a typo in the source.** The document writes -mānd, but its own
+      example dānešmand (دانشمند) is -mand, and the neighbouring rows use the
+      same family: -umand (tanumand) and -vand (Xodāvand). Built as -mand; the
+      source spelling stays visible as the lookup key.
+
+  - latin: "-bāž"
+    corrected_latin: "bāž-"
+    fa: "باژ"
+    kind: prefix
+    ruled_on: 2026-08-11
+    needs_expert_check: true
+    note: >-
+      **Half settled.** The source writes it as a suffix, "-bāž", but its own
+      example bāžgunidan puts it at the front, so it is a prefix — the dash was
+      on the wrong side. That much is settled.
+      **Still open: the spelling.** The source says bāž, giving باژ, but the
+      form written today is usually واژگون (vāžgun) with a v. Both exist in
+      older Persian. Being asked.
+
+  # -- prefixes ------------------------------------------------------------
+  - {latin: "bar-", fa: "بر", kind: prefix}
+  - {latin: "be-", fa: "به", kind: prefix}
+  - {latin: "bi-", fa: "بی", kind: prefix}
+  - {latin: "bā-", fa: "با", kind: prefix}
+  - {latin: "bāz-", fa: "باز", kind: prefix}
+  - {latin: "dar-", fa: "در", kind: prefix}
+  - {latin: "doš-", fa: "دش", kind: prefix}
+  - {latin: "dož-", fa: "دژ", kind: prefix}
+  - {latin: "em-", fa: "ام", kind: prefix}
+  - {latin: "far-", fa: "فر", kind: prefix}
+  - {latin: "farā-", fa: "فرا", kind: prefix}
+  - {latin: "farāz-", fa: "فراز", kind: prefix}
+  - {latin: "foru-", fa: "فرو", kind: prefix}
+  - {latin: "ham-", fa: "هم", kind: prefix}
+  - {latin: "na-", fa: "ن", kind: prefix}
+  - {latin: "nā-", fa: "نا", kind: prefix}
+  - {latin: "piš-", fa: "پیش", kind: prefix}
+  - {latin: "por-", fa: "پر", kind: prefix}
+  - {latin: "pād-", fa: "پاد", kind: prefix}
+  - {latin: "sar-", fa: "سر", kind: prefix}
+  - {latin: "var-", fa: "ور", kind: prefix}
+  - {latin: "vā-", fa: "وا", kind: prefix}
+  - {latin: "zebar-", fa: "زبر", kind: prefix}
+  - {latin: "zir-", fa: "زیر", kind: prefix}
+
+  - latin: "pa-"
+    fa: "پ"
+    kind: prefix
+    ruled_on: 2026-08-11
+    note: >-
+      **Settled: پ is correct.** Source row "pa- (be, pey)", example padid
+      (پدید) from did. The prefix appears once in the whole grammar, so it was
+      flagged; confirmed as پ.
+
+  # -- infixes -------------------------------------------------------------
+  - {latin: "-na-", fa: "ن", kind: infix}
+  - {latin: "-nā-", fa: "نا", kind: infix}
+  - {latin: "-ā-", fa: "ا", kind: infix}
+
+  # -- not affixes ---------------------------------------------------------
+  - latin: "‒"
+    fa: ""
+    kind: none
+    note: >-
+      No affix. The rule makes a word from the base alone (Parhiz, Sāxt) or by
+      joining two parts (Zadoxord).
+
+  - {latin: "Nām-", fa: "", kind: slot, note: "A noun fills this position."}
+  - {latin: "Čonvāže-", fa: "", kind: slot, note: "An adverb fills this position."}

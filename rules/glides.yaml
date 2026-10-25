@@ -1,0 +1,212 @@
+version: 0.1.0
+rules:
+- id: G-01
+  source:
+    table: glides
+    row: '2'
+  left: ā
+  right: e
+  result: āye
+  examples: []
+  explanation_fa: هنگام برخورد ā و e واج‌میانجی می‌آید و āye ساخته می‌شود
+  active: false
+  retired_reason: 'Duplicate of G-03. Both state "ā meets e gives āye", and G-03''s example (Pā + e =
+    Pāye) fits. G-01''s example (ā + ande = Āyande) does not: the ending -ande begins with **a**, not
+    e, and the result is Āyande, not Āyende. That example is really an instance of the ā-meets-a rule,
+    which the document already lists unnumbered as G-04. So the example moves to G-04 and G-01 is retired
+    rather than deleted.'
+  retired_reason_fa: 'همان G-03 است: هر دو می‌گویند آ که با اِ برخورد کند «āye» می‌شود. نمونهٔ G-01 یعنی
+    ā + ande = Āyande به این دستور بازنمی‌گردد، زیرا پایانهٔ ande- با «a» آغاز می‌شود نه با «e». آن نمونه
+    به G-04 برده شد و این دستور بازنشسته شد، نه پاک.'
+- id: G-02
+  source:
+    table: glides
+    row: '3'
+  left: ā
+  right: i
+  result: āyi
+  examples:
+  - dānā + i = Dānāyi
+  explanation_fa: هنگام برخورد ā و i واج‌میانجی می‌آید و āyi ساخته می‌شود
+  active: true
+- id: G-03
+  source:
+    table: glides
+    row: '4'
+  left: ā
+  right: e
+  result: āye
+  examples:
+  - Pā + e = Pāye
+  explanation_fa: هنگام برخورد ā و e واج‌میانجی می‌آید و āye ساخته می‌شود
+  active: true
+- id: G-04
+  source:
+    table: glides
+    row: null
+  left: ā
+  right: a
+  result: āya
+  examples:
+  - ā + ande = Āyande
+  - ā +am = āyam
+  explanation_fa: هنگام برخورد ā و a واج‌میانجی می‌آید و āya ساخته می‌شود
+  active: true
+- id: G-05
+  source:
+    table: glides
+    row: '5'
+  left: u
+  right: e
+  result: uye
+  examples:
+  - gu + eš = Guyeš
+  explanation_fa: هنگام برخورد u و e واج‌میانجی می‌آید و uye ساخته می‌شود
+  active: true
+- id: G-06
+  source:
+    table: glides
+    row: '6'
+  left: u
+  right: a
+  result: uya
+  examples:
+  - gu + ande = Guyande
+  explanation_fa: هنگام برخورد u و a واج‌میانجی می‌آید و uya ساخته می‌شود
+  active: true
+- id: G-07
+  source:
+    table: glides
+    row: '7'
+  left: u
+  right: ā
+  result: uyā
+  examples:
+  - Gu + ā = guyā
+  explanation_fa: هنگام برخورد u و ā واج‌میانجی می‌آید و uyā ساخته می‌شود
+  active: true
+- id: G-08
+  source:
+    table: glides
+    row: '8'
+  left: u
+  right: i
+  result: uyi
+  examples:
+  - niku + i = Nikuyi
+  explanation_fa: هنگام برخورد u و i واج‌میانجی می‌آید و uyi ساخته می‌شود
+  active: true
+- id: G-09
+  source:
+    table: glides
+    row: '9'
+  left: e
+  right: i
+  result: egi
+  examples:
+  - taze + i = Tāzegi
+  explanation_fa: هنگام برخورد e و i واج‌میانجی می‌آید و egi ساخته می‌شود
+  active: true
+- id: G-10
+  source:
+    table: glides
+    row: '10'
+  left: e
+  right: ā
+  result: egā
+  examples:
+  - morde + ān = Mordegān
+  explanation_fa: هنگام برخورد e و ā واج‌میانجی می‌آید و egā ساخته می‌شود
+  active: true
+- id: G-11
+  source:
+    table: glides
+    row: '11'
+  left: e
+  right: é
+  result: eé
+  examples:
+  - Goteé
+  - zibā
+  explanation_fa: هنگام برخورد e و é واج‌میانجی می‌آید و eé ساخته می‌شود
+  active: true
+- id: G-12
+  source:
+    table: glides
+    row: '12'
+  left: i
+  right: ā
+  result: iyā
+  examples:
+  - zi + ān= Ziyān
+  explanation_fa: هنگام برخورد i و ā واج‌میانجی می‌آید و iyā ساخته می‌شود
+  active: true
+- id: G-13
+  source:
+    table: glides
+    row: '13'
+  left: i
+  right: a
+  result: iya
+  examples:
+  - zi + ande = Ziyande
+  explanation_fa: هنگام برخورد i و a واج‌میانجی می‌آید و iya ساخته می‌شود
+  active: true
+- id: G-14
+  source:
+    table: glides
+    row: '14'
+  left: i
+  right: i
+  result: iyi
+  examples:
+  - ni + i = niyi
+  explanation_fa: هنگام برخورد i و i واج‌میانجی می‌آید و iyi ساخته می‌شود
+  active: true
+- id: G-15
+  source:
+    table: glides
+    row: '15'
+  left: ow
+  right: a
+  result: av
+  examples:
+  - row + am = ravam
+  - šow + am = šavam
+  explanation_fa: هنگام برخورد ow و a واج‌میانجی می‌آید و av ساخته می‌شود
+  active: false
+  retired_reason: Superseded by the stem_finals rule above. This row said "ow + a gives av" — one instance
+    of the broader fact that a stem written *ow* is *av* whenever anything follows. Its example, row +
+    am = ravam, still comes out right, now without a joining rule.
+  retired_reason_fa: 'در دستوری کلی‌تر گنجید: بنی که «ow» نوشته می‌شود، هرگاه چیزی پس از آن بیاید «av»
+    است. نمونهٔ آن (row + am = ravam) همچنان درست ساخته می‌شود، بی‌آنکه به دستور میانجی نیازی باشد.'
+- id: G-16
+  source:
+    table: glides
+    row: '16'
+  left: ow
+  right: e
+  result: av
+  examples:
+  - row + eš = Raveš
+  - derow + eš = Deraveš
+  - šow + eš = Šaveš
+  - dow + eš = Daveš
+  explanation_fa: هنگام برخورد ow و e واج‌میانجی می‌آید و av ساخته می‌شود
+  active: false
+  retired_reason: Superseded by the stem_finals rule above, as G-15. Its examples (row + eš = Raveš and
+    three more) still come out right.
+  retired_reason_fa: همچون G-15 در دستور کلی‌ترِ بن‌های پایان‌یافته به «ow» گنجید. نمونه‌های آن (row +
+    eš = Raveš و سه نمونهٔ دیگر) همچنان درست ساخته می‌شوند.
+- id: G-17
+  source:
+    table: glides
+    row: '17'
+  left: e
+  right: i
+  result: ei
+  examples:
+  - raftei
+  - xodei
+  explanation_fa: هنگام برخورد e و i واج‌میانجی می‌آید و ei ساخته می‌شود
+  active: true

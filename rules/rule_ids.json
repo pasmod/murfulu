@@ -1,0 +1,1755 @@
+{
+ "scheme": "FAMILY-NNN, defined in docs/RULE_PACK.md",
+ "source_document": "Dasturhāye Vāžesāzi az Kārbonhā.docx",
+ "source_sha256": "5c897ce4a071ec3f45315accf03ec5d8b5f955b417243ca18a50a06d08e35170",
+ "stem_source_document": "قواعد_مصدر_و_لاتین‌نویسی_…_۲۰۲۶۰۵۱۴.docx",
+ "stem_source_sha256": "0d73079e9de447b2d97706a23dc4135cb287044240c21309c2936d126423dbe7",
+ "families": {
+  "verb_stems": [
+   {
+    "id": "V-001",
+    "source": {
+     "table": "verb_stems",
+     "row": "1"
+    },
+    "docx_row_position": 1
+   },
+   {
+    "id": "V-002",
+    "source": {
+     "table": "verb_stems",
+     "row": "2"
+    },
+    "docx_row_position": 2
+   },
+   {
+    "id": "V-003",
+    "source": {
+     "table": "verb_stems",
+     "row": "3"
+    },
+    "docx_row_position": 3
+   },
+   {
+    "id": "V-004",
+    "source": {
+     "table": "verb_stems",
+     "row": "4"
+    },
+    "docx_row_position": 4
+   },
+   {
+    "id": "V-005",
+    "source": {
+     "table": "verb_stems",
+     "row": "5"
+    },
+    "docx_row_position": 5
+   },
+   {
+    "id": "V-006",
+    "source": {
+     "table": "verb_stems",
+     "row": "6"
+    },
+    "docx_row_position": 6
+   },
+   {
+    "id": "V-007",
+    "source": {
+     "table": "verb_stems",
+     "row": "7"
+    },
+    "docx_row_position": 7
+   },
+   {
+    "id": "V-008",
+    "source": {
+     "table": "verb_stems",
+     "row": "8"
+    },
+    "docx_row_position": 8
+   },
+   {
+    "id": "V-009",
+    "source": {
+     "table": "verb_stems",
+     "row": "9"
+    },
+    "docx_row_position": 10
+   },
+   {
+    "id": "V-010",
+    "source": {
+     "table": "verb_stems",
+     "row": "10"
+    },
+    "docx_row_position": 11
+   },
+   {
+    "id": "V-011",
+    "source": {
+     "table": "verb_stems",
+     "row": "11"
+    },
+    "docx_row_position": 12
+   },
+   {
+    "id": "V-012",
+    "source": {
+     "table": "verb_stems",
+     "row": "12"
+    },
+    "docx_row_position": 13
+   },
+   {
+    "id": "V-013",
+    "source": {
+     "table": "verb_stems",
+     "row": "13"
+    },
+    "docx_row_position": 14
+   },
+   {
+    "id": "V-014",
+    "source": {
+     "table": "verb_stems",
+     "row": "14"
+    },
+    "docx_row_position": 15
+   },
+   {
+    "id": "V-015",
+    "source": {
+     "table": "verb_stems",
+     "row": "15"
+    },
+    "docx_row_position": 16
+   },
+   {
+    "id": "V-016",
+    "source": {
+     "table": "verb_stems",
+     "row": "16"
+    },
+    "docx_row_position": 17
+   },
+   {
+    "id": "V-017",
+    "source": {
+     "table": "verb_stems",
+     "row": "17"
+    },
+    "docx_row_position": 18
+   },
+   {
+    "id": "V-018",
+    "source": {
+     "table": "verb_stems",
+     "row": "18"
+    },
+    "docx_row_position": 19
+   },
+   {
+    "id": "V-019",
+    "source": {
+     "table": "verb_stems",
+     "row": "19"
+    },
+    "docx_row_position": 20
+   },
+   {
+    "id": "V-020",
+    "source": {
+     "table": "verb_stems",
+     "row": "20"
+    },
+    "docx_row_position": 21
+   },
+   {
+    "id": "V-021",
+    "source": {
+     "table": "verb_stems",
+     "row": "21"
+    },
+    "docx_row_position": 22
+   },
+   {
+    "id": "V-022",
+    "source": {
+     "table": "verb_stems",
+     "row": "22"
+    },
+    "docx_row_position": 23
+   },
+   {
+    "id": "V-023",
+    "source": {
+     "table": "verb_stems",
+     "row": "23"
+    },
+    "docx_row_position": 24
+   },
+   {
+    "id": "V-024",
+    "source": {
+     "table": "verb_stems",
+     "row": "24"
+    },
+    "docx_row_position": 25
+   },
+   {
+    "id": "V-025",
+    "source": {
+     "table": "verb_stems",
+     "row": "25"
+    },
+    "docx_row_position": 26
+   },
+   {
+    "id": "V-026",
+    "source": {
+     "table": "verb_stems",
+     "row": "26"
+    },
+    "docx_row_position": 27
+   },
+   {
+    "id": "V-027",
+    "source": {
+     "table": "verb_stems",
+     "row": "27"
+    },
+    "docx_row_position": 28
+   },
+   {
+    "id": "V-028",
+    "source": {
+     "table": "verb_stems",
+     "row": "28"
+    },
+    "docx_row_position": 29
+   },
+   {
+    "id": "V-029",
+    "source": {
+     "table": "verb_stems",
+     "row": "29"
+    },
+    "docx_row_position": 30
+   },
+   {
+    "id": "V-030",
+    "source": {
+     "table": "verb_stems",
+     "row": "30"
+    },
+    "docx_row_position": 31
+   },
+   {
+    "id": "V-031",
+    "source": {
+     "table": "verb_stems",
+     "row": "31"
+    },
+    "docx_row_position": 32
+   },
+   {
+    "id": "V-032",
+    "source": {
+     "table": "verb_stems",
+     "row": "32"
+    },
+    "docx_row_position": 33
+   },
+   {
+    "id": "V-033",
+    "source": {
+     "table": "verb_stems",
+     "row": "33"
+    },
+    "docx_row_position": 34
+   },
+   {
+    "id": "V-034",
+    "source": {
+     "table": "verb_stems",
+     "row": "34"
+    },
+    "docx_row_position": 35
+   },
+   {
+    "id": "V-035",
+    "source": {
+     "table": "verb_stems",
+     "row": "35"
+    },
+    "docx_row_position": 36
+   },
+   {
+    "id": "V-036",
+    "source": {
+     "table": "verb_stems",
+     "row": "36"
+    },
+    "docx_row_position": 37
+   },
+   {
+    "id": "V-037",
+    "source": {
+     "table": "verb_stems",
+     "row": "37"
+    },
+    "docx_row_position": 38
+   },
+   {
+    "id": "V-038",
+    "source": {
+     "table": "verb_stems",
+     "row": "38"
+    },
+    "docx_row_position": 39
+   },
+   {
+    "id": "V-039",
+    "source": {
+     "table": "verb_stems",
+     "row": "39"
+    },
+    "docx_row_position": 40
+   },
+   {
+    "id": "V-040",
+    "source": {
+     "table": "verb_stems",
+     "row": "40"
+    },
+    "docx_row_position": 41
+   },
+   {
+    "id": "V-041",
+    "source": {
+     "table": "verb_stems",
+     "row": "41"
+    },
+    "docx_row_position": 42
+   },
+   {
+    "id": "V-042",
+    "source": {
+     "table": "verb_stems",
+     "row": "42"
+    },
+    "docx_row_position": 43
+   },
+   {
+    "id": "V-043",
+    "source": {
+     "table": "verb_stems",
+     "row": "43"
+    },
+    "docx_row_position": 44
+   },
+   {
+    "id": "V-044",
+    "source": {
+     "table": "verb_stems",
+     "row": "44"
+    },
+    "docx_row_position": 45
+   },
+   {
+    "id": "V-045",
+    "source": {
+     "table": "verb_stems",
+     "row": "45"
+    },
+    "docx_row_position": 46
+   },
+   {
+    "id": "V-046",
+    "source": {
+     "table": "verb_stems",
+     "row": "46"
+    },
+    "docx_row_position": 47
+   },
+   {
+    "id": "V-047",
+    "source": {
+     "table": "verb_stems",
+     "row": "47"
+    },
+    "docx_row_position": 48
+   },
+   {
+    "id": "V-048",
+    "source": {
+     "table": "verb_stems",
+     "row": "48"
+    },
+    "docx_row_position": 49
+   },
+   {
+    "id": "V-049",
+    "source": {
+     "table": "verb_stems",
+     "row": "49"
+    },
+    "docx_row_position": 50
+   },
+   {
+    "id": "V-050",
+    "source": {
+     "table": "verb_stems",
+     "row": "50"
+    },
+    "docx_row_position": 51
+   },
+   {
+    "id": "V-051",
+    "source": {
+     "table": "verb_stems",
+     "row": "51"
+    },
+    "docx_row_position": 52
+   },
+   {
+    "id": "V-052",
+    "source": {
+     "table": "verb_stems",
+     "row": "52"
+    },
+    "docx_row_position": 53
+   },
+   {
+    "id": "V-053",
+    "source": {
+     "table": "verb_stems",
+     "row": "53"
+    },
+    "docx_row_position": 54
+   },
+   {
+    "id": "V-054",
+    "source": {
+     "table": "verb_stems",
+     "row": "54"
+    },
+    "docx_row_position": 55
+   },
+   {
+    "id": "V-055",
+    "source": {
+     "table": "verb_stems",
+     "row": "55"
+    },
+    "docx_row_position": 56
+   },
+   {
+    "id": "V-056",
+    "source": {
+     "table": "verb_stems",
+     "row": "56"
+    },
+    "docx_row_position": 57
+   },
+   {
+    "id": "V-057",
+    "source": {
+     "table": "verb_stems",
+     "row": "57"
+    },
+    "docx_row_position": 58
+   },
+   {
+    "id": "V-058",
+    "source": {
+     "table": "verb_stems",
+     "row": "58"
+    },
+    "docx_row_position": 59
+   },
+   {
+    "id": "V-059",
+    "source": {
+     "table": "verb_stems",
+     "row": "59"
+    },
+    "docx_row_position": 60
+   },
+   {
+    "id": "V-060",
+    "source": {
+     "table": "verb_stems",
+     "row": "60"
+    },
+    "docx_row_position": 61
+   },
+   {
+    "id": "V-061",
+    "source": {
+     "table": "verb_stems",
+     "row": "61"
+    },
+    "docx_row_position": 62
+   },
+   {
+    "id": "V-062",
+    "source": {
+     "table": "verb_stems",
+     "row": "62"
+    },
+    "docx_row_position": 63
+   },
+   {
+    "id": "V-063",
+    "source": {
+     "table": "verb_stems",
+     "row": "63"
+    },
+    "docx_row_position": 64
+   },
+   {
+    "id": "V-064",
+    "source": {
+     "table": "verb_stems",
+     "row": "64"
+    },
+    "docx_row_position": 65
+   },
+   {
+    "id": "V-065",
+    "source": {
+     "table": "verb_stems",
+     "row": "65"
+    },
+    "docx_row_position": 66
+   },
+   {
+    "id": "V-066",
+    "source": {
+     "table": "verb_stems",
+     "row": "66"
+    },
+    "docx_row_position": 67
+   },
+   {
+    "id": "V-067",
+    "source": {
+     "table": "verb_stems",
+     "row": "67"
+    },
+    "docx_row_position": 68
+   },
+   {
+    "id": "V-068",
+    "source": {
+     "table": "verb_stems",
+     "row": "68"
+    },
+    "docx_row_position": 69
+   },
+   {
+    "id": "V-069",
+    "source": {
+     "table": "verb_stems",
+     "row": "69"
+    },
+    "docx_row_position": 70
+   },
+   {
+    "id": "V-070",
+    "source": {
+     "table": "verb_stems",
+     "row": "70"
+    },
+    "docx_row_position": 71
+   },
+   {
+    "id": "V-071",
+    "source": {
+     "table": "verb_stems",
+     "row": "71"
+    },
+    "docx_row_position": 72
+   },
+   {
+    "id": "V-072",
+    "source": {
+     "table": "verb_stems",
+     "row": "72"
+    },
+    "docx_row_position": 73
+   },
+   {
+    "id": "V-073",
+    "source": {
+     "table": "verb_stems",
+     "row": "73"
+    },
+    "docx_row_position": 74
+   },
+   {
+    "id": "V-074",
+    "source": {
+     "table": "verb_stems",
+     "row": "74"
+    },
+    "docx_row_position": 75
+   },
+   {
+    "id": "V-075",
+    "source": {
+     "table": "verb_stems",
+     "row": "75"
+    },
+    "docx_row_position": 76
+   },
+   {
+    "id": "V-076",
+    "source": {
+     "table": "verb_stems",
+     "row": "76"
+    },
+    "docx_row_position": 77
+   },
+   {
+    "id": "V-078",
+    "source": {
+     "table": "verb_stems",
+     "row": "78"
+    },
+    "docx_row_position": 79
+   },
+   {
+    "id": "V-079",
+    "source": {
+     "table": "verb_stems",
+     "row": "79"
+    },
+    "docx_row_position": 80
+   },
+   {
+    "id": "V-080",
+    "source": {
+     "table": "verb_stems",
+     "row": "80"
+    },
+    "docx_row_position": 81
+   },
+   {
+    "id": "V-081",
+    "source": {
+     "table": "verb_stems",
+     "row": "81"
+    },
+    "docx_row_position": 82
+   },
+   {
+    "id": "V-082",
+    "source": {
+     "table": "verb_stems",
+     "row": null,
+     "follows_row": "8"
+    },
+    "docx_row_position": 9,
+    "note": "unnumbered in the source document; appended to the family"
+   },
+   {
+    "id": "V-077",
+    "source": {
+     "table": "verb_stems",
+     "row": "77"
+    },
+    "reason": "the source row is empty; the id is reserved, never reused"
+   }
+  ],
+  "nominals": [
+   {
+    "id": "N-001",
+    "source": {
+     "table": "nominals",
+     "row": "1"
+    },
+    "docx_row_position": 1
+   },
+   {
+    "id": "N-002",
+    "source": {
+     "table": "nominals",
+     "row": "2"
+    },
+    "docx_row_position": 2
+   },
+   {
+    "id": "N-003",
+    "source": {
+     "table": "nominals",
+     "row": "3"
+    },
+    "docx_row_position": 3
+   },
+   {
+    "id": "N-004",
+    "source": {
+     "table": "nominals",
+     "row": "4"
+    },
+    "docx_row_position": 4
+   },
+   {
+    "id": "N-005",
+    "source": {
+     "table": "nominals",
+     "row": "5"
+    },
+    "docx_row_position": 5
+   },
+   {
+    "id": "N-006",
+    "source": {
+     "table": "nominals",
+     "row": "6"
+    },
+    "docx_row_position": 6
+   },
+   {
+    "id": "N-007",
+    "source": {
+     "table": "nominals",
+     "row": "7"
+    },
+    "docx_row_position": 7
+   },
+   {
+    "id": "N-008",
+    "source": {
+     "table": "nominals",
+     "row": "8"
+    },
+    "docx_row_position": 8
+   },
+   {
+    "id": "N-009",
+    "source": {
+     "table": "nominals",
+     "row": "9"
+    },
+    "docx_row_position": 9
+   },
+   {
+    "id": "N-010",
+    "source": {
+     "table": "nominals",
+     "row": "10"
+    },
+    "docx_row_position": 10
+   },
+   {
+    "id": "N-011",
+    "source": {
+     "table": "nominals",
+     "row": "11"
+    },
+    "docx_row_position": 11
+   },
+   {
+    "id": "N-012",
+    "source": {
+     "table": "nominals",
+     "row": "12"
+    },
+    "docx_row_position": 12
+   },
+   {
+    "id": "N-013",
+    "source": {
+     "table": "nominals",
+     "row": "13"
+    },
+    "docx_row_position": 13
+   },
+   {
+    "id": "N-014",
+    "source": {
+     "table": "nominals",
+     "row": "14"
+    },
+    "docx_row_position": 14
+   },
+   {
+    "id": "N-015",
+    "source": {
+     "table": "nominals",
+     "row": "15"
+    },
+    "docx_row_position": 15
+   },
+   {
+    "id": "N-016",
+    "source": {
+     "table": "nominals",
+     "row": "16"
+    },
+    "docx_row_position": 16
+   },
+   {
+    "id": "N-017",
+    "source": {
+     "table": "nominals",
+     "row": "17"
+    },
+    "docx_row_position": 17
+   },
+   {
+    "id": "N-018",
+    "source": {
+     "table": "nominals",
+     "row": "18"
+    },
+    "docx_row_position": 18
+   },
+   {
+    "id": "N-019",
+    "source": {
+     "table": "nominals",
+     "row": "19"
+    },
+    "docx_row_position": 19
+   },
+   {
+    "id": "N-020",
+    "source": {
+     "table": "nominals",
+     "row": "20"
+    },
+    "docx_row_position": 20
+   },
+   {
+    "id": "N-021",
+    "source": {
+     "table": "nominals",
+     "row": "21"
+    },
+    "docx_row_position": 21
+   },
+   {
+    "id": "N-022",
+    "source": {
+     "table": "nominals",
+     "row": "22"
+    },
+    "docx_row_position": 22
+   },
+   {
+    "id": "N-023",
+    "source": {
+     "table": "nominals",
+     "row": "23"
+    },
+    "docx_row_position": 23
+   },
+   {
+    "id": "N-024",
+    "source": {
+     "table": "nominals",
+     "row": "24"
+    },
+    "docx_row_position": 24
+   },
+   {
+    "id": "N-025",
+    "source": {
+     "table": "nominals",
+     "row": "25"
+    },
+    "docx_row_position": 25
+   },
+   {
+    "id": "N-026",
+    "source": {
+     "table": "nominals",
+     "row": "26"
+    },
+    "docx_row_position": 26
+   },
+   {
+    "id": "N-027",
+    "source": {
+     "table": "nominals",
+     "row": "27"
+    },
+    "docx_row_position": 27
+   },
+   {
+    "id": "N-028",
+    "source": {
+     "table": "nominals",
+     "row": "28"
+    },
+    "docx_row_position": 28
+   },
+   {
+    "id": "N-029",
+    "source": {
+     "table": "nominals",
+     "row": "29"
+    },
+    "docx_row_position": 29
+   },
+   {
+    "id": "N-030",
+    "source": {
+     "table": "nominals",
+     "row": "30"
+    },
+    "docx_row_position": 30
+   },
+   {
+    "id": "N-031",
+    "source": {
+     "table": "nominals",
+     "row": "31"
+    },
+    "docx_row_position": 31
+   },
+   {
+    "id": "N-032",
+    "source": {
+     "table": "nominals",
+     "row": "32"
+    },
+    "docx_row_position": 32
+   },
+   {
+    "id": "N-033",
+    "source": {
+     "table": "nominals",
+     "row": "33"
+    },
+    "docx_row_position": 33
+   },
+   {
+    "id": "N-034",
+    "source": {
+     "table": "nominals",
+     "row": "34"
+    },
+    "docx_row_position": 34
+   },
+   {
+    "id": "N-035",
+    "source": {
+     "table": "nominals",
+     "row": "35"
+    },
+    "docx_row_position": 35
+   },
+   {
+    "id": "N-036",
+    "source": {
+     "table": "nominals",
+     "row": "36"
+    },
+    "docx_row_position": 36
+   },
+   {
+    "id": "N-037",
+    "source": {
+     "table": "nominals",
+     "row": "37"
+    },
+    "docx_row_position": 37
+   },
+   {
+    "id": "N-038",
+    "source": {
+     "table": "nominals",
+     "row": "38"
+    },
+    "docx_row_position": 38
+   },
+   {
+    "id": "N-039",
+    "source": {
+     "table": "nominals",
+     "row": "39"
+    },
+    "docx_row_position": 39
+   },
+   {
+    "id": "N-040",
+    "source": {
+     "table": "nominals",
+     "row": "40"
+    },
+    "docx_row_position": 40
+   },
+   {
+    "id": "N-041",
+    "source": {
+     "table": "nominals",
+     "row": "41"
+    },
+    "docx_row_position": 41
+   },
+   {
+    "id": "N-042",
+    "source": {
+     "table": "nominals",
+     "row": "42"
+    },
+    "docx_row_position": 42
+   },
+   {
+    "id": "N-043",
+    "source": {
+     "table": "nominals",
+     "row": "43"
+    },
+    "docx_row_position": 43
+   },
+   {
+    "id": "N-044",
+    "source": {
+     "table": "nominals",
+     "row": "44"
+    },
+    "docx_row_position": 44
+   },
+   {
+    "id": "N-045",
+    "source": {
+     "table": "nominals",
+     "row": "45"
+    },
+    "docx_row_position": 45
+   },
+   {
+    "id": "N-046",
+    "source": {
+     "table": "nominals",
+     "row": "46"
+    },
+    "docx_row_position": 46
+   },
+   {
+    "id": "N-047",
+    "source": {
+     "table": "nominals",
+     "row": "47"
+    },
+    "docx_row_position": 47
+   },
+   {
+    "id": "N-048",
+    "source": {
+     "table": "nominals",
+     "row": "48"
+    },
+    "docx_row_position": 48
+   },
+   {
+    "id": "N-049",
+    "source": {
+     "table": "nominals",
+     "row": "49"
+    },
+    "docx_row_position": 49
+   },
+   {
+    "id": "N-050",
+    "source": {
+     "table": "nominals",
+     "row": "50"
+    },
+    "docx_row_position": 50
+   },
+   {
+    "id": "N-051",
+    "source": {
+     "table": "nominals",
+     "row": "51"
+    },
+    "docx_row_position": 51
+   },
+   {
+    "id": "N-052",
+    "source": {
+     "table": "nominals",
+     "row": "52"
+    },
+    "docx_row_position": 52
+   },
+   {
+    "id": "N-053",
+    "source": {
+     "table": "nominals",
+     "row": "53"
+    },
+    "docx_row_position": 53
+   },
+   {
+    "id": "N-054",
+    "source": {
+     "table": "nominals",
+     "row": "54"
+    },
+    "docx_row_position": 54
+   },
+   {
+    "id": "N-055",
+    "source": {
+     "table": "nominals",
+     "row": "55"
+    },
+    "docx_row_position": 55
+   },
+   {
+    "id": "N-056",
+    "source": {
+     "table": "nominals",
+     "row": "56"
+    },
+    "docx_row_position": 56
+   },
+   {
+    "id": "N-057",
+    "source": {
+     "table": "nominals",
+     "row": "57"
+    },
+    "docx_row_position": 57
+   },
+   {
+    "id": "N-058",
+    "source": {
+     "table": "nominals",
+     "row": "58"
+    },
+    "docx_row_position": 58
+   },
+   {
+    "id": "N-059",
+    "source": {
+     "table": "nominals",
+     "row": "59"
+    },
+    "docx_row_position": 59
+   },
+   {
+    "id": "N-060",
+    "source": {
+     "table": "nominals",
+     "row": "60"
+    },
+    "docx_row_position": 60
+   },
+   {
+    "id": "N-061",
+    "source": {
+     "table": "nominals",
+     "row": "61"
+    },
+    "docx_row_position": 61
+   },
+   {
+    "id": "N-062",
+    "source": {
+     "table": "nominals",
+     "row": "62"
+    },
+    "docx_row_position": 62
+   },
+   {
+    "id": "N-063",
+    "source": {
+     "table": "nominals",
+     "row": "63"
+    },
+    "docx_row_position": 63
+   },
+   {
+    "id": "N-064",
+    "source": {
+     "table": "nominals",
+     "row": "64"
+    },
+    "docx_row_position": 64
+   },
+   {
+    "id": "N-065",
+    "source": {
+     "table": "nominals",
+     "row": "65"
+    },
+    "docx_row_position": 65
+   },
+   {
+    "id": "N-066",
+    "source": {
+     "table": "nominals",
+     "row": "66"
+    },
+    "docx_row_position": 66
+   },
+   {
+    "id": "N-067",
+    "source": {
+     "table": "nominals",
+     "row": "67"
+    },
+    "docx_row_position": 67
+   },
+   {
+    "id": "N-068",
+    "source": {
+     "table": "nominals",
+     "row": "68"
+    },
+    "docx_row_position": 68
+   },
+   {
+    "id": "N-069",
+    "source": {
+     "table": "nominals",
+     "row": "69"
+    },
+    "docx_row_position": 69
+   },
+   {
+    "id": "N-070",
+    "source": {
+     "table": "nominals",
+     "row": "70"
+    },
+    "docx_row_position": 70
+   },
+   {
+    "id": "N-071",
+    "source": {
+     "table": "nominals",
+     "row": "71"
+    },
+    "docx_row_position": 71
+   },
+   {
+    "id": "N-072",
+    "source": {
+     "table": "nominals",
+     "row": "72"
+    },
+    "docx_row_position": 72
+   },
+   {
+    "id": "N-073",
+    "source": {
+     "table": "nominals",
+     "row": "73"
+    },
+    "docx_row_position": 73
+   },
+   {
+    "id": "N-074",
+    "source": {
+     "table": "nominals",
+     "row": "74"
+    },
+    "docx_row_position": 74
+   },
+   {
+    "id": "N-075",
+    "source": {
+     "table": "nominals",
+     "row": "75"
+    },
+    "docx_row_position": 75
+   },
+   {
+    "id": "N-076",
+    "source": {
+     "table": "nominals",
+     "row": "76"
+    },
+    "docx_row_position": 76
+   },
+   {
+    "id": "N-077",
+    "source": {
+     "table": "nominals",
+     "row": "77"
+    },
+    "docx_row_position": 77
+   },
+   {
+    "id": "N-078",
+    "source": {
+     "table": "nominals",
+     "row": "78"
+    },
+    "docx_row_position": 78
+   },
+   {
+    "id": "N-079",
+    "source": {
+     "table": "nominals",
+     "row": "79"
+    },
+    "docx_row_position": 79
+   },
+   {
+    "id": "N-080",
+    "source": {
+     "table": "nominals",
+     "row": "80"
+    },
+    "docx_row_position": 80
+   },
+   {
+    "id": "N-081",
+    "source": {
+     "table": "nominals",
+     "row": "81"
+    },
+    "docx_row_position": 81
+   },
+   {
+    "id": "N-082",
+    "source": {
+     "table": "nominals",
+     "row": "82"
+    },
+    "docx_row_position": 82
+   },
+   {
+    "id": "N-083",
+    "source": {
+     "table": "nominals",
+     "row": "83"
+    },
+    "docx_row_position": 83
+   },
+   {
+    "id": "N-084",
+    "source": {
+     "table": "nominals",
+     "row": "84"
+    },
+    "docx_row_position": 84
+   },
+   {
+    "id": "N-085",
+    "source": {
+     "table": "nominals",
+     "row": "85"
+    },
+    "docx_row_position": 86
+   },
+   {
+    "id": "N-086",
+    "source": {
+     "table": "nominals",
+     "row": "86"
+    },
+    "docx_row_position": 87
+   },
+   {
+    "id": "N-087",
+    "source": {
+     "table": "nominals",
+     "row": "87"
+    },
+    "docx_row_position": 88
+   },
+   {
+    "id": "N-088",
+    "source": {
+     "table": "nominals",
+     "row": "88"
+    },
+    "docx_row_position": 89
+   },
+   {
+    "id": "N-089",
+    "source": {
+     "table": "nominals",
+     "row": "89"
+    },
+    "docx_row_position": 90
+   },
+   {
+    "id": "N-090",
+    "source": {
+     "table": "nominals",
+     "row": "90"
+    },
+    "docx_row_position": 91
+   },
+   {
+    "id": "N-091",
+    "source": {
+     "table": "nominals",
+     "row": "91"
+    },
+    "docx_row_position": 92
+   },
+   {
+    "id": "N-092",
+    "source": {
+     "table": "nominals",
+     "row": "92"
+    },
+    "docx_row_position": 93
+   },
+   {
+    "id": "N-093",
+    "source": {
+     "table": "nominals",
+     "row": "93"
+    },
+    "docx_row_position": 94
+   },
+   {
+    "id": "N-094",
+    "source": {
+     "table": "nominals",
+     "row": "94"
+    },
+    "docx_row_position": 95
+   },
+   {
+    "id": "N-095",
+    "source": {
+     "table": "nominals",
+     "row": "95"
+    },
+    "docx_row_position": 96
+   },
+   {
+    "id": "N-096",
+    "source": {
+     "table": "nominals",
+     "row": "96"
+    },
+    "docx_row_position": 97
+   },
+   {
+    "id": "N-097",
+    "source": {
+     "table": "nominals",
+     "row": "97"
+    },
+    "docx_row_position": 98
+   },
+   {
+    "id": "N-098",
+    "source": {
+     "table": "nominals",
+     "row": "98"
+    },
+    "docx_row_position": 99
+   },
+   {
+    "id": "N-099",
+    "source": {
+     "table": "nominals",
+     "row": "99"
+    },
+    "docx_row_position": 100
+   },
+   {
+    "id": "N-100",
+    "source": {
+     "table": "nominals",
+     "row": "100"
+    },
+    "docx_row_position": 101
+   },
+   {
+    "id": "N-101",
+    "source": {
+     "table": "nominals",
+     "row": "101"
+    },
+    "docx_row_position": 102
+   },
+   {
+    "id": "N-102",
+    "source": {
+     "table": "nominals",
+     "row": "102"
+    },
+    "docx_row_position": 103
+   },
+   {
+    "id": "N-103",
+    "source": {
+     "table": "nominals",
+     "row": "103"
+    },
+    "docx_row_position": 104
+   },
+   {
+    "id": "N-104",
+    "source": {
+     "table": "nominals",
+     "row": "104"
+    },
+    "docx_row_position": 105
+   },
+   {
+    "id": "N-105",
+    "source": {
+     "table": "nominals",
+     "row": null,
+     "follows_row": "84"
+    },
+    "docx_row_position": 85,
+    "note": "unnumbered in the source document; appended to the family"
+   }
+  ],
+  "glides": [
+   {
+    "id": "G-01",
+    "source": {
+     "table": "glides",
+     "row": "2"
+    },
+    "docx_row_position": 1
+   },
+   {
+    "id": "G-02",
+    "source": {
+     "table": "glides",
+     "row": "3"
+    },
+    "docx_row_position": 2
+   },
+   {
+    "id": "G-03",
+    "source": {
+     "table": "glides",
+     "row": "4"
+    },
+    "docx_row_position": 3
+   },
+   {
+    "id": "G-04",
+    "source": {
+     "table": "glides",
+     "row": null
+    },
+    "docx_row_position": 4
+   },
+   {
+    "id": "G-05",
+    "source": {
+     "table": "glides",
+     "row": "5"
+    },
+    "docx_row_position": 5
+   },
+   {
+    "id": "G-06",
+    "source": {
+     "table": "glides",
+     "row": "6"
+    },
+    "docx_row_position": 6
+   },
+   {
+    "id": "G-07",
+    "source": {
+     "table": "glides",
+     "row": "7"
+    },
+    "docx_row_position": 7
+   },
+   {
+    "id": "G-08",
+    "source": {
+     "table": "glides",
+     "row": "8"
+    },
+    "docx_row_position": 8
+   },
+   {
+    "id": "G-09",
+    "source": {
+     "table": "glides",
+     "row": "9"
+    },
+    "docx_row_position": 9
+   },
+   {
+    "id": "G-10",
+    "source": {
+     "table": "glides",
+     "row": "10"
+    },
+    "docx_row_position": 10
+   },
+   {
+    "id": "G-11",
+    "source": {
+     "table": "glides",
+     "row": "11"
+    },
+    "docx_row_position": 11
+   },
+   {
+    "id": "G-12",
+    "source": {
+     "table": "glides",
+     "row": "12"
+    },
+    "docx_row_position": 12
+   },
+   {
+    "id": "G-13",
+    "source": {
+     "table": "glides",
+     "row": "13"
+    },
+    "docx_row_position": 13
+   },
+   {
+    "id": "G-14",
+    "source": {
+     "table": "glides",
+     "row": "14"
+    },
+    "docx_row_position": 14
+   },
+   {
+    "id": "G-15",
+    "source": {
+     "table": "glides",
+     "row": "15"
+    },
+    "docx_row_position": 15
+   },
+   {
+    "id": "G-16",
+    "source": {
+     "table": "glides",
+     "row": "16"
+    },
+    "docx_row_position": 16
+   },
+   {
+    "id": "G-17",
+    "source": {
+     "table": "glides",
+     "row": "17"
+    },
+    "docx_row_position": 17
+   }
+  ],
+  "stem_rules": [
+   {
+    "id": "S-01",
+    "source": {
+     "table": "stem_rules",
+     "row": "1"
+    },
+    "sub_rules": [],
+    "exception_count": 0,
+    "exceptions_needing_check": []
+   },
+   {
+    "id": "S-02",
+    "source": {
+     "table": "stem_rules",
+     "row": "2"
+    },
+    "sub_rules": [],
+    "exception_count": 5,
+    "exceptions_needing_check": []
+   },
+   {
+    "id": "S-03",
+    "source": {
+     "table": "stem_rules",
+     "row": "3"
+    },
+    "sub_rules": [],
+    "exception_count": 8,
+    "exceptions_needing_check": []
+   },
+   {
+    "id": "S-04",
+    "source": {
+     "table": "stem_rules",
+     "row": "4"
+    },
+    "sub_rules": [
+     "4-1",
+     "4-2"
+    ],
+    "exception_count": 7,
+    "exceptions_needing_check": []
+   },
+   {
+    "id": "S-05",
+    "source": {
+     "table": "stem_rules",
+     "row": "5"
+    },
+    "sub_rules": [],
+    "exception_count": 3,
+    "exceptions_needing_check": [
+     "گشادن"
+    ]
+   },
+   {
+    "id": "S-06",
+    "source": {
+     "table": "stem_rules",
+     "row": "6"
+    },
+    "sub_rules": [],
+    "exception_count": 4,
+    "exceptions_needing_check": []
+   },
+   {
+    "id": "S-07",
+    "source": {
+     "table": "stem_rules",
+     "row": "7"
+    },
+    "sub_rules": [],
+    "exception_count": 1,
+    "exceptions_needing_check": []
+   },
+   {
+    "id": "S-08",
+    "source": {
+     "table": "stem_rules",
+     "row": "8"
+    },
+    "sub_rules": [],
+    "exception_count": 4,
+    "exceptions_needing_check": [
+     "افراشتن"
+    ]
+   },
+   {
+    "id": "S-09",
+    "source": {
+     "table": "stem_rules",
+     "row": "9"
+    },
+    "sub_rules": [],
+    "exception_count": 7,
+    "exceptions_needing_check": [
+     "نهفتن"
+    ]
+   }
+  ]
+ },
+ "retired_families": {
+  "D": "Dropped 2026-08-11. RULE_PACK.md planned a denominal-verb family of four rules. No such group exists: the whole Drive archive and the earlier prototype were searched, and the concept document names exactly two such rules, which are verb-table rows 3 and 4. They are V-003 and V-004, tagged makes_verb_from_nominal. No D id was ever issued."
+ }
+}

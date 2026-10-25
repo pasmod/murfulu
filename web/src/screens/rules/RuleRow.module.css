@@ -1,0 +1,195 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) 0;
+  border-block-end: 1px solid var(--line);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.identity {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.id {
+  color: var(--accent-strong);
+}
+
+.affix {
+  font-size: var(--text-lg);
+  color: var(--ink);
+}
+
+.affixFa,
+.kind {
+  color: var(--ink-soft);
+}
+
+/* A glide rule, which is a meeting rather than an affix: `ā + e → āye`. The
+   two vowels and the result read left to right as one statement, so they sit
+   in their own inline group rather than in the affix slot. */
+.meeting {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  color: var(--ink-soft);
+}
+
+.result {
+  color: var(--ink);
+}
+
+.glideExamples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.built {
+  color: var(--ink-faint);
+}
+
+.attested {
+  color: var(--evidence-reading);
+}
+
+.rateValue {
+  color: var(--ink);
+}
+
+.unmeasured {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+.explanation {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.strength,
+.band,
+.retired,
+.flagged,
+.disagrees {
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  line-height: 1.9;
+  background: var(--paper-sunk);
+  color: var(--ink-soft);
+}
+
+.disagrees {
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+}
+
+.flagged {
+  color: var(--evidence-spelling);
+}
+
+.toggle {
+  align-self: flex-start;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--accent);
+  cursor: pointer;
+  font-size: var(--text-sm);
+}
+
+.toggle:hover {
+  background: var(--accent-wash);
+}
+
+.detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.detail dt {
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}
+
+.detail dd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.reason {
+  color: var(--ink-soft);
+}
+
+/* The expander and the judge button sit together, so a row has one row of
+   actions rather than two things floating at different heights. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* One typical base: its Persian spelling and its Behnevis reading together,
+   the same pairing the affix uses in the head of the row. Logical properties
+   only — a right-to-left layout built by mirroring breaks when nested. */
+.typical {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  padding-inline: var(--space-2);
+  padding-block: var(--space-1);
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+}
+
+/*
+ * Why a rule was retired, in Persian.
+ *
+ * A sentence rather than a chip: the badge says *that* it is retired and this
+ * says why, which for N-090 is several clauses. Quiet, because a retired rule
+ * is a footnote in the list and the reader who wants it has already stopped on
+ * the badge above.
+ */
+.retiredReason {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}

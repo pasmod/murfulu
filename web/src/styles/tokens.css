@@ -1,0 +1,139 @@
+/*
+ * The design system, as values. Nothing in a component may hard-code a colour,
+ * a size or a spacing step; it names a token here instead. A test reads this
+ * file and fails if a component uses a token that does not exist.
+ *
+ * docs/FRONTEND.md sets the rules these follow: space rather than lines, one
+ * accent colour that always means something, and typography carrying the
+ * hierarchy.
+ */
+
+:root {
+  /* ---- type ------------------------------------------------------------ */
+
+  /* Persian is the interface, and Farhang2 is the face it is set in. It
+     carries the Persian block and the Persian digits in full; Inter stands
+     behind it for the one thing it does not have — see --font-latin. */
+  --font-fa: "Farhang2", "Inter Variable", system-ui, sans-serif;
+
+  /* Latin forms are data, not prose: the reader has to tell š from s and ā
+     from a at a glance, so they get their own face and are never italicised.
+     This is also why Farhang2 cannot take the Latin over: checked against
+     Farhang2 v2.100, it has plain ASCII but **none** of ā ē ī ō ū š ž č ğ, so
+     a Behnevis form set in it would break apart mid-word into two faces. */
+  --font-latin: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* Persian sits lower in its line box than Latin and needs more room. */
+  --leading-tight: 1.4;
+  --leading-normal: 1.75;
+
+  /* ---- space ----------------------------------------------------------- */
+
+  /* One scale, roughly 1.5×. Layouts use these and nothing between them. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Apple's guideline, and the one the feedback button and the expanders are
+     most likely to break. */
+  --touch-target: 44px;
+
+  /* ---- colour ---------------------------------------------------------- */
+
+  --ink: #16181d;
+  --ink-soft: #4a4f5a;
+
+  /* Darkened from #767c88 by the contrast check: the old value gave 4.19:1 on
+     white and 3.91:1 on the sunk ground, and this is body text — every count,
+     every caption, every "what this does not cover" line. WCAG 2.1 AA asks
+     4.5:1, and this reaches it on **all three** grounds the app paints:
+     5.2 on white, 4.85 on the sunk ground, 4.57 on the accent wash. The wash
+     is the one an audit of the page caught and a check against two grounds
+     had missed. */
+  --ink-faint: #676d78;
+
+  --paper: #ffffff;
+  --paper-sunk: #f6f7f9;
+
+  /* Two lines, because they do different work.
+     `--line` separates — a rule under a table head — and nothing depends on
+     seeing it. `--line-strong` is the *edge of a control*: the border of an
+     input is the only thing saying where to type, so WCAG 1.4.11 asks 3:1 and
+     the separator's 1.26:1 was nowhere near it. */
+  --line: #e3e5ea;
+  --line-strong: #898a8e;
+
+  /* The one accent. Lapis, because it is calm next to dense text, and it is
+     used for what the reader may act on — never for decoration. */
+  --accent: #1c5c8f;
+  --accent-strong: #14456b;
+  --accent-wash: #eaf1f7;
+
+  /* Evidence. These are the only other colours, and each one states a fact:
+     the corpus confirms this reading, the corpus has the letters only, or the
+     corpus does not have it. Never "does not exist". */
+  --evidence-reading: #1c6b45;
+  --evidence-spelling: #8a5a12;
+  --evidence-none: var(--ink-faint);
+
+  --focus: #b8500f;
+
+  /* ---- surface --------------------------------------------------------- */
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --shadow-raised: 0 1px 2px rgb(22 24 29 / 8%), 0 4px 12px rgb(22 24 29 / 6%);
+
+  /* How wide a paragraph is allowed to get before it wraps.
+   *
+   * **It is the page, and it is not `ch`.** `ch` is the width of the digit
+   * zero, and Farhang2 draws a digit 10.81px wide at 18px where an average
+   * Persian character measures 5.91px — 1.83 times narrower. So `68ch` never
+   * meant sixty-eight Persian characters; measured on the running app it is
+   * 734px, which holds about 124 of them. It was not protecting the reader
+   * from a long line, it was only stopping short of the container: a 734px
+   * paragraph inside a 1248px page broke while 41% of the line stood empty,
+   * and the word screen's definition did it visibly. The project lead raised
+   * it on 2026-08-18 — *do not add a line break when there is enough space in
+   * the line; the whole app has this issue*.
+   *
+   * The page's own maximum is the honest bound, so the two are the same
+   * number now and text wraps where the page ends rather than before it. The
+   * token is kept rather than deleted: a real measure, if one is ever wanted,
+   * has to be written in something calibrated to Persian and not to a digit,
+   * and this is where it would go. */
+  --page-max: 78rem;
+  --measure: var(--page-max);
+
+  /* ---- motion ---------------------------------------------------------- */
+
+  --motion-fast: 120ms;
+  --motion-slow: 240ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-slow: 0ms;
+  }
+}

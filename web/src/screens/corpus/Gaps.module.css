@@ -1,0 +1,52 @@
+.note {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  line-height: var(--leading-normal);
+  max-inline-size: var(--measure);
+}
+
+/* Four columns do not fit at 375 px. The table scrolls inside its own box;
+   the page never does. */
+.scroller {
+  overflow-x: auto;
+  max-block-size: 30rem;
+  overflow-y: auto;
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.caption {
+  text-align: start;
+  padding-block-end: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-3);
+  text-align: start;
+  white-space: nowrap;
+}
+
+.table thead th {
+  position: sticky;
+  inset-block-start: 0;
+  background: var(--paper);
+  color: var(--ink-faint);
+  font-weight: var(--weight-medium);
+  border-block-end: 1px solid var(--line);
+}
+
+.table tbody tr:nth-child(odd) {
+  background: var(--paper-sunk);
+}
+
+.spelling {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+}

@@ -1,0 +1,82 @@
+.account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+  margin-block-end: var(--space-3);
+}
+
+.base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.baseFa {
+  font-size: var(--text-lg);
+}
+
+.baseLatin {
+  color: var(--ink-soft);
+}
+
+.category {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+/*
+ * The base's own corpus evidence. Quiet on purpose: it is one fact a reader
+ * may weigh, not a verdict on the account above it.
+ */
+.evidence {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.sum {
+  color: var(--ink);
+}
+
+.rule {
+  color: var(--accent-strong);
+}
+
+.explanation {
+  color: var(--ink-soft);
+}
+
+.aside {
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}
+
+.result {
+  padding-block-start: var(--space-2);
+  border-block-start: 1px solid var(--line);
+}
+
+.form {
+  font-size: var(--text-lg);
+}

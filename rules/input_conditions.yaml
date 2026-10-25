@@ -1,0 +1,122 @@
+# What each rule says about the base it takes, beyond its word class.
+#
+# The source grammar states a condition for 186 of 195 rules, and for 164 of
+# them the condition is just the word class again — which the engine already
+# honours through `input_types`. The twelve below say something more, and
+# nothing was reading them.
+#
+# **This is an authored table, not a parser.** The condition is one line of
+# Persian-Latin prose per rule, and a parser over twelve lines of prose would
+# be more code than the twelve entries and less honest about what it guessed.
+# Every entry quotes the source text it came from, so it can be checked against
+# `rules/verb_stems.yaml` by eye.
+#
+# **A tendency is not a rule.** V-010 says *bištar* — "mostly". The source is
+# describing what usually happens, not forbidding the rest, so `strictness`
+# records which it is and nothing here ever refuses to run a rule.
+#
+# Ends-with tests are on the **Latin** form. Behnevis is phonemic, which is the
+# whole reason this project works in it: a condition about a final sound is a
+# condition about a final letter here, and would not be in the script.
+
+version: 0.1.0
+
+conditions:
+  # -- a final letter on the base ------------------------------------------
+
+  - rule: V-010
+    source_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    test: ends_with
+    values: [t, d]
+    strictness: tendency
+    note: The source writes *bištar* — mostly. Not a prohibition.
+
+  - rule: V-011
+    source_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    test: ends_with
+    values: [t, d]
+    strictness: tendency
+    note: The source writes *bištar* — mostly. Not a prohibition.
+
+  - rule: V-012
+    source_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    test: ends_with
+    values: [t, d]
+    strictness: tendency
+    note: The source writes *bištar* — mostly. Not a prohibition.
+
+  # -- a subclass named by the ending that formed it ------------------------
+  #
+  # These name their input by how it was itself built: "the kārandekārbahr in
+  # -ande". That is a narrower class than `karandekarbahr` alone, and it is
+  # stated flatly rather than hedged.
+
+  - rule: V-023
+    source_text: Kārandekārbahr-ande
+    test: ends_with
+    values: [ande]
+    strictness: stated
+
+  - rule: V-025
+    source_text: Kārandekārbahr-ā
+    test: ends_with
+    values: ["ā"]
+    strictness: stated
+
+  - rule: V-027
+    source_text: Kāridekārbahr-ā
+    test: ends_with
+    values: ["ā"]
+    strictness: stated
+
+  - rule: V-030
+    source_text: Kārandekārbahr-ān
+    test: ends_with
+    values: ["ān"]
+    strictness: stated
+
+  - rule: V-031
+    source_text: Kārandekārbahr-ān
+    test: ends_with
+    values: ["ān"]
+    strictness: stated
+
+  - rule: V-082
+    source_text: Kāridekārbahr-e
+    test: ends_with
+    values: [e]
+    strictness: stated
+
+  - rule: N-092
+    source_text: Nām-e
+    test: ends_with
+    values: [e]
+    strictness: stated
+
+  # -- the stem's group, which we cannot test yet ---------------------------
+  #
+  # The lexicon carries `stem_rule` and `stem_group` columns, so a test is
+  # within reach. What is missing is the mapping: whether NKZ is stem group 1
+  # in karbon's numbering is a linguistic question and nobody has ruled on it.
+  # Guessing it would silently mark half the verbs as breaking a rule.
+  # See docs/OPEN_QUESTIONS S7.
+
+  - rule: V-001
+    source_text: Kārboné doé nāgozarā az Goruhé yek (NKZ)
+    test: stem_group
+    values: [NKZ]
+    strictness: stated
+    needs_expert_check: true
+    note: >-
+      Which of karbon's stem groups NKZ names has not been settled, so this is
+      recorded and not tested.
+
+  - rule: V-002
+    source_text: Kārboné doé nāgozarā az Goruhé do (NKDZ)
+    test: stem_group
+    values: [NKDZ]
+    strictness: stated
+    needs_expert_check: true
+    note: >-
+      Which of karbon's stem groups NKDZ names has not been settled, so this is
+      recorded and not tested.

@@ -1,0 +1,48 @@
+/* A term and the explanation that follows it around. */
+
+.holder {
+  position: relative;
+  display: inline-block;
+}
+
+.term {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: help;
+  font: inherit;
+  color: inherit;
+
+  /* A dotted underline says "there is more here" without spending the accent
+     colour, which is reserved for what the reader can act on. */
+  text-decoration: underline dotted var(--ink-faint);
+  text-underline-offset: 0.25em;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 20;
+  inset-inline-start: 0;
+  top: calc(100% + var(--space-2));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  inline-size: max-content;
+  max-inline-size: min(22rem, 80vw);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-raised);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.explanation {
+  color: var(--ink);
+}
+
+.traditional {
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}

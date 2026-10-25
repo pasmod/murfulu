@@ -1,0 +1,183 @@
+# Word classes — the project's own grammar vocabulary, as data.
+#
+# **Why this file exists.** The machine ids (`karnam`, `barnam`,
+# `karandekarbahr`) are transliterations of the linguist's coined Persian
+# terms, and until 2026-08-17 the Persian those ids stand for lived only in
+# `docs/FINDINGS.md`. `murfulu/rules/types.py` held the **traditional** term
+# beside each id — اسم مصدر for `karnam` — because that is what the source
+# document's terminology column carries, so every screen labelled its groups
+# in the vocabulary the project exists to replace. That was S3.
+#
+# The standing rule is that the interface may not invent Persian: every
+# user-facing string comes from authored data. So the terms are authored here,
+# once, and served from `/rules`.
+#
+# Fields
+#   name            the machine id. A closed set — it must match
+#                   murfulu.rules.types.WORD_CLASSES exactly, and a test says so.
+#   behnevis        how the **source grammar itself** writes the class, verbatim
+#                   from rules/source_rows.json. null where the source never
+#                   names the class in a rule row.
+#   coined_fa       the linguist's Persian term. The primary label everywhere.
+#   traditional_fa  what traditional Arabic-derived grammar calls it, for the
+#                   tooltip. null where the traditional system has no name.
+#   gloss_en        one line, for a reader who has met neither vocabulary.
+#   explanation_fa  the tooltip: one plain Persian line saying what the class
+#                   is. **Written here, by us, and none of the twelve is
+#                   confirmed** — see below.
+#   confirmed       whether the linguist has stated this Persian **term**.
+#                   **false is not a doubt about the class**, only about the
+#                   letters — see `source` for where each one came from.
+#   source          who wrote the Persian, and where.
+#
+# **Four terms are unconfirmed, and all twelve explanations are.** Both are
+# question L17 for the linguist.
+#
+# The four are the classes the FINDINGS terminology table does not cover; their
+# Persian is read off the source's own Behnevis, which is a linguistic act
+# however mechanical it looks.
+#
+# The explanations are a separate matter and a larger one: the interface has to
+# explain *kārnām* without a manual, no explanation existed in any data file,
+# and the standing rule is that a screen may not invent Persian. So they are
+# authored here rather than in a component — which is the sanctioned place —
+# and every one of them is ours. They deliberately use only the project's own
+# vocabulary, so an explanation cannot quietly reintroduce the terms the
+# grammar replaces. Nothing is blocked: an unconfirmed line is still shown, and
+# the API says which it is.
+
+version: 0.1.0
+source_document: Dasturhāye Vāžesāzi az Kārbonhā.docx
+
+classes:
+  - name: karbon_yek
+    behnevis: Kārboné yek
+    coined_fa: کاربن یک
+    traditional_fa: بن ماضی
+    gloss_en: the past stem of a verb — stem 1
+    explanation_fa: بنِ گذشتهٔ کارواژه؛ آنچه با برداشتنِ «ـن» از نابِسودکارواژه بر جای می‌ماند.
+    confirmed: true
+    source: the linguist's terminology table, docs/FINDINGS.md
+
+  - name: karbon_do
+    behnevis: Kārboné do
+    coined_fa: کاربن دو
+    traditional_fa: بن مضارع
+    gloss_en: the present stem of a verb — stem 2
+    explanation_fa: بنِ اکنونِ کارواژه؛ بنی که فرمان و زمانِ حال بر آن ساخته می‌شود.
+    confirmed: true
+    source: the linguist's terminology table, docs/FINDINGS.md
+
+  - name: nabesudkarvaze
+    behnevis: Nābesudkārvāže
+    coined_fa: نابِسودکارواژه
+    traditional_fa: مصدر
+    gloss_en: the infinitive, uninflected
+    explanation_fa: کارواژه در ریختِ بنیادین و بی‌گردانش، مانندِ «رفتن».
+    confirmed: true
+    source: the linguist's terminology table, docs/FINDINGS.md
+
+  - name: karnam
+    behnevis: Kārnām
+    coined_fa: کارنام
+    traditional_fa: اسم مصدر
+    gloss_en: >-
+      the doing itself, named as a noun. Every traditional sub-type — اسم مصدر,
+      حاصل مصدر, اسم معنی — collapses into this one class.
+    explanation_fa: خودِ کار، که همچون نام آورده می‌شود، مانندِ «گفتار».
+    confirmed: true
+    source: the linguist's terminology table, docs/FINDINGS.md
+
+  - name: nam
+    behnevis: Nām
+    coined_fa: نام
+    traditional_fa: اسم
+    gloss_en: noun
+    explanation_fa: واژه‌ای که بر کس یا چیز یا مفهومی دلالت می‌کند.
+    confirmed: true
+    source: the linguist's terminology table, docs/FINDINGS.md
+
+  - name: barnam
+    behnevis: Barnām
+    coined_fa: برنام
+    traditional_fa: صفت
+    gloss_en: adjective
+    explanation_fa: واژه‌ای که چگونگیِ نام را می‌گوید.
+    confirmed: true
+    source: the linguist's terminology table, docs/FINDINGS.md
+
+  - name: karandekarbahr
+    behnevis: Kārandekārbahr
+    coined_fa: کارنده‌کاربهر
+    traditional_fa: صفت فاعلی
+    gloss_en: the doer participle — the one who does it
+    explanation_fa: آن که کار را انجام می‌دهد، مانندِ «رونده».
+    confirmed: true
+    source: the linguist's terminology table, docs/FINDINGS.md
+
+  - name: karidekarbahr
+    behnevis: Kāridekārbahr
+    coined_fa: کاریده‌کاربهر
+    traditional_fa: صفت مفعولی
+    gloss_en: the done-to participle — the one it is done to
+    explanation_fa: آن که کار بر او انجام شده است، مانندِ «گفته».
+    confirmed: true
+    source: the linguist's terminology table, docs/FINDINGS.md
+
+  # The four the terminology table does not cover. See L17.
+  - name: jonvaze
+    behnevis: Čonvāže
+    coined_fa: چون‌واژه
+    traditional_fa: قید
+    gloss_en: adverb
+    explanation_fa: واژه‌ای که چگونگی یا زمان یا جایِ کار را می‌گوید.
+    confirmed: false
+    # Already written this way in tools/build_rule_pack.py's slot table, during
+    # transcription, and repeated here rather than left in code. čon (چون,
+    # "as / like") + vāže (واژه, "word").
+    #
+    # **The id does not match the Behnevis, and that is not a typo here.** The
+    # source writes Čonvāže with č; the id is `jonvaze` with j. It comes from
+    # the earlier Latin convention, before the one DECISIONS settled on
+    # (š ž č j ˈ). The id stays: it is written into rules/nominals.yaml,
+    # rules/verb_stems.yaml, the engine and every stored derivation, and an id
+    # is permanent. This field is what a reader should be shown.
+    source: transcription, unconfirmed — L17
+
+  - name: janam
+    behnevis: Jānām
+    coined_fa: جانام
+    traditional_fa: ضمیر
+    gloss_en: pronoun — the word that stands in a noun's place
+    explanation_fa: واژه‌ای که به جایِ نام می‌نشیند.
+    confirmed: false
+    # jā (جا, "place") + nām (نام, "noun"): the word that goes in a noun's
+    # place. Read off the source's Behnevis, not stated by the linguist.
+    source: transcription, unconfirmed — L17
+
+  - name: pisvaze
+    behnevis: Pišvāže
+    coined_fa: پیش‌واژه
+    traditional_fa: حرف اضافه
+    gloss_en: preposition
+    explanation_fa: واژه‌ای که پیش از نام می‌آید و پیوندِ آن را با دیگر بخش‌های جمله می‌رساند.
+    confirmed: false
+    # piš (پیش, "before") + vāže (واژه, "word"). Read off the source's
+    # Behnevis, not stated by the linguist.
+    source: transcription, unconfirmed — L17
+
+  - name: nedayi
+    behnevis: Nedāyi
+    # **Null on purpose, and it is the interesting one.** Nedāyi is itself
+    # Arabic-derived (ندا), so it is the vocabulary this project replaces
+    # rather than a term in it — there may be no coined Persian word for the
+    # vocative, or there may be one nobody here has been told. Writing ندایی
+    # would put an Arabic-derived term in the column reserved for the
+    # replacement and make the gap invisible. The API falls back to the
+    # traditional term, and says it did.
+    coined_fa: null
+    traditional_fa: ندایی
+    gloss_en: the vocative — the form used to address someone
+    explanation_fa: ریختی که با آن کسی یا چیزی را می‌خوانند.
+    confirmed: false
+    source: no coined term known — L17

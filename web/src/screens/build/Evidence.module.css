@@ -1,0 +1,26 @@
+/* Colour states a fact here: how strong the evidence is, nothing else. */
+
+.reading,
+.spelling,
+.none,
+.unchecked {
+  font-size: var(--text-sm);
+  white-space: normal;
+}
+
+.reading {
+  color: var(--evidence-reading);
+}
+
+.spelling {
+  color: var(--evidence-spelling);
+}
+
+.none,
+.unchecked {
+  color: var(--evidence-none);
+}
+
+.caveat {
+  color: var(--ink-faint);
+}

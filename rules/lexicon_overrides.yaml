@@ -1,0 +1,86 @@
+# Where we hold a different value from the lexicon, and why.
+#
+# The lexicon belongs to karbon and we mount it read-only, so nothing here
+# changes it. These are values this project uses **instead of** what the
+# snapshot says, applied as the readings are read.
+#
+# **This file exists so that waiting is never the reason something is wrong.**
+# The project's working rule: build what we believe is right now, record it for
+# karbon, and settle it with the linguist afterwards. An override is the
+# machinery for that, not a fork.
+#
+# **karbon is downstream of the same authority.** It was built from the
+# linguist's own rules and many of its readings were checked by hand, so a
+# difference is at least as likely to be his later correction as an error.
+# That is why every entry is `confirmed: false` until he rules, and why each
+# one records exactly what it replaced — dropping an override is one line.
+#
+# Every entry states:
+#   why          — in one sentence
+#   source       — where our value comes from
+#   was          — what the snapshot says, so the change is reversible and
+#                  visible in a diff
+#   confirmed    — false until the linguist has ruled
+#
+# Registered in docs/FOR_THE_LINGUIST.md L1 and docs/UPSTREAM.md B4.
+
+version: 0.2.0
+
+# The snapshots every row below was checked against. An override is applied
+# only to a snapshot listed here, and a snapshot that is not listed is reported
+# (logged, printed by the build tools, refused by a test against the configured
+# one) — never dropped in silence. To move to a new snapshot: re-read each
+# `was` on it, check each addition is still missing from it, then add it here.
+lexicon_snapshots:
+  # karbon's state at its 1.1.0 release; the table was written against it.
+  - lexicon-20260808
+  # karbon 1.2.0, re-checked 2026-10-18: آزردن still آزُر, گسیختن still گسیل,
+  # and رفتن still has only *raftan* (the deleted *roftan* row 559 is gone;
+  # روفتن *ruftan* is a different spelling, present in both). All three apply.
+  - lexicon-20261012
+
+# -- stems the grammar document and the lexicon disagree on -------------------
+
+corrections:
+  - headword_fa: آزردن
+    field: present_stem_fa
+    value: آزار
+    was: آزُر
+    source: stem document, exception list for rule 3
+    why: >-
+      The stem document lists آزردن among the irregulars as آزرد / آزار. The
+      snapshot reads the present stem آزُر.
+    confirmed: false
+
+  - headword_fa: گسیختن
+    field: present_stem_fa
+    value: گسل
+    was: گسیل
+    source: stem document, exception list for rule 6
+    why: >-
+      The stem document lists گسیختن among the irregulars as گسیخت / گسل. The
+      snapshot reads the present stem گسیل, which is a different word.
+    confirmed: false
+
+# -- verbs the document has and the lexicon does not --------------------------
+#
+# An addition is a second reading of a spelling, never a replacement. The
+# system already models one spelling with two readings — مرد is *mard* and
+# *mord* — and this is the same shape.
+
+additions:
+  - headword_fa: رفتن
+    latin: roftan
+    past_stem_fa: رفت
+    past_stem_latin: roft
+    present_stem_fa: روب
+    present_stem_latin: rub
+    lexicon_category: مصدر
+    source: stem document, exception list for rule 9
+    why: >-
+      The document lists رُفتن (to sweep) as an irregular, رُفت / روب. The
+      snapshot has no entry for it — only رفتن (to go). Stripped of harakat
+      the two spellings are identical, so a lookup for the first returned the
+      second and raised nothing, and every word built from it was built on the
+      wrong stem.
+    confirmed: false

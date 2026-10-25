@@ -1,0 +1,20 @@
+version: 0.1.0
+rules:
+- written: ow
+  working: av
+  ruled_on: 2026-08-11
+  affects:
+  - row
+  - šow
+  - dow
+  - derow
+  - šenow
+  - šenāow
+  reason: A stem written *row* is *rav* as soon as anything follows it, vowel or consonant. The *ow* spelling
+    is only how the stem looks standing alone, which is exactly how a stem appears in a list of stems.
+  evidence: 'Measured against the whole lexicon snapshot, 45,579 words: **not one contains ow anywhere**.
+    The sequence appears only in the six present stems themselves. Every word built from them uses av
+    — Ravān (16 words begin Ravān-), ravā- (28), šav- (17), šenavidan, šenavāndan. The consonant case
+    is settled by šenavgar, where *gar* follows and it is still *šenav*. The project''s own alphabet table
+    lists the vowels as ā a e o i u and does not include ow, calling it a separate sound for words like
+    owj and ferdows.'

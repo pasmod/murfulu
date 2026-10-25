@@ -1,0 +1,53 @@
+Murfulu
+Copyright 2026 The Murfulu Project
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+================================================================================
+WHAT THE LICENCE COVERS
+================================================================================
+
+The Apache licence covers **what this project wrote**: the source code, the
+tests, the documentation, the rule pack in `rules/`, and the tooling. Take it,
+change it, build on it, sell it — keep the notice, and you have a patent grant.
+
+================================================================================
+WHAT IT DOES NOT COVER, AND WHY THAT MATTERS
+================================================================================
+
+Three things travel with this repository that are not ours to license. None of
+them is in the repository itself; all three are mounted or downloaded, and a
+licence on this repository says nothing about any of them.
+
+1. THE CORPUS — classical Persian poetry, from Ganjoor (ganjoor.net).
+
+   Do not assume it is free to redistribute. Ganjoor's own FAQ, asked directly
+   whether its data are free of copyright, answers "لزوماً خیر!" — not
+   necessarily. It states that no legal review has been made; that most of the
+   content was typed from published books whose own status was never
+   established; that editing and compilation can attract rights of their own;
+   and that free access must not be read as a licence, the responsibility being
+   the reader's.
+
+   Ganjoor's *software* is GPL-3.0. The poetry is not covered by it.
+
+   Checked 2026-08-17. This is why the deployment described in docs/DEPLOY.md
+   sits behind a password, and why that password is a requirement rather than
+   a precaution.
+
+2. THE LEXICON — karbon's Dehkhoda-derived table of headwords and readings.
+
+   Mounted read-only. Its terms are karbon's question, not this repository's.
+
+3. THE EXPERT FEEDBACK SET — graded verdicts on generated words, exported by
+   `tools/export_feedback.py`.
+
+   These are judgements made by named experts about the language. They are not
+   code, Apache is not a licence for data, and they were not given to this
+   project to give away. The export says so in its own manifest. Ask before
+   redistributing.
+
+================================================================================
+
+In short: the machine is yours to use. What it reads and what people said about
+what it built are not this project's to hand on.

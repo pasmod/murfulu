@@ -1,0 +1,441 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.summary,
+.filter,
+.empty,
+.trouble {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* **The states, as boxes, at the top.** The screen had one checkbox — *only
+   the unanswered* — so how many questions there are, how many were answered
+   and how many are stopping work were all invisible until you counted cards.
+   The boxes say each figure and are the filter, which is one control instead
+   of two. */
+.tallies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tally {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 8rem;
+  min-height: var(--touch-target);
+  padding: var(--space-3) var(--space-4);
+  font: inherit;
+  text-align: start;
+  background: var(--paper-sunk);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.tally[aria-pressed="true"] {
+  background: var(--paper);
+  border-color: var(--line-strong);
+}
+
+.tallyCount {
+  font-size: var(--text-xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.tallyLabel {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+/* The one that stops work is the one to look at first. */
+.tally[data-kind="blocked"] .tallyCount {
+  color: var(--evidence-spelling);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* **Next and previous, above the question and below it.** Sixteen questions
+   set out one after another was a scroll long enough that finding the one
+   under discussion took longer than reading it, and nothing said where you
+   were. Repeated under the card because the moment you want the next question
+   is when you have read to the end of this one. */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.pager button {
+  min-height: var(--touch-target);
+}
+
+.pager button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.place {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+}
+
+/* An answered question steps back without disappearing: it is still evidence
+   of what was asked, and the ruling on it is the thing being exported. */
+.card[data-state="answered"] {
+  opacity: 0.85;
+}
+
+.card header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.reference {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* **The state, as a badge.** With one question on the screen at a time, the
+   thing a reader most needs at a glance is whether this one has been answered
+   — and it was a small grey word at the end of the header row. Each state gets
+   its own ground, and answered gets the colour the app already uses for *the
+   corpus confirms this*. */
+.state {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+  background: var(--paper-sunk);
+  color: var(--ink-soft);
+}
+
+.state[data-state="answered"] {
+  background: var(--accent-wash);
+  color: var(--evidence-reading);
+}
+
+.state[data-state="blocked"] {
+  background: var(--accent-wash);
+  color: var(--evidence-spelling);
+}
+
+.state[data-state="withdrawn"] {
+  color: var(--ink-faint);
+}
+
+/* The one thing on this screen that has to be seen before anything else. */
+.blocking {
+  font-size: var(--text-sm);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+}
+
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.question p {
+  /* **No cap of its own.** This held `max-inline-size: 60ch` — about 111
+     Persian characters, since `ch` is the width of the Latin zero and the
+     Persian face draws its letters 1.83 times narrower. Inside a card that is
+     most of a 78rem page it broke every line at roughly half the width and
+     left the rest of the card empty, which is the fault the project lead
+     named on 2026-08-18 — *do not add a line break when there is enough space
+     in the line* — and this screen was the one place still doing it. The
+     paragraph now wraps where the page ends, which `--measure` already is. */
+  font-size: var(--text-lg);
+
+  /* Persian sits lower in its line box and these are long paragraphs, so they
+     get more room than the app's default 1.75. */
+  line-height: 2;
+
+  /* **Not justified.** Justification stretches the word gaps to force a flush
+     edge, and on a narrow measure that is what the project lead saw on
+     2026-08-18 as broken lines — rivers of white through the paragraph. A
+     ragged edge is the lesser fault. No hyphenation either: Persian does not
+     hyphenate, and letting the browser try breaks words that must stay
+     joined. */
+  text-align: start;
+  hyphens: none;
+
+  /* A single line break inside a paragraph is a list — the fifteen spellings
+     of L13, the seven conditions of L3 — and must stay a line. */
+  white-space: pre-line;
+
+  /* A long Behnevis form inside a Persian sentence must wrap rather than push
+     the line — šāhevār and Kuhesār appear inside these paragraphs. */
+  overflow-wrap: anywhere;
+}
+
+/* Behnevis is the form the project works in, so it reads as text rather than
+   as an aside — one step down from the Persian, a step above the English. */
+.behnevis {
+  font-family: var(--font-latin);
+  line-height: 1.7;
+}
+
+/* The English is a gloss, so it is smaller and set left-to-right. */
+.gloss {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.untranslated {
+  font-size: var(--text-sm);
+  color: var(--accent-strong);
+}
+
+.ruling {
+  padding: var(--space-3);
+  border-inline-start: 3px solid var(--accent);
+  background: var(--paper-sunk);
+}
+
+.rulingText {
+  line-height: 1.8;
+}
+
+.withdrawn {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.changed {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.files {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3);
+  list-style: none;
+  background: var(--paper-sunk);
+  border-radius: var(--radius-sm);
+}
+
+.files li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+/* A file nobody can tell the purpose of is a file nobody opens, so the
+   description sits beside the name rather than behind a hover. */
+.fileWhat {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.more summary {
+  cursor: pointer;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.evidence {
+  margin-block-start: var(--space-2);
+  padding: var(--space-3);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  background: var(--paper-sunk);
+}
+
+.facts {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.facts div {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.facts dt {
+  font-weight: 600;
+}
+
+.answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--line);
+}
+
+.answer label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+.answer textarea {
+  width: 100%;
+  padding: var(--space-2);
+  font: inherit;
+  line-height: 1.8;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: inherit;
+}
+
+.reverses {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.answer .send {
+  align-self: flex-start;
+  min-height: var(--touch-target);
+  padding-inline: var(--space-5);
+}
+
+/* **The options.** Each is a full Persian sentence, so each is a block with
+   its radio beside the first line, and the whole row is the target — a phone
+   thumb should not have to find a 16 px circle. */
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.choices legend {
+  margin-block-end: var(--space-2);
+  padding: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.answer .choice {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--touch-target);
+  padding: var(--space-3);
+  font-size: var(--text-base);
+  line-height: 1.9;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  cursor: pointer;
+}
+
+.answer .choice[data-chosen="true"] {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.choice input {
+  flex: none;
+  inline-size: 1.15rem;
+  block-size: 1.15rem;
+  margin-block-start: 0.45em;
+  accent-color: var(--accent);
+}
+
+.choiceText {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.suggested {
+  display: inline-block;
+  margin-inline-start: var(--space-2);
+  padding: 0 var(--space-2);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  border-radius: var(--radius-sm);
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+}
+
+.clearChoice {
+  align-self: flex-start;
+  padding: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.written {
+  margin-block-start: var(--space-2);
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.rulingChoice {
+  line-height: 1.8;
+  font-weight: 600;
+}
+
+.rulingLabel {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.rulingChoice + .rulingText {
+  margin-block-start: var(--space-2);
+}

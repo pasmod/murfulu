@@ -1,0 +1,62 @@
+# Stem exceptions the source document leaves open, and how karbon reads them.
+#
+# The stem-rules document gives three exception rows that cannot be read as a
+# plain (past stem, present stem) pair. karbon implements the same document and
+# has had to decide the same three. Its readings are recorded here **with
+# attribution** — they are a second reading of the source, not the source.
+#
+# Nothing here overrides the transcription in stem_source_rows.json, which stays
+# verbatim. The builder applies a resolution only where `settled: true`.
+#
+# Cross-checked 2026-08-11 against karbon's morphology rules and its
+# docs/phonemic_bible.md. On the other 36 exception verbs karbon and this
+# transcription agree exactly, apart from diacritics (see the note at the end).
+
+version: 0.1.0
+
+resolutions:
+  - infinitive_fa: گشادن
+    rule: S-05
+    source_text: بنابر دستور ۴
+    settled: true
+    past_stem_fa: گشاد
+    present_stem_fa: گشا
+    past_stem_latin: gošād
+    present_stem_latin: gošā
+    read_by: karbon
+    note: >-
+      The document says only "as rule 4" instead of giving stems. karbon
+      applies rule 4 and gets گشاد / گشا. Straightforward, and it matches what
+      the row instructs.
+
+  - infinitive_fa: افراشتن
+    rule: S-08
+    source_text: افراشت، افروز، افروختن
+    settled: true
+    past_stem_fa: افراشت
+    present_stem_fa: افروز
+    past_stem_latin: afrāšt
+    present_stem_latin: afruz
+    read_by: karbon
+    note: >-
+      The row gives three forms where two are expected. karbon reads the first
+      two as the stem pair and افروختن as a separate infinitive that happens to
+      share the present stem, which is the only reading that yields a pair.
+
+  - infinitive_fa: نهفتن
+    rule: S-09
+    source_text: نهفت، ؟
+    settled: false
+    read_by: null
+    note: >-
+      **Still open.** The document writes ؟ for the present stem and karbon
+      leaves the verb out of its exception list entirely rather than guess. The
+      lexicon has the answer for this verb, but the rule pack should not invent
+      one. Needs the linguist.
+
+# Diacritics
+#
+# This transcription keeps the source's short vowels — رِشتن، سُفتن، گُزیدن،
+# رُفتن — because the source writes them. karbon strips them. Neither is wrong,
+# but any match between the two, or between either and the lexicon, has to
+# strip diacritics first or four verbs will silently fail to line up.

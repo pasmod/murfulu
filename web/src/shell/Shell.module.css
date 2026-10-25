@@ -1,0 +1,193 @@
+/*
+ * The frame. Mobile first: everything below is the narrow layout, and the one
+ * breakpoint widens it. The breakpoint is where the masthead actually runs out
+ * of room, not a device size.
+ */
+
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Off screen until it is focused, which is the whole point of it.
+   It rests at its final position and is pushed clear of the viewport from
+   there, so focusing it only has to undo the push. Doing the arithmetic the
+   other way round — a negative `top` plus a percentage transform — left it
+   half above the screen, which is worse than not having one. */
+.skip {
+  position: absolute;
+  inset-inline-start: var(--space-4);
+  top: var(--space-4);
+  transform: translateY(-200%);
+  z-index: 50;
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-raised);
+  transition: transform var(--motion-fast) var(--ease);
+}
+
+.skip:focus {
+  transform: translateY(0);
+}
+
+.masthead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-4) 0;
+  border-block-end: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.name {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+.nav {
+  /* Six items overflow a 375 px screen, so the row scrolls rather than
+     wrapping into two cramped lines. */
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  /* **Without this the scrolling never happens.** `.nav` is a flex item of
+     `.masthead`, and a flex item's default `min-width: auto` refuses to shrink
+     below its own content — so the row grew to fit the links and pushed the
+     whole page sideways instead of scrolling inside itself.
+
+     It only showed where the links were a little wider than they are here:
+     green on macOS, 43px past the edge on CI's Linux Chromium, from
+     2026-08-14 until it was found on the 16th by making the failure name the
+     element it was measuring. Reproduced at 320px, where it overflows by 40px
+     without this line and by nothing with it. */
+  min-width: 0;
+
+  /* A word cut off flat at the edge reads as a clipping bug. Fading it says
+     "there is more this way" instead. The gradient names a physical
+     direction because the interface is Persian and the root element is
+     `dir="rtl"` — the overflow is always to the left here. `black` is a mask
+     stop, not a colour: it means "keep this part". */
+  mask-image: linear-gradient(to left, black calc(100% - 2rem), transparent);
+}
+
+@media (min-width: 48rem) {
+  .nav {
+    /* Everything fits, so nothing should look cut off. */
+    mask-image: none;
+  }
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.navList {
+  display: flex;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navLink {
+  display: flex;
+  /* Two lines now — the name and what it does — so they stack and the whole
+     item is centred rather than the text sitting on the baseline. */
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.1em;
+  /* Apple's 44 px, which is what makes this usable with a thumb. */
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-3);
+  border-block-end: 2px solid transparent;
+  color: var(--ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--motion-fast) var(--ease);
+}
+
+.navName {
+  line-height: var(--leading-tight);
+}
+
+/* The gloss is support, not a second label: quieter, smaller, and it never
+   competes with the name it sits under. */
+.navGloss {
+  font-size: var(--text-xs);
+  line-height: var(--leading-tight);
+  color: var(--ink-faint);
+  font-weight: var(--weight-normal);
+}
+
+.navLink:hover .navGloss {
+  color: var(--ink-soft);
+}
+
+.navLink:hover {
+  color: var(--ink);
+}
+
+.current {
+  color: var(--accent-strong);
+  font-weight: var(--weight-medium);
+  border-block-end-color: var(--accent);
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+.main:focus {
+  outline: none;
+}
+
+@media (min-width: 48rem) {
+  /* Three columns rather than a row, so the navigation is centred on the
+     *page* and not merely in the space the brand leaves over. The outer two
+     are equal, the brand sits at the start of the first and the third is
+     empty; that equality is what keeps the middle column — and so the menu —
+     on the page's centre line. A plain `space-between` row put the menu hard
+     against the far edge, which the project lead asked to change on
+     2026-08-18. */
+  .masthead {
+    display: grid;
+    /* `max-content` is the floor on the brand's side: enough for the name and
+       the tagline on one line. Where the window is wide the two outer columns
+       come out equal and the menu is exactly centred; where it is not, the
+       brand keeps its line and the menu gives up a little of the centre. It
+       is the better trade — a wrapped tagline reads as broken, a menu forty
+       pixels off centre does not. */
+    grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-6);
+    padding-inline: var(--space-6);
+  }
+
+  /* The brand keeps to its own column; without this it would stretch across
+     it and the tagline would drift away from the name. */
+  .brand {
+    justify-self: start;
+  }
+
+  .main {
+    padding-inline: var(--space-6);
+  }
+}

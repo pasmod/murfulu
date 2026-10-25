@@ -1,0 +1,53 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+.pytest_cache/
+.DS_Store
+
+# secrets and local settings — .env.example is the committed one
+.env
+
+# The production host: which machine, how to reach it, which tunnel. Local
+# files, each copied from the *.example beside it, never committed
+# (docs/DEPLOY.md §0). The tunnel credentials JSON never leaves ~/.cloudflared
+# and the server.
+/deploy/host.env
+/deploy/ssh_config
+/deploy/cloudflared/config.yml
+/deploy/cloudflared/*.json
+
+# Node's caches. `web/.gitignore` covers web/node_modules; this covers the one
+# vitest leaves at the root when it is run from here rather than from web/.
+# Found 2026-08-17 by a results.json turning up in `git add -A`.
+node_modules/
+
+# large / generated data
+data/*.sqlite
+data/*.jsonl
+
+# SQLite's own sidecars: the write-ahead log and its shared-memory index.
+# They belong to a database this file already ignores, they are meaningless
+# without it, and both were committed for months because `git add -A` swept
+# them in. A fresh clone got a stale -wal beside a database it did not have.
+data/*.sqlite-*
+
+
+# editor and tool settings
+.claude/
+
+# measured per run, not committed
+data/rule_productivity-*.json
+data/corpus_report-*.json
+data/unlinked-*.tsv
+data/semantic-*.json
+
+# Batch-job output: the derivation dump, the affix map, the sister forms.
+# **Anchored to the repository root on purpose.** Written as `build/` it also
+# matched `web/src/screens/build/`, and the whole build screen — nine files,
+# the whole of task 7.4 — was silently missing from the repository. A pattern
+# with no leading slash matches at every depth.
+# tests/test_repository.py fails if any source tree is ignored again.
+/build/

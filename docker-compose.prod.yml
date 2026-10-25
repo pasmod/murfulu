@@ -1,0 +1,165 @@
+# The whole system on a server, behind one door.
+#
+# `docker compose -f docker-compose.prod.yml up -d`. See docs/DEPLOY.md.
+#
+# **What is different from docker-compose.yml, and why.**
+#
+# *Nothing publishes a port except Caddy.* On the development file every
+# service is on the host — Postgres on 5432, Elasticsearch on 9200 — which is
+# what makes a laptop workable and a server indefensible. Elasticsearch here
+# runs with security disabled, so a published 9200 is the whole corpus and
+# every index, writable, to anyone who finds the IP.
+#
+# *Caddy holds a password on every route.* The app authenticates with
+# `Authorization: Bearer` headers, not with a session cookie, so a browser
+# asking for `/` sends nothing Caddy could forward-auth against. A password at
+# the edge is the honest way to keep the corpus off the open internet, and it
+# is independent of the app's own tokens: the wall says who may look, the
+# token still says who may rule on a question.
+#
+# *Everything restarts.* A server reboot must bring the site back without
+# anybody logging in.
+#
+# Image tags are exact, as everywhere else — never `latest`.
+
+services:
+  db:
+    image: postgres:16.6-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.1
+    restart: always
+    environment:
+      discovery.type: single-node
+      # Still disabled, and now that is defensible: nothing outside this
+      # network can reach it. It is why the port must never be published here.
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: ${ES_JAVA_OPTS}
+      # The other end of the move. The corpus arrives here as a snapshot
+      # restore rather than an ingest — re-ingesting needs the Ganjoor dump and
+      # hours of compute, and the dump does not belong on this server. Both
+      # sides need `path.repo` set or the repository cannot be registered at
+      # all; neither had it until 2026-08-17.
+      path.repo: /snapshots
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+      - es_snapshots:/snapshots
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          curl -fsS http://localhost:9200/_cluster/health
+          | grep -qE '"status":"(green|yellow)"'
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      MURFULU_DATABASE_URL: >-
+        postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      MURFULU_ELASTICSEARCH_URL: http://elasticsearch:9200
+      MURFULU_LEXICON_PATH: ${MURFULU_LEXICON_PATH}
+      MURFULU_PRODUCTIVITY_PATH: ${MURFULU_PRODUCTIVITY_PATH}
+      MURFULU_CORPUS_REPORT_PATH: ${MURFULU_CORPUS_REPORT_PATH}
+      MURFULU_SEMANTIC_PATH: ${MURFULU_SEMANTIC_PATH}
+      MURFULU_TYPICALITY_PATH: ${MURFULU_TYPICALITY_PATH}
+    volumes:
+      # The lexicon and the measured artefacts. Read-only: we never write to
+      # the snapshot, and a server that could would be able to disagree with
+      # the laptop about what karbon says.
+      - ${MURFULU_DATA_DIR:-./data}:/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import urllib.request;
+          urllib.request.urlopen('http://localhost:8000/health')"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      # 127.0.0.1, never localhost — see docker-compose.yml for the two days
+      # that cost.
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  caddy:
+    image: caddy:2.9.1-alpine
+    restart: always
+    # The only door. 80 is not optional: Let's Encrypt redirects through it.
+    #
+    # **Bound to the loopback by default, which is what makes the tunnel safe.**
+    # The sibling apps on this domain are published by a Cloudflare Tunnel from
+    # a workstation, not by a public IP, and a container publishing 0.0.0.0:80
+    # on a laptop is reachable by everything on the café wifi as well as by
+    # cloudflared. `MURFULU_BIND` is `127.0.0.1` for that case and `0.0.0.0` on
+    # a server that really is the public address.
+    ports:
+      - "${MURFULU_BIND:-127.0.0.1}:80:80"
+      - "${MURFULU_BIND:-127.0.0.1}:443:443"
+    environment:
+      # The site address **with its scheme**, because the scheme decides
+      # whether Caddy asks for a certificate: bare domain on a server, and
+      # `http://…` behind a tunnel where Cloudflare already holds one. See the
+      # Caddyfile.
+      MURFULU_SITE_ADDRESS: ${MURFULU_SITE_ADDRESS:-${MURFULU_DOMAIN}}
+      MURFULU_DOMAIN: ${MURFULU_DOMAIN}
+      MURFULU_SITE_USER: ${MURFULU_SITE_USER}
+      # A bcrypt hash, never a password. `docker run --rm caddy:2.9.1-alpine
+      # caddy hash-password --plaintext '…'` — see docs/DEPLOY.md.
+      MURFULU_SITE_PASSWORD_HASH: ${MURFULU_SITE_PASSWORD_HASH}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # The certificates. Losing this volume means asking Let's Encrypt for a
+      # new certificate on every restart, which is rate-limited.
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      web:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  es_data:
+  # Where a released corpus version arrives from the machine that built it.
+  # Kept apart from es_data so a restore survives the cluster being rebuilt.
+  es_snapshots:
+  caddy_data:
+  caddy_config:

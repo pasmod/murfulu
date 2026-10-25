@@ -1,0 +1,226 @@
+/* The word first, the machinery behind an expander. */
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) 0;
+  border-block-end: 1px solid var(--line);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.forms {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.fa {
+  font-size: var(--text-xl);
+}
+
+.latin {
+  color: var(--ink-soft);
+}
+
+.meaning {
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* The two rules used to be written `.toggle, .copy`. The copy button was
+   removed on 2026-08-18 and `.toggle` is on its own now — it kept the whole
+   declaration, which is what makes it a touch-sized control in the accent
+   colour rather than a line of faint text. */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--accent);
+  cursor: pointer;
+  font-size: var(--text-sm);
+}
+
+.toggle:hover {
+  background: var(--accent-wash);
+}
+
+/* The «۲ راه» count inside the toggle, quieter than the label it follows. */
+.paths {
+  color: var(--ink-faint);
+}
+
+.derivation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+}
+
+/* One route, boxed. Four of them used to sit in the same grey panel with a
+   gap between, so twelve steps read as one list of twelve and «۴ راه» above it
+   explained nothing. */
+.route {
+  padding: var(--space-3);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.routeTitle {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.chain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.ruleId {
+  color: var(--accent-strong);
+}
+
+.stepText {
+  color: var(--ink-soft);
+}
+
+.stepForms {
+  color: var(--ink);
+}
+
+/* The sense the rule carries. Set apart from the mechanics beside it, because
+   where two rules do the same thing this is the whole of the difference. */
+.stepSense {
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+  font-size: var(--text-sm);
+}
+
+.aside {
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}
+
+/* The chain's ground, not the word's own evidence — the spelling-level
+   caution colour, because it is the same kind of caution. */
+.ungrounded {
+  font-size: var(--text-sm);
+  color: var(--evidence-spelling);
+}
+
+.semantic {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+/*
+ * The letters also read as an inflection. Same weight as the ungrounded note:
+ * it is the reason the row sits where it sits, so it must be readable — but it
+ * is a caveat about the evidence, never a verdict on the word.
+ */
+.inflection {
+  font-size: var(--text-sm);
+  color: var(--evidence-spelling);
+}
+
+/* The figure's position among all of them. Same size and colour as the
+   figure it qualifies: it is not an aside, it is the half that makes the
+   number mean anything. */
+.band {
+  color: var(--ink-faint);
+}
+
+/* Part three: what each rule built and what was found. Counts a reader can
+   check, never a rate they would have to trust. */
+.record {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.recordSays {
+  margin: 0;
+}
+
+.recordList {
+  margin: var(--space-1) 0 0;
+  padding-inline-start: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+/* Part four: the figure shown against the bases it was measured against. */
+.semanticSays {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+/* The infinitive a stem belongs to, quieter than the stem itself. */
+.semanticOf {
+  color: var(--ink-faint);
+}
+
+/* The rule under the list, in the shape a step row uses: id, then sentence. */
+.semanticRule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-block-start: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.semanticRuleSays {
+  color: var(--ink-soft);
+}
+
+.semanticList {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+
+/* The arrow between a step's parts and what they make. */
+.becomes {
+  color: var(--ink-faint);
+}
+
+.produced {
+  color: var(--ink);
+}

@@ -1,0 +1,161 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.label {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.input {
+  flex: 1;
+
+  /* **A flex item will not shrink below its own content**, and an <input>'s
+     content is its intrinsic size — about twenty characters. So `flex: 1` on
+     its own let the box keep that width and push the row, and the page with
+     it, sideways on a narrow screen. Same trap as the navigation row.
+
+     It only showed where the default face is a little wider than the one here:
+     green on macOS, 43px past the edge on CI's Linux Chromium, on every run
+     from 2026-08-14. Reproduced at 320px, where the row holds 351px of content
+     in 288px of space. */
+  min-width: 0;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  font: inherit;
+  font-size: var(--text-lg);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+}
+
+.input:hover {
+  border-color: var(--ink-faint);
+}
+
+.submit {
+  min-height: var(--touch-target);
+  padding: 0 var(--space-5);
+  background: var(--accent);
+  color: var(--paper);
+  border: 0;
+  border-radius: var(--radius-md);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.submit:hover {
+  background: var(--accent-strong);
+}
+
+.example {
+  align-self: flex-start;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  background: var(--paper-sunk);
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+/* The two lists, and which one you are looking at. */
+.showing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.pick {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  font: inherit;
+  background: var(--paper-sunk);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.pick[aria-pressed="true"] {
+  background: var(--accent-wash);
+  border-color: var(--line-strong);
+}
+
+.pickCount {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.reading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--line);
+}
+
+.readingTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+}
+
+.category {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  font-weight: normal;
+}
+
+/* The three counts. Not a caption: a list of forty is meaningless without
+   the number it was drawn from, so this reads at body size. */
+.counts {
+  font-size: var(--text-base);
+  color: var(--ink-soft);
+  max-inline-size: var(--measure);
+}
+
+.skipped,
+.nothing,
+.trouble {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  max-inline-size: var(--measure);
+}
+
+/* A row of example words rather than one. They wrap on a narrow screen. */
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.examplesSays {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}

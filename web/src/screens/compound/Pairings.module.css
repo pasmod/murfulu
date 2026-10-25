@@ -1,0 +1,126 @@
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+}
+
+.word {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.fa {
+  font-size: var(--text-lg);
+}
+
+.parts,
+.evidence {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.rule {
+  margin-inline-start: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+/* What the join builds. It is the only thing telling two otherwise identical
+   rows apart — the doer and the done-to — so it is darker than the rule id
+   beside it and sits directly after the parts it is the result of. */
+.builds {
+  margin-inline-start: var(--space-2);
+  color: var(--ink-soft);
+}
+
+/* The row is already ranked last; this says why, in words. Nothing is hidden
+   here — the reader is told the count may belong to another word. */
+/* The derivation, folded. A `details` rather than a button: it is content
+   that opens, not an action, and it must stay keyboard-reachable inside a
+   list of twenty. */
+.how {
+  font-size: var(--text-sm);
+}
+
+.howSummary {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding-inline-start: var(--space-5);
+}
+
+.step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.stepWord {
+  font-size: var(--text-base);
+}
+
+.stepIs {
+  padding: 0 var(--space-2);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-sm);
+  color: var(--ink-soft);
+}
+
+.stepSays {
+  color: var(--ink-faint);
+}
+
+.howRule {
+  margin-block-start: var(--space-2);
+  color: var(--ink-soft);
+}
+
+.warning {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  max-inline-size: var(--measure);
+}
+
+/* Confirmation, not doubt: the dictionary holds this compound too. */
+.known {
+  align-self: flex-start;
+  padding: 0 var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  background: var(--accent-wash);
+  border-radius: var(--radius-sm);
+}
+
+.more {
+  align-self: flex-start;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  background: var(--paper-sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
