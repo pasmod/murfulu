@@ -1,0 +1,8 @@
+#!/bin/sh
+# Refuse a commit that would publish the host's specifics, a credential or a
+# person's name — tools/public_check.py says what and why. Installed by
+# `make hooks` (core.hooksPath = tools/hooks).
+root=$(git rev-parse --show-toplevel) || exit 1
+python=python3
+[ -x "$root/.venv/bin/python" ] && python="$root/.venv/bin/python"
+exec "$python" "$root/tools/public_check.py"
