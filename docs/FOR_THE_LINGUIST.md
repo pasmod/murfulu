@@ -1366,3 +1366,1008 @@ believes it: it reports 43 of the 4,000 commonest spellings, and its top rows
 are پیوسته read as پیو + سته, دیگران as دیگ + ران and داستان as داس + تان.
 The same failure as the L18 measurement, for the same reason: short strings
 collide. The four words in the table above were checked by hand.
+
+---
+
+## L29. Rechtsstaat — a Persian word for it, and the two rules that stop us building one
+
+Asked for by the project lead on 2026-08-24. Same protocol as L27: propose,
+then verify every proposal through `/explain`, `/generate`, `/compound` and
+`/search`, and say plainly what could not be verified. Nothing in the code or
+the rules has changed. **These are candidates for you to accept or throw out.**
+
+Every figure below was read off the running app against corpus v11
+(25,497,189 words) and snapshot `lexicon-20260808`.
+
+### What the German word says, since the candidates turn on it
+
+*Rechtsstaat* is **Recht** + **Staat**, and the head is *Staat*: it names a
+kind of **state**, not a kind of law. What it says is that the state is itself
+**bound** by law — the state is law's author and law's subject at once. Its
+opposites are named words in German: *Machtstaat*, *Polizeistaat*,
+*Willkürstaat*, *Unrechtsstaat*.
+
+**And *Recht* is not *Gesetz*.** *Gesetz* is the enacted statute; *Recht* is
+law-as-right, and it carries justice inside it. The German constitution binds
+the state to «Gesetz **und** Recht» — both words, deliberately.
+
+This is why the standing Persian, **دولت قانونمدار**, is not quite the word.
+It is three Arabic loans (دولت، قانون، مدار), and قانون is *Gesetz*, the
+statute — so the term says *statute-centred state* and loses the half of
+*Recht* that means what is right.
+
+**داد is the Persian that has both halves.** karbon's own entry glosses it
+«عدل. مَعدِلَه. قسط. نصفت. **مقابل ستم**»; Middle Persian *dād* is *law*. And
+Persian already carries the antonym as one word — **بیداد**, which is
+*Willkür* exactly. The pair Recht/Unrecht is the pair داد/بیداد.
+
+| | occurrences | documents | authors | centuries |
+|---|---|---|---|---|
+| **داد** | 23,731 | 13,149 | 229 | 11th–20th |
+| **بیداد** | 2,210 | 1,935 | 190 | 11th–20th |
+
+### The candidates
+
+| | reading | what it says | in the corpus |
+|---|---|---|---|
+| **دادبوم** | *Dādbum* | the land held under داد | **0** |
+| دادشهر | *Dādšahr* | the realm of داد | 0 |
+| دادکشور | *Dādkešvar* | the country of داد | 0 |
+| دادبنیاد | *Dādbonyād* | *rechtsstaatlich*, the adjective | 0 |
+| دادسالاری | *Dādsālāri* | **rule of law**, not *Rechtsstaat* | 0 |
+| دادسامان | *Dādsāmān* | **Rechtsordnung**, not *Rechtsstaat* | 0 |
+
+**We recommend دادبوم**, and the reason is your own lexicon's tails rather
+than our taste. Counted over the 45,579 active entries:
+
+| tail | entries | what they are |
+|---|---|---|
+| ـستان | 249 | 159 اسم مرکب — the tail that names countries (گلستان, هندوستان) |
+| **ـبوم** | **14** | 12 اسم مرکب, **every one of them «[X]-land»** |
+| ـکشور | 4 | |
+| **ـشهر** | **3** | کهنه‌شهر، هم‌شهر، بی‌شهر — all about the *city*, not one a realm |
+
+The ـبوم entries are ریگ‌بوم، شوره‌بوم، شوربوم، سنگ‌بوم، شن‌بوم، غله‌بوم،
+میوه‌بوم، مرزبوم، زادبوم، آبادبوم، تازه‌بوم، فراخ‌بوم، پاکیزه‌بوم and
+**پاک‌بوم, which Dehkhoda glosses «کشور پاک. خطهٔ پاک»** — so a ـبوم compound
+is read as a country in the dictionary's own words. مرزبوم it glosses
+«سرحد مملکت».
+
+**Against دادشهر, and it is this project's own evidence.** ـشهر compounds in
+the corpus are town names — گلشهر، بوشهر، آبادشهر — so دادشهر reads as a
+suburb before it reads as a polity. What is on the other side is that modern
+political Persian does use شهر for a polity type (آرمانشهر for *utopia*), and
+that ایرانشهر is in the corpus in 10 documents. If you weigh the modern
+pattern above the classical tail, دادشهر is the better word and we will change.
+
+**دادبوم's own cost, stated.** بوم also names the owl — بوف's entry says
+«آنرا بوم نیز گویند» — though no ـبوم compound in the lexicon carries that
+sense. And بوم is a territory where *Staat* is an institution.
+
+**دادستان was the first candidate and is withdrawn**, but the reason is worth
+your eye: karbon holds **two** readings of it, and the second is
+`Dādastān`, اسم مرکب, glossed «مرکب از «داد» به معنی عدل و «ستان» از ادات
+اتصاف به مکان، **یعنی محل داد**». Persian made *the place of justice* out of
+these exact two pieces already — 14 occurrences, 12th–13th century — and the
+modern language then took the word for the public prosecutor.
+
+**دادمندی was proposed for *Rechtsstaatlichkeit* and is withdrawn**: it is in
+use, and it is in use meaning عدالت — a synonym of دادگری, not a name for the
+quality of being bound by law. **دادبنیادی** is the fallback, at four
+syllables.
+
+### And the engine cannot build a single one of them
+
+`/explain` on every candidate returns **`rebuilt: false`**. Two rules stop it,
+and both are already your questions.
+
+**L26, on the word this task needs.** داد is filed **اسم معنی**, which your
+prose makes a **kārnām**. **80 active rules take a nām and exactly one takes
+a kārnām** — N-098, the *-i*. So:
+
+| داد classed as | forms at one step |
+|---|---|
+| kārnām, as it stands | **1** — دادی |
+| nām | **79** |
+
+The 79 are not exotic. They include **دادگاه، دادستان، دادگر، دادور، دادبان،
+دادوند، دادمند، دادکده، دادگان** — real Persian words, most of them the
+vocabulary of the courts, none of which the engine can reach from داد today.
+
+**L28, on the compound.** N-104 is the only two-noun row and it puts an ā
+between the halves, so asked for دادبوم the engine offers:
+
+```
+N-104   داد + بوم    →   دادابوم
+N-104   داد + شهر    →   داداشهر
+```
+
+**The sharpest way to put both faults together.** The engine builds the
+Persian for *Unrechtsstaat* today and cannot build the Persian for
+*Rechtsstaat*:
+
+```
+/explain?word=Bidādstān   rebuilt: true,  settled: true,  one account
+    Bidādstān  ←  بیداد (Bidād, اسم مرکب)  by N-057
+    the base: 2,210 occurrences in 1,935 documents by 190 authors
+
+/explain?word=Dādbum      rebuilt: false, no account
+/explain?word=Dādšahr     rebuilt: false, no account
+```
+
+بیداد is an اسم مرکب and so a nām; داد is an اسم معنی and so is not. One
+category mapping is the whole difference between the two words.
+
+The route itself is sound, which was checked rather than assumed:
+`/explain?word=Šahrvand` returns **`rebuilt: true`** — شهروند, the modern word
+for *citizen*, is the engine's own output from شهر by N-084 and N-105.
+
+**What we did meanwhile**: nothing. **What changes if you rule L26 the way its
+evidence points**: دادبوم and دادشهر still need L28, but دادمند، دادستان،
+دادگاه، دادبان and the rest of the court vocabulary start building from داد
+the same afternoon.
+
+---
+
+## L30. Demokratie — the Persian is already good, and the tail under it says the opposite
+
+Asked for by the project lead on 2026-08-25, straight after L29 and by the same
+protocol: propose, verify every proposal through the running app, say plainly
+what could not be verified. Nothing in the code or the rules has changed.
+
+**Unlike L29, this is not a gap.** Persian already has a wholly Persian,
+established, understood word — **مردم‌سالاری** — and we recommend keeping it.
+There is one question underneath it, and it is yours.
+
+### What the Greek says, since the question turns on it
+
+*Demokratie* is a Greek loan in German, not a German compound: δῆμος +
+κράτος. German's own native gloss is *Volksherrschaft*.
+
+**δῆμος is the citizen body of the polis** — not *Volk* as a people or a
+nation. In Athenian mouths it also carried a class sense, the commons against
+the few.
+
+**κράτος is power, might, holding-the-upper-hand — it is not an office.**
+Greek keeps two suffixes apart and the pair is the whole point:
+
+| | | |
+|---|---|---|
+| ‑αρχία | *archē*, rule, office | μοναρχία — *the rule of one* |
+| ‑κρατία | *krátos*, power held | δημοκρατία — *the people hold the power* |
+
+So the word does not say *the people have a ruler*. It says **the power is in
+the people's hands**.
+
+### مردم is not داد, and that matters
+
+Where داد stopped the engine dead (L26), مردم does not:
+
+| | filed | one-step forms |
+|---|---|---|
+| داد | اسم معنی → kārnām | **1** |
+| **مردم** | **اسم ذات → nām** | **65** |
+
+مردم: 13,953 occurrences in 8,900 documents by 226 authors, 11th–20th century.
+سالار: 1,660 in 1,187 by 124.
+
+So **Demokratie is one wall away from being derivable and Rechtsstaat is two.**
+`/explain?word=Mardomsālāri` returns **`rebuilt: false`**, and L28 alone is why
+— the single two-noun rule puts its ā in and offers:
+
+```
+N-104   مردم + سالار   →   مردماسالار
+```
+
+### The finding: every ـسالار in your lexicon is *the chief of X*
+
+Counted over the 45,579 active entries, **ـسالار has 16 entries, 14 of them
+اسم مرکب** — the strongest of the rival tails by a distance (ـشاهی has 5,
+ـداری 3, ـفرمانی and ـتوانی and ـسروری none at all). The tail is the right
+one. What it *means* is the question:
+
+| | Dehkhoda's own gloss |
+|---|---|
+| سپهسالار | «سالار و رئیس لشکر» — 88 occurrences, 80 documents, 45 poets |
+| دریاسالار | «امیرالبحر… صاحب‌منصب نیروی دریایی» |
+| ناوسالار | «فرماندهٔ ناو» |
+| خوانسالار / خانسالار | «رئیس میز پادشاهی» — 20 occurrences |
+| **بارسالار** | **«سالار بار»** |
+| **نوبت‌سالار** | **«سالار نوبت. سرکردهٔ نوبتیان»** |
+| گندسالار | «فرماندهٔ واحدهای سپاه در زمان ساسانیان» |
+| سابقه‌سالار | «سرلشکر. پیشرو لشکر» |
+
+**All sixteen are «the سالار of X».** The last two rows are the sharpest,
+because the dictionary unpacks the compound in so many words: بارسالار *is*
+«سالار بار». The first noun is what is commanded, never who commands.
+
+**Read by that rule, مردم‌سالار is «سالار مردم» — the chief over the people**,
+which is the thing democracy is defined against.
+
+### And the fair answer to our own objection
+
+**The modern ـسالاری words all reverse the relation and none of them is in the
+lexicon**: دیوان‌سالاری، شایسته‌سالاری، نخبه‌سالاری، تک‌سالاری. Every one means
+*rule by X*. So modern Persian did not misuse the classical tail — it gave the
+tail a **new relation**, and مردم‌سالاری is one member of that new series.
+
+**The question is only whether that reversal is licit.** If you rule that it is
+not, مردم‌سالاری does not fall alone; the whole series falls with it, and
+Persian loses its words for bureaucracy and meritocracy at the same time. We
+think that is the argument for letting it stand, and we say so rather than
+hiding it inside a recommendation.
+
+### The one candidate the engine builds today — and why we are not offering it
+
+```
+/explain?word=Mardomgāni   rebuilt: true,  two accounts
+    مردمگانی  ←  مردم (Mardom, اسم ذات)  by N-067  (-gāni)
+    مردمگانی  ←  مردم  by N-064 (-gān) + N-095 (-i)
+```
+
+مردمگانی is built by exact analogy with N-067's own worked example,
+**خدایگانی** — and it is the only candidate in this run the engine derives with
+no ruling needed, the بانگا of L27 all over again.
+
+**We reject it on the evidence, and the evidence is about N-067 itself.**
+خدایگانی **is not a headword at all**. Only خدایگان is, and karbon files that
+as a **وام‌واژه**. And the 16 entries ending in ـگانی are grape varieties and
+tanned leather — کرنگانی، گوزگانی، کورگانی، کوزگانی، گوژگانی — coins, and six
+compounds of زندگانی. **There is no word of government anywhere on that tail.**
+
+Recorded because it is the cleanest case we have of the thing this project
+keeps having to say: **the engine building a word is not the engine approving
+it.** N-067's example not being a headword is a separate small fault worth
+your eye.
+
+### Two more that were proposed and dropped
+
+**مردم‌شاهی** — ـشاهی has **5** lexicon entries and they are coins and a plant:
+چارشاهی، چهارشاهی، نیم‌شاهی، ارده‌شاهی، اورنگ‌شاهی. Not a tail that names a
+form of government, whatever پادشاهی suggests.
+
+**مردم‌داری** — occupied. It is a live word meaning affability and courtesy,
+and it is in the corpus.
+
+### What we recommend
+
+**Keep مردم‌سالاری.** Wholly Persian, established, understood, on the only tail
+with real support, and free in all 25,497,189 words of the corpus — which for
+a modern term means only that the poets did not write it (see S33).
+
+**مردم‌سالار** for *demokratisch*, and **مردم‌سالارانه** for the adverb.
+
+What we want from you is the ruling on the relation, not on the word.
+
+---
+
+## L31. امکان، ضرورت، واقعیت — three terms, and the first set the engine can build
+
+Asked for by the project lead on 2026-08-25: pure-Persian renderings of the
+three modal terms, in **فارسی سره**. Three runs against the running app, one
+per term, same protocol as L27, L29 and L30. Nothing in the code or the rules
+has changed. Every figure was read off corpus v11 (25,497,189 words) and
+snapshot `lexicon-20260808`.
+
+### The recommendation
+
+| | now | candidate | reading | adjective | rules |
+|---|---|---|---|---|---|
+| **امکان** | Möglichkeit | **شایایی** | *Šāyāyi* | شایا | V-024 + V-025 |
+| **ضرورت** | Notwendigkeit | **بایایی** | *Bāyāyi* | بایا | V-024 + V-025 |
+| **امتناع** | Unmöglichkeit | **ناشایایی** | *Nāšāyāyi* | ناشایا | V-065 + N-033 + N-095 |
+| **واقعیت** | Wirklichkeit | **کردمان** | *Kardmān* | — | V-014 |
+
+**And this is the first term set in the project's history that the engine
+builds today, with no ruling from you needed on L26 or L28.** Every one of
+those four returns `rebuilt: true`. دادبوم could not be built; مردم‌سالاری
+could not be built; these can.
+
+### Why they build where the last two runs failed
+
+**Because they go in through a مصدر instead of a noun.** L26 is a rule about
+what a *noun* is; a verb is neither a nām nor a kārnām, and the V-rules take
+verb stems.
+
+| base | filed | forms at one step |
+|---|---|---|
+| کار | اسم معنی → kārnām | **1** |
+| توان | اسم معنی → kārnām | **2** |
+| یارا | اسم معنی → kārnām | **1** |
+| داد (L29) | اسم معنی → kārnām | 1 |
+| **شایستن** | **مصدر** | **38** |
+| **بایستن** | **مصدر** | **38** |
+| **کردن** | **مصدر** | **38** |
+
+So the whole modal vocabulary was reachable all along, and the two previous
+runs failed because they reached for nouns. **Worth stating as a method:
+where a concept has a native verb, coin off the verb.**
+
+### امکان — and the one Persian verb that means *to be possible*
+
+**شایستن**, Middle Persian *šāyistan*, the verb of the Pahlavi *Šāyest nē
+Šāyest*. There is no second candidate root: توانستن is *ability* (δύναμις's
+sense, which Islamic philosophy rendered **قوّه**, not امکان), شدن is
+*becoming*, بودن is *being*. None of those is a modality.
+
+**A trap we nearly fell into, and you should know it exists.** karbon holds
+**ناور**, صفت, glossed «به معنی ممکن باشد که **برابر واجب** است» — the exact
+modal pairing — and **ناوران** for ممکنات. Both entries end
+«**از لغات ساختگی دساتیر است**». They are eighteenth-century forgeries of the
+Āzar Kayvān school. Refused.
+
+### ضرورت — and the split your dictionary has already made
+
+The Arabic Persian inherited holds **two** words where the concept needs one.
+**ضرورة** is from ض-ر-ر, *harm* — its home is exigency and duress. The term
+Islamic logic actually uses for modal necessity is **وجوب**. This term is for
+وجوب.
+
+**And بایستن's two participles have already been pulled apart along that
+line, by Dehkhoda, not by us:**
+
+| entry | filed | gloss |
+|---|---|---|
+| **نابایا** | صفت مرکب | «مقابل بایا. **ممتنع. مقابل واجب**» |
+| **نابای** | صفت مرکب | «**محال. مقابل ممکن.** ضد ممکن» |
+| نابایست | صفت مرکب | «**نالایق. نامناسب**… که سزاوار نیست. که درخور نیست» |
+
+**بایا is on the modal square; بایسته is on the fitting-and-worthy square.**
+That is why the recommendation is بایایی and not بایستگی — and بایستگی is the
+better-attested word (**42 occurrences, 17 documents, 9 authors, 12th–20th**,
+against بایا's 2). It is rejected because it is the *ought* word: if ضرورت
+becomes بایستگی, Persian has nothing left for *Sollen*.
+
+**Two headwords of yours sit on the modal square and both are built on بای-.**
+No other candidate root in this run has any such support.
+
+### واقعیت — the one that should not join the family
+
+*Wirklichkeit* is **wirken**, to work and have effect. **It does not say
+*really there*.** Pfeifer's *Etymologisches Wörterbuch* has late Middle High
+German *wirkelīcheit* meaning «Tätigkeit, Wirksamkeit, Aktivität» — activity
+and efficacy, before ever meaning reality. German keeps Sein, Dasein,
+Existenz, Realität, Wirklichkeit and Tatsache apart; Persian واقعیت is asked
+to carry all six.
+
+**A correction to what we first wrote, since it was asserted and is not
+established.** We said Meister Eckhart coined *Wirklichkeit* to render
+*actualitas*, itself Aristotle's ἐνέργεια. **Neither half is confirmed.**
+Pfeifer does not mention Eckhart or *actualitas*; Grimm's dictionary gives the
+Latin equivalents as *operatio, actus, operabilitas, efficacia, existentia* —
+**not *actualitas*** — and names nobody. The attribution is carried unfootnoted
+by German Wikipedia, and the best source found for it (W. J. Hoye) hedges it
+himself as «so die Angaben der philosophischen Wörterbücher». Hoye also says
+*actualitas* is «keineswegs aristotelisch»: it arises in thirteenth-century
+theology, earliest in Albertus Magnus, and Eckhart took it from Aquinas.
+**What survives, and it is what the argument rests on, is that *Wirklichkeit*
+is built on *wirken* and first meant efficacy.** The *Historisches Wörterbuch
+der Philosophie* entry is the citation that would settle the rest; it was not
+read.
+
+**And واقعیت translates the wrong one.** و-ق-ع is *to fall, to occur*, so
+واقعیت says **occurredness** — which is *Tatsache*, «was der Fall ist», where
+the German *Fall* is a fall exactly as Latin *casus* is. It is a good
+rendering, filed under the wrong heading. It occurs **12 times in 12 documents
+by 7 authors** in the whole corpus: an import, not an inheritance.
+
+**Note that the Islamic tradition got the root right where the modern word got
+it wrong**: بالفعل / بالقوه is built on ف-ع-ل, *to do* — *agere*, ἐνέργεια. A
+Persian term should follow بالفعل's root choice, so it is built on **کردن**.
+
+**هستی is not available and must not be taken.** 8,710 occurrences in 6,390
+documents by 211 authors — the largest attestation in this run. It is
+Persian's *Sein* and taking it would collapse the distinction the term exists
+to keep.
+
+**کردمان** — کردن + `-mān` on the past stem, **V-014, one account, no
+competing parse**. The suffix makes a standing state and not an act, which is
+the Wirklichkeit/Handlung difference: Dehkhoda glosses **ساختمان** «نهاد. وضع.
+ساخت. ترتیب. **خلقت**» — the constitution of a thing — and **کشتمان** «صحرای
+کشته و زراعت شده». So `[past stem] + مان` is *the standing whole of what has
+been done*.
+
+**Its cost, stated:** ـمان is also the first-person-plural clitic, so کردمان
+can be read *we did*. Its 4 corpus occurrences are probably exactly that — we
+could not read the lines. What answers the objection is **گفتمان, which
+carries the identical ambiguity, has 0 occurrences in the whole corpus, and
+won completely.**
+
+**And one word we are rejecting although the engine builds it and its gloss is
+the best in the field.** **کنشمندی** rebuilds by one rule from کنشمند, which
+Dehkhoda glosses «خداوند کردار و **صاحب عمل**… یعنی **کننده و فاعل**» — *being
+in act*, almost word for word. The same entry ends «**و این لغت از دساتیر
+است**», and its stated synonym کنور is «دساتیری است… از **برساخته‌های فرقهٔ
+آذرکیوان**». Forgeries again. **132 lexicon entries mention دساتیر and 52
+mention آذرکیوان**; a سره coining run walks into them constantly.
+
+### Two things a check outside the corpus found, and one of them moves the word
+
+**There is already a rigorous pure-Persian system for these terms, and L30's
+rule says we must report it rather than coin past it.** Mohammad Heidari
+Malayeri's *Etymological Dictionary of Astronomy and Astrophysics* carries a
+complete, internally consistent set:
+
+| | Persian | from |
+|---|---|---|
+| real / reality | **هسیا / هسیایی** | Old Persian *hašya‑* «true, real», the same PIE root as هستن |
+| actual / **actuality** | **ژیروند / ژیروندی** | ژیر, Avestan *žirā‑* «active, agile» |
+| potential / potentiality | **توند / توندی** | تو‑, the stem of توان |
+| energy | **کاروژ** | کار |
+
+He rejects **کنش** explicitly, and his reason is one you should weigh: Persian
+has only کردن for both *do* and *act*, so کنش «confounds 'to do' with 'to
+act'». That objection lands on **کردمان** too, and we did not have it when we
+recommended it. `/explain?word=Hasyāyi` returns `rebuilt: false` — none of
+Malayeri's stems is in karbon.
+
+**Kazzazi's سره tradition gives واقعیت → راستینه / راستینگی**, consistently
+across four independent lists. **We refuse it and the reason is the analysis
+above**: راستین is *true*, so راستینه is **Wahrheit**, and German keeps
+Wahrheit and Wirklichkeit apart. راستینه rebuilds (`true`, N-101 + N-088 on
+راست) and has 1 corpus occurrence; راستین has 319.
+
+**And the finding that changes our recommendation.** **ورزیدن, Greek ἔργον and
+German *wirken* are the same Proto-Indo-European root, \*werǵ-.** Persian
+ورز/ورزیدن ← Middle Persian *warz/warzīdan* ← Proto-Iranian \*warj‑; Greek
+ἔργον ← \*wérǵom, whose cognate list names Avestan *varəzəm* outright; German
+*wirken* ← Proto-Germanic \*wirkijaną. And **ἐνέργεια is ἐν + ἔργον**.
+
+**So a Persian term coined on ورز‑ reproduces in Persian exactly the move
+German made from *wirken* and Greek made from *ergon* — with the genuine
+Iranian cognate of both.** کردن does not do that: کردن is *facere/tun*, and
+*wirken* is the other verb, which Persian also has.
+
+```
+/explain?word=Varzidmān   rebuilt: true, ONE account
+    ورزیدمان  ←  ورزیدن (مصدر)  by  V-014
+```
+
+Free: **0 occurrences**, no lexicon entry. Identical shape and identical
+cleanliness to کردمان, on the etymologically exact verb.
+
+**Its cost, and it is the neighbourhood again.** Every ورز‑ headword in your
+lexicon is a farmer or an athlete: ورزکار «زارع. کشاورز», ورزگر «برزگر»،
+ورزیگر «کشاورز»، ورزگاو and ورزو the plough‑ox, and the ورزش family. On its own
+tail, a ورز‑ word reads as *the ploughing*. And ورزیدمان is four syllables
+against کردمان's two.
+
+**The short form of the ورز‑ line is already taken**: **ورزمان** was approved
+by the Farhangestān in 1390 for **ماساژ**. Worth knowing — it was on our list.
+
+**Where we now stand: ورزیدمان leads on the argument and کردمان on the form.**
+Four syllables is the length of بن‌کارواژه, which L27 recommended, so we lean
+**ورزیدمان** — but this is a ruling and it is yours.
+
+### The verses, read at last — and they settle the first question against us
+
+Every run in this project has reported counts and said it could not read a
+line. **That was wrong about our own system**: the corpus is in an
+Elasticsearch index called `documents`, each record carrying `text_fa` whole,
+and a phrase query returns the verse. The counts were never the only thing
+available. Read now, the lines move the recommendation.
+
+**شایایی is used, in the one place it occurs, to mean *worthy*** — which is
+the sense §1 said the term must not swallow. In ملک‌الشعرا بهار's «ای زن» it
+stands in one row with **لایق**, and **درخور** follows in the next couplet.
+There is no modal reading available.
+
+**بایش is used, in the one place it occurs, as a term of logic.**
+ادیب‌الممالک, in a poem that glosses a vocabulary line by line, glosses
+**بایش as ایجاب and رانش as سلب** — necessitation against negation, the exact
+opposition the term is for, in a Persian poet's own gloss.
+
+**بایا's single occurrence is not the word at all.** ابن یمین uses it in a
+riddle about reversing letters. So بایا, on which we rested the
+recommendation, has no attested use in 25,497,189 words.
+
+**بایستگی's classical use pairs it with شایستگی in the *fitting* sense**,
+which supports the split we drew: فرخی سیستانی and خواجوی کرمانی both set
+**بایستگی** and **شایستگی** side by side as a pair, one in each half of the
+line.
+
+**But ناصرخسرو uses it philosophically, and this is against us**, in the
+prose of «صف پنجاه و دوم», arguing the necessity of time. **واجب and بایستگی
+in one passage, by a philosopher.** So بایستگی is not purely deontic, and our
+§2 argument is weaker than it read.
+
+**کردمان's four occurrences are all the clitic, now verified rather than
+inferred** — in بهار, افسرالملوک عاملی and اثیر اخسیکتی each is کرد + مان,
+*did to us*. The word itself is free.
+
+**So we revise the first question's answer.** ـش was argued for on brevity and
+an empty slot; it now has the better *usage* evidence too, and ـایی has an
+attestation pointing the wrong way. **We now recommend شایش and بایش**, and
+the cost stays what it was: **ناشایش does not build** (`rebuilt: false`), so
+امتناع has to come from the ـا adjective — **نابایا** (`rebuilt: true`,
+V-065 + N-033) and **نابایی** (`rebuilt: true`), and نابایا and نابای are your
+own headwords. A set of two ـش nouns with an ـا negative is not tidy, and we
+would rather say so than force symmetry.
+
+### The two questions we could not settle, and they are yours
+
+**1. ـایی or ـش?** Both shapes build off the same two verbs:
+
+| | ـایی | ـش (V-033) |
+|---|---|---|
+| امکان | شایایی (3 syllables) | **شایش** (2) |
+| ضرورت | بایایی | بایش |
+| امتناع | ناشایایی — **`rebuilt: true`** | **ناشایش — `rebuilt: false`** |
+
+**ـش is shorter and its slot is emptier**: شایش has 0 occurrences and the
+wildcard `شایش*` returns **0 distinct spellings in all 409,916**. Its tail is
+the most productive deverbal class in the language — دانش 4,488 occurrences,
+آفرینش 1,871, کوشش 1,221, بینش 688 — and دانش and بینش are *state* nouns, so
+the "possibility is not a process" objection does not hold. Two سره
+dictionaries already give **شایش** for امکان.
+
+**ـایی closes under negation and ـش does not**, and the two headwords above sit
+on it. Against ـایی: `شایا*` returns 8 spellings and seven are شایان and its
+inflections — 131 occurrences meaning *worthy* — so شایایی has the axiological
+family as its neighbour where شایش has no neighbour at all.
+
+**We recommend ـایی for the set and would not argue with ـش for امکان alone.**
+
+**2. Is امتناع ناشایایی or نابایایی?** Logically امتناع is the negation of
+امکان, so ناشایایی. But your dictionary glosses **نابایا** as «ممتنع» while
+glossing **نابای** as «مقابل ممکن» — the negative pole is recorded on بای- in
+both entries, and the two glosses are not consistent with each other. We have
+not smoothed this over.
+
+### Evidence
+
+`/explain` at depth 3, and corpus counts as occurrences / documents / authors.
+
+| candidate | Behnevis | rebuilt | rules | corpus |
+|---|---|---|---|---|
+| **شایایی** | Šāyāyi | **true**, 3 | V-024+V-025, V-024+V-030, V-026+V-027 ← شایستن | **1 / 1 / 1** — ملک‌الشعرا بهار, 20th c. |
+| **بایایی** | Bāyāyi | **true**, 4 | same three ← بایستن, **+ one spurious** N-002+N-095 ← یا | **0** |
+| **ناشایایی** | Nāšāyāyi | **true**, 1 | V-065 + N-033 + N-095 ← شایستن | 0 |
+| نابایایی | Nābāyāyi | true, 3 | N-095 ← نابایا (a headword) | 0 |
+| **کردمان** | Kardmān | **true**, 1 | **V-014 ← کردن** | 4 / 4 / 4 |
+| شایش | Šāyeš | true, 2 | V-033 ← شایستن; V-033 ← شاییدن (base 0 occ) | **0**, and `شایش*` = 0 spellings |
+| بایش | Bāyeš | true, 2 | V-033 ← بایستن; ← باییدن | 2 / 2 / 2, 13th c. |
+| ناشایش | Nāšāyeš | **false** | نا- takes an infinitive, not a kārnām | 0 |
+| شایا | šāyā | true, 2 | V-024, V-026 ← شایستن | 0 |
+| بایا | bāyā | true, 3 | V-024, V-026 ← بایستن, + N-002 ← یا | 2 / 2 / 2, 13th c. (عطار، ابن یمین) |
+| بایستگی | Bāyestegi | true, 3 | V-008+V-082 ← بایستن | 42 / 17 / 9 — **the *ought* word** |
+| شایستگی | Šāyestegi | true, 3 | — | 133 / 97 / 41 — **occupied: merit** |
+| کنندگی | Konandegi | true, 6 | V-022+V-023 ← کردن | 0 — runner-up for واقعیت |
+| کنمان | Konmān | true, 4 | V-037, V-038 ← کردن (present stem) | 0 |
+| کنشمندی | Konešmandi | true, 1 | N-095 ← کنشمند | 0 — **دساتیر** |
+| ناور | nāvar | true, 2 | both spurious | 8 / 8 / 7 — **دساتیر** |
+| هستی | Hasti | **false** | — | 8,710 / 6,390 / 211 |
+| کارایی | Kārāyi | true, 9 | **every base کشتن، کاریدن، کاشتن** | 0 |
+
+**کارایی is L27's کارنده fault reproduced on a second word**: on this
+project's own engine it means *sower-hood*. So does کارگری, by the same three
+bases.
+
+### What could not be verified
+
+- **Meaning, throughout.** V-014, V-024, V-025 and V-033 carry no semantic tag
+  and `meaning_fa` is null on every form. Whether شایایی reads as *امکان* to a
+  Persian ear is your judgement and not the engine's.
+- **Modern usage.** The corpus is classical, so a zero means the poets did not
+  write it and nothing more — S33. Whether an accepted سره term for actuality
+  already exists was not established.
+- **No corpus line was read.** We know کردمان occurs 4 times and not what any
+  of the four writers meant by it.
+- **Syllable counts were made by reading aloud.** The project has no
+  syllabifier.
+
+---
+
+## L32. Windtelefon — the wind phone, and a compound the engine builds forward
+
+Asked for by the project lead on 2026-08-29. Same protocol; nothing in the
+code or rules changed. Figures from corpus v11 and `lexicon-20260808`.
+
+**The thing being named.** The *kaze no denwa* of Ōtsuchi: a disconnected
+telephone in a garden booth where mourners speak to their dead, the wind
+carrying the words. German *Windtelefon*, Japanese «the wind's telephone».
+Persian media already call it **تلفن باد** (fa.wikipedia has the article under
+that title) — a half-loan, تلفن being French.
+
+**What the word must carry**: the wind as bearer, and the act of speaking to
+one who cannot answer. It is not a technology term; the obliqueness is the
+point in every language that has named it.
+
+### The recommendation: بادگو — *bādgu*
+
+**The engine builds it, forward, by the same rule that builds سخنگو:**
+
+```
+/compound?word=باد&partner=گفتن   →   بادگو (bādgu)   V-078, V-079
+```
+
+باد is اسم ذات → nām (one reading, 65 one-step forms), so the slot rules
+take it without any ruling. **بادگو is 0 in 25,497,189 words, and neither
+بادگو nor بادگوی is a lexicon headword.** The slot is empty.
+
+The shape has a modern device-precedent: **بلندگو** for loudspeaker — noun +
+گو naming an instrument, not a person. (Outside the corpus, S33: بلندگو is 0
+in the classical corpus, as expected of a modern word.)
+
+**S32 stated plainly**: `/explain?word=Bādgu` returns `rebuilt: false`,
+because nothing reverses a compound. The verification here is the forward
+build only — the same standing limitation the third Dasein run reported.
+
+### The wind-as-messenger reading is massively native, and we read the verses
+
+| | documents |
+|---|---|
+| باد صبا | **1,231** |
+| پیک صبا | 46 |
+| شاد باد | 119 |
+
+And the exact concept — the wind carrying words to the unreachable — is in
+the corpus in so many words: in ادیب صابر the morning wind carries the poet's
+message to the friend, and مهستی گنجوی (also مجد همگر) addresses the wind as
+the bearer of a message.
+
+The مهستی line carries **both readings of باد in one hemistich**: the wind
+addressed as messenger, and the optative بادِ دعا — the same بادِ that Persian
+says over the dead in «روانش شاد باد». The engine even builds **بادا** from
+باد by N-032, the vocative rule (بانگا's rule): *O wind* — which is also the
+بادا of «هرچه بادا باد». A resonance, not an argument; recorded because it is
+pretty and true.
+
+### The cost, and it is a real branch
+
+**باد compounds have a futility/vanity branch, documented in your own
+entries**: بادپیما «مردمِ مفلس... بی‌فایده‌گوی و **دروغ‌گوی**» (13 documents),
+بادسر «متکبر», باد در سر «غرور», بادبدست «مفلس». So بادگو *can* be heard as
+«حرفِ باد زن» — an idle talker. Against it: the messenger branch above
+outweighs it in the corpus by orders of magnitude, and the سخنگو/بلندگو
+pattern pulls the reading toward the device. Your call whether the risk is
+tolerable.
+
+### Rejected, with reasons
+
+| candidate | why |
+|---|---|
+| **بادگاه** | occupied, fatally: your entry reads «**بیت‌الخلا** و طهارت‌جای». Recorded so nobody proposes it again. |
+| بادنامه | letter, not speech; and `rebuilt: false` (L28) |
+| بادپیام | پیام is not even a headword; پیغام is اسم معنی → blocked; and L28 |
+| بادرسان | builds (V-078) and is free, but names the *wind*, not the device |
+| **بادکده** | builds (N-062, one account), 0 in corpus, and lovely for the *booth* — «house of the wind» — but drops the speaking, which is the working half of the concept. Offered as the word for the booth if you want a pair: بادگو the phone, بادکده the hut. |
+
+**What we did meanwhile**: nothing. تلفن باد remains the standing Persian;
+بادگو is the سره candidate, yours to accept or throw out.
+
+---
+
+## L33. جوهر، علت، معلول — a word Persian lent and can take back, and a pair the engine builds off one verb
+
+Asked for by the project lead on 2026-09-05: pure-Persian renderings of the
+three metaphysical terms, in **فارسی سره**. Same protocol as L31 and L32 —
+propose, verify every proposal through `/explain` or `/compound`, count in the
+corpus, **read the lines**, then check outside the corpus. Nothing in the code
+or the rules changed. Every figure is corpus v11 (25,497,189 words) and
+snapshot `lexicon-20260808`.
+
+### The recommendation
+
+| | now | candidate | reading | rules | corpus |
+|---|---|---|---|---|---|
+| **جوهر** | substance, οὐσία | **گوهر** | *Gavhar* | a headword — nothing to build | **11,466 / 8,236 / 210** |
+| جوهری | substantial | **گوهرین** (or گوهری) | *gavharin* | N-100 ← گوهر | 45 / 42 / 20 |
+| **علت** | cause, αἰτία | **انگیزنده** | *angizande* | V-022 ← انگیختن | 3 / 3 / 3 |
+| **معلول** | effect, the caused | **انگیخته** | *angixte* | V-008 ← انگیختن | 371 / 232 / 93 |
+| علیت | causality | انگیزندگی | *Angizandegi* | V-022 + V-023 ← انگیختن | 0 |
+| علت, as *the reason why* | | **چرایی** | *Čerāyi* | **cannot be built — چرا is not a headword** (B7) | 297 / 221 / 68, of which the noun is 22 lines |
+
+Two kinds of answer, to be judged differently. **گوهر is L30's case:
+Persian already has the word, so we report it and coin nothing.** انگیزنده /
+انگیخته is L31's case: a concept with a native verb, coined off the verb, and
+the engine builds every member of the family today. چرایی is a third thing —
+an established word for one sense of علت that the engine cannot reach.
+
+### جوهر — Arabic borrowed it from Persian, and Persian can have it back
+
+**جوهر is Middle Persian گوهر.** *gōhr* is glossed «substance, essence,
+nature; jewel; stock, lineage» (MacKenzie), Arabic *jawhar* is the loan from
+it, and your own dictionary says so: «معرب گوهرِ فارسی», and under گوهر «از
+gohr پهلوی، به معنای سرشت و نهاد یا طبیعت». The philosophical sense was in
+the Persian word **before** Arabic took it; the loan carried both senses
+across. So this is not a coinage but a loan-return: the Arabic term is the
+Persian word in Arabic dress.
+
+**Avicenna made this choice before us.** A secondary source reports that the
+دانشنامهٔ علایی — the first Persian rendering of the Arabic philosophical
+vocabulary — writes گوهر for جوهر; and the same work's «ایستاده به خود» for
+قائم به ذات is documented separately, which is the definition of a substance.
+We have not read the passage itself; it is listed below among the unverified.
+
+**The corpus.** گوهر: **11,466 occurrences, 8,236 documents, 210 authors**,
+11th–20th century — the largest attestation in any run so far, above هستی's
+8,710. جوهر: 4,526 / 2,692 / 168. And the poets use گوهر in exactly the sense
+wanted — read, not counted:
+
+- فردوسی and قطران: **چار گوهر** / **چهار گوهر**, the four elements — the
+  physical substances a body is made of.
+- رودکی, Dehkhoda's own citation: **گوهر اصل** beside گوهر تن.
+- مسعود سعد: a ذات that is a **گوهر**.
+- عطار, both words in one couplet in one sense: **جوهر عشق** and **گوهر
+  عشق**.
+
+**Where the poets kept the Arabic: the technical compound.** جوهر فرد, the
+atom, is **35 lines** (حافظ among them, and جامی beside جزو لایتجزی) against
+گوهر فرد **3**, and those three are ornaments. The loan-return is free in the
+general sense and has to be made deliberately in the term of art.
+
+**The engine.** گوهر is اسم ذات → nām, one reading in two spellings (*Gavhar*
+/ *Govhar*, both carried), **130 one-step forms**. For جوهری: **گوهرین**
+rebuilds by N-100 — the *made-of* adjective of سیمین and زرین — 45
+occurrences, 12th–15th; **گوهری** rebuilds by N-095 and is 1,060, but گوهری
+is also *the jeweller*, which is why گوهرین is first. گوهرمند (N-071) and
+گوهرگی (N-092) rebuild and are 0.
+
+**The cost, stated:** گوهر's first sense is the pearl and will stay so. But
+that was equally true of *gōhr*, and it is true of Arabic *jawhar*, which is
+also a jewel. The polysemy is the word's, not the proposal's.
+
+### علت and معلول — off one verb, as the Arabic is off one root
+
+**The Arabic pair is one root twice** — علّة and معلول, the cause and the
+*caused*. L31's rule says coin off the verb, and here the verb also settles
+the pairing: a Persian cause and effect should be the two participles of one
+کارواژه, as فاعل / مفعول are.
+
+**The verb is انگیختن** — *to rouse into being, bring about*. Your dictionary
+already holds the noun: **انگیزه** «سبب و باعث چیزها... موجب. **علت**», and
+**انگیز** «آنچه باعث انگیزش و تحریک باشد. محرک» — 646 occurrences by 137
+authors, the classical form; انگیزه itself is 17 occurrences, **all twentieth
+century**. فرهنگ فارسی lists انگیزه first among the Persian equivalents of
+علت, and the encyclopaedia article on علیت glosses the final cause as
+«انگیزهٔ فاعل».
+
+**The engine builds the whole family, and every member rebuilds:**
+
+| | reading | `/explain` | rules | corpus |
+|---|---|---|---|---|
+| **انگیزنده** — علت | *angizande* | **true**, 2 | V-022 ← انگیختن (and ← انگیزیدن) | 3 / 3 / 3 |
+| **انگیخته** — معلول | *angixte* | **true**, 1 | V-008 ← انگیختن | 371 / 232 / 93 |
+| برانگیخته | *barangixte* | true, 2 | V-009 + N-003; V-005 + V-053 + V-008 | 96 / 91 / 54 |
+| انگیزندگی — علیت | *Angizandegi* | true, 4 | V-022 + V-023 ← انگیختن | 0 |
+| انگیزه | *Angize* | true, 4 | V-034 / V-035 ← انگیختن, ← انگیزیدن | 17 / 17 / 12 |
+| انگیزش | *Angizeš* | true, 2 | V-033 | 14 / 14 / 13 |
+
+**The lines were read.** انگیزنده's one line in the passages is مولانا's,
+where every atom is a rouser. انگیخته's 371 are the participle of *stir up* —
+a wave, a tumult, a passion stirred up, in فردوسی, مولانا and صائب. That is the
+cost and the argument at once: the pair says *the
+rouser and the roused*, a live metaphor rather than a dead technical term;
+and انگیزه has narrowed in modern Persian to *motive*, so انگیزنده will be
+heard first as *what motivates* and only second as *what causes*.
+
+### چرایی — the word for *the why*, and it is older than we thought
+
+Aristotle's αἰτία is the answer to διὰ τί, *on account of what*; the four
+causes are four ways of answering *why*. Persian has the noun for that:
+**چرایی**, فرهنگ عمید «**علت، دلیل، سبب**», and فرهنگ فارسی lists it among
+the equivalents of علت.
+
+**The count lies and the lines correct it.** 297 occurrences, 221 documents,
+68 authors — but **221 of the 243 lines are «چرا + یی», *why are you***, in
+فردوسی and مولانا among others. **22 lines are the noun**, nearly all in the
+fixed pair چون و چرایی, *the how and the why*:
+
+- فردوسی, the cleanest: **چرایی و چون** as the object of a question that
+  reason answers.
+- عطار, beside the Arabic word itself: **بی علت** next to **چون و چرایی**.
+- انوری: **علت** next to **چونی و چرایی**.
+- سنایی، عراقی، جامی، اهلی، بیدل and others, 12th–19th century.
+
+So چرایی is classical, nominal, and sits next to علت in the poets' own
+lines. **What it is not**: a term for the efficient cause. Its home is the
+reason-question — *why is this so* — which is one of علت's senses, the one
+modern Persian already gives it. And **it has no partner**: nothing on چرا
+names the effect.
+
+**The engine cannot build it, and the reason is a gap upstream.**
+`/explain?word=Čerāyi` is `rebuilt: false` and `/generate?word=چرا` is 404:
+**چرا is not a headword** in the snapshot, with **14,869 occurrences in 9,897
+documents by 228 authors** — the third most frequent word in this run. B7 in
+UPSTREAM. Even entered, it would come in as a چون‌واژه, and N-097 makes a
+برنام from that, not a کارنام; so چرایی-the-noun needs a ruling on its class
+as well as an entry.
+
+### شوند — Kasravi's word, and why it is not offered yet
+
+**شوند** is in your dictionary: «باعث و سبب و مادهٔ هر چیز. ج، شَوَنْدان.
+رجوع به شَوه شود» — sources **برهان، انجمن‌آرا، آنندراج, and no verse**. That
+is the profile L31 taught us to check: the three dictionaries that carried
+the دساتیر, a gloss that lands on a philosophical term, and no citation.
+Nothing found marks it ساختگی, and Pourdavoud's essay does not name it; but
+nothing found vouches for it either.
+
+**The corpus has the string 2,940 times and the noun never**: every line is
+the verb *they become*; «به شوند», «شوندان» and «شوند آن» are 0 lines each.
+Its twin شَوه is 4 lines by one author.
+
+**Its case rests on morphology and on one modern writer.** شو + ـند is the
+shape of روند، پیوند، گزند، خورند — a real Persian formation — and Kasravi
+revived it as شَوَند in زبان پاک, where it means *cause, reason*; فرهنگ
+فارسی lists it. **And the engine cannot build it**, because the rule document
+has no [کاربن دو + ـند] rule — that is L34. Until you rule on L34, شوند is a
+word you would have to hand us, not one the engine can derive; and it is a
+homograph of one of the commonest verb forms in the language.
+
+### Rejected, with reasons
+
+| candidate | for | why |
+|---|---|---|
+| مایه | جوهر | Pahlavi ماتک «جوهر، مادهٔ اولی» in your own entry — the *materia*, not the substance; and occupied four times over (yeast, capital, the she-camel, the month of May). A headword: nothing to build. |
+| بن و بر | علت و معلول | the folk pair, *root and fruit*; the encyclopaedia article on علیت records it. بن is a headword («بنیاد. پایه. اصل») but **بر is not**, the pair cannot be checked as a phrase in the corpus, and بن is this project's own word for a stem. |
+| پیامد | معلول | 1 occurrence; `rebuilt: false`; `/compound?word=پی&partner=آمدن` returns **0 rows for both readings** — پی is اسم معنی, so L26 blocks it. The Farhangestān's word for *consequence* is پیایند. |
+| برآیند | معلول | modern *resultant*; the 75 corpus hits (12th–17th) are the verb; `rebuilt: false` — the same missing ـند rule as شوند (L34). |
+| زاینده / زاده | علت / معلول | both rebuild (V-022, V-008) and are well attested (102; 1,908) — and every line read is a mother and a child. The metaphor is Neoplatonic and Persian would hear it literally. |
+| شده، کننده، کرده | معلول / علت | rebuild, and mean nothing in particular: 19,660, 620, 26,725. |
+| بهانه | علت | Pahlavi وهان, *cause* — your entry says so — and the sense is dead: *pretext*, 1,339 occurrences all in that sense. |
+| گوهری | جوهری | rebuilds (N-095) and is 1,060 — but it is *the jeweller* first. Second choice after گوهرین. |
+
+### Evidence
+
+`/explain` at depth 3; corpus as occurrences / documents / authors. **The
+Behnevis case is part of the query**: a برنام or کاربهر is lowercase and a
+نام or کارنام capitalised, so `Konande` and `angizandegi` return `rebuilt:
+false` while `konande` and `Angizandegi` rebuild. An early pass of this run
+recorded four *-ande* words as unbuildable on that mistake alone.
+
+| candidate | Behnevis | rebuilt | rules | corpus |
+|---|---|---|---|---|
+| **گوهر** | Gavhar | headword | — | **11,466 / 8,236 / 210** |
+| **گوهرین** | gavharin | **true**, 1 | N-100 ← گوهر | 45 / 42 / 20 |
+| گوهری | Gavhari | true, 1 | N-095 ← گوهر | 1,060 / 952 / 156 |
+| گوهرمند | gavharmand | true, 1 | N-071 | 0 |
+| گوهرگی | gavhargi | true, 1 | N-092 | 0 |
+| **انگیزنده** | angizande | **true**, 2 | V-022 ← انگیختن، انگیزیدن | 3 / 3 / 3 |
+| **انگیخته** | angixte | **true**, 1 | V-008 ← انگیختن | 371 / 232 / 93 |
+| برانگیخته | barangixte | true, 2 | V-009 + N-003; V-005 + V-053 + V-008 | 96 / 91 / 54 |
+| انگیزندگی | Angizandegi | true, 4 | V-022 + V-023 | 0 |
+| انگیزه | Angize | true, 4 | V-034, V-035 | 17 / 17 / 12, 20th only |
+| انگیز | Angiz | headword | V-049 | 646 / 593 / 137 |
+| **چرایی** | Čerāyi | **false** — چرا absent | — | 297 / 221 / 68; the noun 22 lines |
+| شوند | Šavand | **false** — no ـند rule | — | 2,940, all the verb |
+| پیامد | Peyāmad | false | compound: 0 rows | 1 |
+| برآیند | Barāyand | false | — | 75, the verb |
+| زاینده / زاده | zāyande / zāde | true / true | V-022 / V-008 ← زادن | 102 / 1,908 |
+| جوهر | — | — | — | 4,526 / 2,692 / 168 |
+| علت / معلول | — | — | — | 1,758 / 1,123 / 151; 230 / 134 / 49 |
+
+### What could not be verified
+
+- **Avicenna's گوهر.** That the دانشنامه writes گوهر for جوهر rests on one
+  secondary source; the passage was not read. «ایستاده به خود» for قائم به
+  ذات is from a second, independent one.
+- **Meaning, throughout.** No rule in the family carries a semantic tag;
+  whether انگیزنده reads as *cause* to a Persian ear is your judgement.
+- **Modern usage beyond the dictionaries.** Heidari Malayeri's dictionary —
+  the check that moved L31 — could not be reached this session. Whether a
+  سره philosophy already uses a fixed pair for علت / معلول was not
+  established.
+- **شوند's provenance.** Not found in any list of دساتیر words; not found
+  vouched for either.
+- **Phrase counts with «و».** «چون و چرا» and «بن و بر» cannot be counted as
+  phrases on the passages index — a phrase containing و returns either 0 or
+  the bare word's count — so the 22 noun lines of چرایی were found by pulling
+  all 243 and reading them, not by a query.
+
+### The questions, and they are yours
+
+1. **Is a loan-return سره?** گوهر → جوهر → گوهر. If yes, جوهر is settled with
+   no coinage; and say whether the technical compound follows (گوهر فرد for
+   the atom).
+2. **گوهرین or گوهری for جوهری?**
+3. **انگیزنده / انگیخته as the pair** — or a pair on a different verb? The
+   engine will build any you name; every candidate off a مصدر rebuilds.
+4. **چرایی**: accept it for the reason-sense of علت, or keep علت one word?
+   And should چرا enter the lexicon, and as what class?
+5. **L34** decides شوند and برآیند.
+
+**What we did meanwhile**: nothing in code or rules. The three words stand as
+they were.
+
+---
+
+## L34. A suffix the document does not have: [کاربن دو + ـند]
+
+Found in L33: شوند and برآیند cannot be built because **no rule in the pack
+puts ـند on a present stem**, while روند، پیوند، گزند، خورند are ordinary
+Persian words of exactly that shape.
+
+**Measured** on `lexicon-20260808`: **759 headwords end in ـند**; for **58** of
+them the string in front is the present stem of some verb in the snapshot.
+Read by hand, most are coincidence (سمند، کمند، پرند). The ones that are the
+pattern:
+
+| headword | stem | verb | your gloss |
+|---|---|---|---|
+| شوند | شو | شدن | «باعث و سبب» |
+| خورند | خور | خوردن | «درخور. سزاوار» |
+| مانند | مان | ماندن | «مثل و شبیه» |
+| تنند | تن | تنیدن | «عنکبوت» — *the spinner* |
+| کنند | کن | کندن | «افزاری که... بدان زمین کنند» — *the digger* |
+| بساوند | بساو | بساویدن | «قافیهٔ شعر» — *the touching* |
+| دوسند | دوس | دوسیدن | «التصاق و چسبندگی» |
+| پیچند | پیچ | پیچیدن | «پیشانی‌بند» |
+| پیوند، گزند | پیو، گز | پیوستن، گزیدن | headwords; گزند is Pahlavi *wizand*, your entry says |
+
+روند is not a headword at all. So the suffix is real, old, and small.
+
+**The question:** is [کاربن دو + ـند] a rule — live enough that شوند and
+برآیند count as derivations — or a closed list of inherited words? If a
+rule, it needs a row: input کاربن دو, output نام or کارنام, examples روند،
+پیوند، گزند، خورند. If a closed list, شوند is a dictionary word to be judged
+on its own, and the engine is right to refuse it.
+
+**What we did meanwhile**: nothing. No rule was added; L33 reports شوند as
+unbuildable rather than building it on a rule you have not written.
+
+### L33, addendum (2026-09-05, later) — the definitions read, and the candidates they yield
+
+The project lead's note: his own rendering comes from Aristotle's definitions,
+which the app cannot reach. So the definitions were read — Categories 5;
+Metaphysics Δ.2, Δ.8, Z.1–3; Physics II.3; Posterior Analytics I.2, II.11,
+II.16–17 (Ross / Hardie–Gaye / Mure translations, MIT) — and candidates were
+derived from **what the definitions say** rather than from the Arabic terms.
+Then the same protocol.
+
+**What the definitions say.** Categories 5: primary substance is «that which
+is neither predicable of a subject nor present in a subject; for instance,
+the individual man or horse»; it is «individual», «has no contrary», «does not
+admit of variation of degree», and «while remaining numerically one and the
+same, is capable of admitting contrary qualities». Metaphysics Δ.8: «substance
+has two senses, (A) ultimate substratum, which is no longer predicated of
+anything else, and (B) that which, being a "this", is also separable — the
+shape or form of each thing»; Z.3: the substratum is «that of which
+everything else is predicated, while it is itself not predicated of anything
+else». Physics II.3 / Δ.2: «cause» is (1) «that out of which a thing comes to
+be and which persists» — the bronze of the statue; (2) «the form or the
+archetype, i.e. the statement of the essence» — 2:1 for the octave; (3) «the
+primary source of the change or coming to rest» — the adviser, the father,
+«the maker a cause of the thing made and the change-producing of the
+changing»; (4) «the end or "that for the sake of which"» — health of walking;
+and «men do not think they know a thing till they have grasped the "why" of
+it». Posterior Analytics II.16: the correlate of αἴτιον is **τὸ αἰτιατόν, «the
+thing caused»** — a passive verbal adjective, which is what Arabic معلول
+copies. Etymology: οὐσία = οὖσα (the participle *being*) + ‑ία, «beingness»,
+calqued by Latin *essentia*; *substantia* is the calque of ὑπόστασις, «what
+stands under»; αἰτία ← αἴτιος «responsible, culpable» — the cause is what is
+answerable for a thing.
+
+**What the definitions yield, through the engine.**
+
+| candidate | for | carries | `/explain` | rules | corpus |
+|---|---|---|---|---|---|
+| **زیرایستا** *ziristā* | جوهر as substratum | Δ.8 (A) / Z.3 — *what stands under*; the shape of *substantia* | **true**, 2 | V-076 zir- + ایستادن; V-024 ‑ā | 0 |
+| زیرایست *Zirist* | the same, as کارنام | | true, 1 | V-076 + V-049 | 0 |
+| **باشنده** *bāšande* | جوهر as οὐσία's own calque | οὖσα → باشنده | true (V-022 ← باشیدن; two spurious parses) | V-022 | 8 / 8 / 4, 13th — in مولانا: *dweller* |
+| هستی | the exact calque of οὐσία | | `Hasti` false; not a headword | — | 8,710 — Persian's *Sein*, occupied |
+| **جنباننده** *jonbānande* | علت, the efficient cause | Physics II.3 (3), verbatim: «the change-producing of the changing» — the mover | **true**, 2 | V-022 ← جنباندن | **41 / 17 / 4**, 13th — مولانا pairs جنباننده with جنبنده: Physics VIII's argument, in Persian |
+| **جنبانده** *jonbānde* | معلول, the moved | αἰτιατόν's shape: the passive participle | **true**, 1 | V-008 ← جنباندن | 3 / 3 / 3 |
+| جنبیده *jonbide* | the same | | true, 2 | V-008 ← جنبیدن | 17 / 15 / 12 |
+| جنبنده *jonbande* | the moving thing (مولانا's partner word) | | true | V-022 ← جنبیدن | 81 / 74 / 34 — **occupied**: a creature (جنبندگان) |
+| جنبانندگی | علیت as *moving* | | true, 3 | V-022 + V-023 | 0 |
+| چرایی | علت as «the why» | Physics II.3's opening | false — چرا absent | — | (L33 above) |
+| زیرنهاد | ὑποκείμενον's calque | | **false** — نهاد is اسم معنی | L26 | 0 |
+| آغازگاه | «whence the change first begins» | | **false** — آغاز is اسم معنی | L26 | 0 |
+| پدیدآورنده | «the maker of the thing made» | | compound: **0 rows** — پدید is a برنام | L26 | 2 |
+| خودایستا | Categories: «not in a subject» | | false — no compound route | | 0 |
+
+**Two things this route shows, and both are worth having.** First, the
+definitions reach one sense of each term and not the others: *what stands
+under* but not *a this that is separable*; *the mover* but not matter, form
+or end. That is exactly why the tradition chose non-definitional words —
+*jawhar*, *ʿilla* — and it is the argument for keeping the lexical route
+(گوهر; انگیزنده / انگیخته) first and offering these beside it. Second, the
+Greek word for the effect is itself a passive participle, so the shape L33
+recommends for the pair is not a Persian expedient but the shape of the
+original. **And the same wall as before**: four definition-derived candidates
+(زیرنهاد، آغازگاه، پدیدآورنده، خودایستا) die on L26 or the compound gap, not
+on the rules.
+
+**What we did meanwhile**: nothing. The page for the project lead carries the
+section «از تعریف ارسطو» with the same table.
