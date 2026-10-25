@@ -1,0 +1,13 @@
+{
+  "counted": 555859,
+  "lowest": 0.5541,
+  "highest": 0.9144,
+  "median": 0.8283,
+  "boundaries": [
+    0.7628,
+    0.807,
+    0.8469,
+    0.8703
+  ],
+  "corpus_version": "v9"
+}

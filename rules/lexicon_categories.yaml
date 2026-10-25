@@ -1,0 +1,119 @@
+# Lexicon category → word class.
+#
+# The lexicon labels entries with lexicographic categories (اسم ذات، صفت مرکب،
+# مصدر…). The rules match on the grammar's word classes (nam, barnam,
+# nabesudkarvaze…). The two systems do not line up one to one, so the mapping
+# is written down here rather than guessed in code.
+#
+# **This is a linguistic judgement.** Every entry says what it is grounded in.
+# Anything not settled by the source document carries needs_expert_check: true
+# and is not used until the linguist rules on it.
+#
+# Fields
+#   lexicon_category   exactly as the lexicon writes it
+#   word_classes       what the rules should match on. Empty = unmappable.
+#   is_compound        the entry is already a compound word. Not a word class:
+#                      it decides whether the compounding rules should take it
+#                      as input, which is a separate open question.
+#   grounding          why. "source" = stated in the source grammar.
+#   rows               how many active rows carry this category, 2026-08-11
+#
+# Counts are from snapshot lexicon-20260808 (45,579 active rows).
+
+version: 0.1.0
+
+categories:
+  - lexicon_category: مصدر
+    word_classes: [nabesudkarvaze]
+    is_compound: false
+    rows: 1752
+    grounding: source
+    note: >-
+      The terminology table maps مصدر → نابِسودکارواژه directly. These entries
+      also carry both stems, so they are the entry point for karbon_yek and
+      karbon_do.
+
+  - lexicon_category: صفت
+    word_classes: [barnam]
+    is_compound: false
+    rows: 1528
+    grounding: source
+    note: The terminology table maps صفت → برنام directly.
+
+  - lexicon_category: اسم معنی
+    word_classes: [karnam]
+    is_compound: false
+    rows: 1991
+    grounding: source
+    note: >-
+      Stated outright in the source grammar's prose — what traditional grammar
+      calls اسم معنی is a kārnām here, because these nouns name the doing
+      itself rather than a standing thing.
+
+  - lexicon_category: اسم ذات
+    word_classes: [nam]
+    is_compound: false
+    rows: 14391
+    grounding: source
+    note: >-
+      The terminology table maps اسم → نام. The grammar has a finer term for
+      this group, nākārnām — a noun that does *not* come from a doing, like
+      "horse" or "cow". That term is not in the rules' type vocabulary and no
+      rule matches on it, so the class the rules see is nam.
+
+  - lexicon_category: اسم مرکب
+    word_classes: [nam]
+    is_compound: true
+    rows: 8132
+    grounding: source
+    note: >-
+      A compound noun is still a نام. "Compound" describes how the word was
+      built, not what class it is. Whether these should feed the compounding
+      rules again is a separate question — see LEXICON_ANALYSIS.md §7.
+
+  - lexicon_category: صفت مرکب
+    word_classes: [barnam]
+    is_compound: true
+    rows: 12131
+    grounding: source
+    note: As اسم مرکب, for adjectives.
+
+  - lexicon_category: صفت-اسم
+    word_classes: []
+    is_compound: false
+    rows: 296
+    grounding: unresolved
+    needs_expert_check: true
+    note: >-
+      The lexicon says the entry works both as an adjective and as a noun. The
+      grammar allows that — a barnām used as a nām is written with a capital
+      first letter. **Question for the linguist:** should such an entry carry
+      both classes, so every nam rule and every barnam rule applies to it, or
+      one primary class? Left unmapped until answered, because mapping it to
+      both roughly doubles what these 296 entries generate.
+
+  - lexicon_category: وام‌واژه
+    word_classes: []
+    is_compound: false
+    rows: 5347
+    grounding: unmappable
+    needs_expert_check: true
+    note: >-
+      "Loanword" says where a word came from, not what class it is. A loanword
+      may be a noun, an adjective or anything else, and the category records
+      none of that. Not excluded from the project — the grammar explicitly
+      permits building Persian verbs from Arabic loans — but it cannot be
+      mapped from this label alone. **Question for the linguist:** should
+      loanwords be classified by a second pass, or treated as nam by default?
+
+  - lexicon_category: null
+    word_classes: []
+    is_compound: false
+    rows: 11
+    grounding: unmappable
+    needs_expert_check: true
+    note: >-
+      Eleven rows carry no category at all, and eight of them have stems. They
+      are listed explicitly because SQL comparisons skip nulls silently, so
+      without this entry they would vanish from every count without anyone
+      noticing.

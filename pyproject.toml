@@ -1,0 +1,76 @@
+[project]
+name = "murfulu"
+version = "0.0.0"
+description = "Persian word generation from stems and word-formation rules"
+# Apache-2.0 covers what this project wrote. It does not reach the corpus, the
+# lexicon, or the expert feedback set — see NOTICE, which says why for each.
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+api = [
+  "alembic==1.19.1",
+  "elasticsearch==8.17.1",
+  "fastapi==0.115.6",
+  "psycopg[binary]==3.3.4",
+  "SQLAlchemy==2.0.52",
+  "uvicorn[standard]==0.34.0",
+]
+dev = [
+  "httpx==0.28.1",
+  "pytest==8.3.4",
+  "ruff==0.9.4",
+  "mypy==1.14.1",
+  "python-docx==1.1.2",
+  "PyYAML==6.0.2",
+  "types-PyYAML==6.0.12.20241230",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "N", "ANN", "D"]
+ignore = [
+  "D203",  # conflicts with D211
+  "D213",  # conflicts with D212
+  # "Return the …" adds nothing to a one-word accessor, and forcing it makes
+  # docstrings worse. Docstrings are still required; only the mood is not.
+  "D401",
+  "ANN401",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# A test name is its own description, and a fixture stub class needs no
+# docstring. Module docstrings are still required.
+"tests/*" = ["D101", "D102", "D103", "D105", "D107", "ANN201"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+files = ["src", "tools", "migrations"]
+strict = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+# python-docx ships no type information.
+module = "docx.*"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

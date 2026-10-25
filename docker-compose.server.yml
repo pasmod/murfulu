@@ -1,0 +1,37 @@
+# Production on the production host (Ubuntu 24.04 in WSL + Docker Engine, see
+# docs/DEPLOY.md §0), on top of docker-compose.prod.yml — see deploy/server.sh:
+#
+#   docker compose -p murfulu -f docker-compose.prod.yml -f docker-compose.server.yml …
+#
+# **Shared with Sokhan**, whose stack runs there as compose project `mana`. The
+# project name `murfulu` keeps every container, network and volume apart
+# (murfulu-*-1, murfulu_default, murfulu_*), and nothing here publishes a port,
+# so the two cannot collide on the host either.
+#
+# **No host ports at all.** cloudflared reaches Caddy over the compose network.
+# WSL runs in mirrored networking mode, where Windows reserves random port
+# ranges at every boot — it once took Sokhan's Qdrant port down after a reboot —
+# and publishing nothing makes that impossible. Debug with `compose exec`.
+#
+# **cloudflared is started by `deploy/server.sh cutover`, never by `deploy`.**
+# Two connectors on the same tunnel split the traffic between two databases, so
+# while the Mac serves the site (before the cutover, after a rollback) this one
+# must stay stopped. `restart: unless-stopped` keeps a stopped connector stopped
+# across a WSL reboot.
+services:
+  caddy:
+    ports: !reset []
+
+  cloudflared:
+    # Exact tag, as everywhere in this repository — never `latest`.
+    image: cloudflare/cloudflared:2026.9.3
+    container_name: murfulu_cloudflared
+    command: tunnel --no-autoupdate --config /etc/cloudflared/config.yml run
+    volumes:
+      # config.yml (local, from config.yml.example, carried by `deploy`) + the
+      # tunnel credentials JSON (copied by `deploy/server.sh tunnel`). Neither
+      # is ever in git.
+      - ./deploy/cloudflared:/etc/cloudflared:ro
+    depends_on:
+      - caddy
+    restart: unless-stopped

@@ -1,0 +1,54 @@
+# Murfulu behind one door, with automatic HTTPS.
+#
+# Domain and credentials come from the environment, set by
+# docker-compose.prod.yml. See docs/DEPLOY.md.
+#
+# **Why a password rather than the app's own sign-in.** Murfulu authenticates
+# with `Authorization: Bearer <token>` headers, not with a session cookie, so
+# a browser asking for `/` carries nothing to check — there is no request for
+# `forward_auth` to forward. Gating at the edge is the only way to keep the
+# corpus off the open internet without rewriting the app's auth.
+#
+# **Two credentials, and that is the cost.** A reader needs the site password
+# to see anything, and an expert token to answer a question. The wall says who
+# may look; the token still says who may rule. Nothing about the app's own
+# roles changes — see docs/REVIEW.md.
+#
+# **What is behind it, and it is no longer an open question.** 19.5 million
+# lines of Ganjoor poetry and karbon's Dehkhoda-derived lexicon. Both were open
+# when this file was written and both are now settled — and they settled in
+# opposite directions. This project's own licence is **Apache-2.0** since
+# 2026-08-17, and it deliberately does not reach either of them: Ganjoor, asked
+# whether their data are free of copyright, answer «لزوماً خیر!» — no legal
+# review, most of it typed from published books whose status was never
+# established, and free access is not a licence.
+#
+# **So `basic_auth` is not waiting on anything.** Taking it out is still the one
+# edit that would publish all three, and the first of them is now known to be
+# unpublishable rather than merely unchecked.
+#
+# **The address carries the scheme on purpose.** On a server Caddy holds the
+# certificate and this is the bare domain, which turns on automatic HTTPS.
+# Behind a Cloudflare Tunnel — how the sibling apps on this domain are
+# published — Cloudflare terminates TLS and forwards plain HTTP, so the address
+# is written `http://…` and Caddy serves port 80 without asking Let's Encrypt
+# for a certificate it could never validate. **The wall is the same either
+# way**: what changes is who holds the key, never whether there is a door.
+
+{$MURFULU_SITE_ADDRESS} {
+	encode gzip
+
+	basic_auth {
+		{$MURFULU_SITE_USER} {$MURFULU_SITE_PASSWORD_HASH}
+	}
+
+	# The web container serves the app and proxies /api to the API itself, so
+	# this is the whole of it — see web/nginx.conf.
+	reverse_proxy web:80
+
+	log {
+		# Off by default. The corpus is a research asset, and who searched for
+		# which word is not something this project needs to keep.
+		output discard
+	}
+}

@@ -1,0 +1,327 @@
+version: 0.1.0
+rules:
+- id: S-01
+  source:
+    table: stem_rules
+    row: '1'
+  kind: stem
+  label_fa: کاربن یک از نابسودکارواژه
+  input:
+    types:
+    - nabesudkarvaze
+  output:
+    types:
+    - karbon_yek
+  explanation_fa: با حذف -an از پایان همه مصدرها باقیمانده بن یک است.
+  sub_rules: []
+  exceptions: []
+  active: true
+- id: S-02
+  source:
+    table: stem_rules
+    row: '2'
+  kind: stem
+  label_fa: کاربن دو از کاربن یک
+  input:
+    types:
+    - karbon_yek
+  output:
+    types:
+    - karbon_do
+  explanation_fa: اگر پایانِ بن یک -id باشد، با حذف -id بن‌ دو بدست می‌آید.
+  sub_rules: []
+  exceptions:
+  - infinitive_fa: آفریدن
+    stems_fa:
+    - آفرید
+    - آفرین
+  - infinitive_fa: گُزیدن
+    stems_fa:
+    - گُزید
+    - گُزین
+  - infinitive_fa: شنیدن
+    stems_fa:
+    - شنید
+    - شنو
+  - infinitive_fa: دیدن
+    stems_fa:
+    - دید
+    - بین
+  - infinitive_fa: چیدن
+    stems_fa:
+    - چید
+    - چین
+  active: true
+- id: S-03
+  source:
+    table: stem_rules
+    row: '3'
+  kind: stem
+  label_fa: کاربن دو از کاربن یک
+  input:
+    types:
+    - karbon_yek
+  output:
+    types:
+    - karbon_do
+  explanation_fa: اگر پایانِ بنِ‌ یک -d باشد، با حذف -d باقیمانده بنِ دو است.
+  sub_rules: []
+  exceptions:
+  - infinitive_fa: آزردن
+    stems_fa:
+    - آزرد
+    - آزار
+  - infinitive_fa: آمدن
+    stems_fa:
+    - آمد
+    - آ
+  - infinitive_fa: بردن
+    stems_fa:
+    - برد
+    - بر
+  - infinitive_fa: درودن
+    stems_fa:
+    - درود
+    - درو
+  - infinitive_fa: زدن
+    stems_fa:
+    - زد
+    - زن
+  - infinitive_fa: شدن
+    stems_fa:
+    - شد
+    - شو
+  - infinitive_fa: کردن
+    stems_fa:
+    - کرد
+    - کن
+  - infinitive_fa: مردن
+    stems_fa:
+    - مرد
+    - میر
+  active: true
+- id: S-04
+  source:
+    table: stem_rules
+    row: '4'
+  kind: stem
+  label_fa: کاربن دو از کاربن یک
+  input:
+    types:
+    - karbon_yek
+  output:
+    types:
+    - karbon_do
+  explanation_fa: اگر پایان بنِ یک -st باشد، با حذف -st باقیمانده ماده برای بنِ دو است.
+  sub_rules:
+  - part: 4-1
+    text_fa: اگر ماده برای بنِ دو K- a/ā  باشد، با افزودن h به پایان ماده برای بنِ دو خودِ بن‌ِ دو به‌دست
+      می‌آید.
+  - part: 4-2
+    text_fa: اگر ماده برای بنِ دو K- o  باشد، با تبدیل -o به -u بن‌ِ دو به‌دست می‌آید.
+  exceptions:
+  - infinitive_fa: بستن
+    stems_fa:
+    - بست
+    - بند
+  - infinitive_fa: پیوستن
+    stems_fa:
+    - پیوست
+    - پیوند
+  - infinitive_fa: خاستن
+    stems_fa:
+    - خاست
+    - خیز
+  - infinitive_fa: شکستن
+    stems_fa:
+    - شکست
+    - شکن
+  - infinitive_fa: نگریستن
+    stems_fa:
+    - نگریست
+    - نگر
+  - infinitive_fa: گسستن
+    stems_fa:
+    - گسست
+    - گسل
+  - infinitive_fa: نشستن
+    stems_fa:
+    - نشست
+    - نشین
+  active: true
+- id: S-05
+  source:
+    table: stem_rules
+    row: '5'
+  kind: stem
+  label_fa: کاربن دو از کاربن یک
+  input:
+    types:
+    - karbon_yek
+  output:
+    types:
+    - karbon_do
+  explanation_fa: اگر پایان بنِ یک -ād باشد، با حذف -ād باقیمانده بنِ دو است.
+  sub_rules: []
+  exceptions:
+  - infinitive_fa: دادن
+    stems_fa:
+    - داد
+    - ده
+  - infinitive_fa: گشادن
+    stems_fa:
+    - گشاد
+    - گشا
+    stems_latin:
+    - gošād
+    - gošā
+    source_text: بنابر دستور ۴
+    read_by: karbon
+    resolution_note: The document says only "as rule 4" instead of giving stems. karbon applies rule 4
+      and gets گشاد / گشا. Straightforward, and it matches what the row instructs.
+  - infinitive_fa: زادن
+    stems_fa:
+    - زاد
+    - زا
+  active: true
+- id: S-06
+  source:
+    table: stem_rules
+    row: '6'
+  kind: stem
+  label_fa: کاربن دو از کاربن یک
+  input:
+    types:
+    - karbon_yek
+  output:
+    types:
+    - karbon_do
+  explanation_fa: اگر پایان بنِ یک -xt باشد، بن دو با حذف -t و تبدیل -x به -z ساخته می‌شود.
+  sub_rules: []
+  exceptions:
+  - infinitive_fa: شناختن
+    stems_fa:
+    - شناخت
+    - شناس
+  - infinitive_fa: فروختن
+    stems_fa:
+    - فروخت
+    - فروش
+  - infinitive_fa: گسیختن
+    stems_fa:
+    - گسیخت
+    - گسل
+  - infinitive_fa: پختن
+    stems_fa:
+    - پخت
+    - پز
+  active: true
+- id: S-07
+  source:
+    table: stem_rules
+    row: '7'
+  kind: stem
+  label_fa: کاربن دو از کاربن یک
+  input:
+    types:
+    - karbon_yek
+  output:
+    types:
+    - karbon_do
+  explanation_fa: اگر پایان بنِ یک -ud باشد، بنِ دو با حذف -d و تبدیل -u به -ā ساخته می‌شود.
+  sub_rules: []
+  exceptions:
+  - infinitive_fa: بودن
+    stems_fa:
+    - بود
+    - بو
+  active: true
+- id: S-08
+  source:
+    table: stem_rules
+    row: '8'
+  kind: stem
+  label_fa: کاربن دو از کاربن یک
+  input:
+    types:
+    - karbon_yek
+  output:
+    types:
+    - karbon_do
+  explanation_fa: اگر پایان بن‌ِ یک -št باشد، بن دو با حذف -t و تبدیل -š به -r ساخته می‌شود.
+  sub_rules: []
+  exceptions:
+  - infinitive_fa: رِشتن
+    stems_fa:
+    - رِشت
+    - ریس
+  - infinitive_fa: گشتن
+    stems_fa:
+    - گشت
+    - گرد
+  - infinitive_fa: نوشتن
+    stems_fa:
+    - نوشت
+    - نویس
+  - infinitive_fa: افراشتن
+    stems_fa:
+    - افراشت
+    - افروز
+    stems_latin:
+    - afrāšt
+    - afruz
+    source_text: افراشت، افروز، افروختن
+    read_by: karbon
+    resolution_note: The row gives three forms where two are expected. karbon reads the first two as the
+      stem pair and افروختن as a separate infinitive that happens to share the present stem, which is
+      the only reading that yields a pair.
+  active: true
+- id: S-09
+  source:
+    table: stem_rules
+    row: '9'
+  kind: stem
+  label_fa: کاربن دو از کاربن یک
+  input:
+    types:
+    - karbon_yek
+  output:
+    types:
+    - karbon_do
+  explanation_fa: اگر پایان بنِ یک -ft باشد، بن دو با حذف -t و تبدیل -f به -b ساخته می‌شود.
+  sub_rules: []
+  exceptions:
+  - infinitive_fa: آشفتن
+    stems_fa:
+    - آشفت
+    - آشوب
+  - infinitive_fa: رُفتن
+    stems_fa:
+    - رُفت
+    - روب
+  - infinitive_fa: رفتن
+    stems_fa:
+    - رفت
+    - رو
+  - infinitive_fa: سُفتن
+    stems_fa:
+    - سفت
+    - سنب
+  - infinitive_fa: گرفتن
+    stems_fa:
+    - گرفت
+    - گیر
+  - infinitive_fa: گفتن
+    stems_fa:
+    - گفت
+    - گو
+  - infinitive_fa: نهفتن
+    stems_fa:
+    - نهفت
+    - ؟
+    needs_expert_check: true
+    note: the document writes ؟ for a stem it does not give
+  active: true
+  needs_expert_check: true
+  notes:
+  - 'نهفتن: the document writes ؟ for a stem it does not give'

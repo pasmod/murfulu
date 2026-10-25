@@ -1,0 +1,116 @@
+# Spellings that are, almost always, a function word — and so are no evidence
+# for a dictionary word written with the same letters.
+#
+# **Why this file exists.** Corpus text has no vowels, so a spelling's count is
+# the count of the letters. For که that is 609,699 occurrences, and karbon
+# 1.2.0 reads row 28296 «که» as the adjective *keh* ("small") — correctly. The
+# link pass then credited the conjunction's whole count to the adjective, and
+# every form written که (the noun *Keh*, *Koh* from کهیدن) inherited it as
+# attestation (data/compare-v12-v13.md). The letters say nothing about whether
+# *keh* was ever written.
+#
+# **What the list does** (murfulu/corpus/function_words.py,
+# murfulu/scoring/attestation.py): any lexicon reading or built form whose
+# spelling is listed here gets level `spelling` with `function_word` set and
+# **no count credited** — "homograph of a function word, attestation unknown".
+# Shown, never dropped: the record stays, the interface says why it carries no
+# number, and the raw count of the letters stays on the spelling's own
+# word_types document. A form *built on* such an entry (کهتر from *keh*) is
+# judged on its own spelling, as before.
+#
+# **How the list was chosen — conservative on purpose.** An entry must be
+#   1. closed-class in Persian grammar: conjunction, preposition or
+#      postposition (را), pronoun, demonstrative, or particle; and
+#   2. among the `max_rank` most frequent spellings of the corpus — measured,
+#      not assumed: `rank` and `count` below are corpus v13 (Ganjoor, 25,497,189
+#      tokens; the text is unchanged since v4), and tools/check_function_words.py
+#      fails if any entry falls outside; and
+#   3. its function-word use must plainly dominate any content homograph. That
+#      is a judgement and is written down where it was close.
+# Left out, although closed-class or near it: است and the other verb forms (the
+# inflection analyser's business, not this list's); یک، دو and numerals (the
+# lexicon's *yek* is the same word, not a homograph); خود، خویش (also "self",
+# "kin" — content words in this poetry); می (*mey*, wine, is common in it); کان
+# (*kān*, a mine); کی (*Kay*, the royal title); زین (*zin*, saddle, is common in
+# the epic); بس، پس، باز، چند، دیگر، زیر، سوی، میان (adverbs or nouns as often
+# as not); چرا (UPSTREAM B7 asks karbon for it as a headword — then it would be
+# the word itself, not a homograph); Arabic فی، لا، الله.
+#
+# **If karbon ever adds one of these as a headword of the function word itself**
+# (B7 suggests چون), the entry must be revisited: the list would then doubt the
+# word it names. Nothing in the snapshot does that today.
+#
+# Recorded in docs/ENGINEERING.md ("Building a corpus version", v14) and
+# data/compare-v13-v14.md; the background is UPSTREAM B3 and OPEN_QUESTIONS O.
+
+version: 1.0.0
+corpus_version: v13
+max_rank: 200
+
+# class: conjunction | preposition | postposition | contraction | pronoun |
+#        demonstrative | particle
+# note:  only where criterion 3 was close, or the lexicon holds a homograph
+#        reading in the snapshot (lexicon-20261012).
+entries:
+  # conjunctions
+  - {spelling: و,     class: conjunction,  rank: 1,   count: 1109915}
+  - {spelling: که,    class: conjunction,  rank: 3,   count: 609699,
+     note: "karbon row 28296 keh, adjective 'small' — the trigger case"}
+  - {spelling: چون,   class: conjunction,  rank: 15,  count: 157382}
+  - {spelling: چو,    class: conjunction,  rank: 19,  count: 134032}
+  - {spelling: تا,    class: conjunction,  rank: 18,  count: 141206, note: "lexicon Tā"}
+  - {spelling: اگر,   class: conjunction,  rank: 35,  count: 69479,
+     note: "lexicon Agar (aloeswood)"}
+  - {spelling: گر,    class: conjunction,  rank: 34,  count: 71424,
+     note: "short for اگر; lexicon Gar (mange)"}
+  - {spelling: یا,    class: conjunction,  rank: 66,  count: 35424, note: "lexicon Yā"}
+  - {spelling: مگر,   class: conjunction,  rank: 143, count: 17623, note: "lexicon Magar"}
+  - {spelling: هم,    class: conjunction,  rank: 37,  count: 62293}
+  - {spelling: چه,    class: conjunction,  rank: 25,  count: 105045,
+     note: "also 'what'; čah (a well) is rare beside it"}
+  # prepositions and the postposition
+  - {spelling: از,    class: preposition,  rank: 2,   count: 634849, note: "lexicon Az"}
+  - {spelling: ز,     class: preposition,  rank: 8,   count: 279353}
+  - {spelling: به,    class: preposition,  rank: 4,   count: 499649,
+     note: "lexicon beh (good), Beh (quince), Be"}
+  - {spelling: در,    class: preposition,  rank: 5,   count: 469313,
+     note: "lexicon Dar (door) — a real word, but the preposition outnumbers it"}
+  - {spelling: بر,    class: preposition,  rank: 9,   count: 265119,
+     note: "bar (fruit) is the B7 case; no lexicon reading yet"}
+  - {spelling: با,    class: preposition,  rank: 20,  count: 131697, note: "lexicon Bā"}
+  - {spelling: بی,    class: preposition,  rank: 41,  count: 59190}
+  - {spelling: اندر,  class: preposition,  rank: 49,  count: 50533}
+  - {spelling: جز,    class: preposition,  rank: 75,  count: 33022, note: "lexicon Jaz"}
+  - {spelling: را,    class: postposition, rank: 6,   count: 393813, note: "lexicon Rā"}
+  # contractions of the above
+  - {spelling: کز,    class: contraction,  rank: 80,  count: 29901,
+     note: "که از; lexicon Kaz, Kez"}
+  - {spelling: وز,    class: contraction,  rank: 158, count: 16598, note: "و از"}
+  - {spelling: زان,   class: contraction,  rank: 144, count: 17549,
+     note: "از آن; lexicon Zān"}
+  - {spelling: ازین,  class: contraction,  rank: 153, count: 16841,
+     note: "از این; lexicon azin"}
+  - {spelling: مرا,   class: contraction,  rank: 40,  count: 59418,
+     note: "من را; lexicon Merā"}
+  - {spelling: ترا,   class: contraction,  rank: 94,  count: 24775,
+     note: "تو را; lexicon Tarā"}
+  # pronouns and demonstratives
+  - {spelling: من,    class: pronoun,      rank: 12,  count: 227318,
+     note: "lexicon Man (a weight)"}
+  - {spelling: تو,    class: pronoun,      rank: 7,   count: 318631, note: "lexicon Tav, Tu"}
+  - {spelling: او,    class: pronoun,      rank: 14,  count: 184486}
+  - {spelling: ما,    class: pronoun,      rank: 23,  count: 115948}
+  - {spelling: وی,    class: pronoun,      rank: 57,  count: 42336}
+  - {spelling: ایشان, class: pronoun,      rank: 77,  count: 30658}
+  - {spelling: این,   class: demonstrative, rank: 13, count: 186084, note: "lexicon Ein"}
+  - {spelling: آن,    class: demonstrative, rank: 11, count: 240366}
+  - {spelling: چنین,  class: demonstrative, rank: 93, count: 25809}
+  - {spelling: چنان,  class: demonstrative, rank: 113, count: 21086, note: "lexicon Čanān"}
+  # particles and determiners
+  - {spelling: ای,    class: particle,     rank: 22,  count: 123476}
+  - {spelling: همی,   class: particle,     rank: 69,  count: 33673}
+  - {spelling: نه,    class: particle,     rank: 33,  count: 73781,
+     note: "negation; noh (nine) is rare beside it"}
+  - {spelling: مر,    class: particle,     rank: 187, count: 14215, note: "lexicon Mar, Mer"}
+  - {spelling: هر,    class: particle,     rank: 21,  count: 130022, note: "lexicon Har"}
+  - {spelling: همه,   class: particle,     rank: 32,  count: 74781}

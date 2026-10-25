@@ -1,0 +1,2041 @@
+version: 0.1.0
+rules:
+- id: V-001
+  source:
+    table: verb_stems
+    row: '1'
+  kind: suffix
+  affix: -āndan
+  affix_source: -āndan
+  affix_fa: اندن
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné doé nāgozarā az Goruhé yek (NKZ)
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - oftāndan
+  - parāndan
+  label_fa: کاربن دو + -āndan
+  explanation_fa: از کاربن دو با پسوند -āndan نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-002
+  source:
+    table: verb_stems
+    row: '2'
+  kind: suffix
+  affix: -āndan
+  affix_source: -āndan
+  affix_fa: اندن
+  affix_variants:
+  - -ānidan
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné doé nāgozarā az Goruhé do (NKDZ)
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - pazāndan
+  - pazānidan
+  label_fa: کاربن دو + -āndan
+  explanation_fa: از کاربن دو با پسوند -āndan نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-003
+  source:
+    table: verb_stems
+    row: '3'
+  kind: suffix
+  affix: -idan
+  affix_source: -idan
+  affix_fa: یدن
+  affix_variants: []
+  input:
+    types:
+    - nam
+    - barnam
+    condition_text: Nām, Barnām
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - tarsidan
+  - xašmidan
+  label_fa: نام / برنام + -idan
+  explanation_fa: از نام یا برنام با پسوند -idan نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-004
+  source:
+    table: verb_stems
+    row: '4'
+  kind: suffix
+  affix: -ānidan
+  affix_source: -ānidan
+  affix_fa: انیدن
+  affix_variants:
+  - -āndan
+  input:
+    types:
+    - nam
+    - barnam
+    condition_text: Nām, Barnām
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - tarsāndan
+  - tarsānidan
+  label_fa: نام / برنام + -ānidan
+  explanation_fa: از نام یا برنام با پسوند -ānidan نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-005
+  source:
+    table: verb_stems
+    row: '5'
+  kind: suffix
+  affix: -an
+  affix_source: -an
+  affix_fa: ن
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - porsidan
+  label_fa: کاربن یک + -an
+  explanation_fa: از کاربن یک با پسوند -an نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-006
+  source:
+    table: verb_stems
+    row: '6'
+  kind: suffix
+  affix: -an
+  affix_source: -an
+  affix_fa: ن
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Porsidan
+  label_fa: کاربن یک + -an
+  explanation_fa: از کاربن یک با پسوند -an کارنام ساخته می‌شود
+  active: true
+- id: V-007
+  source:
+    table: verb_stems
+    row: '7'
+  kind: none
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Darxāst
+  label_fa: کاربن یک
+  explanation_fa: خودِ کاربن یک کارنام است
+  active: true
+- id: V-008
+  source:
+    table: verb_stems
+    row: '8'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - karidekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - zade
+  label_fa: کاربن یک + -e
+  explanation_fa: از کاربن یک با پسوند -e کاریده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-009
+  source:
+    table: verb_stems
+    row: '9'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Dide
+  label_fa: کاربن یک + -e
+  explanation_fa: از کاربن یک با پسوند -e نام ساخته می‌شود
+  active: true
+- id: V-010
+  source:
+    table: verb_stems
+    row: '10'
+  kind: suffix
+  affix: -ār
+  affix_source: -ār
+  affix_fa: ار
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    tendency_text: bištar bā Pāyāne -t va -d
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: typical
+  examples:
+  - Gotār
+  label_fa: کاربن یک + -ār
+  explanation_fa: از کاربن یک با پسوند -ār کارنام ساخته می‌شود
+  active: true
+- id: V-011
+  source:
+    table: verb_stems
+    row: '11'
+  kind: suffix
+  affix: -ār
+  affix_source: -ār
+  affix_fa: ار
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    tendency_text: bištar bā Pāyāne -t va -d
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: typical
+  examples:
+  - xāridār
+  label_fa: کاربن یک + -ār
+  explanation_fa: از کاربن یک با پسوند -ār کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-012
+  source:
+    table: verb_stems
+    row: '12'
+  kind: suffix
+  affix: -ār
+  affix_source: -ār
+  affix_fa: ار
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    tendency_text: bištar bā Pāyāne -t va -d
+  output:
+    types:
+    - karidekarbahr
+  semantic_tags: []
+  strength: typical
+  examples:
+  - gereftār
+  label_fa: کاربن یک + -ār
+  explanation_fa: از کاربن یک با پسوند -ār کاریده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-013
+  source:
+    table: verb_stems
+    row: '13'
+  kind: suffix
+  affix: -gār
+  affix_source: -gār
+  affix_fa: گار
+  affix_variants:
+  - -gar
+  - -kār
+  - -bān
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - āfaridgār
+  - rastegār
+  label_fa: کاربن یک + -gār
+  explanation_fa: از کاربن یک با پسوند -gār کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-014
+  source:
+    table: verb_stems
+    row: '14'
+  kind: suffix
+  affix: -mān
+  affix_source: -mān
+  affix_fa: مان
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Goftmān
+  label_fa: کاربن یک + -mān
+  explanation_fa: از کاربن یک با پسوند -mān کارنام ساخته می‌شود
+  active: true
+- id: V-015
+  source:
+    table: verb_stems
+    row: '15'
+  kind: suffix
+  affix: -bān
+  affix_source: -bān
+  affix_fa: بان
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - nam
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Didebān
+  label_fa: کاربن یک + -bān
+  explanation_fa: از کاربن یک با پسوند -bān نام یا برنام ساخته می‌شود
+  active: true
+- id: V-016
+  source:
+    table: verb_stems
+    row: '16'
+  kind: slot
+  affix: Nām-
+  affix_source: Nām-
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Čašmdāšt
+  label_fa: نام + کاربن یک
+  explanation_fa: از نام و کاربن یک کارنام ساخته می‌شود
+  active: true
+- id: V-017
+  source:
+    table: verb_stems
+    row: '17'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek + o + Kārboné yek az Digarkārvāže
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Zadoxord
+  - Goftošenid
+  label_fa: کاربن یک
+  explanation_fa: از پیوندِ کاربن یک کارنام ساخته می‌شود
+  active: true
+  pattern: '{a} + o + {b}'
+  pattern_fa: '{a}و{b}'
+  slots:
+  - name: a
+    type: karbon_yek
+  - name: b
+    type: karbon_yek
+    constraint: different_verb
+- id: V-018
+  source:
+    table: verb_stems
+    row: '18'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    - karbon_do
+    condition_text: Kārboné yek + o + Kārboné do az Hamānkārvāže
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Goftogu
+  label_fa: کاربن یک + کاربن دو
+  explanation_fa: از پیوندِ کاربن یک و کاربن دو کارنام ساخته می‌شود
+  active: true
+  pattern: '{a} + o + {b}'
+  pattern_fa: '{a}و{b}'
+  slots:
+  - name: a
+    type: karbon_yek
+  - name: b
+    type: karbon_do
+    constraint: same_verb
+- id: V-019
+  source:
+    table: verb_stems
+    row: '19'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    - karbon_do
+    condition_text: Kārboné yek + o + Kārboné do az Digarkārvāže
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Xordoxāb
+  label_fa: کاربن یک + کاربن دو
+  explanation_fa: از پیوندِ کاربن یک و کاربن دو کارنام ساخته می‌شود
+  active: true
+  pattern: '{a} + o + {b}'
+  pattern_fa: '{a}و{b}'
+  slots:
+  - name: a
+    type: karbon_yek
+  - name: b
+    type: karbon_do
+    constraint: different_verb
+- id: V-020
+  source:
+    table: verb_stems
+    row: '20'
+  kind: none
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Sāxt
+  label_fa: کاربن یک
+  explanation_fa: خودِ کاربن یک کارنام است
+  active: true
+- id: V-021
+  source:
+    table: verb_stems
+    row: '21'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek + o+ na + Kārboné yek az Hamānkārvāže
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Budonabud
+  label_fa: کاربن یک
+  explanation_fa: از پیوندِ کاربن یک کارنام ساخته می‌شود
+  active: true
+  pattern: '{a} + o + na + {b}'
+  pattern_fa: '{a}ونا{b}'
+  slots:
+  - name: a
+    type: karbon_yek
+  - name: b
+    type: karbon_yek
+    constraint: same_verb
+    negated: true
+- id: V-022
+  source:
+    table: verb_stems
+    row: '22'
+  kind: suffix
+  affix: -ande
+  affix_source: -ande
+  affix_fa: نده
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - ravande
+  label_fa: کاربن دو + -ande
+  explanation_fa: از کاربن دو با پسوند -ande کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-023
+  source:
+    table: verb_stems
+    row: '23'
+  kind: suffix
+  affix: -gi
+  affix_source: -gi
+  affix_fa: گی
+  affix_variants: []
+  input:
+    types:
+    - karandekarbahr
+    condition_text: Kārandekārbahr-ande
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Ravandegi
+  label_fa: کارنده‌کاربهر + -gi
+  explanation_fa: از کارنده‌کاربهر با پسوند -gi کارنام ساخته می‌شود
+  active: true
+- id: V-024
+  source:
+    table: verb_stems
+    row: '24'
+  kind: suffix
+  affix: -ā
+  affix_source: -ā
+  affix_fa: ا
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - dānā
+  - dārā
+  label_fa: کاربن دو + -ā
+  explanation_fa: از کاربن دو با پسوند -ā کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-025
+  source:
+    table: verb_stems
+    row: '25'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - karandekarbahr
+    condition_text: Kārandekārbahr-ā
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Dānāyi
+  label_fa: کارنده‌کاربهر + -i
+  explanation_fa: از کارنده‌کاربهر با پسوند -i کارنام ساخته می‌شود
+  active: true
+- id: V-026
+  source:
+    table: verb_stems
+    row: '26'
+  kind: suffix
+  affix: -ā
+  affix_source: -ā
+  affix_fa: ا
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karidekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - rahā
+  - xānā
+  label_fa: کاربن دو + -ā
+  explanation_fa: از کاربن دو با پسوند -ā کاریده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-027
+  source:
+    table: verb_stems
+    row: '27'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - karidekarbahr
+    condition_text: Kāridekārbahr-ā
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Rahāyi
+  label_fa: کاریده‌کاربهر + -i
+  explanation_fa: از کاریده‌کاربهر با پسوند -i کارنام ساخته می‌شود
+  active: true
+- id: V-028
+  source:
+    table: verb_stems
+    row: '28'
+  kind: suffix
+  affix: -gār
+  affix_source: -gār
+  affix_fa: گار
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - āmuzgār
+  - sāzgār
+  label_fa: کاربن دو + -gār
+  explanation_fa: از کاربن دو با پسوند -gār کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-029
+  source:
+    table: verb_stems
+    row: '29'
+  kind: suffix
+  affix: -ān
+  affix_source: -ān
+  affix_fa: ان
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - xāhān
+  - ravān
+  label_fa: کاربن دو + -ān
+  explanation_fa: از کاربن دو با پسوند -ān کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-030
+  source:
+    table: verb_stems
+    row: '30'
+  kind: suffix
+  affix: -i
+  affix_source: -i
+  affix_fa: ی
+  affix_variants: []
+  input:
+    types:
+    - karandekarbahr
+    condition_text: Kārandekārbahr-ān
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Ravāni
+  - Xorāni
+  label_fa: کارنده‌کاربهر + -i
+  explanation_fa: از کارنده‌کاربهر با پسوند -i کارنام ساخته می‌شود
+  active: true
+- id: V-031
+  source:
+    table: verb_stems
+    row: '31'
+  kind: slot
+  affix: Nām-
+  affix_source: Nām-
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karandekarbahr
+    condition_text: Kārandekārbahr-ān
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Širinoxorān
+  label_fa: نام + کارنده‌کاربهر
+  explanation_fa: از نام و کارنده‌کاربهر کارنام ساخته می‌شود
+  active: true
+- id: V-032
+  source:
+    table: verb_stems
+    row: '32'
+  kind: suffix
+  affix: -gar
+  affix_source: -gar
+  affix_fa: گر
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - tavangar
+  label_fa: کاربن دو + -gar
+  explanation_fa: از کاربن دو با پسوند -gar کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-033
+  source:
+    table: verb_stems
+    row: '33'
+  kind: suffix
+  affix: -eš
+  affix_source: -eš
+  affix_fa: ش
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Pazireš
+  label_fa: کاربن دو + -eš
+  explanation_fa: از کاربن دو با پسوند -eš کارنام ساخته می‌شود
+  active: true
+- id: V-034
+  source:
+    table: verb_stems
+    row: '34'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Āvize
+  label_fa: کاربن دو + -e
+  explanation_fa: از کاربن دو با پسوند -e نام ساخته می‌شود
+  active: true
+- id: V-035
+  source:
+    table: verb_stems
+    row: '35'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Xande
+  label_fa: کاربن دو + -e
+  explanation_fa: از کاربن دو با پسوند -e کارنام ساخته می‌شود
+  active: true
+- id: V-036
+  source:
+    table: verb_stems
+    row: '36'
+  kind: suffix
+  affix: -e
+  affix_source: -e
+  affix_fa: ه
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karidekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - ranje
+  label_fa: کاربن دو + -e
+  explanation_fa: از کاربن دو با پسوند -e کاریده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-037
+  source:
+    table: verb_stems
+    row: '37'
+  kind: suffix
+  affix: -mān
+  affix_source: -mān
+  affix_fa: مان
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Zāymān
+  label_fa: کاربن دو + -mān
+  explanation_fa: از کاربن دو با پسوند -mān کارنام ساخته می‌شود
+  active: true
+- id: V-038
+  source:
+    table: verb_stems
+    row: '38'
+  kind: suffix
+  affix: -mān
+  affix_source: -mān
+  affix_fa: مان
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Rismān
+  label_fa: کاربن دو + -mān
+  explanation_fa: از کاربن دو با پسوند -mān نام ساخته می‌شود
+  active: true
+- id: V-039
+  source:
+    table: verb_stems
+    row: '39'
+  kind: suffix
+  affix: -āk
+  affix_source: -āk
+  affix_fa: اک
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - nam
+  semantic_tags:
+  - Sezāvāri
+  strength: null
+  examples:
+  - Xorāk
+  - Pušāk
+  label_fa: کاربن دو + -āk
+  explanation_fa: از کاربن دو با پسوند -āk نام ساخته می‌شود
+  active: true
+- id: V-040
+  source:
+    table: verb_stems
+    row: '40'
+  kind: suffix
+  affix: -āk
+  affix_source: -āk
+  affix_fa: اک
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karidekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - kāvak
+  label_fa: کاربن دو + -āk
+  explanation_fa: از کاربن دو با پسوند -āk کاریده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-041
+  source:
+    table: verb_stems
+    row: '41'
+  kind: suffix
+  affix: -nāk
+  affix_source: -nāk
+  affix_fa: ناک
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - andišnak
+  label_fa: کاربن دو + -nāk
+  explanation_fa: از کاربن دو با پسوند -nāk برنام ساخته می‌شود
+  active: true
+- id: V-042
+  source:
+    table: verb_stems
+    row: '42'
+  kind: suffix
+  affix: -var
+  affix_source: -var
+  affix_fa: ور
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - sāzvar
+  label_fa: کاربن دو + -var
+  explanation_fa: از کاربن دو با پسوند -var برنام ساخته می‌شود
+  active: true
+- id: V-043
+  source:
+    table: verb_stems
+    row: '43'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do + o + Digarkārboné do
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Suzogodāz
+  label_fa: کاربن دو
+  explanation_fa: از پیوندِ کاربن دو نام ساخته می‌شود
+  active: true
+  pattern: '{a} + o + {b}'
+  pattern_fa: '{a}و{b}'
+  slots:
+  - name: a
+    type: karbon_do
+  - name: b
+    type: karbon_do
+    constraint: different_stem
+- id: V-044
+  source:
+    table: verb_stems
+    row: '44'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do + ā + Hamānkārboné do
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Kešākeš
+  label_fa: کاربن دو
+  explanation_fa: از پیوندِ کاربن دو نام ساخته می‌شود
+  active: true
+  pattern: '{a} + ā + {b}'
+  pattern_fa: '{a}ا{b}'
+  slots:
+  - name: a
+    type: karbon_do
+  - name: b
+    type: karbon_do
+    constraint: same_stem
+- id: V-045
+  source:
+    table: verb_stems
+    row: '45'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do + ā + Digarkārboné do
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Takāpu
+  label_fa: کاربن دو
+  explanation_fa: از پیوندِ کاربن دو نام ساخته می‌شود
+  active: true
+  pattern: '{a} + ā + {b}'
+  pattern_fa: '{a}ا{b}'
+  slots:
+  - name: a
+    type: karbon_do
+  - name: b
+    type: karbon_do
+    constraint: different_stem
+- id: V-046
+  source:
+    table: verb_stems
+    row: '46'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    - karbon_do
+    condition_text: Kārboné yek + o + Hamānkārboné do
+  output:
+    types:
+    - nam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Šostošow
+  - Soxtosāz
+  label_fa: کاربن یک + کاربن دو
+  explanation_fa: از پیوندِ کاربن یک و کاربن دو نام ساخته می‌شود
+  active: true
+  pattern: '{a} + o + {b}'
+  pattern_fa: '{a}و{b}'
+  slots:
+  - name: a
+    type: karbon_yek
+  - name: b
+    type: karbon_do
+    constraint: same_stem
+- id: V-047
+  source:
+    table: verb_stems
+    row: '47'
+  kind: template
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    - karbon_do
+    condition_text: Kārboné yek + o + Digarkārboné do
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Rixtopāš
+  - Jastoxiz
+  label_fa: کاربن یک + کاربن دو
+  explanation_fa: از پیوندِ کاربن یک و کاربن دو کارنام ساخته می‌شود
+  active: true
+  pattern: '{a} + o + {b}'
+  pattern_fa: '{a}و{b}'
+  slots:
+  - name: a
+    type: karbon_yek
+  - name: b
+    type: karbon_do
+    constraint: different_stem
+- id: V-048
+  source:
+    table: verb_stems
+    row: '48'
+  kind: suffix
+  affix: -ār
+  affix_source: -ār
+  affix_fa: ار
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - parastār
+  label_fa: کاربن دو + -ār
+  explanation_fa: از کاربن دو با پسوند -ār کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-049
+  source:
+    table: verb_stems
+    row: '49'
+  kind: none
+  affix: ‒
+  affix_source: ‒
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Parhiz
+  - Tarāš
+  label_fa: کاربن دو
+  explanation_fa: خودِ کاربن دو کارنام است
+  active: true
+- id: V-050
+  source:
+    table: verb_stems
+    row: '50'
+  kind: suffix
+  affix: -ešt
+  affix_source: -ešt
+  affix_fa: شت
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Konešt
+  label_fa: کاربن دو + -ešt
+  explanation_fa: از کاربن دو با پسوند -ešt کارنام ساخته می‌شود
+  active: true
+- id: V-051
+  source:
+    table: verb_stems
+    row: '51'
+  kind: suffix
+  affix: -ā
+  affix_source: -ā
+  affix_fa: ا
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - Nāyi
+  strength: null
+  examples:
+  - ākandan
+  - āramidan
+  label_fa: نابسودکارواژه + -ā
+  explanation_fa: از نابسودکارواژه با پسوند -ā نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-052
+  source:
+    table: verb_stems
+    row: '52'
+  kind: prefix
+  affix: andar-
+  affix_source: -andar
+  affix_fa: اندر
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - darun
+  strength: null
+  examples:
+  - andarāmadan
+  label_fa: andar- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند andar- نابسودکارواژه ساخته می‌شود
+  active: true
+  corrected_by: The dash is on the wrong side, exactly as it was for -bāž. The source writes "-andar (darun)",
+    but its own example andarāmadan (اندرآمدن) puts it in front, and every neighbouring row in the same
+    block of the verb table — bar-, bāz-, dar-, farā-, foru-, ham- — is a prefix. اندر is the preposition
+    *inside*, and Persian puts it before the verb. **Ruled here and not in affix_spellings.yaml, because
+    the spelling is two different affixes.** The nominal table writes "-andar (nātani)" at row 38 — N-038,
+    the step-kin ending, whose example Mādarandar (مادراندر) puts it on the end and is right to. Correcting
+    the affix table moved both, which is how the difference was noticed. Unconfirmed by the linguist;
+    see FOR_THE_LINGUIST.
+- id: V-053
+  source:
+    table: verb_stems
+    row: '53'
+  kind: prefix
+  affix: bar-
+  affix_source: bar-
+  affix_fa: بر
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - bālā
+  strength: null
+  examples:
+  - barangixtan
+  - barnesastan
+  label_fa: bar- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند bar- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-054
+  source:
+    table: verb_stems
+    row: '54'
+  kind: prefix
+  affix: bāz-
+  affix_source: bāz-
+  affix_fa: باز
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - Pasravi
+  strength: null
+  examples:
+  - bāzgaštan
+  - bāzāmadan
+  label_fa: bāz- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند bāz- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-055
+  source:
+    table: verb_stems
+    row: '55'
+  kind: prefix
+  affix: bāž-
+  affix_source: -bāž
+  affix_fa: باژ
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - vārun
+  strength: null
+  examples:
+  - bāžgunidan
+  label_fa: bāž- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند bāž- نابسودکارواژه ساخته می‌شود
+  active: true
+  needs_expert_check: true
+  notes:
+  - 'affix ''-bāž'': **Half settled.** The source writes it as a suffix, "-bāž", but its own example bāžgunidan
+    puts it at the front, so it is a prefix — the dash was on the wrong side. That much is settled. **Still
+    open: the spelling.** The source says bāž, giving باژ, but the form written today is usually واژگون
+    (vāžgun) with a v. Both exist in older Persian. Being asked.'
+- id: V-056
+  source:
+    table: verb_stems
+    row: '56'
+  kind: prefix
+  affix: dar-
+  affix_source: dar-
+  affix_fa: در
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - Vorud
+  strength: null
+  examples:
+  - darāmadan
+  label_fa: dar- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند dar- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-057
+  source:
+    table: verb_stems
+    row: '57'
+  kind: prefix
+  affix: far-
+  affix_source: far-
+  affix_fa: فر
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - farsudan
+  label_fa: far- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند far- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-058
+  source:
+    table: verb_stems
+    row: '58'
+  kind: prefix
+  affix: farā-
+  affix_source: farā-
+  affix_fa: فرا
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - be
+  - suy
+  strength: null
+  examples:
+  - farāgereftan
+  label_fa: farā- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند farā- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-059
+  source:
+    table: verb_stems
+    row: '59'
+  kind: prefix
+  affix: farāz-
+  affix_source: farāz-
+  affix_fa: فراز
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - boland
+  strength: null
+  examples:
+  - farāzāmadan
+  label_fa: farāz- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند farāz- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-060
+  source:
+    table: verb_stems
+    row: '60'
+  kind: prefix
+  affix: farāz-
+  affix_source: farāz-
+  affix_fa: فراز
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - bepiš
+  strength: null
+  examples:
+  - farāzāvordan
+  label_fa: farāz- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند farāz- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-061
+  source:
+    table: verb_stems
+    row: '61'
+  kind: prefix
+  affix: foru-
+  affix_source: foru-
+  affix_fa: فرو
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - pāyin
+  strength: null
+  examples:
+  - foruraftan
+  label_fa: foru- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند foru- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-062
+  source:
+    table: verb_stems
+    row: '62'
+  kind: prefix
+  affix: ham-
+  affix_source: ham-
+  affix_fa: هم
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags: []
+  strength: null
+  examples:
+  - hamandišidan
+  label_fa: ham- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند ham- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-063
+  source:
+    table: verb_stems
+    row: '63'
+  kind: prefix
+  affix: na-
+  affix_source: na-
+  affix_fa: ن
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - nasuz
+  label_fa: na- + کاربن دو
+  explanation_fa: از کاربن دو با پیشوند na- برنام ساخته می‌شود
+  active: true
+  corrected_by: The row's own example nasuz is na- on suz, the present stem of suxtan, not on the infinitive
+    suxtan. Read as the infinitive the rule built nasuxtan and called it an adjective. Paired with V-064,
+    which is the same prefix on the past stem.
+- id: V-064
+  source:
+    table: verb_stems
+    row: '64'
+  kind: prefix
+  affix: na-
+  affix_source: na-
+  affix_fa: ن
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - nadid
+  label_fa: na- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند na- برنام ساخته می‌شود
+  active: true
+  corrected_by: The row's own example nadid is na- on did, the past stem of didan. Paired with V-063,
+    which is the same prefix on the present stem.
+- id: V-065
+  source:
+    table: verb_stems
+    row: '65'
+  kind: prefix
+  affix: nā-
+  affix_source: nā-
+  affix_fa: نا
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - nāšenās
+  label_fa: nā- + کاربن دو
+  explanation_fa: از کاربن دو با پیشوند nā- برنام ساخته می‌شود
+  active: true
+  corrected_by: The row's own example nāšenās is nā- on šenās, the present stem of šenāxtan. Paired with
+    V-066, which is the same prefix on the past stem.
+- id: V-066
+  source:
+    table: verb_stems
+    row: '66'
+  kind: prefix
+  affix: nā-
+  affix_source: nā-
+  affix_fa: نا
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - barnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - nāšāyest
+  label_fa: nā- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند nā- برنام ساخته می‌شود
+  active: true
+  corrected_by: The row's own example nāšāyest is nā- on šāyest, the past stem of šāyestan. Paired with
+    V-065, which is the same prefix on the present stem.
+- id: V-067
+  source:
+    table: verb_stems
+    row: '67'
+  kind: prefix
+  affix: pa-
+  affix_source: pa-
+  affix_fa: پ
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - barnam
+  semantic_tags:
+  - be
+  - pey
+  strength: null
+  examples:
+  - padid
+  label_fa: pa- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند pa- برنام ساخته می‌شود
+  active: true
+- id: V-068
+  source:
+    table: verb_stems
+    row: '68'
+  kind: prefix
+  affix: piš-
+  affix_source: piš-
+  affix_fa: پیش
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - pišro
+  strength: null
+  examples:
+  - pišāmadan
+  label_fa: piš- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند piš- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-069
+  source:
+    table: verb_stems
+    row: '69'
+  kind: prefix
+  affix: vā-
+  affix_source: vā-
+  affix_fa: وا
+  affix_variants: []
+  input:
+    types:
+    - nabesudkarvaze
+    condition_text: Nābesudkārvāže
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - Jelogiri
+  strength: null
+  examples:
+  - vādāštan
+  - vāgereftan
+  - vāgozaštan
+  - vāmāndan
+  - vārāndan
+  label_fa: vā- + نابسودکارواژه
+  explanation_fa: از نابسودکارواژه با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-070
+  source:
+    table: verb_stems
+    row: '70'
+  kind: prefix
+  affix: vā-
+  affix_source: vā-
+  affix_fa: وا
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboé yek
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - pas
+  strength: null
+  examples:
+  - vāgardāndan
+  - vāzadan
+  - vāgereftan
+  label_fa: vā- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-071
+  source:
+    table: verb_stems
+    row: '71'
+  kind: prefix
+  affix: vā-
+  affix_source: vā-
+  affix_fa: وا
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboé yek
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - dobāre
+  strength: null
+  examples:
+  - vāgoftan
+  - vāšurānidan
+  - vāporsidan
+  - vāgereftan
+  label_fa: vā- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-072
+  source:
+    table: verb_stems
+    row: '72'
+  kind: prefix
+  affix: vā-
+  affix_source: vā-
+  affix_fa: وا
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboé yek
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - bāz
+  strength: null
+  examples:
+  - vāgoftan
+  - vārahidan
+  label_fa: vā- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-073
+  source:
+    table: verb_stems
+    row: '73'
+  kind: prefix
+  affix: vā-
+  affix_source: vā-
+  affix_fa: وا
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboé yek
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - Āxšij
+  strength: null
+  examples:
+  - vāxāstan
+  label_fa: vā- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-074
+  source:
+    table: verb_stems
+    row: '74'
+  kind: prefix
+  affix: var-
+  affix_source: var-
+  affix_fa: ور
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboé yek
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - kenār
+  strength: null
+  examples:
+  - varčidan
+  - vārāmadan
+  - varraftan
+  - vardādan
+  - varparidan
+  label_fa: var- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند var- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-075
+  source:
+    table: verb_stems
+    row: '75'
+  kind: prefix
+  affix: var-
+  affix_source: var-
+  affix_fa: ور
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - pāyin
+  strength: null
+  examples:
+  - varoftādan
+  - varšekastan
+  label_fa: var- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند var- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-076
+  source:
+    table: verb_stems
+    row: '76'
+  kind: prefix
+  affix: zir-
+  affix_source: zir-
+  affix_fa: زیر
+  affix_variants: []
+  input:
+    types:
+    - karbon_yek
+    condition_text: Kārboné yek
+  output:
+    types:
+    - nabesudkarvaze
+  semantic_tags:
+  - pāyin
+  strength: null
+  examples:
+  - ziršodan
+  label_fa: zir- + کاربن یک
+  explanation_fa: از کاربن یک با پیشوند zir- نابسودکارواژه ساخته می‌شود
+  active: true
+- id: V-078
+  source:
+    table: verb_stems
+    row: '78'
+  kind: slot
+  affix: Nām-
+  affix_source: Nām-
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - soxanguy
+  - xodaparast
+  - delgir
+  - dādras
+  - gušenešin
+  label_fa: نام + کاربن دو
+  explanation_fa: از نام و کاربن دو کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-079
+  source:
+    table: verb_stems
+    row: '79'
+  kind: slot
+  affix: Nām-
+  affix_source: Nām-
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karidekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - delpazir
+  - dastduz
+  - angošnamā
+  label_fa: نام + کاربن دو
+  explanation_fa: از نام و کاربن دو کاریده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-080
+  source:
+    table: verb_stems
+    row: '80'
+  kind: slot
+  affix: Čonvāže-
+  affix_source: Čonvāže-
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karandekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - xošnevis
+  - tondrow
+  label_fa: چون‌واژه + کاربن دو
+  explanation_fa: از چون‌واژه و کاربن دو کارنده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-081
+  source:
+    table: verb_stems
+    row: '81'
+  kind: slot
+  affix: Čonvāže-
+  affix_source: Čonvāže-
+  affix_fa: ''
+  affix_variants: []
+  input:
+    types:
+    - karbon_do
+    condition_text: Kārboné do
+  output:
+    types:
+    - karidekarbahr
+  semantic_tags: []
+  strength: null
+  examples:
+  - diryāb
+  - dirjuš
+  label_fa: چون‌واژه + کاربن دو
+  explanation_fa: از چون‌واژه و کاربن دو کاریده‌کاربهر ساخته می‌شود
+  active: true
+- id: V-082
+  source:
+    table: verb_stems
+    row: null
+    follows_row: '8'
+  kind: suffix
+  affix: -gi
+  affix_source: -gi
+  affix_fa: گی
+  affix_variants: []
+  input:
+    types:
+    - karidekarbahr
+    condition_text: Kāridekārbahr-e
+  output:
+    types:
+    - karnam
+  semantic_tags: []
+  strength: null
+  examples:
+  - Zadegi
+  label_fa: کاریده‌کاربهر + -gi
+  explanation_fa: از کاریده‌کاربهر با پسوند -gi کارنام ساخته می‌شود
+  active: true

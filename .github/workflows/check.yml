@@ -1,0 +1,72 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-types-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install -e ".[dev,api]"
+
+      - name: Lint, types and tests
+        run: make check
+
+  web:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        run: make web-install
+
+      - name: Install the browser the layout tests need
+        run: npx --prefix web playwright install --with-deps chromium
+
+      - name: Lint, types, tests and layout
+        run: make web-check
+
+      # A trace is only useful if it leaves the runner. Five layout tests
+      # failed in CI and nowhere else, and there was no way to look at the
+      # failing frame — see OPEN_QUESTIONS S24. `if: failure()` so a green run
+      # uploads nothing.
+      - name: Keep the failing frame
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-trace
+          path: web/test-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  docker:
+    # ENGINEERING.md: the tests must also run inside the container image.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the api image
+        run: docker build -t murfulu-api .
+
+      - name: Run the tests inside the image
+        run: docker run --rm murfulu-api python -m pytest
+
+      - name: Build the web image
+        run: docker build -t murfulu-web ./web

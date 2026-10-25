@@ -1,0 +1,20 @@
+/* The LTR island. See Latin.tsx for why each declaration is here. */
+
+.latin {
+  /* Isolation, not just direction: without it the punctuation around a Latin
+     form reorders itself against the surrounding Persian. */
+  unicode-bidi: isolate;
+  font-family: var(--font-latin);
+  font-feature-settings: "kern" 1;
+
+  /* Capitalisation is grammar. No ancestor may fold it away. */
+  text-transform: none;
+
+  /* Latin digits inside a Latin form stay Latin: the form is data. */
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
+}
+
+.affix {
+  color: var(--ink-soft);
+}

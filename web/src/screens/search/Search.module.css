@@ -1,0 +1,57 @@
+/* One clear action at the top, the answer under it. */
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-block-start: var(--space-4);
+}
+
+.total {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* An error says what to do next, never only what failed. */
+.trouble {
+  padding: var(--space-4) var(--space-5);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-lg);
+}
+
+.troubleTitle {
+  font-size: var(--text-lg);
+}
+
+.troubleAdvice {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 60rem) {
+  .columns {
+    display: grid;
+    /* Results first in the source and in the reading order; the facets are
+       supporting evidence and sit beside them. */
+    grid-template-columns: minmax(0, 1fr) 16rem;
+    gap: var(--space-7);
+    align-items: start;
+  }
+}

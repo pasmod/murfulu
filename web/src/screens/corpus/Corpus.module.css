@@ -1,0 +1,138 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.block h2 {
+  font-size: var(--text-xl);
+}
+
+/* The line under a heading that says what the section is about, before any
+   figure is read. Darker than .note: it is the explanation, not an aside. */
+.lede {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  line-height: var(--leading-normal);
+  max-inline-size: var(--measure);
+}
+
+.note,
+.trouble,
+.unmeasured {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  line-height: var(--leading-normal);
+  max-inline-size: var(--measure);
+}
+
+/* A stored figure that describes another corpus version. Marked in the
+   evidence colour that means "the letters only", because that is the same
+   kind of caution: the number is real, but not about what you are reading. */
+.mismatch {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--paper-sunk);
+  color: var(--evidence-spelling);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.versions {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 40rem) {
+  .versions {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.version {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--paper-sunk);
+}
+
+.versionLabel {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.versionCount {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+.absent {
+  color: var(--evidence-none);
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (min-width: 40rem) {
+  .facts {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.fact dt {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.fact dd {
+  margin: 0;
+  font-size: var(--text-base);
+  /* A licence sentence and a snapshot id are both long and neither may push
+     the page sideways at 375 px. */
+  overflow-wrap: anywhere;
+}
+
+/* A snapshot id is not a word form.
+   `Latin` refuses to break, and it is right to: a Behnevis form split across
+   two lines is two different words. But `lexicon-20260808:45e05ff66c37` is an
+   address, it is 264 px wide, and at 375 px it pushed the whole page sideways
+   — which is what the layout test caught. Identifiers may break; forms may
+   not. */
+.identifier {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.big {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+}

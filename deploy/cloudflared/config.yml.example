@@ -1,0 +1,22 @@
+# murfulu.mosaic-hub.de from the production host. Copy to config.yml
+# (gitignored) and put the tunnel's id in both places — `cloudflared tunnel
+# create murfulu` prints it (docs/DEPLOY.md §4b). `deploy/server.sh deploy`
+# carries the filled-in file to the server, and `deploy/server.sh tunnel`
+# copies the credentials JSON next to it, on the server only.
+#
+# One tunnel can be served from more than one machine: whichever runs a
+# connector serves the site, so moving production needs no DNS change. **Never
+# two at once** — Cloudflare would split the traffic between two different
+# databases. `deploy/server.sh cutover` and `rollback` switch between them.
+#
+# The service is Caddy, never web or api: Caddy holds the password wall, and
+# pointing the tunnel past it would publish what docs/DEPLOY.md §7 says must not
+# be published.
+tunnel: <tunnel-id>
+credentials-file: /etc/cloudflared/<tunnel-id>.json
+protocol: http2
+
+ingress:
+  - hostname: murfulu.mosaic-hub.de
+    service: http://caddy:80
+  - service: http_status:404

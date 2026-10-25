@@ -1,0 +1,175 @@
+# Rulings on places where the source document is wrong or contradicts itself.
+#
+# The transcriptions (source_rows.json, stem_source_rows.json) stay verbatim
+# forever. This file is where a human decision is recorded, and the builder
+# applies it when it writes the rule pack. So the source and the judgement are
+# never mixed up, and any ruling can be revisited by reading one short file.
+#
+# Ids are permanent. Nothing here deletes a rule — a retired rule keeps its id
+# with `active: false`, so old references and stored results still resolve.
+
+version: 0.1.0
+
+# How a stem is written on its own versus how it behaves once something
+# follows it. Not a joining rule — a fact about the stem itself.
+stem_finals:
+  - written: ow
+    working: av
+    ruled_on: 2026-08-11
+    affects: [row, šow, dow, derow, šenow, šenāow]
+    reason: >-
+      A stem written *row* is *rav* as soon as anything follows it, vowel or
+      consonant. The *ow* spelling is only how the stem looks standing alone,
+      which is exactly how a stem appears in a list of stems.
+    evidence: >-
+      Measured against the whole lexicon snapshot, 45,579 words: **not one
+      contains ow anywhere**. The sequence appears only in the six present
+      stems themselves. Every word built from them uses av — Ravān (16 words
+      begin Ravān-), ravā- (28), šav- (17), šenavidan, šenavāndan. The
+      consonant case is settled by šenavgar, where *gar* follows and it is
+      still *šenav*. The project's own alphabet table lists the vowels as
+      ā a e o i u and does not include ow, calling it a separate sound for
+      words like owj and ferdows.
+
+glides:
+  - id: G-15
+    active: false
+    ruled_on: 2026-08-11
+    reason_fa: >-
+      در دستوری کلی‌تر گنجید: بنی که «ow» نوشته می‌شود، هرگاه چیزی پس از آن بیاید «av» است. نمونهٔ آن (row + am = ravam) همچنان درست ساخته می‌شود، بی‌آنکه به دستور میانجی نیازی باشد.
+    reason: >-
+      Superseded by the stem_finals rule above. This row said "ow + a gives
+      av" — one instance of the broader fact that a stem written *ow* is *av*
+      whenever anything follows. Its example, row + am = ravam, still comes
+      out right, now without a joining rule.
+
+  - id: G-16
+    active: false
+    ruled_on: 2026-08-11
+    reason_fa: >-
+      همچون G-15 در دستور کلی‌ترِ بن‌های پایان‌یافته به «ow» گنجید. نمونه‌های آن (row + eš = Raveš و سه نمونهٔ دیگر) همچنان درست ساخته می‌شوند.
+    reason: >-
+      Superseded by the stem_finals rule above, as G-15. Its examples
+      (row + eš = Raveš and three more) still come out right.
+
+  - id: G-01
+    active: false
+    move_examples_to: G-04
+    ruled_on: 2026-08-11
+    reason_fa: >-
+      همان G-03 است: هر دو می‌گویند آ که با اِ برخورد کند «āye» می‌شود. نمونهٔ G-01 یعنی ā + ande = Āyande به این دستور بازنمی‌گردد، زیرا پایانهٔ ande- با «a» آغاز می‌شود نه با «e». آن نمونه به G-04 برده شد و این دستور بازنشسته شد، نه پاک.
+    reason: >-
+      Duplicate of G-03. Both state "ā meets e gives āye", and G-03's example
+      (Pā + e = Pāye) fits. G-01's example (ā + ande = Āyande) does not: the
+      ending -ande begins with **a**, not e, and the result is Āyande, not
+      Āyende. That example is really an instance of the ā-meets-a rule, which
+      the document already lists unnumbered as G-04. So the example moves to
+      G-04 and G-01 is retired rather than deleted.
+
+# Rules from the verb_stems and nominals tables that are transcribed correctly
+# and are **not run**. Same shape as the glide rulings above and applied the
+# same way, by tools/build_rule_pack.py.
+#
+# **These two lived in the generated nominals.yaml until 2026-08-15**, having
+# been edited into it directly, so re-running the builder put both back. They
+# were found by running it. A retirement is a decision about a source row, and
+# this file is where a decision belongs.
+rules:
+  - id: N-090
+    active: false
+    ruled_on: 2026-08-14
+    reason_fa: >-
+      واژه‌سازی نیست: این کسرهٔ اضافه است. نمونهٔ خودِ این ردیف گواه آن است — «کتابِ او» دو واژه است که با کسره به هم پیوسته‌اند، نه یک واژه. اگر همچون پسوند اجرا شود، بر هر نامی کسره می‌نشاند، بر خودش سوار می‌شود، و شمار پیکرهٔ پایه را نیز به ارث می‌برد، زیرا پیکره کسره نمی‌نویسد. هنوز تأیید نشده است؛ شناسه و آوانگاشتِ ردیف بر جای مانده و تنها اجرا نمی‌شود.
+    reason: >-
+      Not word formation: this is the ezāfe. The row's own example is the
+      argument — `Ketābé` `u` is کتابِ او, two words joined by a کسره, not one
+      word. Run as a suffix it hung a کسره on every noun, stacked on itself
+      (Balandéé), and inherited the base's corpus count, because the corpus
+      writes no کسره: 14,074 forms in v4, 1,983 of them counted as attested.
+      Unconfirmed, per the project's working rule — the row keeps its id and
+      its transcription and is simply not run. Registered as FOR_THE_LINGUIST
+      L8; one line brings it back.
+
+  - id: N-099
+    active: false
+    ruled_on: 2026-08-14
+    reason_fa: >-
+      واژه‌سازی نیست: این «ی» نکره است. نمونهٔ خودِ این ردیف گواه آن است — «کتابی» همان واژه است با نشانهٔ نکره بر آن. اگر همچون پسوند اجرا شود، به «بلندی» از راه نادرست می‌رسد: بلندی نامِ معناست، نه «یک بلند». هنوز تأیید نشده است؛ شناسه و آوانگاشت بر جای مانده و تنها اجرا نمی‌شود.
+    reason: >-
+      Not word formation: this is the indefinite enclitic. The row's own
+      example is the argument — `Ketābí` is کتابی, *a book*, the same word with
+      an article on it. Run as a suffix it produced 14,074 forms in v4, 269 of
+      them counted as attested against the base's own spelling, and it reached
+      بلندی by the wrong route: بلندی is the abstract noun, not *a tall one*,
+      so the right word arrived filed under the wrong rule with a borrowed
+      count. Unconfirmed, per the project's working rule — the row keeps its id
+      and its transcription and is simply not run. Registered as
+      FOR_THE_LINGUIST L8; one line brings it back.
+
+  - id: V-052
+    kind: prefix
+    affix: andar-
+    ruled_on: 2026-08-15
+    reason: >-
+      The dash is on the wrong side, exactly as it was for -bāž. The source
+      writes "-andar (darun)", but its own example andarāmadan (اندرآمدن) puts
+      it in front, and every neighbouring row in the same block of the verb
+      table — bar-, bāz-, dar-, farā-, foru-, ham- — is a prefix. اندر is the
+      preposition *inside*, and Persian puts it before the verb.
+      **Ruled here and not in affix_spellings.yaml, because the spelling is two
+      different affixes.** The nominal table writes "-andar (nātani)" at row 38
+      — N-038, the step-kin ending, whose example Mādarandar (مادراندر) puts it
+      on the end and is right to. Correcting the affix table moved both, which
+      is how the difference was noticed. Unconfirmed by the linguist; see
+      FOR_THE_LINGUIST.
+
+  # -- na- and nā- attach to a stem, not to the infinitive -------------------
+  #
+  # All four rows write attaches_to = Nābesudkārvāže and produces = Barnām, and
+  # are otherwise identical — no tag tells them apart. **Their examples do.**
+  # Two are built on the present stem and two on the past, which is also the
+  # only thing that explains why the source has a pair for each prefix:
+  #
+  #   V-063  nasuz     suz     present stem of suxtan
+  #   V-064  nadid     did     past stem of didan
+  #   V-065  nāšenās   šenās   present stem of šenāxtan
+  #   V-066  nāšāyest  šāyest  past stem of šāyestan
+  #
+  # Read as the infinitive, the engine kept the whole infinitive and called the
+  # result an adjective: nā + hamandišidan = nāhamandišidan, barnām. That is
+  # not a word. *Nābesudkārvāže* names the verb here, and an adjective off a
+  # verb is built on its stem — which is how the rest of the pack already works
+  # (docs say a verb is entered through its two stems, never the infinitive).
+  #
+  # Unconfirmed by the linguist; see FOR_THE_LINGUIST. Dormant until the next
+  # corpus version, exactly as the rule_chain fixes were before v9.
+  - id: V-063
+    input_types: [karbon_do]
+    ruled_on: 2026-08-15
+    reason: >-
+      The row's own example nasuz is na- on suz, the present stem of suxtan,
+      not on the infinitive suxtan. Read as the infinitive the rule built
+      nasuxtan and called it an adjective. Paired with V-064, which is the
+      same prefix on the past stem.
+
+  - id: V-064
+    input_types: [karbon_yek]
+    ruled_on: 2026-08-15
+    reason: >-
+      The row's own example nadid is na- on did, the past stem of didan. Paired
+      with V-063, which is the same prefix on the present stem.
+
+  - id: V-065
+    input_types: [karbon_do]
+    ruled_on: 2026-08-15
+    reason: >-
+      The row's own example nāšenās is nā- on šenās, the present stem of
+      šenāxtan. Paired with V-066, which is the same prefix on the past stem.
+
+  - id: V-066
+    input_types: [karbon_yek]
+    ruled_on: 2026-08-15
+    reason: >-
+      The row's own example nāšāyest is nā- on šāyest, the past stem of
+      šāyestan. Paired with V-065, which is the same prefix on the present
+      stem.

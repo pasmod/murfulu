@@ -1,0 +1,58 @@
+.shares {
+  display: grid;
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 40rem) {
+  .shares {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.share {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+}
+
+.figure {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--accent);
+}
+
+/* A bar, not a pie: the reader is comparing two shares against each other and
+   against the whole, and length is the only encoding that does both. */
+.track {
+  block-size: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--paper-sunk);
+  overflow: hidden;
+}
+
+.filled {
+  block-size: 100%;
+  background: var(--accent);
+}
+
+.counted {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.note {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  line-height: var(--leading-normal);
+  max-inline-size: var(--measure);
+}

@@ -1,0 +1,276 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.reading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-start: var(--space-5);
+}
+
+.readingTitle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--text-lg);
+}
+
+.readingCount,
+.groupCount {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.built,
+.note,
+.version,
+.deeper,
+.trouble {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+/* The dictionary's own doubt. Readable rather than faint — it qualifies
+   everything under it — and no colour of its own, because a flag is a note to
+   check and not a verdict. */
+.doubted {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+/* The dictionary's own words, not ours. Given room to be read, and labelled,
+   because an unattributed sentence on this screen would look like something
+   Murfulu worked out. */
+.definition {
+  font-size: var(--text-base);
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+.definitionLabel {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.built > * {
+  margin-inline-end: var(--space-2);
+}
+
+/* **The classes are a grid, and they look like controls.**
+   Each was a full-width row about 90px tall to say «کارنام ۹» — six classes
+   across two readings ran to roughly 1,100px of index before a single word
+   appeared. Worse, a folded class and an open word were the same shape: a
+   two-line block under a hairline, so nothing told a reader which was which.
+   A tile with a surface and a border is a different *shape*, not just
+   different text. Project lead, 2026-08-18. */
+.groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-2);
+  /* Stretch, not `start`. The classes have explanations of different lengths —
+     کارنام wraps to three lines where نام takes two — so `start` left the row
+     with a 20px ragged bottom edge. A row of choices should look like a row of
+     choices; the tiles are one control repeated, and one of them being shorter
+     says something that is not true. */
+  align-items: stretch;
+  margin-block-start: var(--space-3);
+}
+
+/* The words of the open class, below the whole grid — never inside a tile.
+   Letting the opened tile span the grid pushed the other five classes below a
+   screenful of words, so choosing one class hid the rest. */
+.words {
+  display: flex;
+  flex-direction: column;
+  margin-block-start: var(--space-4);
+}
+
+/* The heading is the control that opens the group, so the whole row is the
+   target — a reader choosing between eight classes should not have to find a
+   small chevron. `h3` keeps the outline; the button inside it is what the
+   keyboard and the screen reader get. */
+.groupHeading {
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  /* The heading is the grid item and the button is what is seen, so the
+     button has to take the height the grid gave its heading. */
+  height: 100%;
+}
+
+.groupToggle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  width: 100%;
+  height: 100%;
+  background: var(--paper-sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  /* Apple's 44px. The folded list is now the main thing on the screen and
+     every line of it is pressed. */
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  text-align: start;
+  color: var(--ink-soft);
+  transition: color var(--motion-fast) var(--ease);
+}
+
+.groupToggle:hover {
+  color: var(--ink);
+}
+
+/* Which class the words below belong to. Without it the grid gives no sign of
+   what was chosen, and the list underneath is unlabelled. */
+.groupToggle[aria-expanded="true"] {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.groupName {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+/* A closed group is a choice, so it says what the class is rather than hiding
+   it behind a hover — the same call the navigation's gloss made, and for the
+   same reader on the same phone. */
+.groupSays {
+  /* Text that flows, not two flex columns. As a flex row the explanation sat
+     at the right and the traditional term at the far left with a gulf between
+     them, which at 375px read as two unrelated captions rather than one line
+     about one class. */
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-tight);
+  color: var(--ink-faint);
+}
+
+/* «اسم مصدر» after «خودِ کار، که همچون نام آورده می‌شود» — the name the reader
+   was taught, following the one they are being taught. Separated by space
+   rather than punctuation, because the rule pack's own strings end in a stop
+   and a second mark would be the interface writing Persian. */
+/* The name the reader was taught, on its own line.
+   It used to follow the explanation after a single space — «…مانندِ «گفتار».
+   اسم مصدر / اسم معنی» — so it read as the tail of that sentence rather than
+   as a second name for the same thing, and it wrapped mid-phrase. */
+.groupTraditional {
+  display: block;
+  margin-block-start: 0.35em;
+  /* No `opacity` here. Fading `--ink-faint` a further 15% to set the
+     traditional term back from the project's own failed axe's contrast check
+     on the phone profile — the token is already at the floor, and anything on
+     top of it goes under. Distinction has to come from order and spacing. */
+}
+
+.forms {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The rest of a group. A full-width target rather than a link at the end of a
+   row: it is the one thing to do at the bottom of a group, and on a phone it
+   has to be hittable with a thumb. */
+.more {
+  display: block;
+  inline-size: 100%;
+  min-block-size: var(--touch-target);
+  margin-block-start: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--accent-strong);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.more:hover {
+  background: var(--paper-sunk);
+}
+
+/* The two stems, as the two starting points they are.
+   Was «بر پایهٔ raft row»: two bare Latin words in grey, unlabelled. */
+.stems {
+  display: grid;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-5);
+  padding: 0;
+  list-style: none;
+}
+
+/* A stem is a control now, so it is one the whole way: full width of its
+   cell, its own text direction, and a pressed state that says it is on. */
+.stem {
+  display: block;
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: start;
+  transition:
+    background var(--motion-fast) var(--ease),
+    border-color var(--motion-fast) var(--ease);
+}
+
+/* Off reads as set aside, never as broken: the words are still there, they
+   are simply not being shown. */
+.stem[aria-pressed="false"] {
+  background: none;
+  color: var(--ink-faint);
+}
+
+.stem[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.stem:hover {
+  border-color: var(--line-strong);
+}
+
+.stemLabel {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+.stemForms {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-block-start: var(--space-1);
+}
+
+.stemFa {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+}
+
+.stemLatin {
+  color: var(--ink-soft);
+}
+
+.stemCount {
+  margin-inline-start: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}

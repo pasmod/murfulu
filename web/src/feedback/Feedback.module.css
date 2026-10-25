@@ -1,0 +1,207 @@
+/*
+ * The launcher sits in the corner of every screen and the panel opens above
+ * the page. Both are sized for a thumb: docs/FRONTEND.md names the feedback
+ * button as one of the two things that usually gets the 44 px target wrong.
+ */
+
+.launcher {
+  position: fixed;
+  inset-block-end: var(--space-4);
+  inset-inline-start: var(--space-4);
+  z-index: 40;
+  min-block-size: var(--touch-target);
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--accent);
+  color: var(--paper);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  box-shadow: var(--shadow-raised);
+}
+
+.launcher:hover {
+  background: var(--accent-strong);
+}
+
+/* Not modal. A reader has to be able to look at the word while writing about
+   it, which is the whole reason the context is captured from the screen. */
+.panel {
+  position: fixed;
+  inset-block-end: calc(var(--touch-target) + var(--space-6));
+  inset-inline-start: var(--space-4);
+  inset-inline-end: var(--space-4);
+  z-index: 45;
+  max-inline-size: 30rem;
+  max-block-size: 70dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-raised);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-lg);
+}
+
+.close {
+  min-block-size: var(--touch-target);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--paper-sunk);
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.about,
+.explain,
+.hint,
+.forever,
+.trouble,
+.thanks {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  line-height: var(--leading-normal);
+}
+
+.hint,
+.forever {
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}
+
+.trouble {
+  color: var(--evidence-spelling);
+}
+
+.thanks {
+  color: var(--evidence-reading);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.legend {
+  padding: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.choice,
+.chosen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-block-size: var(--touch-target);
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  text-align: start;
+  cursor: pointer;
+}
+
+.choice {
+  background: var(--paper-sunk);
+  color: var(--ink);
+}
+
+.choice:disabled {
+  cursor: not-allowed;
+  color: var(--ink-faint);
+}
+
+.chosen {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.chosen .hint {
+  color: var(--paper);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.label {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.note,
+.token {
+  inline-size: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: var(--text-base);
+}
+
+.token {
+  font-family: var(--font-latin);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.send {
+  min-block-size: var(--touch-target);
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--paper);
+  font-family: inherit;
+  font-size: var(--text-base);
+  cursor: pointer;
+}
+
+.send:disabled {
+  background: var(--paper-sunk);
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}

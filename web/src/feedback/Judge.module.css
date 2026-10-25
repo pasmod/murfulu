@@ -1,0 +1,17 @@
+/* Quiet until wanted. It sits among the other row actions and matches them. */
+.judge {
+  min-block-size: var(--touch-target);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink-faint);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.judge:hover {
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+}

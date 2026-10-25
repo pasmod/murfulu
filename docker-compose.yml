@@ -1,0 +1,122 @@
+# Whole system on a clean machine: `docker compose up`.
+# Image tags are exact on purpose. Never `latest` — see docs/ENGINEERING.md.
+
+services:
+  db:
+    image: postgres:16.6-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.1
+    environment:
+      discovery.type: single-node
+      # Local single-node development only. Nothing is exposed off the host.
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: ${ES_JAVA_OPTS}
+      # Where a filesystem snapshot may be written. **Without this the deploy
+      # cannot happen at all**: docs/DEPLOY.md moves the corpus to a server by
+      # snapshot rather than re-ingesting it, and Elasticsearch refuses to
+      # register any `fs` repository while `path.repo` is empty — which it was
+      # until 2026-08-17, so the first command in that runbook failed. A
+      # separate named volume, not a directory inside the data path, so a
+      # snapshot survives the cluster being wiped and rebuilt.
+      path.repo: /snapshots
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+      - es_snapshots:/snapshots
+    ports:
+      - "${ELASTICSEARCH_PORT}:9200"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          curl -fsS http://localhost:9200/_cluster/health
+          | grep -qE '"status":"(green|yellow)"'
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MURFULU_DATABASE_URL: >-
+        postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      MURFULU_ELASTICSEARCH_URL: http://elasticsearch:9200
+      MURFULU_LEXICON_PATH: ${MURFULU_LEXICON_PATH}
+      # Measured by tools/run_productivity.py. Absent until a precompute has
+      # been run, and the app says so rather than showing zeros.
+      MURFULU_PRODUCTIVITY_PATH: ${MURFULU_PRODUCTIVITY_PATH}
+      # Measured by tools/run_ingest.py --report-out. Absent until an ingest
+      # has been run, and the corpus screen says so rather than showing zeros.
+      MURFULU_CORPUS_REPORT_PATH: ${MURFULU_CORPUS_REPORT_PATH}
+      # Built by tools/build_semantic_vectors.py. Absent until it has been
+      # run; the semantic part of every score is then null, never low.
+      MURFULU_SEMANTIC_PATH: ${MURFULU_SEMANTIC_PATH}
+      # Measured by tools/measure_typicality_spread.py. Absent until it has
+      # been run, and a score is then shown with no position rather than one
+      # nobody worked out — the figure is a cosine that never leaves the
+      # middle, so alone it reads far better than it is.
+      MURFULU_TYPICALITY_PATH: ${MURFULU_TYPICALITY_PATH}
+    volumes:
+      # The lexicon snapshot is read-only. We never write to it.
+      - ./data:/data:ro
+    ports:
+      - "${API_PORT}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import urllib.request;
+          urllib.request.urlopen('http://localhost:8000/health')"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "${WEB_PORT}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      # 127.0.0.1, never localhost: inside this image localhost resolves to
+      # ::1 only, and nginx's `listen 80` binds IPv4. The check was refused
+      # every ten seconds for as long as the container ran while the site
+      # served 200 the whole time.
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+volumes:
+  db_data:
+  es_data:
+  # Corpus snapshots, for moving a released version to a server. Kept apart
+  # from es_data so a snapshot survives the cluster being wiped and rebuilt.
+  es_snapshots:
