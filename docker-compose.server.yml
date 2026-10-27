@@ -1,4 +1,4 @@
-# Production on the production host (Ubuntu 24.04 in WSL + Docker Engine, see
+# Production on the production host (Ubuntu 24.04 + Docker Engine, see
 # docs/DEPLOY.md §0), on top of docker-compose.prod.yml — see deploy/server.sh:
 #
 #   docker compose -p murfulu -f docker-compose.prod.yml -f docker-compose.server.yml …
@@ -9,18 +9,39 @@
 # so the two cannot collide on the host either.
 #
 # **No host ports at all.** cloudflared reaches Caddy over the compose network.
-# WSL runs in mirrored networking mode, where Windows reserves random port
-# ranges at every boot — it once took Sokhan's Qdrant port down after a reboot —
-# and publishing nothing makes that impossible. Debug with `compose exec`.
+# On the first host (WSL in mirrored networking mode) Windows reserved random
+# port ranges at every boot — it once took Sokhan's Qdrant port down after a
+# reboot — and publishing nothing makes that impossible anywhere. Debug with
+# `compose exec`.
+#
+# **A memory ceiling on every service, ≤ 5 GB in all**, because Sokhan shares
+# the machine's 16 GB and needs ~7.5 GiB of it (Qdrant's page cache). Set
+# 2026-10-27 for the move to the VPS: Elasticsearch 3 GB with a 1 GB heap
+# (ES_JAVA_OPTS in the server .env, why in deploy/server.env.example), api 1 GB (~270 MiB measured), db 512 MB,
+# the three small ones 128 MB each. A limit that is hit is an OOM kill of that
+# container and a restart, not of Sokhan's.
 #
 # **cloudflared is started by `deploy/server.sh cutover`, never by `deploy`.**
 # Two connectors on the same tunnel split the traffic between two databases, so
-# while the Mac serves the site (before the cutover, after a rollback) this one
-# must stay stopped. `restart: unless-stopped` keeps a stopped connector stopped
-# across a WSL reboot.
+# while the fallback serves the site (before the cutover, after a rollback) this
+# one must stay stopped. `restart: unless-stopped` keeps a stopped connector
+# stopped across a reboot.
 services:
+  db:
+    mem_limit: 512m
+
+  elasticsearch:
+    mem_limit: 3g
+
+  api:
+    mem_limit: 1g
+
+  web:
+    mem_limit: 128m
+
   caddy:
     ports: !reset []
+    mem_limit: 128m
 
   cloudflared:
     # Exact tag, as everywhere in this repository — never `latest`.
@@ -35,3 +56,4 @@ services:
     depends_on:
       - caddy
     restart: unless-stopped
+    mem_limit: 128m

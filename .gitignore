@@ -15,6 +15,7 @@ dist/
 # (docs/DEPLOY.md §0). The tunnel credentials JSON never leaves ~/.cloudflared
 # and the server.
 /deploy/host.env
+/deploy/host.*.env
 /deploy/ssh_config
 /deploy/cloudflared/config.yml
 /deploy/cloudflared/*.json

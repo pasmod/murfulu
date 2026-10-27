@@ -59,7 +59,7 @@ docker stop murfulu-es-forward
 
 Step 6 against production is `docker compose -f docker-compose.prod.yml up -d
 --build --no-deps api` (web only if `web/` changed). **Since 2026-10-17 that is
-the Mac's fallback stack, not production**: production runs on the server
+the Mac's old stack, not production**: production runs on the server
 (DEPLOY.md §0), and a released version reaches it with `deploy/server.sh corpus vN`,
 `data` and `deploy` — see DEPLOY.md §0. **The two host paths
 moved**: `~/data/murfulu/` no longer exists. v12 read the Ganjoor dump from
@@ -78,7 +78,9 @@ finished indices over the VPN; the inputs are small (lexicon 19 MB, Ganjoor
 341 MB, centuries, suspect claims) and rsync's compression moved them in 46
 seconds. The build runs as a one-shot container of the deployed `murfulu-api`
 image on the compose network — no forward, nothing published — capped at 7 GB
-so it can never crowd out Sokhan, with the inputs in `~/murfulu/build/inputs`
+so it can never crowd out Sokhan (on the previous host; **on the VPS since 2026-10-27
+7 GB does not fit** beside Sokhan's ~7.5 GiB and the stack's 5 GB ceiling, and
+what a build needs is not measured yet — OPEN_QUESTIONS), with the inputs in `~/murfulu/build/inputs`
 (outside `deploy`'s rsync, which excludes `/build`):
 
 ```bash

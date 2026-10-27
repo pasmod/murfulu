@@ -2,6 +2,30 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-10-27 — production moves to the VPS
+
+**murfulu is served from a VPS shared with Sokhan since 2026-10-27**, decided
+by the project lead on 2026-10-26: the previous host was a workstation
+administered by others and never the right home. It stays the fallback,
+its stack running and its connector stopped, until the project lead decides
+on decommissioning it (around 2026-11-15, after 14 stable days). DEPLOY §0.
+
+**The corpus moved as a snapshot, not a rebuild.** The served v14 came from the
+previous host's Elasticsearch in 14 minutes; building it on the VPS would still
+have needed `passages` copied, plus a build and a comparison proving the
+rebuild equal. Counts and Postgres checksums were compared before the cutover.
+
+**`deploy/server.sh` knows a fallback host** (`MURFULU_FALLBACK_SSH_HOST`)
+instead of assuming the Mac is the other side: `counts`, `corpus`, `db`,
+`db-back`, `cutover` and `rollback` work against it, and the Mac stays the
+fallback when it is unset. `cutover` now refuses to switch unless `check`
+passes.
+
+**A memory ceiling per service, 4.9 GB in all, and a 1 GB Elasticsearch
+heap.** Sokhan needs ~7.5 GiB of the 16 GB. A 2 GB heap was tried first and
+left only ~0.5 GB of the 3 GB limit for Lucene's page cache; the 1 GB heap
+had run production for 9.6 days at 28% use with no old-generation GC.
+
 ## 2026-10-25 — the repository is public
 
 **One commit, not the history.** The history named the production host and
