@@ -3,15 +3,23 @@
 # the repository (docs/DEPLOY.md §0). deploy/server.sh connects to the Host
 # that MURFULU_SSH_HOST in deploy/host.env names.
 #
-# If another project already reaches the same machine, reuse its Host alias,
-# so both share one known_hosts entry.
+# If another project already reaches the same machine, reuse its Host alias.
 #
-# The current host is Ubuntu in WSL. WSL runs in mirrored networking mode; a
-# Hyper-V firewall rule admits port 22 from the local network only. Key auth
-# only. Port 22, not 2222: Windows reserves random port ranges at boot and once
-# took 2222 — ports below 1024 are never in the dynamic range, so 22 stays free.
+# Two entries since 2026-10-27: production (a VPS, a non-root user in the
+# docker group, key auth only) and the fallback, the machine that served
+# before and keeps its stack for the rollback (MURFULU_FALLBACK_SSH_HOST).
+# The fallback is Ubuntu in WSL: port 22, not 2222, because Windows reserves
+# random port ranges at boot and once took 2222 — ports below 1024 are never
+# in the dynamic range.
 Host murfulu-prod
   HostName 203.0.113.10
+  Port 22
+  User deploy
+  StrictHostKeyChecking accept-new
+  ServerAliveInterval 30
+
+Host murfulu-fallback
+  HostName 198.51.100.20
   Port 22
   User root
   StrictHostKeyChecking accept-new

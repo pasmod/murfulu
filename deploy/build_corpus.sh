@@ -9,6 +9,9 @@
 #     -v ~/murfulu/build:/build -v ~/murfulu/deploy:/deploy:ro \
 #     murfulu-api:latest sh /deploy/build_corpus.sh v13 lexicon-20261012
 #
+# --memory 7g was the previous host's; on the VPS shared with Sokhan it does not
+# fit — measure what a build needs first (docs/OPEN_QUESTIONS.md).
+#
 # Inputs in /build/inputs (rsynced from the Mac): ganjoor.s3db,
 # poet_centuries.json, suspect-claims-v4.json. Outputs in /build.
 set -eu

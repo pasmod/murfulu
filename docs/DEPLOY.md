@@ -11,90 +11,129 @@ The password is not a placeholder.
 
 ---
 
-## 0. Where production runs (since 2026-10-17)
+## 0. Where production runs (since 2026-10-27)
 
-**On a production host of its own**, next to Sokhan, not on the Mac any more.
-Ubuntu 24.04 in WSL → Docker Engine; compose project **`murfulu`** from
-`docker-compose.prod.yml` + `docker-compose.server.yml`, code and data in the
-SSH user's `~/murfulu`. The tunnel connector runs there as the container
-`murfulu_cloudflared` — the same tunnel the Mac used, so the hostname needed no
-DNS change. Sokhan's stack on the same machine is compose project `mana`;
-nothing in this repository touches it, and nothing here publishes a host port.
+**On a rented VPS shared with Sokhan, since 2026-10-27.** Ubuntu 24.04 →
+Docker Engine; compose project **`murfulu`** from `docker-compose.prod.yml` +
+`docker-compose.server.yml`, code and data in the SSH user's `~/murfulu`. The
+tunnel connector runs there as the container `murfulu_cloudflared` — the same
+tunnel as before, so the hostname needed no DNS change. Sokhan's stack on the
+same machine is compose project `mana`; nothing in this repository touches it,
+and nothing here publishes a host port. The host's base (user, firewall,
+updates, swap, Docker) is Sokhan's set-up and is not repeated here.
 
-**Which machine that is stays out of the repository.** Three local files,
+**The fallback is the previous host** that served production from 2026-10-17
+to 2026-10-27 (Ubuntu in WSL, Docker Engine, the same compose project). Its
+stack keeps running with corpus v12–v14 and its connector `murfulu_cloudflared`
+**stopped, not removed**, so a rollback is one command. Before that, from
+2026-08-17, the Mac served the site; its stack is still there and is the
+fallback only when no fallback host is configured.
+
+**Which machines those are stays out of the repository.** Three local files,
 each copied from the `*.example` beside it and gitignored, hold everything
-specific to the host:
+specific to the hosts:
 
 | file | holds |
 |---|---|
-| `deploy/host.env` | `MURFULU_SSH_HOST`, the `Host` in `deploy/ssh_config`; `MURFULU_REMOTE_DIR`, the checkout on the server (default `murfulu`, relative to the SSH user's home) |
-| `deploy/ssh_config` | the host's address, user and port |
+| `deploy/host.env` | `MURFULU_SSH_HOST`, the production `Host` in `deploy/ssh_config`; `MURFULU_REMOTE_DIR`, the checkout there (default `murfulu`, relative to the SSH user's home); and `MURFULU_FALLBACK_SSH_HOST` / `MURFULU_FALLBACK_REMOTE_DIR`, the machine that served before. Unset, the fallback is the Mac. |
+| `deploy/ssh_config` | each host's address, user and port |
 | `deploy/cloudflared/config.yml` | the tunnel id and the name of its credentials file. `deploy` carries it to the server; `tunnel` copies the credentials JSON from `~/.cloudflared/` |
 
 A fresh clone has none of them, and `deploy/server.sh` names the one that is
-missing rather than guessing.
+missing rather than guessing. `deploy/host.previous.env` (also gitignored)
+keeps the settings from when the previous host was production, with no fallback.
 
 Everything is `deploy/server.sh`, run on the Mac from the repo root, over SSH,
-from a network that reaches the host:
+from a network that reaches both hosts (the previous one only over a VPN):
 
 | | |
 |---|---|
-| `deploy` | rsync the working tree, rebuild and restart the app — **the normal deploy**. Never starts the tunnel. |
-| `check` | on the server, not public: health, served corpus version, `generate پر`, L16, Caddy's 401 |
-| `counts` | ES document counts and Postgres rows + per-table checksum, Mac vs server |
-| `corpus vN` | (v12's way; v13 was built on the server instead, ENGINEERING) a new corpus version built on the Mac: snapshot of `passages` + the four `*-v13` indices on the Mac into a repository of its own (`/snapshots/release-v13`), streamed into the server's `es_snapshots` volume and restored, aliases set, counts compared. Then set the `*-v13` paths in the server `.env`, `data`, `deploy`. |
-| `release v13 [lexicon-20261012]` | serve a corpus version already on the server: all three aliases in one request, the version paths (and the lexicon) in the server `.env`, the api recreated. **Also the rollback**: `deploy/server.sh release v12 lexicon-20260808`. |
-| `data` | rsync exactly the files `deploy/server.env.example` names (`MURFULU_*_PATH`) — keep it in step with the server `.env` |
-| `env`, `tunnel` | once: the server `.env` (Postgres password generated there; the site login copied from the Mac's `.env` unread, so the same password works) and the tunnel credentials |
+| `deploy` | rsync the working tree, rebuild and restart the app — **the normal deploy**. Never starts the tunnel. Never carries `.denylist` or the host files. |
+| `check` | on the server, not public: health, served corpus version, `generate پر`, L16, Caddy's 401. Exits 1 on any failure. |
+| `counts` | ES document counts and Postgres rows + per-table checksum, fallback vs server |
+| `corpus vN` | snapshot of `passages` + the three `*-vN` indices on the fallback into a repository of its own (`/snapshots/release-vN`), streamed through the Mac into the server's `es_snapshots` volume and restored, aliases set, counts compared. How v14 reached the VPS. A *new* version is built on the server instead (ENGINEERING). |
+| `release v14 [lexicon-20261012]` | serve a corpus version already on the server: all three aliases in one request, the version paths (and the lexicon) in the server `.env`, the api recreated. |
+| `data` | rsync exactly the files `deploy/server.env.example` names (`MURFULU_*_PATH`) from the Mac — keep it in step with the server `.env` |
+| `env`, `tunnel` | once: the server `.env` (Postgres password generated there; the site login copied unread from the fallback's `.env`, so the same password works) and the tunnel credentials |
+| `db`, `db-back` | copy the Postgres database fallback → server, or back, and compare |
 | `cutover` / `rollback` | switch which machine serves the site, below |
 | `migrate`, `ps`, `logs` | as named |
 
-**`corpus` is slow over a remote link, and that is expected.** v12 on 2026-10-17:
-the snapshot took 72 s on the Mac, the ~2.9 GB copy (`docker cp` piped through
-SSH) **~55 minutes at ~0.8 MB/s**, the restore under a minute — 58 minutes in
-all, with the Mac serving throughout. While `docker cp` runs, `docker exec` into
-the server's Elasticsearch container blocks, so watch progress from the host:
-`du -sh /var/lib/docker/volumes/murfulu_es_snapshots/_data`. Counts after the
-restore, Mac = server: passages 1,427,460 (`_count`; 19,556,734 Lucene docs
-with the nested ones), documents 133,148, word_types 411,165, derivations
-1,870,987.
+**The move to the VPS, 2026-10-27, as run:** `env`, `tunnel`, `data`,
+`deploy` (3 min 21 s, images built there), `corpus v14` (below), `db`,
+`check`, `counts`, `cutover`. The fallback's `.env` and the server's differ
+only in the generated Postgres password. The code deployed was `main`, which
+differed from the previous host's only in docs and one anonymised file name.
+
+**`corpus` over a remote link is a copy, and it is timed by the slowest hop.**
+v14 on 2026-10-27, previous host → Mac (VPN) → VPS: snapshot 72 s on the previous host,
+2.8 GB copied at **~3.7 MB/s** (the VPN; Mac → VPS measured ~6.5 MB/s), restore
+under a minute — **14 min 14 s in all**, with the previous host serving throughout.
+v12 on 2026-10-17, Mac → previous host: ~2.9 GB in ~55 minutes at ~0.8 MB/s. While
+`docker cp` runs, `docker exec` into the server's Elasticsearch container
+blocks, so watch progress from the host: `sudo du -sh
+/var/lib/docker/volumes/murfulu_es_snapshots/_data`. **Counts after the move,
+previous host = VPS:** passages 1,427,460 (`_count`; 19,556,734 Lucene docs with
+the nested ones), documents 133,148, word_types 411,190, derivations 1,844,043;
+Postgres identical row for row and by checksum (195 rules, 26 questions, one
+ruling, 10 feedback). **Building v14 on the VPS instead was not the faster
+path:** it still needs `passages` (2 GB) copied, plus a 15-minute build and a
+comparison to show the rebuild equals what is served; the snapshot is that
+equality by construction.
+
+**Memory: murfulu stays under 5 GB on a 16 GB machine Sokhan also uses.**
+Every service has a `mem_limit` in `docker-compose.server.yml` (Elasticsearch
+3 GB, api 1 GB, db 512 MB, web, caddy and cloudflared 128 MB each: 4.9 GB in
+all). Elasticsearch's heap is **1 GB, not 2**: after 9.6 days serving v14 on
+the previous host the 1 GB heap was 28% used with no old-generation collection,
+and a 2 GB heap tried on the VPS left 2.5 GiB anonymous memory and only
+~0.5 GB of the 3 GB for Lucene's page cache over a 2 GB `passages`. Measured
+after the cutover (`docker stats`): murfulu ~1.9 GiB (Elasticsearch 1.54 GiB,
+api 266 MiB, the rest under 50 MiB each), Sokhan ~6.9 GiB (Qdrant 5.8 GiB of
+it), `free`: 3.5 GB used, 12.2 GB available, no swap in use, no OOM kill.
 
 **Only one connector at a time.** Two connectors on one tunnel are load-balanced
 by Cloudflare, which here would mean two databases answering in turn.
-`cutover` parks the Mac's LaunchAgent `com.cloudflared.murfulu` in
-`~/Library/LaunchAgents/disabled/` (config and credentials stay in
-`~/.cloudflared/`), copies the database once more now that nothing can write on
-the Mac, and starts `murfulu_cloudflared`.
+`cutover` runs `check` first and stops unless it passes, then stops the
+fallback's connector (`compose stop cloudflared` on the fallback host; with the
+Mac as fallback it parks the LaunchAgent `com.cloudflared.murfulu` in
+`~/Library/LaunchAgents/disabled/`), copies the database once more now that
+nothing can write there, and starts `murfulu_cloudflared` on the server. The
+2026-10-27 cutover took 32 s; `cloudflared tunnel info murfulu` afterwards
+listed exactly one connector, from the VPS.
 
 **Rollback is one command: `deploy/server.sh rollback`** — stops the server's
-connector, moves the LaunchAgent back and starts it. The Mac stack was left
-running for exactly this. Rulings, feedback or proposals written on the server
-since the cutover exist only there: `deploy/server.sh db-back` copies the
-database back to the Mac (run it before or right after the rollback).
+connector and starts the previous host's again (`compose start cloudflared`; with
+the Mac as fallback, moves the LaunchAgent back). Rulings, feedback or
+proposals written on the server since the cutover exist only there:
+`deploy/server.sh db-back` copies the database back to the fallback (run it
+before or right after the rollback). To make the previous host production again in
+the script's eyes as well, `cp deploy/host.previous.env deploy/host.env`.
 
-**Autostart is Sokhan's.** The Windows task «Sokhan WSL» boots WSL at startup
-and logon and keeps it alive; systemd starts Docker, and Docker starts every
-container with a restart policy — `restart: always` for the app, `unless-stopped`
-for the connector, so a connector stopped by `rollback` stays stopped across a
-reboot. **The limitation is the task's:** it runs with the user's stored Windows
-password, so after a password change it fails until it is re-entered
-(`Set-ScheduledTask -TaskName 'Sokhan WSL' -User <user> -Password <new>`,
-admin), and until then murfulu, like Sokhan, only comes back after a login.
+**Autostart.** On the VPS systemd starts Docker, and Docker starts every
+container with a restart policy — `restart: always` for the app,
+`unless-stopped` for the connector, so a connector stopped by `rollback` or
+`cutover` stays stopped across a reboot. The previous host's stack depends on
+Sokhan's Windows task «Sokhan WSL», which boots WSL at startup and logon with
+the user's stored Windows password; after a password change it fails until
+the password is re-entered (`Set-ScheduledTask -TaskName 'Sokhan WSL' -User
+<user> -Password <new>`, admin), and until then the fallback only comes back
+after a login.
 
 **Corpus versions are built on the server since v13** (2026-10-18, ENGINEERING
 "Building a corpus version"): 16 minutes in a one-shot container, against
-v12's 58 minutes of copying. The Mac's Elasticsearch holds v4–v12 and stops
-there; the server holds what it serves (v14) and the two before it (v13,
-v12) for the rollback. **Serving v14 since 2026-10-18** (v13 plus the function-word
-rule, `data/compare-v13-v14.md`) with karbon 1.2.0's lexicon
-(`lexicon-20261012`); **rollback: `deploy/server.sh release v13
-lexicon-20261012`** — the code keeps applying the list to live lookups, so a
-full return also needs the code reverted and `deploy`. The server `.env`
-before v14 is `~/murfulu/.env.bak-v13-20261018`; v12's indices are still
-there too (`release v12 lexicon-20260808`).
-The server `.env` before v13 is kept as `~/murfulu/.env.bak-v12-20261018`. `docker compose -f
-docker-compose.prod.yml` on the Mac still targets the Mac's stack, which is the
-fallback now and no longer production.
+v12's 58 minutes of copying. **Serving v14 since 2026-10-18** (v13 plus the
+function-word rule, `data/compare-v13-v14.md`) with karbon 1.2.0's lexicon
+(`lexicon-20261012`). **The VPS holds v14 only** (and `passages`); v12 and v13
+stay on the previous host with their `.env` backups (`~/murfulu/.env.bak-v13-20261018`,
+`.env.bak-v12-20261018`), so returning to an earlier corpus version is a
+rollback to the previous host followed by `release v13 lexicon-20261012` there (with
+`deploy/host.previous.env` as `host.env`) — the code keeps applying the
+function-word list to live lookups, so a full return to v13 also needs the code
+reverted and `deploy`. **A build on the VPS must fit the shared memory**: the
+7 GB cap the previous host's builds ran with does not (OPEN_QUESTIONS).
+`docker compose -f docker-compose.prod.yml` on the Mac still targets the Mac's
+stack, which has not been production since 2026-10-17.
 
 ---
 

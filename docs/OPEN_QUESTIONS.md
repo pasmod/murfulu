@@ -5,6 +5,23 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-10-27 (the move to the VPS)
+
+### S35. How much memory does a corpus build need, and where does it run now?
+
+The previous host built v13 and v14 in a one-shot container capped at 7 GB
+(ENGINEERING, "Building a corpus version"). Production moved on 2026-10-27 to
+a 16 GB VPS that Sokhan shares: Sokhan needs ~7.5 GiB, murfulu's stack is
+capped at 4.9 GB, so ~3 GB are left and 7 GB does not fit. What the build
+actually peaked at was never recorded. Before v15: measure a build's peak
+(`docker stats` or the cgroup's `memory.peak`) on the previous host, which still
+holds everything a build needs, then either cap it to fit the VPS, run it
+on the previous host and move the result with `deploy/server.sh corpus`, or stop
+Sokhan's reclaimable page cache from being the margin. Unanswered until the
+next corpus version is due.
+
+---
+
 ## Opened 2026-08-24 (session 21)
 
 ### S33. A coinage free in the corpus is not a coinage that is free

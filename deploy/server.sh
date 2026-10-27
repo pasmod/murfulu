@@ -7,27 +7,28 @@
 #   tunnel    copy the Cloudflare tunnel credentials to the server (once)
 #   data      rsync the lexicon and the measured artefacts the API reads — safe to re-run
 #   deploy    rsync the code and rebuild/restart the app (never the tunnel)  ← the normal deploy
-#   corpus V  snapshot passages + documents/word_types/derivations-V on the Mac, restore on the server
+#   corpus V  snapshot passages + documents/word_types/derivations-V on the fallback, restore on the server
 #   release V [L]  serve corpus version V (and lexicon L): aliases + .env + api; the rollback too
-#   db        copy the Postgres database Mac → server (pg_dump | pg_restore --clean) and compare
-#   db-back   the same, server → Mac: run it before a rollback if anyone wrote on the server
+#   db        copy the Postgres database fallback → server (pg_dump | pg_restore --clean) and compare
+#   db-back   the same, server → fallback: run it before a rollback if anyone wrote on the server
 #   migrate   alembic upgrade head on the server
 #   check     health, served corpus version, a generation, L16 — on the server, not public
-#   counts    ES document counts and Postgres rows, Mac vs server
-#   cutover   stop the Mac's connector, copy the DB once more, start the server's connector
-#   rollback  stop the server's connector and start the Mac's again
+#   counts    ES document counts and Postgres rows, fallback vs server
+#   cutover   check, stop the fallback's connector, copy the DB once more, start the server's
+#   rollback  stop the server's connector and start the fallback's again
 #   ps|logs   status / follow logs
 #
-# Which host, how to reach it and which tunnel are local files, never in git:
-# deploy/host.env, deploy/ssh_config and deploy/cloudflared/config.yml, each
-# copied from the *.example beside it. Sokhan runs on the same host as compose
-# project `mana`: nothing here may touch it.
+# The fallback is the machine that served before: MURFULU_FALLBACK_SSH_HOST in
+# deploy/host.env, or the Mac when that is unset. Hosts, how to reach them and
+# which tunnel are local files, never in git: deploy/host.env, deploy/ssh_config
+# and deploy/cloudflared/config.yml, each copied from the *.example beside it.
+# Sokhan runs on the same host as compose project `mana`: nothing here may touch it.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 SSH_CONFIG="$PWD/deploy/ssh_config"   # absolute: `data` runs rsync from inside data/
 HOST_ENV="$PWD/deploy/host.env"
-[ -n "${1:-}" ] || { sed -n '2,24p' "$0"; exit 1; }
+[ -n "${1:-}" ] || { sed -n '2,25p' "$0"; exit 1; }
 TUNNEL_CONFIG="$PWD/deploy/cloudflared/config.yml"
 for local_file in "$HOST_ENV" "$SSH_CONFIG"; do
   [ -f "$local_file" ] || {
@@ -42,16 +43,26 @@ REMOTE_DIR=${MURFULU_REMOTE_DIR:-murfulu}
 SITE=murfulu.mosaic-hub.de
 COMPOSE="docker compose -p murfulu -f docker-compose.prod.yml -f docker-compose.server.yml"
 APP_SERVICES="db elasticsearch api web caddy"
-# The Mac's production stack (the fallback) and its tunnel connector.
+# The fallback, kept running for the rollback: another host's stack when
+# deploy/host.env names one (its connector is murfulu_cloudflared, stopped
+# while the server serves), otherwise the Mac's (its connector the LaunchAgent).
+FALLBACK=${MURFULU_FALLBACK_SSH_HOST:-}
+FALLBACK_DIR=${MURFULU_FALLBACK_REMOTE_DIR:-murfulu}
+FB_NAME=${FALLBACK:-Mac}
 MAC_COMPOSE="docker compose -p murfulu -f docker-compose.prod.yml"
 MAC_AGENT=com.cloudflared.murfulu
 MAC_PLIST="$HOME/Library/LaunchAgents/$MAC_AGENT.plist"
 MAC_PLIST_PARKED="$HOME/Library/LaunchAgents/disabled/$MAC_AGENT.plist"
 
 remote() { ssh -F "$SSH_CONFIG" "$SERVER" "$@"; }
+fallback() { ssh -F "$SSH_CONFIG" "$FALLBACK" "$@"; }
 RSYNC=(rsync -az -e "ssh -F $SSH_CONFIG")
 
-mac_es()    { $MAC_COMPOSE exec -T elasticsearch curl -sS "$@"; }
+# `docker` and the stack's `docker compose` on the fallback, arguments passed as they are.
+fb_docker()  { if [ -n "$FALLBACK" ]; then fallback "docker $(printf '%q ' "$@")"; else docker "$@"; fi; }
+fb_compose() { if [ -n "$FALLBACK" ]; then fallback "cd $FALLBACK_DIR && $COMPOSE $(printf '%q ' "$@")"; else $MAC_COMPOSE "$@"; fi; }
+
+fb_es()     { fb_compose exec -T elasticsearch curl -sS "$@"; }
 server_es() { remote "cd $REMOTE_DIR && $COMPOSE exec -T elasticsearch curl -sS $(printf '%q ' "$@")"; }
 
 # Exact rows and a checksum of every row, per table, so a copy is compared by
@@ -60,19 +71,19 @@ TABLE_SQL="select table_name || ' ' || (xpath('/row/c/text()', query_to_xml(form
   'select count(*) || '' '' || md5(coalesce(string_agg(t::text, '''' order by t::text), '''')) as c from %I.%I t',
   table_schema, table_name), false, true, '')))[1]::text
   from information_schema.tables where table_schema = 'public' and table_type = 'BASE TABLE' order by 1"
-psql_mac()    { $MAC_COMPOSE exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Atc "$0"' "$1"; }
+psql_fb()     { fb_compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Atc "$0"' "$1"; }
 psql_server() { remote "cd $REMOTE_DIR && $COMPOSE exec -T db sh -c 'psql -U \"\$POSTGRES_USER\" -d \"\$POSTGRES_DB\" -Atc \"\$0\"' $(printf '%q' "$1")"; }
 
-dump_mac()       { $MAC_COMPOSE exec -T db sh -c 'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc --no-owner --no-privileges'; }
+dump_fb()        { fb_compose exec -T db sh -c 'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc --no-owner --no-privileges'; }
 dump_server()    { remote "cd $REMOTE_DIR && $COMPOSE exec -T db sh -c 'pg_dump -U \"\$POSTGRES_USER\" -d \"\$POSTGRES_DB\" -Fc --no-owner --no-privileges'"; }
 RESTORE='pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean --if-exists --no-owner --no-privileges --single-transaction'
-restore_mac()    { $MAC_COMPOSE exec -T db sh -c "$RESTORE"; }
+restore_fb()     { fb_compose exec -T db sh -c "$RESTORE"; }
 restore_server() { remote "cd $REMOTE_DIR && $COMPOSE exec -T db sh -c $(printf '%q' "$RESTORE")"; }
 
 compare_db() {
   local mac server
-  mac=$(psql_mac "$TABLE_SQL"); server=$(psql_server "$TABLE_SQL")
-  echo "table                      rows (Mac / server)   content"
+  mac=$(psql_fb "$TABLE_SQL"); server=$(psql_server "$TABLE_SQL")
+  echo "table                      rows ($FB_NAME / server)   content"
   LC_ALL=C join -a1 -a2 -e '-' -o 0,1.2,2.2,1.3,2.3 <(echo "$mac" | LC_ALL=C sort) <(echo "$server" | LC_ALL=C sort) |
     awk '{ printf "%-26s %8s / %-8s   %s\n", $1, $2, $3, ($4 == $5 ? "same" : "DIFFERENT") }'
   [ "$mac" = "$server" ] && echo "Postgres: identical" || { echo "Postgres: DIFFERENT" >&2; return 1; }
@@ -80,9 +91,9 @@ compare_db() {
 
 compare_es() {
   local index mac server ok=0
-  printf '%-18s %12s %12s\n' index Mac server
+  printf '%-18s %12s %12s\n' index "$FB_NAME" server
   for index in passages documents word_types derivations; do
-    mac=$(mac_es "localhost:9200/$index/_count" | sed -E 's/.*"count":([0-9]+).*/\1/')
+    mac=$(fb_es "localhost:9200/$index/_count" | sed -E 's/.*"count":([0-9]+).*/\1/')
     server=$(server_es "localhost:9200/$index/_count" | sed -E 's/.*"count":([0-9]+).*/\1/')
     printf '%-18s %12s %12s\n' "$index" "$mac" "$server"
     [ "$mac" = "$server" ] || ok=1
@@ -98,9 +109,11 @@ case "${1:-}" in
   env)
     remote "mkdir -p $REMOTE_DIR && cd $REMOTE_DIR && if [ -f .env ]; then echo '.env exists, left unchanged'; else
       (umask 077; cat > .env) && echo '.env created'; fi" < deploy/server.env.example
-    # The site login moves as it is, so everyone's saved password keeps working.
-    # Piped, never echoed; merged on the server only where the value is still empty.
-    grep -E '^MURFULU_SITE_(USER|PASSWORD_HASH)=' .env | remote "umask 077; cat > $REMOTE_DIR/.env.site"
+    # The site login moves as it is, from the fallback that serves it now, so
+    # everyone's saved password keeps working. Piped, never echoed; merged on
+    # the server only where the value is still empty.
+    if [ -n "$FALLBACK" ]; then fallback "cat $FALLBACK_DIR/.env"; else cat .env; fi |
+      grep -E '^MURFULU_SITE_(USER|PASSWORD_HASH)=' | remote "umask 077; cat > $REMOTE_DIR/.env.site"
     remote "bash -s $REMOTE_DIR" <<'EOF'
 set -e
 cd "$1"
@@ -110,7 +123,7 @@ while IFS= read -r line; do
   grep -v "^$key=" .env > .env.new || true
   printf '%s\n' "$line" >> .env.new
   mv .env.new .env
-  echo "$key copied from the Mac"
+  echo "$key copied from the fallback"
 done < .env.site
 rm -f .env.site
 if ! grep -qE '^POSTGRES_PASSWORD=.+' .env; then
@@ -147,7 +160,8 @@ EOF
       --exclude node_modules --exclude /web/dist --exclude /web/test-results \
       --exclude __pycache__ --exclude .venv --exclude .mypy_cache --exclude .pytest_cache \
       --exclude .ruff_cache --exclude '*.egg-info' --exclude '/deploy/cloudflared/*.json' \
-      --exclude /deploy/host.env --exclude /deploy/ssh_config --exclude .DS_Store \
+      --exclude /deploy/host.env --exclude '/deploy/host.*.env' --exclude /deploy/ssh_config \
+      --exclude /.denylist --exclude .DS_Store \
       ./ "$SERVER:$REMOTE_DIR/"
     remote "cd $REMOTE_DIR && $COMPOSE up -d --build $APP_SERVICES && docker image prune -f --filter label=com.docker.compose.project=murfulu >/dev/null"
     ;;
@@ -157,21 +171,21 @@ EOF
     repo="release-$version"
     # A repository of its own for this release, so the directory that travels
     # holds these four indices and nothing from earlier snapshots.
-    if ! mac_es -f "localhost:9200/_snapshot/$repo/$version" >/dev/null 2>&1; then
-      $MAC_COMPOSE exec -T -u root elasticsearch chown -R elasticsearch:root /snapshots
-      mac_es -f -X PUT "localhost:9200/_snapshot/$repo" -H 'content-type: application/json' \
+    if ! fb_es -f "localhost:9200/_snapshot/$repo/$version" >/dev/null 2>&1; then
+      fb_compose exec -T -u root elasticsearch chown -R elasticsearch:root /snapshots
+      fb_es -f -X PUT "localhost:9200/_snapshot/$repo" -H 'content-type: application/json' \
         -d "{\"type\":\"fs\",\"settings\":{\"location\":\"/snapshots/$repo\"}}"; echo
-      mac_es -f -X PUT "localhost:9200/_snapshot/$repo/$version?wait_for_completion=true" \
+      fb_es -f -X PUT "localhost:9200/_snapshot/$repo/$version?wait_for_completion=true" \
         -H 'content-type: application/json' \
         -d "{\"indices\":\"$indices\",\"include_global_state\":false}" | head -c 400; echo
     fi
     remote "cd $REMOTE_DIR && $COMPOSE up -d --wait elasticsearch"
-    mac_container=$($MAC_COMPOSE ps -q elasticsearch)
+    fb_container=$(fb_compose ps -q elasticsearch)
     server_container=$(remote "cd $REMOTE_DIR && $COMPOSE ps -q elasticsearch")
     if remote "docker exec $server_container test -d /snapshots/$repo"; then
       echo "snapshot already on the server"
     else
-      docker cp "$mac_container:/snapshots/$repo" - | remote "docker cp - $server_container:/snapshots/"
+      fb_docker cp "$fb_container:/snapshots/$repo" - | remote "docker cp - $server_container:/snapshots/"
     fi
     remote "docker exec -u root $server_container chown -R elasticsearch:root /snapshots"
     server_es -f -X PUT "localhost:9200/_snapshot/$repo" -H 'content-type: application/json' \
@@ -214,11 +228,11 @@ EOF
     ;;
   db)
     remote "cd $REMOTE_DIR && $COMPOSE up -d --wait db"
-    dump_mac | restore_server
+    dump_fb | restore_server
     compare_db
     ;;
   db-back)
-    dump_server | restore_mac
+    dump_server | restore_fb
     compare_db
     ;;
   migrate) remote "cd $REMOTE_DIR && $COMPOSE run --rm api alembic upgrade head" ;;
@@ -233,15 +247,22 @@ EOF
     compare_db || true
     ;;
   cutover)
-    # 1. The Mac stops serving: parked, not deleted (config and credentials stay).
-    if launchctl print "gui/$(id -u)/$MAC_AGENT" >/dev/null 2>&1; then
-      launchctl bootout "gui/$(id -u)/$MAC_AGENT"
+    # 0. Nothing switches unless the server answers every check (exits 1 otherwise).
+    remote "cd $REMOTE_DIR && $COMPOSE exec -T api python -" < deploy/check_api.py
+    # 1. The fallback stops serving: stopped or parked, never removed.
+    if [ -n "$FALLBACK" ]; then
+      fallback "cd $FALLBACK_DIR && $COMPOSE stop cloudflared"
+      echo "$FALLBACK connector murfulu_cloudflared stopped (container kept)"
+    else
+      if launchctl print "gui/$(id -u)/$MAC_AGENT" >/dev/null 2>&1; then
+        launchctl bootout "gui/$(id -u)/$MAC_AGENT"
+      fi
+      mkdir -p "$(dirname "$MAC_PLIST_PARKED")"
+      [ -f "$MAC_PLIST" ] && mv "$MAC_PLIST" "$MAC_PLIST_PARKED"
+      echo "Mac connector stopped; plist parked in ~/Library/LaunchAgents/disabled/"
     fi
-    mkdir -p "$(dirname "$MAC_PLIST_PARKED")"
-    [ -f "$MAC_PLIST" ] && mv "$MAC_PLIST" "$MAC_PLIST_PARKED"
-    echo "Mac connector stopped; plist parked in ~/Library/LaunchAgents/disabled/"
-    # 2. Nothing can write on the Mac any more, so this copy is the last one.
-    dump_mac | restore_server
+    # 2. Nothing can write on the fallback any more, so this copy is the last one.
+    dump_fb | restore_server
     compare_db
     # 3. The server starts serving.
     remote "cd $REMOTE_DIR && $COMPOSE up -d cloudflared"
@@ -250,13 +271,17 @@ EOF
     ;;
   rollback)
     remote "cd $REMOTE_DIR && $COMPOSE stop cloudflared"
-    [ -f "$MAC_PLIST_PARKED" ] && mv "$MAC_PLIST_PARKED" "$MAC_PLIST"
-    launchctl bootstrap "gui/$(id -u)" "$MAC_PLIST" 2>/dev/null || launchctl kickstart -k "gui/$(id -u)/$MAC_AGENT"
+    if [ -n "$FALLBACK" ]; then
+      fallback "cd $FALLBACK_DIR && $COMPOSE start cloudflared"
+    else
+      [ -f "$MAC_PLIST_PARKED" ] && mv "$MAC_PLIST_PARKED" "$MAC_PLIST"
+      launchctl bootstrap "gui/$(id -u)" "$MAC_PLIST" 2>/dev/null || launchctl kickstart -k "gui/$(id -u)/$MAC_AGENT"
+    fi
     sleep 15
-    echo "server connector stopped, Mac connector started; https://$SITE/ → $(public_status) (401 expected)"
+    echo "server connector stopped, $FB_NAME connector started; https://$SITE/ → $(public_status) (401 expected)"
     echo "Writes made on the server since the cutover are only there: deploy/server.sh db-back copies them back."
     ;;
   ps)   remote "cd $REMOTE_DIR && $COMPOSE ps" ;;
   logs) remote "cd $REMOTE_DIR && $COMPOSE logs -f --tail=100 ${2:-}" ;;
-  *)    sed -n '2,24p' "$0"; exit 1 ;;
+  *)    sed -n '2,25p' "$0"; exit 1 ;;
 esac
