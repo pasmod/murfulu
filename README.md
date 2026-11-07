@@ -1,5 +1,7 @@
 # Murfulu
 
+[![check](https://github.com/pasmod/murfulu/actions/workflows/check.yml/badge.svg)](https://github.com/pasmod/murfulu/actions/workflows/check.yml)
+
 Murfulu generates the words a language *can* form, not only the ones its
 dictionaries already list: it applies word-formation rules to the stems of a
 lexicon and returns each possible word with the rule that built it, a composed
@@ -14,7 +16,11 @@ mögliche Wörter, jedes mit Herleitung, Bedeutung und Beleg im Korpus. Heute
 läuft ein Prototyp für Persisch mit 195 Regeln. Als Nächstes entstehen eine
 sprachunabhängige Python-Bibliothek mit einem offenen, prüfbaren Regelformat
 und einem Prüfwerkzeug sowie ein deutsches Regelpaket mit rund 40 produktiven
-Mustern; das persische Paket dient als Referenz.
+Mustern; das persische Paket dient als Referenz. Der Prototyp läuft unter
+murfulu.mosaic-hub.de hinter einem Passwort, weil das Korpus nicht frei
+weitergegeben werden darf; Gutachterinnen und Gutachter erhalten Zugang auf
+Anfrage. Die Engine selbst lässt sich ohne Lexikon und Korpus in wenigen
+Minuten lokal ausprobieren (Abschnitt *Try it*).
 
 ## What it does
 
@@ -35,6 +41,38 @@ does, and the linguist judges the rest.
 Nothing in the idea is Persian. German *Lichtung* is *lichten* + *-ung*, and a
 German rule for *-ung* would propose the nouns German has not formed yet in the
 same way.
+
+## Try it
+
+**The engine, in a few minutes.** The rule pack is in the repository, so the
+engine runs without the lexicon, the corpus or Docker. After the three install
+lines under *Running it*:
+
+```python
+from murfulu.engine import Word, apply_all, deduplicate
+from murfulu.rules.pack import load
+
+pack = load()  # the Persian rule pack in rules/
+stems = [
+    Word(latin="angiz", fa="انگیز", word_class="karbon_do"),    # present stem
+    Word(latin="angixt", fa="انگیخت", word_class="karbon_yek"),  # past stem
+]
+words = deduplicate([form for stem in stems for form in apply_all(pack, stem)])
+print(len(words))  # 38
+for word in words[:5]:
+    print(word.shortest_path[-1].rule_id, word.latin, word.fa)
+```
+
+Each result keeps its derivation path: the rule, the base it was applied to,
+and the join between them. The lexicon and the corpus add the rest, meaning
+and attestation.
+
+**The running prototype** is at <https://murfulu.mosaic-hub.de>, in Persian,
+behind a password. The password is there because of the corpus, not the code:
+the site shows Ganjoor's poetry verse by verse, and that corpus may not be
+passed on (see *Licence*). Reviewers get access on request from the project
+lead. Without it, [WALKTHROUGH_RAFTAN.md](docs/WALKTHROUGH_RAFTAN.md) follows
+one verb through the whole system step by step, from input to presentation.
 
 ## Where it stands, and where it is going
 
@@ -100,12 +138,18 @@ Running on a server, behind HTTPS and a password, is in
 [docs/DEPLOY.md](docs/DEPLOY.md), which also says why the password is
 required: the corpus terms are unsettled.
 
-## How we work
+## Team
 
-Murfulu is built by a team of three: the **project lead** (concept and
-direction, development), an **engineer** (architecture and development;
-maintains karbon), and a **linguist** (the word-formation rules, the grammar terminology and the
-Behnevis script). The docs refer to people by role.
+Murfulu is built by a team of three. The repository and its docs name people
+by role:
+
+| Role | Responsible for |
+|---|---|
+| **Project lead** | concept and scientific direction, development, this repository |
+| **Engineer** | architecture and development; also maintains karbon, the companion library for Persian transliteration, the lexicon and stem extraction |
+| **Linguist** | the word-formation rules, the grammar terminology and the Behnevis script; every linguistic ruling is theirs, and the code follows it |
+
+## How we work
 
 - **We use AI coding assistants** to draft code, tests and documentation, and
   we say so: commits made with one carry a `Co-Authored-By` line, and we leave

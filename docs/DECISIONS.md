@@ -2,6 +2,25 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-07 — the api image carries the files its tests read
+
+**The `docker` CI job had been red since 2026-08-20, and only that job.** It
+runs the whole suite inside the api image, and seven tests read files the
+image did not contain: `.env.example`, `deploy/server.env.example`,
+`.gitignore`, `.denylist.example`, and the two search-screen files the syntax
+contract reads (`web/src/screens/search/syntax.ts`, `Search.tsx`). The same
+tests passed in `lint-types-tests`, so the failure said nothing about the code.
+
+**The image copies those six files rather than the tests skipping without
+them.** The syntax contract says why in its own docstring: a contract test
+that can be skipped is not a contract. The files are small, public and never
+read at run time. The alternative, mounting the checkout into the container in
+CI, would have kept `docker run … pytest` red on every machine but the runner.
+
+**The README's code example is a test** (`tests/test_readme_example.py`): it
+runs the *Try it* block as written and checks the count it promises and the
+four words of the table, because that block is the first code a visitor runs.
+
 ## 2026-10-27 — production moves to the VPS
 
 **murfulu is served from a VPS shared with Sokhan since 2026-10-27**, decided
