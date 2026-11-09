@@ -16,10 +16,9 @@ mögliche Wörter, jedes mit Herleitung, Bedeutung und Beleg im Korpus. Heute
 läuft ein Prototyp für Persisch mit 195 Regeln. Als Nächstes entstehen eine
 sprachunabhängige Python-Bibliothek mit einem offenen, prüfbaren Regelformat
 und einem Prüfwerkzeug sowie ein deutsches Regelpaket mit rund 40 produktiven
-Mustern; das persische Paket dient als Referenz. Der Prototyp läuft unter
-murfulu.mosaic-hub.de hinter einem Passwort, weil das Korpus nicht frei
-weitergegeben werden darf; Gutachterinnen und Gutachter erhalten Zugang auf
-Anfrage. Die Engine selbst lässt sich ohne Lexikon und Korpus in wenigen
+Mustern; das persische Paket dient als Referenz. Der Prototyp läuft hinter
+einem Passwort, weil das Korpus nicht frei weitergegeben werden darf;
+Gutachterinnen und Gutachter erhalten Zugang auf Anfrage. Die Engine selbst lässt sich ohne Lexikon und Korpus in wenigen
 Minuten lokal ausprobieren (Abschnitt *Try it*).
 
 ## What it does
@@ -67,8 +66,7 @@ Each result keeps its derivation path: the rule, the base it was applied to,
 and the join between them. The lexicon and the corpus add the rest, meaning
 and attestation.
 
-**The running prototype** is at <https://murfulu.mosaic-hub.de>, in Persian,
-behind a password. The password is there because of the corpus, not the code:
+**The running prototype** is in Persian and behind a password. The password is there because of the corpus, not the code:
 the site shows Ganjoor's poetry verse by verse, and that corpus may not be
 passed on (see *Licence*). Reviewers get access on request from the project
 lead. Without it, [WALKTHROUGH_RAFTAN.md](docs/WALKTHROUGH_RAFTAN.md) follows
