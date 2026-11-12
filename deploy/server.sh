@@ -7,11 +7,13 @@
 #   tunnel    copy the Cloudflare tunnel credentials to the server (once)
 #   data      rsync the lexicon and the measured artefacts the API reads — safe to re-run
 #   deploy    rsync the code and rebuild/restart the app (never the tunnel)  ← the normal deploy
-#   corpus V  snapshot passages + documents/word_types/derivations-V on the fallback, restore on the server
+#   corpus V  snapshot documents/word_types/derivations-V (+ passages if the server lacks it) on the fallback, restore on the server; no alias moves
+#   corpus-mac V  the same, from the Mac's own stack (a version built on the Mac, v15 on)
 #   release V [L]  serve corpus version V (and lexicon L): aliases + .env + api; the rollback too
 #   db        copy the Postgres database fallback → server (pg_dump | pg_restore --clean) and compare
 #   db-back   the same, server → fallback: run it before a rollback if anyone wrote on the server
 #   migrate   alembic upgrade head on the server
+#   questions [--apply]  load rules/questions_fa.yaml into the server's store (dry run without --apply)
 #   check     health, served corpus version, a generation, L16 — on the server, not public
 #   counts    ES document counts and Postgres rows, fallback vs server
 #   cutover   check, stop the fallback's connector, copy the DB once more, start the server's
@@ -40,7 +42,9 @@ done
 . "$HOST_ENV"
 SERVER=${MURFULU_SSH_HOST:?set MURFULU_SSH_HOST in deploy/host.env}
 REMOTE_DIR=${MURFULU_REMOTE_DIR:-murfulu}
-SITE=murfulu.mosaic-hub.de
+# The public address. Set MURFULU_SITE in deploy/host.env when the demo
+# moves to its own host (DEPLOY §9); the default is the address it has had.
+SITE=${MURFULU_SITE:-murfulu.mosaic-hub.de}
 COMPOSE="docker compose -p murfulu -f docker-compose.prod.yml -f docker-compose.server.yml"
 APP_SERVICES="db elasticsearch api web caddy"
 # The fallback, kept running for the rollback: another host's stack when
@@ -49,6 +53,13 @@ APP_SERVICES="db elasticsearch api web caddy"
 FALLBACK=${MURFULU_FALLBACK_SSH_HOST:-}
 FALLBACK_DIR=${MURFULU_FALLBACK_REMOTE_DIR:-murfulu}
 FB_NAME=${FALLBACK:-Mac}
+# `corpus-mac vN`: the same as `corpus`, with the Mac's own stack as the
+# source — for a version built on the Mac (v15 on, ENGINEERING).
+if [ "${1:-}" = corpus-mac ]; then
+  FALLBACK=""
+  FB_NAME=Mac
+  set -- corpus "${@:2}"
+fi
 MAC_COMPOSE="docker compose -p murfulu -f docker-compose.prod.yml"
 MAC_AGENT=com.cloudflared.murfulu
 MAC_PLIST="$HOME/Library/LaunchAgents/$MAC_AGENT.plist"
@@ -89,10 +100,14 @@ compare_db() {
   [ "$mac" = "$server" ] && echo "Postgres: identical" || { echo "Postgres: DIFFERENT" >&2; return 1; }
 }
 
+# With a version, compare that version's three indices by name; without,
+# what the aliases serve on both sides.
 compare_es() {
-  local index mac server ok=0
+  local index mac server ok=0 version=${1:-}
+  local names="passages documents word_types derivations"
+  [ -z "$version" ] || names="documents-$version word_types-$version derivations-$version"
   printf '%-18s %12s %12s\n' index "$FB_NAME" server
-  for index in passages documents word_types derivations; do
+  for index in $names; do
     mac=$(fb_es "localhost:9200/$index/_count" | sed -E 's/.*"count":([0-9]+).*/\1/')
     server=$(server_es "localhost:9200/$index/_count" | sed -E 's/.*"count":([0-9]+).*/\1/')
     printf '%-18s %12s %12s\n' "$index" "$mac" "$server"
@@ -167,10 +182,25 @@ EOF
     ;;
   corpus)
     version=${2:?usage: deploy/server.sh corpus v12}
-    indices="passages,documents-$version,word_types-$version,derivations-$version"
+    # The server's Elasticsearch first: whether it holds `passages` can only be
+    # asked of a running one, and a stopped one is not an empty one.
+    remote "cd $REMOTE_DIR && $COMPOSE up -d --wait elasticsearch"
+    indices="documents-$version,word_types-$version,derivations-$version"
     repo="release-$version"
-    # A repository of its own for this release, so the directory that travels
-    # holds these four indices and nothing from earlier snapshots.
+    # `passages` travels only to a server that does not have it: a restore
+    # refuses an index that is already open there, and the whole request
+    # with it. It does not change between corpus versions. Only a 404 means
+    # absent; any other answer stops here rather than guessing.
+    held=$(server_es -o /dev/null -w '%{http_code}' "localhost:9200/passages")
+    case "$held" in
+      200) ;;
+      404) indices="passages,$indices"; repo="$repo-with-passages" ;;
+      *) echo "the server's Elasticsearch answered $held for passages; stopping" >&2; exit 1 ;;
+    esac
+    # A repository of its own for this release — and for whether it carries
+    # `passages` — so the directory that travels holds exactly these indices,
+    # and a snapshot taken without `passages` is never reused to seed a server
+    # that lacks it.
     if ! fb_es -f "localhost:9200/_snapshot/$repo/$version" >/dev/null 2>&1; then
       fb_compose exec -T -u root elasticsearch chown -R elasticsearch:root /snapshots
       fb_es -f -X PUT "localhost:9200/_snapshot/$repo" -H 'content-type: application/json' \
@@ -179,7 +209,6 @@ EOF
         -H 'content-type: application/json' \
         -d "{\"indices\":\"$indices\",\"include_global_state\":false}" | head -c 400; echo
     fi
-    remote "cd $REMOTE_DIR && $COMPOSE up -d --wait elasticsearch"
     fb_container=$(fb_compose ps -q elasticsearch)
     server_container=$(remote "cd $REMOTE_DIR && $COMPOSE ps -q elasticsearch")
     if remote "docker exec $server_container test -d /snapshots/$repo"; then
@@ -195,14 +224,13 @@ EOF
     else
       server_es -f -X POST "localhost:9200/_snapshot/$repo/$version/_restore?wait_for_completion=true" \
         -H 'content-type: application/json' \
-        -d "{\"indices\":\"$indices\",\"include_global_state\":false,\"include_aliases\":true}" | head -c 400; echo
+        -d "{\"indices\":\"$indices\",\"include_global_state\":false,\"include_aliases\":false}" | head -c 400; echo
     fi
-    # The aliases are what the app reads; make sure they point at this version.
-    server_es -f -X POST 'localhost:9200/_aliases' -H 'content-type: application/json' -d "{\"actions\":[
-      {\"add\":{\"index\":\"documents-$version\",\"alias\":\"documents\"}},
-      {\"add\":{\"index\":\"word_types-$version\",\"alias\":\"word_types\"}},
-      {\"add\":{\"index\":\"derivations-$version\",\"alias\":\"derivations\"}}]}"; echo
-    compare_es
+    # **No alias moves here.** A server already serving a version would
+    # end up with each alias on two indices; `release` moves all three in
+    # one request, removing the old ones, and is the step that serves it.
+    compare_es "$version"
+    echo "restored, not served: deploy/server.sh release $version <lexicon>"
     ;;
   release)
     # Serve corpus version V (already on the server) with lexicon L, or move
@@ -236,6 +264,11 @@ EOF
     compare_db
     ;;
   migrate) remote "cd $REMOTE_DIR && $COMPOSE run --rm api alembic upgrade head" ;;
+  questions)
+    # The linguist's questions from rules/questions_fa.yaml into the server's
+    # store: a dry run, or `questions --apply` (tools/load_questions.py).
+    remote "cd $REMOTE_DIR && $COMPOSE exec -T api python tools/load_questions.py ${2:-}"
+    ;;
   check)
     remote "cd $REMOTE_DIR && $COMPOSE ps --format 'table {{.Service}}\t{{.Status}}'"
     remote "cd $REMOTE_DIR && $COMPOSE exec -T api python -" < deploy/check_api.py

@@ -51,7 +51,8 @@ from a network that reaches both hosts (the previous one only over a VPN):
 | `deploy` | rsync the working tree, rebuild and restart the app — **the normal deploy**. Never starts the tunnel. Never carries `.denylist` or the host files. |
 | `check` | on the server, not public: health, served corpus version, `generate پر`, L16, Caddy's 401. Exits 1 on any failure. |
 | `counts` | ES document counts and Postgres rows + per-table checksum, fallback vs server |
-| `corpus vN` | snapshot of `passages` + the three `*-vN` indices on the fallback into a repository of its own (`/snapshots/release-vN`), streamed through the Mac into the server's `es_snapshots` volume and restored, aliases set, counts compared. How v14 reached the VPS. A *new* version is built on the server instead (ENGINEERING). |
+| `corpus vN` | snapshot of the three `*-vN` indices (and `passages`, only if the server lacks it) on the fallback into a repository of its own (`/snapshots/release-vN`, `…-with-passages`), streamed through the Mac into the server's `es_snapshots` volume and restored, counts compared by index name. **No alias moves since 2026-11-12: `release` serves it.** How v14 reached the VPS. |
+| `corpus-mac vN` | the same with the Mac's own stack as the source, for a version built on the Mac (v15 on, ENGINEERING) |
 | `release v14 [lexicon-20261012]` | serve a corpus version already on the server: all three aliases in one request, the version paths (and the lexicon) in the server `.env`, the api recreated. |
 | `data` | rsync exactly the files `deploy/server.env.example` names (`MURFULU_*_PATH`) from the Mac — keep it in step with the server `.env` |
 | `env`, `tunnel` | once: the server `.env` (Postgres password generated there; the site login copied unread from the fallback's `.env`, so the same password works) and the tunnel credentials |
@@ -395,3 +396,61 @@ one deployed by hand.
 The app already knows who its experts are; what it does not have is a session
 the browser carries, which is what would let Caddy check a person instead of a
 shared secret. Worth doing if more than a handful of people ever need in.
+
+## 9. The next deploy: karbon 1.3.2 and corpus v15 — prepared 2026-11-12, not run
+
+Everything below was built and checked on the Mac (ENGINEERING, v15;
+`data/compare-v14-v15.md`). **None of it has been run against the server.** It
+waits for the project lead's word, and then goes in this order:
+
+| step | command | what it does |
+|---|---|---|
+| 0 | `.venv/bin/python tools/fetch_lexicon.py v1.3.2` | on a Mac that lacks it: `data/lexicon-20261111.sqlite` from karbon's release |
+| 1 | `deploy/server.sh deploy` | the code: the word-bank groups and names, `/bank`, the deferred question state. It still serves v14 on lexicon 1.2.0 afterwards — the new code reads the old snapshot as before |
+| 2 | `deploy/server.sh migrate` | migration 0010 (a question can be deferred) |
+| 3 | `deploy/server.sh data` | `deploy/server.env.example` now names `lexicon-20261111.sqlite` and the v15 figures, so exactly those travel |
+| 4 | `deploy/server.sh corpus-mac v15` | snapshot of `documents-v15`, `word_types-v15`, `derivations-v15` (≈1.05 GB) on the Mac's stack, streamed to the server and restored; `passages` stays, the server has it; **no alias moves**; counts compared by index name |
+| 5 | `deploy/server.sh release v15 lexicon-20261111` | all three aliases and the server `.env` in one step, api recreated. **The rollback is `release v14 lexicon-20261012`**, which works as long as v14's indices, the old lexicon and v14's three JSON figures stay on the server (`data` adds files and removes none) |
+| 6 | `deploy/server.sh questions`, then `questions --apply` | the reworked questions into the server's store. On the Mac's store the same load reworded 10, withdrew L13, L17 and L17b, and deferred L26; read the dry run before applying |
+| 7 | `deploy/server.sh check`, then the site logged out (401) and in | `/bank` with the twelve groups; a verb on `/build` reading پیشین‌کاربن; `/questions` with ten waiting and L26 under «فعلاً پرسیده نمی‌شود» |
+
+**What v15 costs the server.** Serving: three indices of about 1.05 GB on
+disk beside v14's (both kept until v15 has run a while), within the stack's
+memory as before. Building: 7.2 GB peak, which is why v15 is built on the Mac
+(OPEN_QUESTIONS S35). L26's switch, if it is ever turned on, multiplies the
+build about tenfold and needs its own plan first.
+
+**The message to the linguist** points at `/questions`; it goes after step 6,
+and after the move below if the address changes in the same deploy.
+
+### Moving the demo to its own host — decided 2026-11-09, prepared, not run
+
+The project lead decided to take the demo off Mosaic. Two choices are his
+before anything runs, and nothing here guesses them:
+
+- **Which address.** A name outside Mosaic's domain. Whatever it is goes into
+  the server `.env` as `MURFULU_DOMAIN` and `MURFULU_SITE_ADDRESS`, into
+  `deploy/host.env` as `MURFULU_SITE` (what `check`, `cutover` and `rollback`
+  probe; it defaults to the old address), and into the tunnel's ingress in
+  `deploy/cloudflared/config.yml`. DNS: `cloudflared tunnel route dns <tunnel>
+  <hostname>` on the zone that holds the name — a zone in another Cloudflare
+  account needs a tunnel of its own there (`tunnel` copies its credentials).
+  Then `deploy`, which recreates Caddy because its environment changed, and a
+  restart of murfulu's own connector, `murfulu_cloudflared` (§0) — `deploy`
+  never touches the tunnel, and no other connector on the host is restarted.
+  Check through the new hostname: 401 logged out, the app logged in.
+- **Which machine.** Keep serving from the VPS beside Sokhan and only change
+  the address, or a machine of its own. Measured for the second: serving needs
+  what it needs today (the stack is capped at 5 GB, Elasticsearch holds
+  `passages` 2 GB plus one version's three indices); building a version needs
+  7.2 GB more, so a builder of its own needs 16 GB — or the builds stay on the
+  Mac and only the snapshot travels, as for v15. A new machine is set up the
+  way the VPS was on 2026-10-27 (§0), with `deploy` first, because it brings
+  the compose files every later step runs: `deploy`, `env`, `tunnel`, `data`,
+  `corpus-mac v15`, `release v15 lexicon-20261111` (no alias exists before
+  it), `db`, `migrate`, `questions --apply`, `check`, `cutover`; the VPS stays
+  the fallback until the project lead retires it.
+
+After either: the old address answers with a redirect for a while or not at
+all (his call); the README, the questions link sent to the linguist and the
+pages that name the address are updated.

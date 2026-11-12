@@ -5,6 +5,46 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-12 (session 27) — karbon 1.3.2: the linguist's word bank, corpus v15
+
+karbon 1.3.2 is the linguist's final word bank, and murfulu now reads it.
+Details: `data/README.md` (the snapshot), `data/compare-v14-v15.md` (the
+build), DECISIONS 2026-11-12 (two entries). What is worth knowing next time:
+
+**The bank changes what a word is more than how it is read.** 58,983 rows, one
+per word, 2,986 in more than one of his twelve groups; 9,980 of 1.2.0's rows
+were re-read, 509 merged, 426 dropped, 14,341 added — 8,113 of them اسم معنی,
+because the former اسم مصدر is now کارنام (10,866 words, was about 1,990).
+Word formation now reads his groups, not the dictionary's label, and a
+loanword builds nothing.
+
+**L26 is now the largest single lever in the engine.** 10,645 words are کارنام
+and not نام, so 80 rules cannot take them: on, the build's pool grows from 3.0
+to 29.1 million forms, and دانشمند، امیدوار، هوشمند، هوشواره are built. It is
+a switch (`karnam_counts_as_nam`, off) until his corrected rules arrive.
+
+**v15 links far more of the poetry: 60.8% of running words, from 45.7%** —
+6,488 spellings newly linked, mostly the short frequent words the bank added
+(بر، آن، او، چون). Three of them are verb forms filed as کارنام (بود، شد،
+نیست), which credit the verbs' counts to a noun: که in v13 again (S36).
+
+**The bank settles questions by existing.** L13's spellings are the bank's
+own headwords (بخرد *bexrad*, نستوه *nastuh*); L17 and L17b are his group
+names. What L13 leaves is ours: the engine puts a vowel into a joint the
+finished word does not have (S37).
+
+**A build no longer fits a container on the Mac or the VPS beside Sokhan:**
+7.2 GB peak. Built on the Mac outside Docker; the snapshot transfer to the
+server is prepared, not run (DEPLOY §9).
+
+**Two old faults surfaced by the switch itself.** The آزردن / گسیختن overrides
+had corrected only the Persian stem since August, so v12–v14 built them on
+*āzor* and *gosil*; and the attribution tool could read zero while a path moved
+for a reason it did not count (fixed: metadata-only changes are unexplained,
+input-pool exits are named).
+
+---
+
 ## 2026-11-10 (session 26) — هوشواره: a regular word the engine cannot build, for the reason it cannot build هوشمند
 
 The project lead asked about **هوشواره**, put forward in 2026 as a Persian

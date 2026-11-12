@@ -5,7 +5,7 @@ Large files here are gitignored.
 ## lexicon-20261111.sqlite — karbon 1.3.2, the final word bank (from corpus v15)
 
 **karbon release 1.3.2** (2026-11-11), the lexicon inside its wheel, taken out
-with `python tools/fetch_lexicon.py v1.3.2` (needs read access to karbon's
+with `.venv/bin/python tools/fetch_lexicon.py v1.3.2` (needs read access to karbon's
 repository; `--wheel` takes a downloaded wheel instead). 58,983 rows, **none
 soft-deleted**, 56,366 reviewed by the linguist (`needs_review` on 2,617, was
 14,467). `karbon_meta`: build_date 2026-11-11, ruleset `V.7+V.9e-adj`, source

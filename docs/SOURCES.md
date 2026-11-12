@@ -29,6 +29,27 @@ two rule documents are transcribed into `rules/source_rows.json` and
 The archive also holds the team's protocols, voice messages and funding
 papers. They are private and are not indexed here.
 
+## Added between 2026-10 and 2026-11 (indexed 2026-11-12)
+
+Filed into the archive on 2026-11-12. Names in file names are shortened to «…»
+and the role given instead, as above; the funding papers and the team's
+roadmap filed at the same time are private and not indexed.
+
+| File | What it is |
+|---|---|
+| `Daten/karbon_1.3.2_Wortbank_20261111.zip` | karbon 1.3.2's word bank as the karbon maintainer exported it: one TSV and one JSON per word-bank group, and `all.tsv`. murfulu reads the same data from karbon's release wheel (`tools/fetch_lexicon.py`, `data/README.md`) |
+| `Forschung/بانک_واژگان_گروه‌ها_…_۲۰۲۶۱۱۰۹.docx` (the linguist's) | **The word bank's twelve groups and their names**, the source of `rules/bank_groups.yaml` and of پیشین‌کاربن / کنون‌کاربن |
+| `Forschung/گردآوری_گروه‌های_واژه_…_۲۰۲۶۱۰۲۱.docx` (the linguist's) | The first gathering of the new word groups, where جانام and پیش‌واژه appear as his own terms (L17, L17b) |
+| `Forschung/واج‌نویسی_ویرایش_۸_…_۲۰۲۶۱۰۰۷.docx` (the linguist's) | The Behnevis transcription rules, version 8 |
+| `Forschung/پاسخ_به_پیشنهادهای_واج‌نویسی_…_۲۰۲۶۱۰۱۱.docx` (the linguist's) | His answers to the proposals on the transcription rules |
+| `Forschung/پاسخ_پرسش‌های_دستور_ده_…_۲۰۲۶۱۰۱۹.docx` (the linguist's) | His answers to the questions on rule set 10 |
+| `Forschung/واج‌نویسی_اسم_و_صفت_مرکب_…_۲۰۲۶۱۰۲۲.docx` (the linguist's) | How compound nouns and compound adjectives are transcribed |
+| `Forschung/Quellen/واژه‌نامه_پارسی_سره_کزازی_۱۳۹۰.pdf`, `…_OCR.txt` | Kazzazi's dictionary of pure Persian (edition 1390), scan and OCR text |
+| `Forschung/Quellen/Noor_Texte_۲۰۲۶۱۰۲۸/` | Classical texts from the Noor digital library as HTML: logic in three files (one of them a repaired extract), Bal'ami in two volumes, Avicenna, and an index page |
+| `Konzept/توانمندسازی_فارسی_در_زایایی_ارائه_…_۲۰۲۶۰۶۰۴.pptx` (the linguist's) | His presentation on enabling Persian's word-making (June 2026) |
+| `Konzept/Projektbeschreibung_Murfulu_DE.docx` | The project description in German |
+| `Konzept/فارسی_ممکن_…_۲۰۲۶۱۰۱۹.pdf` (the project lead's) | The essay «فارسی ممکن» — the Persian that is possible |
+
 ## Research notes
 
 | File | What it is |
