@@ -24,7 +24,7 @@
 #
 # Registered in docs/FOR_THE_LINGUIST.md L1 and docs/UPSTREAM.md B4.
 
-version: 0.2.0
+version: 0.3.0
 
 # The snapshots every row below was checked against. An override is applied
 # only to a snapshot listed here, and a snapshot that is not listed is reported
@@ -38,6 +38,11 @@ lexicon_snapshots:
   # and رفتن still has only *raftan* (the deleted *roftan* row 559 is gone;
   # روفتن *ruftan* is a different spelling, present in both). All three apply.
   - lexicon-20261012
+  # karbon 1.3.2, re-checked 2026-11-12: آزردن now reads آزار and گسیختن گسل
+  # in karbon itself (1.3.1, the linguist's answers of 2026-11-11), so those two
+  # corrections are confined to the two older snapshots (`only_on`). رفتن still
+  # has only *raftan*, so the رُفتن addition still applies.
+  - lexicon-20261111
 
 # -- stems the grammar document and the lexicon disagree on -------------------
 
@@ -50,7 +55,9 @@ corrections:
     why: >-
       The stem document lists آزردن among the irregulars as آزرد / آزار. The
       snapshot reads the present stem آزُر.
-    confirmed: false
+    # Settled upstream: karbon 1.3.1 reads آزار, on the linguist's answer.
+    confirmed: true
+    only_on: [lexicon-20260808, lexicon-20261012]
 
   - headword_fa: گسیختن
     field: present_stem_fa
@@ -60,7 +67,35 @@ corrections:
     why: >-
       The stem document lists گسیختن among the irregulars as گسیخت / گسل. The
       snapshot reads the present stem گسیل, which is a different word.
-    confirmed: false
+    # Settled upstream: karbon 1.3.1 reads گسل, on the linguist's answer.
+    confirmed: true
+    only_on: [lexicon-20260808, lexicon-20261012]
+
+  # The two above corrected the Persian stem only, and word formation reads
+  # the Latin one: on the two older snapshots آزردن was still built on *āzor*
+  # and گسیختن on *gosil*, so corpus v12–v14 carry those forms. Found
+  # 2026-11-12 in review; added for completeness, confined like the two above.
+  - headword_fa: آزردن
+    field: present_stem_latin
+    value: āzār
+    was: āzor
+    source: stem document, exception list for rule 3 (the Latin of آزار)
+    why: >-
+      The Persian correction to آزار left the Latin present stem at āzor, which
+      is what the rules build on.
+    confirmed: true
+    only_on: [lexicon-20260808, lexicon-20261012]
+
+  - headword_fa: گسیختن
+    field: present_stem_latin
+    value: gosal
+    was: gosil
+    source: stem document, exception list for rule 6 (the Latin of گسل)
+    why: >-
+      The Persian correction to گسل left the Latin present stem at gosil, which
+      is what the rules build on.
+    confirmed: true
+    only_on: [lexicon-20260808, lexicon-20261012]
 
 # -- verbs the document has and the lexicon does not --------------------------
 #
@@ -76,6 +111,7 @@ additions:
     present_stem_fa: روب
     present_stem_latin: rub
     lexicon_category: مصدر
+    bank_groups: [نابسودکارواژه]
     source: stem document, exception list for rule 9
     why: >-
       The document lists رُفتن (to sweep) as an irregular, رُفت / روب. The

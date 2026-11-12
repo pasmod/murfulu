@@ -22,7 +22,7 @@ function pairing(over: Partial<Pairing> = {}): Pairing {
     word_class: "karandekarbahr",
     rule_id: "V-078",
     label_fa: null,
-    explanation_fa: "از نام و کاربن دو ساخته می‌شود",
+    explanation_fa: "از نام و کنون‌کاربن ساخته می‌شود",
     front: { fa: "دل", latin: "dal", type: "nam" },
     behind: {
       fa: "بر",

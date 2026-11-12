@@ -341,6 +341,7 @@ def compound(
                 "latin": result.reading.latin,
                 "spelling_fa": result.reading.spelling_fa,
                 "lexicon_category": result.reading.lexicon_category,
+                "bank_groups": list(result.reading.bank_groups),
                 "needs_review": result.reading.needs_review,
                 # The three numbers that make the shown list readable: what was
                 # built, what the corpus has, and how many partners were tried.

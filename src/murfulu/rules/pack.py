@@ -11,7 +11,7 @@ Every check here names the id and says what is wrong.
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -37,6 +37,30 @@ KINDS = {"suffix", "prefix", "infix", "template", "none", "slot", "stem"}
 
 #: What the source states about how reliably a rule applies.
 STRENGTHS = {"obligatory", "typical", "occasional", None}
+
+#: The linguist's word-bank groups and what they feed, beside the rules. The
+#: rule pack reads only its ``switches`` block; the groups themselves are
+#: :mod:`murfulu.lexicon.bank`'s.
+BANK_GROUPS_FILE = "bank_groups.yaml"
+
+#: The open ruling L26 (with L18): does «نام» in the rule table take a کارنام
+#: too? Off is today's behaviour. On widens every active rule that names نام
+#: as its input — and every slot rule whose front is a نام — to take a کارنام
+#: as well, and marks the pack's version with :data:`KARNAM_AS_NAM_MARK`.
+KARNAM_AS_NAM = "karnam_counts_as_nam"
+KARNAM_AS_NAM_MARK = "+karnam-as-nam"
+
+#: What a slot rule's ``affix`` says stands in **front**. The rule's own
+#: ``input_types`` describe the word behind it, so between the two the whole
+#: shape is stated: *Nām-* + کنون‌کاربن is "a noun, then a present stem".
+#: Data about the rules, so it lives with them; the engine reads it through
+#: :func:`murfulu.engine.compound.front_classes`.
+FRONT_CLASS: dict[str, tuple[str, ...]] = {
+    # soxan + guy, češm + dāšt, dast + duz, xod + parast.
+    "Nām-": ("nam",),
+    # xoš + nevis, tond + row, dir + yāb — a manner word, not a noun.
+    "Čonvāže-": ("barnam",),
+}
 
 #: Slot constraints the source grammar uses in its compounding rows.
 CONSTRAINTS = {"same_verb", "different_verb", "same_stem", "different_stem"}
@@ -80,6 +104,10 @@ class Rule:
     #: interface may not invent it, so an empty string means the screen shows
     #: the badge alone rather than a sentence somebody guessed. See S14.
     retired_reason_fa: str = ""
+    #: Which word classes may stand in front of a slot rule, when that differs
+    #: from what :data:`FRONT_CLASS` says for its affix. Empty for every rule
+    #: as authored; set only by :func:`widen_nam_to_karnam`.
+    front_types: tuple[str, ...] = ()
 
     @property
     def family(self) -> str:
@@ -367,7 +395,69 @@ def load(directory: Path | None = None) -> RulePack:
                 )
             )
 
+    if karnam_counts_as_nam(base):
+        return widen_nam_to_karnam(pack)
     return pack
+
+
+def widen_nam_to_karnam(pack: RulePack) -> RulePack:
+    """The pack with every «نام» input also taking a کارنام — L26's option A.
+
+    Every active rule whose input names ``nam`` takes ``karnam`` too, every
+    slot rule whose front is a نام takes a کارنام in front, and every template
+    slot of type نام accepts a کارنام (N-104). Nothing else changes. The
+    version is marked, so a derivation stored under one setting can never be
+    mistaken for one built under the other.
+    """
+    rules = []
+    for rule in pack.rules:
+        changes: dict[str, Any] = {}
+        if (
+            rule.active
+            and "nam" in rule.input_types
+            and "karnam" not in rule.input_types
+        ):
+            changes["input_types"] = (*rule.input_types, "karnam")
+        front = rule.front_types or FRONT_CLASS.get(rule.affix or "", ())
+        if (
+            rule.active
+            and rule.kind == "slot"
+            and "nam" in front
+            and "karnam" not in front
+        ):
+            changes["front_types"] = (*front, "karnam")
+        if (
+            rule.active
+            and rule.kind == "template"
+            and any(slot.get("type") == "nam" for slot in rule.slots)
+        ):
+            # A template's own slots say what fills them (N-104, نام + ā + نام).
+            changes["slots"] = tuple(
+                {**slot, "accepts": ["nam", "karnam"]}
+                if slot.get("type") == "nam"
+                else slot
+                for slot in rule.slots
+            )
+        rules.append(replace(rule, **changes) if changes else rule)
+    version = pack.version
+    if not version.endswith(KARNAM_AS_NAM_MARK):
+        version += KARNAM_AS_NAM_MARK
+    return replace(pack, rules=rules, version=version)
+
+
+def karnam_counts_as_nam(directory: Path | None = None) -> bool:
+    """What ``rules/bank_groups.yaml`` sets the L26 switch to. False if absent."""
+    path = (directory or default_directory()) / BANK_GROUPS_FILE
+    if not path.exists():
+        return False
+    document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    switches = document.get("switches") or {}
+    value = switches.get(KARNAM_AS_NAM, False)
+    if not isinstance(value, bool):
+        raise RulePackError(
+            f"{path}: {KARNAM_AS_NAM} must be true or false, not {value!r}"
+        )
+    return value
 
 
 @lru_cache(maxsize=1)

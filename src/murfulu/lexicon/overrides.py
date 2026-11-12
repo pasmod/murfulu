@@ -70,6 +70,19 @@ class Correction:
     source: str
     why: str
     confirmed: bool = False
+    #: The snapshots this correction applies to, when not all that the file
+    #: lists. Set once karbon itself carries the value: the correction keeps
+    #: holding on the older snapshots that still need it, and stops on the
+    #: newer ones, where its ``was`` would no longer match (آزردن and گسیختن
+    #: from karbon 1.3.1 on).
+    only_on: tuple[str, ...] = ()
+
+    def applies_on(self, snapshot_id: str) -> bool:
+        """True unless ``only_on`` names other snapshots than this one."""
+        if not self.only_on:
+            return True
+        name = snapshot_id.split(":", 1)[0]
+        return any(entry in (name, snapshot_id) for entry in self.only_on)
 
 
 @dataclass(frozen=True)
@@ -121,6 +134,11 @@ class Overrides:
         """Readings to add for one headword."""
         return tuple(one for one in self.additions if one.headword_fa == headword_fa)
 
+    def applicable(self, snapshot_id: str) -> int:
+        """How many of them apply on this snapshot (see ``only_on``)."""
+        corrections = sum(1 for one in self.corrections if one.applies_on(snapshot_id))
+        return corrections + len(self.additions)
+
     def __len__(self) -> int:
         """How many values are held differently in all."""
         return len(self.corrections) + len(self.additions)
@@ -153,6 +171,7 @@ def _correction(raw: dict[str, Any]) -> Correction:
         source=raw["source"],
         why=raw["why"],
         confirmed=bool(raw.get("confirmed")),
+        only_on=tuple(str(one) for one in raw.get("only_on") or ()),
     )
 
 
@@ -166,6 +185,8 @@ def _addition(raw: dict[str, Any]) -> Addition:
         "present_stem_fa",
         "present_stem_latin",
         "lexicon_category",
+        # The linguist's group, for a snapshot that carries the word bank.
+        "bank_groups",
     }
     return Addition(
         headword_fa=raw["headword_fa"],
@@ -234,6 +255,8 @@ def apply_to(reading: Reading, overrides: Overrides | None = None) -> Reading:
     held = overrides if overrides is not None else loaded()
     changed = reading
     for correction in held.corrections_for(reading.spelling_fa):
+        if not correction.applies_on(reading.snapshot_id):
+            continue
         current = getattr(changed, correction.field, None)
         if current != correction.was:
             raise OverrideError(

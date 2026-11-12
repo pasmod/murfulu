@@ -33,7 +33,8 @@ from murfulu.engine import (
     deduplicate,
     generate,
 )
-from murfulu.lexicon.categories import UnmappableCategoryError, word_classes_for
+from murfulu.lexicon.bank import is_excluded, word_classes_of
+from murfulu.lexicon.categories import UnmappableCategoryError
 from murfulu.lexicon.entries import Reading
 from murfulu.lexicon.store import Lexicon
 from murfulu.rules.pack import RulePack
@@ -67,8 +68,13 @@ def bases_of(reading: Reading) -> list[Word]:
     """The starting points a reading offers.
 
     A verb is entered through its two stems, never through the infinitive: the
-    rules attach to *kārbon-e yek* and *kārbon-e do*, not to *raftan*.
+    rules attach to the پیشین‌کاربن and the کنون‌کاربن, not to *raftan*.
+
+    A reading the linguist keeps out of word formation (a وام‌واژه) offers
+    none, verb or not — :mod:`murfulu.lexicon.bank`.
     """
+    if is_excluded(reading):
+        return []
     if reading.is_infinitive and reading.has_both_stems:
         return [
             Word(
@@ -84,7 +90,7 @@ def bases_of(reading: Reading) -> list[Word]:
         ]
 
     try:
-        classes = word_classes_for(reading.lexicon_category)
+        classes = word_classes_of(reading)
     except UnmappableCategoryError:
         # A category we deliberately did not map. Not an error: it means we
         # decided not to guess, and the caller should see an empty result.

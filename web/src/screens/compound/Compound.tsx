@@ -26,7 +26,7 @@ import { compound as fetchCompound, type Compounds } from "../../api/compound";
 import { wordClasses, type WordClass } from "../../api/generate";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
-import { notFound } from "../../text/lexicon";
+import { notFound, wordGroup } from "../../text/lexicon";
 import { SCREENS } from "../../shell/screens";
 import { Pairings } from "./Pairings";
 import styles from "./Compound.module.css";
@@ -171,8 +171,8 @@ export function Compound() {
         >
           <h2 id={`reading-${reading.latin}`} className={styles.readingTitle}>
             {reading.spelling_fa} <Latin>{reading.latin}</Latin>
-            {reading.lexicon_category ? (
-              <span className={styles.category}>{reading.lexicon_category}</span>
+            {wordGroup(reading) ? (
+              <span className={styles.category}>{wordGroup(reading)}</span>
             ) : null}
           </h2>
 

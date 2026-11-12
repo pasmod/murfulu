@@ -32,7 +32,8 @@ from murfulu.engine.affix import CannotApplyError, Word
 from murfulu.engine.compound import Filler, Verb, fill, fill_slot, parts_used
 from murfulu.engine.compound import front_classes as slot_front_classes
 from murfulu.generation import WordNotFoundError, ordered
-from murfulu.lexicon.categories import UnmappableCategoryError, word_classes_for
+from murfulu.lexicon.bank import is_excluded, word_classes_of
+from murfulu.lexicon.categories import UnmappableCategoryError
 from murfulu.lexicon.entries import Reading
 from murfulu.lexicon.store import Lexicon
 from murfulu.rules.pack import Rule, RulePack
@@ -121,7 +122,8 @@ def partners_from(lexicon: Lexicon) -> Partners:
     """Every verb in the snapshot that has both stems written."""
     found = []
     for reading in lexicon.infinitives():
-        if not reading.has_both_stems:
+        # A verb the linguist keeps out of word formation is no partner either.
+        if not reading.has_both_stems or is_excluded(reading):
             continue
         found.append(
             Verb(
@@ -146,8 +148,11 @@ def partners_from(lexicon: Lexicon) -> Partners:
 
 
 def _as_verb(reading: Reading) -> Verb | None:
-    """The reading seen as a verb, or None when it is not one."""
-    if not (reading.is_infinitive and reading.has_both_stems):
+    """The reading seen as a verb, or None when it is not one.
+
+    None too for a verb the linguist keeps out of word formation.
+    """
+    if is_excluded(reading) or not (reading.is_infinitive and reading.has_both_stems):
         return None
     return Verb(
         past_stem=Word(
@@ -171,7 +176,7 @@ def _as_verb(reading: Reading) -> Verb | None:
 def _as_words(reading: Reading) -> list[Word]:
     """The reading as the plain words a slot's front may hold."""
     try:
-        classes = word_classes_for(reading.lexicon_category)
+        classes = word_classes_of(reading)
     except UnmappableCategoryError:
         # A category we deliberately did not map. Not an error, and an empty
         # answer here is the honest one.

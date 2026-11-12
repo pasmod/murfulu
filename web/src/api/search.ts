@@ -22,6 +22,8 @@ export interface WordType {
   definition_fa?: string | null;
   /** The dictionary's own category, in Persian. Shown as it is written. */
   lexicon_category?: string | null;
+  /** The linguist's word-bank groups, by his names. Absent before corpus v15. */
+  bank_groups?: string[];
   /** corpus / lexicon / generated. A word can be in more than one. */
   population?: string[];
   total_count?: number;

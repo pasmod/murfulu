@@ -27,6 +27,7 @@ import {
   FUNCTION_WORD_LETTERS,
   NO_READING,
   wasCut,
+  wordGroup,
 } from "../../text/lexicon";
 import { persianCentury } from "../../text/numbers";
 import { Dispersion } from "./Dispersion";
@@ -114,8 +115,8 @@ export function Word() {
         ) : (
           <span className={styles.unread}>{NO_READING}</span>
         )}
-        {word.lexicon_category ? (
-          <span className={styles.category}>{word.lexicon_category}</span>
+        {wordGroup(word) ? (
+          <span className={styles.category}>{wordGroup(word)}</span>
         ) : null}
         {/* A second pronunciation the dictionary itself lists. Distinct from
             the other *readings* below: those are different words sharing a

@@ -543,6 +543,10 @@ def _take_apart(word: str, depth: int) -> dict[str, Any]:
                     "latin": account.base.latin,
                     "spelling_fa": account.base.spelling_fa,
                     "lexicon_category": account.base.lexicon_category,
+                    # The linguist's word-bank groups, by his names. What a
+                    # screen shows when there are any; the dictionary's label
+                    # above is for a snapshot from before the bank.
+                    "bank_groups": list(account.base.bank_groups),
                     # How much of the corpus the **base** itself has, which is
                     # the one thing we already hold that separates a parse a
                     # reader would accept from one that is merely arithmetic.
@@ -812,6 +816,7 @@ def generate(
                 "latin": result.reading.latin,
                 "spelling_fa": result.reading.spelling_fa,
                 "lexicon_category": result.reading.lexicon_category,
+                "bank_groups": list(result.reading.bank_groups),
                 # The dictionary's own doubt about this reading. 31.5% of the
                 # snapshot's active rows carry it, and it was being dropped
                 # here — so the screen built 2,612 words from بلند's flagged

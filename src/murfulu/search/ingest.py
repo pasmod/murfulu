@@ -37,7 +37,9 @@ from murfulu.corpus.adapter import SourceAdapter
 from murfulu.corpus.function_words import FunctionWords
 from murfulu.corpus.function_words import loaded as function_words
 from murfulu.corpus.link import LinkedWordType, LinkResult
-from murfulu.lexicon.categories import UnmappableCategoryError, word_classes_for
+from murfulu.lexicon.bank import word_classes_of
+from murfulu.lexicon.categories import UnmappableCategoryError
+from murfulu.lexicon.entries import Reading
 from murfulu.search.backfill import AffixMap
 from murfulu.search.writer import BATCH_SIZE, WriteResult
 from murfulu.search.writer import write as bulk_write
@@ -46,16 +48,18 @@ DOCUMENTS = "documents"
 WORD_TYPES = "word_types"
 
 
-def _word_classes(category: str | None) -> list[str]:
-    """What the rules should match this lexicon category on.
+def _word_classes(reading: Reading) -> list[str]:
+    """What the rules should match this reading on.
 
-    A category we deliberately did not map yields an empty list, not a
-    default. "We decided not to" and "there happen to be none" have to look
-    the same in the index only because both mean *no rule matches* — and the
-    reason stays readable in ``rules/lexicon_categories.yaml``.
+    A reading we deliberately did not map — or one the linguist keeps out of
+    word formation, a وام‌واژه — yields an empty list, not a default. "We
+    decided not to" and "there happen to be none" have to look the same in the
+    index only because both mean *no rule matches*; the reason stays readable
+    in ``rules/bank_groups.yaml`` (or ``rules/lexicon_categories.yaml`` for a
+    snapshot from before the word bank).
     """
     try:
-        return list(word_classes_for(category))
+        return list(word_classes_of(reading))
     except (UnmappableCategoryError, LookupError):
         return []
 
@@ -150,7 +154,10 @@ def word_type_source(
             "source_entry_ids": [str(i) for i in reading.source_entry_ids],
             "sense_count": reading.sense_count,
             "lexicon_category": reading.lexicon_category,
-            "word_class": _word_classes(reading.lexicon_category),
+            "word_class": _word_classes(reading),
+            # The linguist's word-bank groups, by their keys. Empty before
+            # karbon 1.3.0.
+            "bank_groups": list(reading.bank_groups),
             "stem_1_fa": reading.past_stem_fa,
             "stem_1_latin": reading.past_stem_latin,
             "stem_2_fa": reading.present_stem_fa,

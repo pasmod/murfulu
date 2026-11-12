@@ -23,7 +23,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from murfulu.engine.affix import CannotApplyError, DerivedForm, Step, Word, cased
-from murfulu.rules.pack import Rule
+from murfulu.rules.pack import FRONT_CLASS, Rule
 
 #: Constraints that need a second, different verb supplied.
 NEEDS_SECOND = {"different_verb", "different_stem"}
@@ -64,10 +64,18 @@ class Verb:
 Filler = Verb | Word
 
 
-def _part(filler: Filler, word_class: str) -> Word:
+def _part(filler: Filler, slot: dict[str, object]) -> Word:
+    """The word a slot takes from this filler.
+
+    A verb gives the stem the slot names. A plain word must be of the slot's
+    class — or of one the slot ``accepts`` besides, which only a pack widened
+    for L26 sets (a کارنام in N-104's نام slots).
+    """
+    word_class = str(slot["type"])
     if isinstance(filler, Verb):
         return filler.stem(word_class)
-    if filler.word_class != word_class:
+    accepted = slot.get("accepts") or (word_class,)
+    if filler.word_class not in accepted:  # type: ignore[operator]
         raise CannotApplyError(
             f"a slot wants {word_class!r} but was given {filler.word_class!r}"
         )
@@ -112,7 +120,7 @@ def fill(rule: Rule, first: Filler, second: Filler | None = None) -> DerivedForm
     fa = rule.pattern_fa or ""
     for index, slot in enumerate(rule.slots):
         source = second if (index and second is not None) else first
-        stem = _part(source, slot["type"])
+        stem = _part(source, slot)
         latin = latin.replace(f"{{{slot['name']}}}", stem.latin)
         fa = fa.replace(f"{{{slot['name']}}}", stem.fa)
 
@@ -148,25 +156,18 @@ def parts_used(
     joined to بین. The engine decides it, so the engine says it.
     """
     return tuple(
-        _part(second if (index and second is not None) else first, slot["type"])
+        _part(second if (index and second is not None) else first, slot)
         for index, slot in enumerate(rule.slots)
     )
 
 
-#: What a slot rule's ``affix`` says stands in **front**. The rule's own
-#: ``input_types`` describe the word behind it, so between the two the whole
-#: shape is stated: *Nām-* + kārboné do is "a noun, then a present stem".
-FRONT_CLASS: dict[str, tuple[str, ...]] = {
-    # soxan + guy, češm + dāšt, dast + duz, xod + parast.
-    "Nām-": ("nam",),
-    # xoš + nevis, tond + row, dir + yāb — a manner word, not a noun.
-    "Čonvāže-": ("barnam",),
-}
-
-
 def front_classes(rule: Rule) -> tuple[str, ...]:
-    """Which word classes may stand in front of this slot rule."""
-    return FRONT_CLASS.get(rule.affix or "", ())
+    """Which word classes may stand in front of this slot rule.
+
+    What :data:`~murfulu.rules.pack.FRONT_CLASS` says for its affix, unless
+    the rule carries its own — which only a widened pack does (L26).
+    """
+    return rule.front_types or FRONT_CLASS.get(rule.affix or "", ())
 
 
 def fill_slot(rule: Rule, front: Word, behind: Word) -> DerivedForm:

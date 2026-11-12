@@ -36,7 +36,9 @@ def _reading(**fields: object) -> Reading:
         "lexicon_categories": ("مصدر",),
         "past_stem_fa": "آزرد",
         "present_stem_fa": "آزُر",
-        "snapshot_id": "test",
+        "present_stem_latin": "āzor",
+        # A snapshot every correction in the shipped table applies to.
+        "snapshot_id": "lexicon-20261012:test",
     }
     return Reading(**{**base, **fields})
 
@@ -55,15 +57,32 @@ def test_every_override_says_why_and_what_it_replaced(held: overrides.Overrides)
         assert one.source.strip()
 
 
-def test_everything_is_marked_unconfirmed_until_the_linguist_rules(
+def test_nothing_is_confirmed_unless_karbon_now_carries_it(
     held: overrides.Overrides,
 ):
-    """Nothing claims to be settled.
+    """Nothing claims to be settled — except what was settled upstream.
 
     karbon was built from the linguist's rules and hand-checked, so a
-    difference may be his later correction.
+    difference may be his later correction. A correction is marked confirmed
+    only once karbon itself carries the value on his word, and then it is
+    confined to the older snapshots that still need it (``only_on``).
     """
-    assert held.unconfirmed == len(held)
+    for one in held.corrections:
+        assert one.confirmed == bool(one.only_on)
+    assert all(not one.confirmed for one in held.additions)
+
+
+def test_a_correction_confined_to_older_snapshots_skips_a_newer_one(
+    held: overrides.Overrides,
+):
+    """Karbon 1.3.1 reads آزار itself; the `was` check must not fire on it."""
+    newer = _reading(present_stem_fa="آزار", snapshot_id="lexicon-20261111:abc")
+    assert overrides.apply_to(newer, held).present_stem_fa == "آزار"
+    older = _reading(present_stem_fa="آزُر", snapshot_id="lexicon-20261012:abc")
+    assert overrides.apply_to(older, held).present_stem_fa == "آزار"
+    confined = sum(1 for one in held.corrections if one.only_on)
+    assert confined == 4
+    assert held.applicable("lexicon-20261111:abc") == len(held) - confined
 
 
 def test_a_correction_outside_the_stem_fields_is_refused():

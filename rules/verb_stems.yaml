@@ -21,8 +21,8 @@ rules:
   examples:
   - oftāndan
   - parāndan
-  label_fa: کاربن دو + -āndan
-  explanation_fa: از کاربن دو با پسوند -āndan نابسودکارواژه ساخته می‌شود
+  label_fa: کنون‌کاربن + -āndan
+  explanation_fa: از کنون‌کاربن با پسوند -āndan نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-002
   source:
@@ -46,8 +46,8 @@ rules:
   examples:
   - pazāndan
   - pazānidan
-  label_fa: کاربن دو + -āndan
-  explanation_fa: از کاربن دو با پسوند -āndan نابسودکارواژه ساخته می‌شود
+  label_fa: کنون‌کاربن + -āndan
+  explanation_fa: از کنون‌کاربن با پسوند -āndan نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-003
   source:
@@ -120,8 +120,8 @@ rules:
   strength: null
   examples:
   - porsidan
-  label_fa: کاربن یک + -an
-  explanation_fa: از کاربن یک با پسوند -an نابسودکارواژه ساخته می‌شود
+  label_fa: پیشین‌کاربن + -an
+  explanation_fa: از پیشین‌کاربن با پسوند -an نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-006
   source:
@@ -143,8 +143,8 @@ rules:
   strength: null
   examples:
   - Porsidan
-  label_fa: کاربن یک + -an
-  explanation_fa: از کاربن یک با پسوند -an کارنام ساخته می‌شود
+  label_fa: پیشین‌کاربن + -an
+  explanation_fa: از پیشین‌کاربن با پسوند -an کارنام ساخته می‌شود
   active: true
 - id: V-007
   source:
@@ -166,8 +166,8 @@ rules:
   strength: null
   examples:
   - Darxāst
-  label_fa: کاربن یک
-  explanation_fa: خودِ کاربن یک کارنام است
+  label_fa: پیشین‌کاربن
+  explanation_fa: خودِ پیشین‌کاربن کارنام است
   active: true
 - id: V-008
   source:
@@ -189,8 +189,8 @@ rules:
   strength: null
   examples:
   - zade
-  label_fa: کاربن یک + -e
-  explanation_fa: از کاربن یک با پسوند -e کاریده‌کاربهر ساخته می‌شود
+  label_fa: پیشین‌کاربن + -e
+  explanation_fa: از پیشین‌کاربن با پسوند -e کاریده‌کاربهر ساخته می‌شود
   active: true
 - id: V-009
   source:
@@ -212,8 +212,8 @@ rules:
   strength: null
   examples:
   - Dide
-  label_fa: کاربن یک + -e
-  explanation_fa: از کاربن یک با پسوند -e نام ساخته می‌شود
+  label_fa: پیشین‌کاربن + -e
+  explanation_fa: از پیشین‌کاربن با پسوند -e نام ساخته می‌شود
   active: true
 - id: V-010
   source:
@@ -236,8 +236,8 @@ rules:
   strength: typical
   examples:
   - Gotār
-  label_fa: کاربن یک + -ār
-  explanation_fa: از کاربن یک با پسوند -ār کارنام ساخته می‌شود
+  label_fa: پیشین‌کاربن + -ār
+  explanation_fa: از پیشین‌کاربن با پسوند -ār کارنام ساخته می‌شود
   active: true
 - id: V-011
   source:
@@ -260,8 +260,8 @@ rules:
   strength: typical
   examples:
   - xāridār
-  label_fa: کاربن یک + -ār
-  explanation_fa: از کاربن یک با پسوند -ār کارنده‌کاربهر ساخته می‌شود
+  label_fa: پیشین‌کاربن + -ār
+  explanation_fa: از پیشین‌کاربن با پسوند -ār کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-012
   source:
@@ -284,8 +284,8 @@ rules:
   strength: typical
   examples:
   - gereftār
-  label_fa: کاربن یک + -ār
-  explanation_fa: از کاربن یک با پسوند -ār کاریده‌کاربهر ساخته می‌شود
+  label_fa: پیشین‌کاربن + -ār
+  explanation_fa: از پیشین‌کاربن با پسوند -ār کاریده‌کاربهر ساخته می‌شود
   active: true
 - id: V-013
   source:
@@ -311,8 +311,8 @@ rules:
   examples:
   - āfaridgār
   - rastegār
-  label_fa: کاربن یک + -gār
-  explanation_fa: از کاربن یک با پسوند -gār کارنده‌کاربهر ساخته می‌شود
+  label_fa: پیشین‌کاربن + -gār
+  explanation_fa: از پیشین‌کاربن با پسوند -gār کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-014
   source:
@@ -334,8 +334,8 @@ rules:
   strength: null
   examples:
   - Goftmān
-  label_fa: کاربن یک + -mān
-  explanation_fa: از کاربن یک با پسوند -mān کارنام ساخته می‌شود
+  label_fa: پیشین‌کاربن + -mān
+  explanation_fa: از پیشین‌کاربن با پسوند -mān کارنام ساخته می‌شود
   active: true
 - id: V-015
   source:
@@ -358,8 +358,8 @@ rules:
   strength: null
   examples:
   - Didebān
-  label_fa: کاربن یک + -bān
-  explanation_fa: از کاربن یک با پسوند -bān نام یا برنام ساخته می‌شود
+  label_fa: پیشین‌کاربن + -bān
+  explanation_fa: از پیشین‌کاربن با پسوند -bān نام یا برنام ساخته می‌شود
   active: true
 - id: V-016
   source:
@@ -381,8 +381,8 @@ rules:
   strength: null
   examples:
   - Čašmdāšt
-  label_fa: نام + کاربن یک
-  explanation_fa: از نام و کاربن یک کارنام ساخته می‌شود
+  label_fa: نام + پیشین‌کاربن
+  explanation_fa: از نام و پیشین‌کاربن کارنام ساخته می‌شود
   active: true
 - id: V-017
   source:
@@ -405,8 +405,8 @@ rules:
   examples:
   - Zadoxord
   - Goftošenid
-  label_fa: کاربن یک
-  explanation_fa: از پیوندِ کاربن یک کارنام ساخته می‌شود
+  label_fa: پیشین‌کاربن
+  explanation_fa: از پیوندِ پیشین‌کاربن کارنام ساخته می‌شود
   active: true
   pattern: '{a} + o + {b}'
   pattern_fa: '{a}و{b}'
@@ -437,8 +437,8 @@ rules:
   strength: null
   examples:
   - Goftogu
-  label_fa: کاربن یک + کاربن دو
-  explanation_fa: از پیوندِ کاربن یک و کاربن دو کارنام ساخته می‌شود
+  label_fa: پیشین‌کاربن + کنون‌کاربن
+  explanation_fa: از پیوندِ پیشین‌کاربن و کنون‌کاربن کارنام ساخته می‌شود
   active: true
   pattern: '{a} + o + {b}'
   pattern_fa: '{a}و{b}'
@@ -469,8 +469,8 @@ rules:
   strength: null
   examples:
   - Xordoxāb
-  label_fa: کاربن یک + کاربن دو
-  explanation_fa: از پیوندِ کاربن یک و کاربن دو کارنام ساخته می‌شود
+  label_fa: پیشین‌کاربن + کنون‌کاربن
+  explanation_fa: از پیوندِ پیشین‌کاربن و کنون‌کاربن کارنام ساخته می‌شود
   active: true
   pattern: '{a} + o + {b}'
   pattern_fa: '{a}و{b}'
@@ -500,8 +500,8 @@ rules:
   strength: null
   examples:
   - Sāxt
-  label_fa: کاربن یک
-  explanation_fa: خودِ کاربن یک کارنام است
+  label_fa: پیشین‌کاربن
+  explanation_fa: خودِ پیشین‌کاربن کارنام است
   active: true
 - id: V-021
   source:
@@ -523,8 +523,8 @@ rules:
   strength: null
   examples:
   - Budonabud
-  label_fa: کاربن یک
-  explanation_fa: از پیوندِ کاربن یک کارنام ساخته می‌شود
+  label_fa: پیشین‌کاربن
+  explanation_fa: از پیوندِ پیشین‌کاربن کارنام ساخته می‌شود
   active: true
   pattern: '{a} + o + na + {b}'
   pattern_fa: '{a}ونا{b}'
@@ -555,8 +555,8 @@ rules:
   strength: null
   examples:
   - ravande
-  label_fa: کاربن دو + -ande
-  explanation_fa: از کاربن دو با پسوند -ande کارنده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -ande
+  explanation_fa: از کنون‌کاربن با پسوند -ande کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-023
   source:
@@ -602,8 +602,8 @@ rules:
   examples:
   - dānā
   - dārā
-  label_fa: کاربن دو + -ā
-  explanation_fa: از کاربن دو با پسوند -ā کارنده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -ā
+  explanation_fa: از کنون‌کاربن با پسوند -ā کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-025
   source:
@@ -649,8 +649,8 @@ rules:
   examples:
   - rahā
   - xānā
-  label_fa: کاربن دو + -ā
-  explanation_fa: از کاربن دو با پسوند -ā کاریده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -ā
+  explanation_fa: از کنون‌کاربن با پسوند -ā کاریده‌کاربهر ساخته می‌شود
   active: true
 - id: V-027
   source:
@@ -696,8 +696,8 @@ rules:
   examples:
   - āmuzgār
   - sāzgār
-  label_fa: کاربن دو + -gār
-  explanation_fa: از کاربن دو با پسوند -gār کارنده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -gār
+  explanation_fa: از کنون‌کاربن با پسوند -gār کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-029
   source:
@@ -720,8 +720,8 @@ rules:
   examples:
   - xāhān
   - ravān
-  label_fa: کاربن دو + -ān
-  explanation_fa: از کاربن دو با پسوند -ān کارنده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -ān
+  explanation_fa: از کنون‌کاربن با پسوند -ān کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-030
   source:
@@ -790,8 +790,8 @@ rules:
   strength: null
   examples:
   - tavangar
-  label_fa: کاربن دو + -gar
-  explanation_fa: از کاربن دو با پسوند -gar کارنده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -gar
+  explanation_fa: از کنون‌کاربن با پسوند -gar کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-033
   source:
@@ -813,8 +813,8 @@ rules:
   strength: null
   examples:
   - Pazireš
-  label_fa: کاربن دو + -eš
-  explanation_fa: از کاربن دو با پسوند -eš کارنام ساخته می‌شود
+  label_fa: کنون‌کاربن + -eš
+  explanation_fa: از کنون‌کاربن با پسوند -eš کارنام ساخته می‌شود
   active: true
 - id: V-034
   source:
@@ -836,8 +836,8 @@ rules:
   strength: null
   examples:
   - Āvize
-  label_fa: کاربن دو + -e
-  explanation_fa: از کاربن دو با پسوند -e نام ساخته می‌شود
+  label_fa: کنون‌کاربن + -e
+  explanation_fa: از کنون‌کاربن با پسوند -e نام ساخته می‌شود
   active: true
 - id: V-035
   source:
@@ -859,8 +859,8 @@ rules:
   strength: null
   examples:
   - Xande
-  label_fa: کاربن دو + -e
-  explanation_fa: از کاربن دو با پسوند -e کارنام ساخته می‌شود
+  label_fa: کنون‌کاربن + -e
+  explanation_fa: از کنون‌کاربن با پسوند -e کارنام ساخته می‌شود
   active: true
 - id: V-036
   source:
@@ -882,8 +882,8 @@ rules:
   strength: null
   examples:
   - ranje
-  label_fa: کاربن دو + -e
-  explanation_fa: از کاربن دو با پسوند -e کاریده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -e
+  explanation_fa: از کنون‌کاربن با پسوند -e کاریده‌کاربهر ساخته می‌شود
   active: true
 - id: V-037
   source:
@@ -905,8 +905,8 @@ rules:
   strength: null
   examples:
   - Zāymān
-  label_fa: کاربن دو + -mān
-  explanation_fa: از کاربن دو با پسوند -mān کارنام ساخته می‌شود
+  label_fa: کنون‌کاربن + -mān
+  explanation_fa: از کنون‌کاربن با پسوند -mān کارنام ساخته می‌شود
   active: true
 - id: V-038
   source:
@@ -928,8 +928,8 @@ rules:
   strength: null
   examples:
   - Rismān
-  label_fa: کاربن دو + -mān
-  explanation_fa: از کاربن دو با پسوند -mān نام ساخته می‌شود
+  label_fa: کنون‌کاربن + -mān
+  explanation_fa: از کنون‌کاربن با پسوند -mān نام ساخته می‌شود
   active: true
 - id: V-039
   source:
@@ -953,8 +953,8 @@ rules:
   examples:
   - Xorāk
   - Pušāk
-  label_fa: کاربن دو + -āk
-  explanation_fa: از کاربن دو با پسوند -āk نام ساخته می‌شود
+  label_fa: کنون‌کاربن + -āk
+  explanation_fa: از کنون‌کاربن با پسوند -āk نام ساخته می‌شود
   active: true
 - id: V-040
   source:
@@ -976,8 +976,8 @@ rules:
   strength: null
   examples:
   - kāvak
-  label_fa: کاربن دو + -āk
-  explanation_fa: از کاربن دو با پسوند -āk کاریده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -āk
+  explanation_fa: از کنون‌کاربن با پسوند -āk کاریده‌کاربهر ساخته می‌شود
   active: true
 - id: V-041
   source:
@@ -999,8 +999,8 @@ rules:
   strength: null
   examples:
   - andišnak
-  label_fa: کاربن دو + -nāk
-  explanation_fa: از کاربن دو با پسوند -nāk برنام ساخته می‌شود
+  label_fa: کنون‌کاربن + -nāk
+  explanation_fa: از کنون‌کاربن با پسوند -nāk برنام ساخته می‌شود
   active: true
 - id: V-042
   source:
@@ -1022,8 +1022,8 @@ rules:
   strength: null
   examples:
   - sāzvar
-  label_fa: کاربن دو + -var
-  explanation_fa: از کاربن دو با پسوند -var برنام ساخته می‌شود
+  label_fa: کنون‌کاربن + -var
+  explanation_fa: از کنون‌کاربن با پسوند -var برنام ساخته می‌شود
   active: true
 - id: V-043
   source:
@@ -1045,8 +1045,8 @@ rules:
   strength: null
   examples:
   - Suzogodāz
-  label_fa: کاربن دو
-  explanation_fa: از پیوندِ کاربن دو نام ساخته می‌شود
+  label_fa: کنون‌کاربن
+  explanation_fa: از پیوندِ کنون‌کاربن نام ساخته می‌شود
   active: true
   pattern: '{a} + o + {b}'
   pattern_fa: '{a}و{b}'
@@ -1076,8 +1076,8 @@ rules:
   strength: null
   examples:
   - Kešākeš
-  label_fa: کاربن دو
-  explanation_fa: از پیوندِ کاربن دو نام ساخته می‌شود
+  label_fa: کنون‌کاربن
+  explanation_fa: از پیوندِ کنون‌کاربن نام ساخته می‌شود
   active: true
   pattern: '{a} + ā + {b}'
   pattern_fa: '{a}ا{b}'
@@ -1107,8 +1107,8 @@ rules:
   strength: null
   examples:
   - Takāpu
-  label_fa: کاربن دو
-  explanation_fa: از پیوندِ کاربن دو نام ساخته می‌شود
+  label_fa: کنون‌کاربن
+  explanation_fa: از پیوندِ کنون‌کاربن نام ساخته می‌شود
   active: true
   pattern: '{a} + ā + {b}'
   pattern_fa: '{a}ا{b}'
@@ -1140,8 +1140,8 @@ rules:
   examples:
   - Šostošow
   - Soxtosāz
-  label_fa: کاربن یک + کاربن دو
-  explanation_fa: از پیوندِ کاربن یک و کاربن دو نام ساخته می‌شود
+  label_fa: پیشین‌کاربن + کنون‌کاربن
+  explanation_fa: از پیوندِ پیشین‌کاربن و کنون‌کاربن نام ساخته می‌شود
   active: true
   pattern: '{a} + o + {b}'
   pattern_fa: '{a}و{b}'
@@ -1173,8 +1173,8 @@ rules:
   examples:
   - Rixtopāš
   - Jastoxiz
-  label_fa: کاربن یک + کاربن دو
-  explanation_fa: از پیوندِ کاربن یک و کاربن دو کارنام ساخته می‌شود
+  label_fa: پیشین‌کاربن + کنون‌کاربن
+  explanation_fa: از پیوندِ پیشین‌کاربن و کنون‌کاربن کارنام ساخته می‌شود
   active: true
   pattern: '{a} + o + {b}'
   pattern_fa: '{a}و{b}'
@@ -1204,8 +1204,8 @@ rules:
   strength: null
   examples:
   - parastār
-  label_fa: کاربن دو + -ār
-  explanation_fa: از کاربن دو با پسوند -ār کارنده‌کاربهر ساخته می‌شود
+  label_fa: کنون‌کاربن + -ār
+  explanation_fa: از کنون‌کاربن با پسوند -ār کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-049
   source:
@@ -1228,8 +1228,8 @@ rules:
   examples:
   - Parhiz
   - Tarāš
-  label_fa: کاربن دو
-  explanation_fa: خودِ کاربن دو کارنام است
+  label_fa: کنون‌کاربن
+  explanation_fa: خودِ کنون‌کاربن کارنام است
   active: true
 - id: V-050
   source:
@@ -1251,8 +1251,8 @@ rules:
   strength: null
   examples:
   - Konešt
-  label_fa: کاربن دو + -ešt
-  explanation_fa: از کاربن دو با پسوند -ešt کارنام ساخته می‌شود
+  label_fa: کنون‌کاربن + -ešt
+  explanation_fa: از کنون‌کاربن با پسوند -ešt کارنام ساخته می‌شود
   active: true
 - id: V-051
   source:
@@ -1578,8 +1578,8 @@ rules:
   strength: null
   examples:
   - nasuz
-  label_fa: na- + کاربن دو
-  explanation_fa: از کاربن دو با پیشوند na- برنام ساخته می‌شود
+  label_fa: na- + کنون‌کاربن
+  explanation_fa: از کنون‌کاربن با پیشوند na- برنام ساخته می‌شود
   active: true
   corrected_by: The row's own example nasuz is na- on suz, the present stem of suxtan, not on the infinitive
     suxtan. Read as the infinitive the rule built nasuxtan and called it an adjective. Paired with V-064,
@@ -1604,8 +1604,8 @@ rules:
   strength: null
   examples:
   - nadid
-  label_fa: na- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند na- برنام ساخته می‌شود
+  label_fa: na- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند na- برنام ساخته می‌شود
   active: true
   corrected_by: The row's own example nadid is na- on did, the past stem of didan. Paired with V-063,
     which is the same prefix on the present stem.
@@ -1629,8 +1629,8 @@ rules:
   strength: null
   examples:
   - nāšenās
-  label_fa: nā- + کاربن دو
-  explanation_fa: از کاربن دو با پیشوند nā- برنام ساخته می‌شود
+  label_fa: nā- + کنون‌کاربن
+  explanation_fa: از کنون‌کاربن با پیشوند nā- برنام ساخته می‌شود
   active: true
   corrected_by: The row's own example nāšenās is nā- on šenās, the present stem of šenāxtan. Paired with
     V-066, which is the same prefix on the past stem.
@@ -1654,8 +1654,8 @@ rules:
   strength: null
   examples:
   - nāšāyest
-  label_fa: nā- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند nā- برنام ساخته می‌شود
+  label_fa: nā- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند nā- برنام ساخته می‌شود
   active: true
   corrected_by: The row's own example nāšāyest is nā- on šāyest, the past stem of šāyestan. Paired with
     V-065, which is the same prefix on the present stem.
@@ -1759,8 +1759,8 @@ rules:
   - vāgardāndan
   - vāzadan
   - vāgereftan
-  label_fa: vā- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  label_fa: vā- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند vā- نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-071
   source:
@@ -1786,8 +1786,8 @@ rules:
   - vāšurānidan
   - vāporsidan
   - vāgereftan
-  label_fa: vā- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  label_fa: vā- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند vā- نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-072
   source:
@@ -1811,8 +1811,8 @@ rules:
   examples:
   - vāgoftan
   - vārahidan
-  label_fa: vā- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  label_fa: vā- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند vā- نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-073
   source:
@@ -1835,8 +1835,8 @@ rules:
   strength: null
   examples:
   - vāxāstan
-  label_fa: vā- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند vā- نابسودکارواژه ساخته می‌شود
+  label_fa: vā- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند vā- نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-074
   source:
@@ -1863,8 +1863,8 @@ rules:
   - varraftan
   - vardādan
   - varparidan
-  label_fa: var- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند var- نابسودکارواژه ساخته می‌شود
+  label_fa: var- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند var- نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-075
   source:
@@ -1888,8 +1888,8 @@ rules:
   examples:
   - varoftādan
   - varšekastan
-  label_fa: var- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند var- نابسودکارواژه ساخته می‌شود
+  label_fa: var- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند var- نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-076
   source:
@@ -1912,8 +1912,8 @@ rules:
   strength: null
   examples:
   - ziršodan
-  label_fa: zir- + کاربن یک
-  explanation_fa: از کاربن یک با پیشوند zir- نابسودکارواژه ساخته می‌شود
+  label_fa: zir- + پیشین‌کاربن
+  explanation_fa: از پیشین‌کاربن با پیشوند zir- نابسودکارواژه ساخته می‌شود
   active: true
 - id: V-078
   source:
@@ -1939,8 +1939,8 @@ rules:
   - delgir
   - dādras
   - gušenešin
-  label_fa: نام + کاربن دو
-  explanation_fa: از نام و کاربن دو کارنده‌کاربهر ساخته می‌شود
+  label_fa: نام + کنون‌کاربن
+  explanation_fa: از نام و کنون‌کاربن کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-079
   source:
@@ -1964,8 +1964,8 @@ rules:
   - delpazir
   - dastduz
   - angošnamā
-  label_fa: نام + کاربن دو
-  explanation_fa: از نام و کاربن دو کاریده‌کاربهر ساخته می‌شود
+  label_fa: نام + کنون‌کاربن
+  explanation_fa: از نام و کنون‌کاربن کاریده‌کاربهر ساخته می‌شود
   active: true
 - id: V-080
   source:
@@ -1988,8 +1988,8 @@ rules:
   examples:
   - xošnevis
   - tondrow
-  label_fa: چون‌واژه + کاربن دو
-  explanation_fa: از چون‌واژه و کاربن دو کارنده‌کاربهر ساخته می‌شود
+  label_fa: چون‌واژه + کنون‌کاربن
+  explanation_fa: از چون‌واژه و کنون‌کاربن کارنده‌کاربهر ساخته می‌شود
   active: true
 - id: V-081
   source:
@@ -2012,8 +2012,8 @@ rules:
   examples:
   - diryāb
   - dirjuš
-  label_fa: چون‌واژه + کاربن دو
-  explanation_fa: از چون‌واژه و کاربن دو کاریده‌کاربهر ساخته می‌شود
+  label_fa: چون‌واژه + کنون‌کاربن
+  explanation_fa: از چون‌واژه و کنون‌کاربن کاریده‌کاربهر ساخته می‌شود
   active: true
 - id: V-082
   source:

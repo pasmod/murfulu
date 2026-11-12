@@ -5469,8 +5469,8 @@ are written in them.
 | Traditional | the linguist | English |
 |---|---|---|
 | فعل | کارواژه (kārvāže) | verb |
-| بن ماضی | کاربن یک (kārbon-e yek) | past stem / stem 1 |
-| بن مضارع | کاربن دو (kārbon-e do) | present stem / stem 2 |
+| بن ماضی | پیشین‌کاربن (pišinkārbon; until 2026-11 کاربن یک, kārbon-e yek) | past stem / stem 1 |
+| بن مضارع | کنون‌کاربن (konunkārbon; until 2026-11 کاربن دو, kārbon-e do) | present stem / stem 2 |
 | مصدر | نابِسودکارواژه | infinitive |
 | اسم مصدر / حاصل مصدر / … | کارنام (kārnām) | action noun (all the old sub-types collapse into this one) |
 | اسم | نام (nām) | noun |

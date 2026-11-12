@@ -170,6 +170,8 @@ export interface Reading {
   latin: string;
   spelling_fa: string;
   lexicon_category: string | null;
+  /** The linguist's word-bank groups, by his names. Empty before karbon 1.3. */
+  bank_groups?: string[];
   /**
    * The dictionary's own doubt about this reading. Reported, never filtered
    * on: بلند is *Baland* flagged and *boland* clean, and the flagged one

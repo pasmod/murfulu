@@ -1,0 +1,168 @@
+# The linguist's word-bank groups → the word classes the rules match on.
+#
+# **Why this file exists.** Since karbon 1.3.0 every lexicon entry carries the
+# linguist's own groups (table `bank_group`): twelve, named by him in his
+# word-bank document of 2026-11-09, several per word where a word works in
+# several ways. Those groups are the authority on what a word is; the
+# dictionary's label in `pos` (اسم ذات، صفت مرکب…) is kept, but word formation
+# reads the groups. This file says what each group feeds.
+#
+# Read by murfulu.lexicon.bank. A reading's word classes are the union of its
+# groups' classes; **a reading in a group that is out of word formation builds
+# nothing**, whatever its other groups say. A snapshot from before 1.3.0 has no
+# groups and falls back to rules/lexicon_categories.yaml, unchanged.
+#
+# Fields
+#   key               the group exactly as `bank_group` writes it
+#   label_fa          the linguist's name, shown everywhere a group is named
+#   word_classes      what the rules match on. Empty = feeds no rule.
+#   in_word_formation false = the group's words build nothing, even through
+#                     another group. Only وام‌واژه.
+#   grounding         linguist = his own word, document or group; source = the
+#                     grammar document; ours = our reading, unconfirmed and
+#                     asked (L17d)
+#   rows              how many rows carry the group in lexicon-20261111
+#   note              why
+#
+# The switch at the bottom holds the one open ruling that changes what the
+# groups feed (L26 with L18).
+
+version: 1.0.0
+measured_against: lexicon-20261111 (karbon 1.3.2)
+
+groups:
+  - key: نابسودکارواژه
+    label_fa: نابسودکارواژه
+    word_classes: [nabesudkarvaze]
+    in_word_formation: true
+    grounding: linguist
+    rows: 1772
+    note: >-
+      The infinitive. A verb enters through its two stems, پیشین‌کاربن and
+      کنون‌کاربن, never through the infinitive itself — unchanged.
+
+  - key: نام
+    label_fa: نام
+    word_classes: [nam]
+    in_word_formation: true
+    grounding: linguist
+    rows: 23306
+    note: Concrete and compound nouns (اسم ذات، اسم مرکب).
+
+  - key: کارنام
+    label_fa: کارنام
+    word_classes: [karnam]
+    in_word_formation: true
+    grounding: linguist
+    rows: 10866
+    note: >-
+      Abstract and verbal nouns. Since 2026-10-24 the linguist files the former
+      اسم مصدر here too, so the group grew from about 1,990 to 10,866. Whether
+      a rule that asks for a نام also takes a کارنام is L26 — see the switch.
+
+  - key: برنام
+    label_fa: برنام
+    word_classes: [barnam]
+    in_word_formation: true
+    grounding: linguist
+    rows: 15957
+    note: Adjectives, simple and compound.
+
+  - key: چون‌واژه
+    label_fa: چون‌واژه
+    word_classes: [jonvaze]
+    in_word_formation: true
+    grounding: linguist
+    rows: 1691
+    note: >-
+      Adverbs. The linguist's own group name, so L17's spelling is settled.
+      Four rules take a چون‌واژه.
+
+  - key: پیش‌واژه
+    label_fa: پیش‌واژه
+    word_classes: [pisvaze]
+    in_word_formation: true
+    grounding: linguist
+    rows: 119
+    note: Prepositions. His own group name, which settles L17b.
+
+  - key: جانام
+    label_fa: جانام
+    word_classes: [janam]
+    in_word_formation: true
+    grounding: linguist
+    rows: 114
+    note: Pronouns. His own group name, which settles L17.
+
+  - key: کاربهر
+    label_fa: کاربهر
+    word_classes: [karandekarbahr]
+    in_word_formation: true
+    grounding: ours
+    rows: 1106
+    note: >-
+      **Our reading, unconfirmed (L17d).** The rules keep the grammar's two
+      participles apart — کارنده‌کاربهر (رونده) and کاریده‌کاربهر (گفته) — and
+      four rules take the first. The linguist's bank has one group, and what it
+      holds is the doer side: Dehkhoda labels these entries نعت فاعلی (نف),
+      442 of 1,106 end in -ande and most of the rest are the shortened doer form
+      (خواه، روان). The done-to participles of the dictionary (گفته) are filed
+      برنام. So the group feeds کارنده‌کاربهر.
+
+  - key: پسوند
+    label_fa: پسوند
+    word_classes: []
+    in_word_formation: true
+    grounding: ours
+    rows: 206
+    note: >-
+      Suffixes, as dictionary entries (ـستان، ـوار…). An affix is what a rule
+      adds, not a word a rule starts from, and the rule pack carries its own
+      affixes. Shown in the word bank; feeds no rule.
+
+  - key: پیوند‌واژه
+    label_fa: پیوند‌واژه
+    word_classes: []
+    in_word_formation: true
+    grounding: ours
+    rows: 127
+    note: >-
+      Conjunctions. No rule in the pack takes one, so a word in this group
+      alone builds nothing. Shown in the word bank. Several are on
+      rules/function_words.yaml, which keeps their corpus counts from being
+      credited to a homograph.
+
+  - key: صوت
+    label_fa: صوت
+    word_classes: []
+    in_word_formation: true
+    grounding: ours
+    rows: 542
+    note: >-
+      Interjections. No rule takes one. Not the same as the rules' ندایی, which
+      is a vocative form the rules *build* (ـا); the vocative has no group in
+      the bank, which is L17c.
+
+  - key: وام‌واژه
+    label_fa: وام‌واژه
+    word_classes: []
+    in_word_formation: false
+    grounding: linguist
+    rows: 6454
+    note: >-
+      Loanwords. The linguist keeps them out of word formation for now (word-bank
+      document, 2026-11-09) and will add the useful ones later. They stay in the
+      lexicon, linked to the corpus, and visible and searchable in the word bank.
+      Out means out: the 14 words filed وام‌واژه and in another group as well
+      (نام، برنام، کارنام، چون‌واژه) build nothing either.
+
+switches:
+  # L26 with L18: does «نام» in the rule table take a کارنام too? The linguist
+  # is revising his rules, so this is **not** answered here. false is today's
+  # behaviour: the 80 rules that ask for a نام take a نام only. true widens
+  # every active rule whose input names نام to take a کارنام as well — affix
+  # rules and compounding slots alike, the engine's own built کارنام (دانش) as
+  # much as the lexicon's — and marks the rule pack's version, so nothing built
+  # under one setting is mistaken for the other. tools/measure_karnam_switch.py
+  # counts what each setting builds.
+  karnam_counts_as_nam: false

@@ -253,3 +253,23 @@ def test_contested_claims_survive_the_round_trip():
     )
     read_back = AffixMap.from_document(formed.as_document())
     assert read_back.contested == formed.contested
+
+
+# -- which rule pack ----------------------------------------------------------
+
+
+def test_the_map_remembers_its_rule_pack_and_refuses_two() -> None:
+    """L26's switch marks the pack; a map must never mix the two settings."""
+    from dataclasses import replace
+
+    one = replace(
+        _derivation("Goftār", "گفتار", Level.READING), rule_pack_version="0.1.0"
+    )
+    built = build([one])
+    assert built.rule_pack_version == "0.1.0"
+    again = AffixMap.from_document(built.as_document())
+    assert again.rule_pack_version == "0.1.0"
+
+    other = replace(one, rule_pack_version="0.1.0+karnam-as-nam")
+    with pytest.raises(ValueError, match="two rule packs"):
+        build([one, other])

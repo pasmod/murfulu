@@ -39,6 +39,8 @@ export interface Account {
     latin: string;
     spelling_fa: string;
     lexicon_category: string | null;
+    /** The linguist's word-bank groups, by his names. Empty before karbon 1.3. */
+    bank_groups?: string[];
     /**
      * How much of the corpus the **base itself** has.
      *

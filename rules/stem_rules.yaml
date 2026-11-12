@@ -5,7 +5,7 @@ rules:
     table: stem_rules
     row: '1'
   kind: stem
-  label_fa: کاربن یک از نابسودکارواژه
+  label_fa: پیشین‌کاربن از نابسودکارواژه
   input:
     types:
     - nabesudkarvaze
@@ -21,7 +21,7 @@ rules:
     table: stem_rules
     row: '2'
   kind: stem
-  label_fa: کاربن دو از کاربن یک
+  label_fa: کنون‌کاربن از پیشین‌کاربن
   input:
     types:
     - karbon_yek
@@ -57,7 +57,7 @@ rules:
     table: stem_rules
     row: '3'
   kind: stem
-  label_fa: کاربن دو از کاربن یک
+  label_fa: کنون‌کاربن از پیشین‌کاربن
   input:
     types:
     - karbon_yek
@@ -105,7 +105,7 @@ rules:
     table: stem_rules
     row: '4'
   kind: stem
-  label_fa: کاربن دو از کاربن یک
+  label_fa: کنون‌کاربن از پیشین‌کاربن
   input:
     types:
     - karbon_yek
@@ -154,7 +154,7 @@ rules:
     table: stem_rules
     row: '5'
   kind: stem
-  label_fa: کاربن دو از کاربن یک
+  label_fa: کنون‌کاربن از پیشین‌کاربن
   input:
     types:
     - karbon_yek
@@ -189,7 +189,7 @@ rules:
     table: stem_rules
     row: '6'
   kind: stem
-  label_fa: کاربن دو از کاربن یک
+  label_fa: کنون‌کاربن از پیشین‌کاربن
   input:
     types:
     - karbon_yek
@@ -221,7 +221,7 @@ rules:
     table: stem_rules
     row: '7'
   kind: stem
-  label_fa: کاربن دو از کاربن یک
+  label_fa: کنون‌کاربن از پیشین‌کاربن
   input:
     types:
     - karbon_yek
@@ -241,7 +241,7 @@ rules:
     table: stem_rules
     row: '8'
   kind: stem
-  label_fa: کاربن دو از کاربن یک
+  label_fa: کنون‌کاربن از پیشین‌کاربن
   input:
     types:
     - karbon_yek
@@ -281,7 +281,7 @@ rules:
     table: stem_rules
     row: '9'
   kind: stem
-  label_fa: کاربن دو از کاربن یک
+  label_fa: کنون‌کاربن از پیشین‌کاربن
   input:
     types:
     - karbon_yek

@@ -169,7 +169,7 @@ def test_the_documented_suffix_rule_is_as_the_design_record_says():
     assert rule["output"]["types"] == ["karnam"]
     # "bištar" — mostly. A tendency, so not full weight.
     assert rule["strength"] == "typical"
-    assert rule["label_fa"] == "کاربن یک + -ār"
+    assert rule["label_fa"] == "پیشین‌کاربن + -ār"
 
 
 def test_the_documented_prefix_rule_is_as_the_design_record_says():

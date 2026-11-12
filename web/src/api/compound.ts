@@ -74,6 +74,8 @@ export interface CompoundReading {
   latin: string;
   spelling_fa: string;
   lexicon_category: string | null;
+  /** The linguist's word-bank groups, by his names. Empty before karbon 1.3. */
+  bank_groups?: string[];
   needs_review: boolean;
   /** Everything the rules can join to this word. */
   built: number;

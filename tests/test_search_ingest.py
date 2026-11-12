@@ -16,6 +16,7 @@ from murfulu.corpus.adapter import SourceAdapter
 from murfulu.corpus.documents import Document
 from murfulu.corpus.ganjoor import GanjoorCorpus
 from murfulu.corpus.link import LinkResult
+from murfulu.lexicon.entries import Reading
 from murfulu.lexicon.store import Lexicon
 from murfulu.search import ingest
 from murfulu.search.indices import IndexAdmin, connect
@@ -127,9 +128,23 @@ def test_the_derivation_fields_are_declared_but_empty(linked: LinkResult):
 
 def test_an_unmappable_category_yields_no_word_class(linked: LinkResult):
     """وام‌واژه and friends are deliberately unmapped, and must not crash."""
-    assert ingest._word_classes("وام‌واژه") == []
-    assert ingest._word_classes(None) == []
-    assert ingest._word_classes("مصدر") == ["nabesudkarvaze"]
+    assert (
+        ingest._word_classes(Reading("x", "x", "x", lexicon_categories=("وام‌واژه",)))
+        == []
+    )
+    assert (
+        ingest._word_classes(Reading("x", "x", "x", lexicon_categories=(None,))) == []
+    )
+    verb = Reading("x", "x", "x", lexicon_categories=("مصدر",))
+    assert ingest._word_classes(verb) == ["nabesudkarvaze"]
+
+
+def test_a_word_bank_reading_is_indexed_by_its_groups(linked: LinkResult):
+    """Since karbon 1.3.0 the linguist's groups decide, and a loan builds nothing."""
+    both = Reading("x", "x", "x", bank_groups=("نام", "کارنام"))
+    assert ingest._word_classes(both) == ["nam", "karnam"]
+    loan = Reading("x", "x", "x", bank_groups=("نام", "وام‌واژه"))
+    assert ingest._word_classes(loan) == []
 
 
 # -- the writes, live cluster --------------------------------------------------

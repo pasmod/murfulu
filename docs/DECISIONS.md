@@ -2,6 +2,68 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-12 — the linguist's word bank decides what a word is
+
+Approved by the project lead on 2026-11-12: adopt the linguist's names one to
+one, keep loanwords out of word formation but visible, build on the Mac and
+deploy only on the project lead's word.
+
+**Word formation reads the linguist's groups, not the dictionary's label.**
+karbon 1.3.2 carries his twelve word-bank groups per entry (`bank_group`), and
+`rules/bank_groups.yaml` says what each feeds (`murfulu.lexicon.bank`). A
+reading feeds the union of its groups' classes; 2,986 words sit in more than
+one group, and آرش, two dictionary rows filed نام and کارنام, now feeds both.
+`pos` stays the dictionary's label. A snapshot from before 1.3.0 has no
+groups and falls back to `rules/lexicon_categories.yaml`, unchanged.
+
+**The mapping of the new groups is ours where it is not his** (`grounding:
+ours`, asked in L17d): کاربهر feeds کارنده‌کاربهر — Dehkhoda labels these
+entries نعت فاعلی and 442 of 1,106 end in *-ande*, while his done-to
+participles are filed برنام; پسوند، پیوند‌واژه and صوت feed no rule, because no
+rule takes one and an affix entry is not a base. صوت is not the rules'
+ندایی, which is a vocative form the rules build.
+
+**A loanword builds nothing, whatever its other groups say.** The linguist's
+word-bank document (2026-11-09) keeps وام‌واژه out of word formation for now;
+the 14 loanwords filed in a second group are out too. They stay in the
+lexicon, in the corpus links and in the word bank.
+
+**His names, everywhere a reader sees one.** The two stems are پیشین‌کاربن and
+کنون‌کاربن (karbon's `bank_labels`), no longer کاربن یک and کاربن دو — in
+`rules/word_classes.yaml`, in every rule label (`TYPE_FA`, the pack rebuilt by
+`tools/build_rule_pack.py`) and on the search screen. The machine ids
+`karbon_yek` / `karbon_do` stay: they are written into every stored
+derivation. چون‌واژه، جانام and پیش‌واژه are his own group names, so they are
+confirmed (L17 and L17b closed); only the vocative is unconfirmed (L17c).
+
+**L26 is a switch, off.** Whether «نام» in the rule table takes a کارنام is
+the linguist's, and he is revising his rules. `karnam_counts_as_nam` in
+`rules/bank_groups.yaml` keeps today's behaviour; on, `rules.pack.load` widens
+every active rule whose input names نام — and every slot rule with a نام in
+front (L18) — to take a کارنام, and marks the pack version
+`+karnam-as-nam`, so a derivation built under one setting is never taken for
+the other. `tools/measure_karnam_switch.py` counts both settings; on
+`lexicon-20261111` (8.5 minutes):
+
+| | off (today) | on |
+|---|---:|---:|
+| readings that feed a کارنام and no نام | 10,645 | — |
+| forms at one step, every reading in word formation | 1,949,859 | 2,651,592 |
+| forms in the build's pool at depth 2 (مصدر 1,764, صفت 2,452, اسم معنی 9,873 readings) | **3,036,182** | **29,140,261** |
+| of them from اسم معنی | 326,332 | 24,230,447 |
+| L26's examples and the هوش family built (دانشمند، امیدوار، دانشگاه، دانشور، هوشواره، هوشمند، بیهوش، باهوش) | 0 of 8 | 8 of 8 |
+
+So turning it on is a ninefold build, not a flag: it waits for the ruling
+and for a decision about where such a build is stored.
+
+**Two lexicon overrides retire on 1.3.2.** karbon now reads آزار for آزردن and
+گسل for گسیختن on the linguist's answer; the corrections are confirmed and
+confined to the two older snapshots (`only_on`). The رُفتن addition still
+applies. **Found in review:** the two corrections had changed only the Persian
+stem, and the rules build on the Latin one, so corpus v12–v14 built آزردن on
+*āzor* and گسیختن on *gosil* all along. Two Latin corrections now complete them
+on the older snapshots; 1.3.2 reads *āzār* and *gosal* itself.
+
 ## 2026-11-07 — the api image carries the files its tests read
 
 **The `docker` CI job had been red since 2026-08-20, and only that job.** It

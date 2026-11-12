@@ -49,7 +49,8 @@ from murfulu.corpus.ganjoor import GanjoorCorpus
 from murfulu.engine.affix import CannotApplyError, Word
 from murfulu.engine.compound import Verb, fill, fill_slot
 from murfulu.engine.compound import front_classes as slot_front_classes
-from murfulu.lexicon.categories import UnmappableCategoryError, word_classes_for
+from murfulu.lexicon.bank import is_excluded, word_classes_of
+from murfulu.lexicon.categories import UnmappableCategoryError
 from murfulu.lexicon.store import Lexicon
 from murfulu.rules.pack import Rule, RulePack, loaded
 
@@ -73,6 +74,9 @@ def _pools(lexicon: Lexicon) -> tuple[dict[str, list[Word]], list[Verb]]:
     by_class: dict[str, dict[str, Word]] = {}
     verbs: dict[str, Verb] = {}
     for reading in lexicon.all_readings():
+        if is_excluded(reading):
+            # Out of word formation (a وام‌واژه): neither a verb nor a front.
+            continue
         if reading.is_infinitive and reading.has_both_stems:
             verbs.setdefault(
                 reading.spelling_fa,
@@ -90,7 +94,7 @@ def _pools(lexicon: Lexicon) -> tuple[dict[str, list[Word]], list[Verb]]:
                 ),
             )
         try:
-            classes = word_classes_for(reading.lexicon_category)
+            classes = word_classes_of(reading)
         except UnmappableCategoryError:
             continue
         for name in classes:
@@ -194,7 +198,12 @@ def _measure_rule(
     }
 
 
-def _merge(into: Path, rows: dict[str, dict[str, object]], version: str) -> int:
+def _merge(
+    into: Path,
+    rows: dict[str, dict[str, object]],
+    version: str,
+    pack_version: str = "",
+) -> int:
     """Write the compounding rows into an existing productivity file.
 
     The rows keep the shape the app already reads, so nothing in the app
@@ -205,6 +214,12 @@ def _merge(into: Path, rows: dict[str, dict[str, object]], version: str) -> int:
         raise SystemExit(
             f"{into} is corpus {document.get('corpus_version')!r}, asked for "
             f"{version!r}. A figure never moves to another version's file."
+        )
+    held = document.get("rule_pack_version", "")
+    if pack_version and held and held != pack_version:
+        raise SystemExit(
+            f"{into} was measured with rule pack {held!r}, this run has "
+            f"{pack_version!r} (L26's switch?). A figure never moves between packs."
         )
     changed = 0
     for row in document.get("rules", []):
@@ -272,7 +287,7 @@ def main(argv: list[str] | None = None) -> int:
             encoding="utf-8",
         )
     if arguments.into:
-        changed = _merge(arguments.into, rows, arguments.corpus_version)
+        changed = _merge(arguments.into, rows, arguments.corpus_version, pack.version)
         print(f"merged         {changed} rules into {arguments.into}")
     return 0
 

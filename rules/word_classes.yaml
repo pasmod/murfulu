@@ -30,12 +30,16 @@
 #                   letters — see `source` for where each one came from.
 #   source          who wrote the Persian, and where.
 #
-# **Four terms are unconfirmed, and all twelve explanations are.** Both are
-# question L17 for the linguist.
+# **One term is unconfirmed, and all twelve explanations are** (L17c, L17d).
 #
-# The four are the classes the FINDINGS terminology table does not cover; their
-# Persian is read off the source's own Behnevis, which is a linguistic act
-# however mechanical it looks.
+# **Since the word bank (karbon 1.3.x, the linguist's group list of
+# 2026-11-09) the linguist's own names are used one to one.** The two stems are
+# پیشین‌کاربن and کنون‌کاربن (karbon's `bank_labels`), no longer کاربن یک and
+# کاربن دو; چون‌واژه، جانام and پیش‌واژه are his own group names, which settles
+# their spelling (L17, L17b). The machine ids stay: an id is permanent, and
+# `karbon_yek` is written into every stored derivation. The vocative has no
+# group in the bank and no coined term (L17c). How his twelve groups feed these
+# twelve classes is rules/bank_groups.yaml.
 #
 # The explanations are a separate matter and a larger one: the interface has to
 # explain *kārnām* without a manual, no explanation existed in any data file,
@@ -50,23 +54,25 @@ version: 0.1.0
 source_document: Dasturhāye Vāžesāzi az Kārbonhā.docx
 
 classes:
+  # The source grammar writes Kārboné yek / Kārboné do; `behnevis` keeps the
+  # source's own spelling, as everywhere in this file.
   - name: karbon_yek
     behnevis: Kārboné yek
-    coined_fa: کاربن یک
+    coined_fa: پیشین‌کاربن
     traditional_fa: بن ماضی
-    gloss_en: the past stem of a verb — stem 1
+    gloss_en: the past stem of a verb (formerly kārbon-e yek, stem 1)
     explanation_fa: بنِ گذشتهٔ کارواژه؛ آنچه با برداشتنِ «ـن» از نابِسودکارواژه بر جای می‌ماند.
     confirmed: true
-    source: the linguist's terminology table, docs/FINDINGS.md
+    source: the linguist's word bank, karbon bank_labels (2026-11-09); was کاربن یک
 
   - name: karbon_do
     behnevis: Kārboné do
-    coined_fa: کاربن دو
+    coined_fa: کنون‌کاربن
     traditional_fa: بن مضارع
-    gloss_en: the present stem of a verb — stem 2
+    gloss_en: the present stem of a verb (formerly kārbon-e do, stem 2)
     explanation_fa: بنِ اکنونِ کارواژه؛ بنی که فرمان و زمانِ حال بر آن ساخته می‌شود.
     confirmed: true
-    source: the linguist's terminology table, docs/FINDINGS.md
+    source: the linguist's word bank, karbon bank_labels (2026-11-09); was کاربن دو
 
   - name: nabesudkarvaze
     behnevis: Nābesudkārvāže
@@ -124,14 +130,15 @@ classes:
     confirmed: true
     source: the linguist's terminology table, docs/FINDINGS.md
 
-  # The four the terminology table does not cover. See L17.
+  # The four the terminology table does not cover. Three are now the
+  # linguist's own word-bank group names; the vocative is still open (L17c).
   - name: jonvaze
     behnevis: Čonvāže
     coined_fa: چون‌واژه
     traditional_fa: قید
     gloss_en: adverb
     explanation_fa: واژه‌ای که چگونگی یا زمان یا جایِ کار را می‌گوید.
-    confirmed: false
+    confirmed: true
     # Already written this way in tools/build_rule_pack.py's slot table, during
     # transcription, and repeated here rather than left in code. čon (چون,
     # "as / like") + vāže (واژه, "word").
@@ -142,7 +149,7 @@ classes:
     # (š ž č j ˈ). The id stays: it is written into rules/nominals.yaml,
     # rules/verb_stems.yaml, the engine and every stored derivation, and an id
     # is permanent. This field is what a reader should be shown.
-    source: transcription, unconfirmed — L17
+    source: the linguist's word-bank group چون‌واژه (2026-11-09)
 
   - name: janam
     behnevis: Jānām
@@ -150,10 +157,10 @@ classes:
     traditional_fa: ضمیر
     gloss_en: pronoun — the word that stands in a noun's place
     explanation_fa: واژه‌ای که به جایِ نام می‌نشیند.
-    confirmed: false
+    confirmed: true
     # jā (جا, "place") + nām (نام, "noun"): the word that goes in a noun's
-    # place. Read off the source's Behnevis, not stated by the linguist.
-    source: transcription, unconfirmed — L17
+    # place. First read off the source's Behnevis; now his own group name.
+    source: the linguist's word-bank group جانام (2026-10-21, 2026-11-09) — L17 closed
 
   - name: pisvaze
     behnevis: Pišvāže
@@ -161,10 +168,10 @@ classes:
     traditional_fa: حرف اضافه
     gloss_en: preposition
     explanation_fa: واژه‌ای که پیش از نام می‌آید و پیوندِ آن را با دیگر بخش‌های جمله می‌رساند.
-    confirmed: false
-    # piš (پیش, "before") + vāže (واژه, "word"). Read off the source's
-    # Behnevis, not stated by the linguist.
-    source: transcription, unconfirmed — L17
+    confirmed: true
+    # piš (پیش, "before") + vāže (واژه, "word"). First read off the source's
+    # Behnevis; now his own group name.
+    source: the linguist's word-bank group پیش‌واژه (2026-10-21, 2026-11-09) — L17b closed
 
   - name: nedayi
     behnevis: Nedāyi

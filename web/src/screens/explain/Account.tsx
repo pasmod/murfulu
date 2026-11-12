@@ -9,7 +9,7 @@
 import type { Account as Analysis } from "../../api/explain";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
-import { FUNCTION_WORD_SHORT } from "../../text/lexicon";
+import { FUNCTION_WORD_SHORT, wordGroup } from "../../text/lexicon";
 import styles from "./Account.module.css";
 
 export function Account({ account, form }: { account: Analysis; form: string }) {
@@ -19,8 +19,8 @@ export function Account({ account, form }: { account: Analysis; form: string }) 
       <p className={styles.base}>
         از <span className={styles.baseFa}>{account.base.spelling_fa}</span>
         <Latin className={styles.baseLatin}>{account.base.latin}</Latin>
-        {account.base.lexicon_category ? (
-          <span className={styles.category}>{account.base.lexicon_category}</span>
+        {wordGroup(account.base) ? (
+          <span className={styles.category}>{wordGroup(account.base)}</span>
         ) : null}
       </p>
 

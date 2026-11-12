@@ -31,6 +31,7 @@ from murfulu.corpus import link, report, wordtypes
 from murfulu.corpus.function_words import loaded as function_words
 from murfulu.corpus.ganjoor import CENTURIES_VARIABLE, GanjoorCorpus
 from murfulu.lexicon.store import Lexicon
+from murfulu.rules.pack import loaded as loaded_pack
 from murfulu.search import ingest
 from murfulu.search.backfill import AffixMap
 from murfulu.search.indices import IndexAdmin, connect
@@ -170,6 +171,13 @@ def main(argv: list[str] | None = None) -> int:
         formed = AffixMap.from_document(
             json.loads(arguments.affix_map.read_text(encoding="utf-8"))
         )
+        pack_version = loaded_pack().version
+        if formed.rule_pack_version and formed.rule_pack_version != pack_version:
+            print(
+                f"affix map      built with rule pack {formed.rule_pack_version!r}, "
+                f"this run has {pack_version!r}; refusing to mix them"
+            )
+            return 1
         print(f"affix map      {len(formed):,} word types traced to a rule")
     else:
         # Leaving it out does not fail. It builds a `word_types` index where no

@@ -22,6 +22,9 @@ TYPE_SPELLINGS: dict[str, str] = {
     "kārboé yek": "karbon_yek",
     "kārboné do": "karbon_do",
     "kārboé do": "karbon_do",
+    # The linguist's names since the word bank (2026-11-09).
+    "pišinkārbon": "karbon_yek",
+    "konunkārbon": "karbon_do",
     "nābesudkārvāže": "nabesudkarvaze",
     "kārnām": "karnam",
     "nām": "nam",
@@ -37,10 +40,12 @@ TYPE_SPELLINGS: dict[str, str] = {
     "nedāyi": "nedayi",
 }
 
-#: Persian display name per word class, from the grammar's terminology table.
+#: Persian display name per word class, from the grammar's terminology table —
+#: except the two stems, which the linguist renamed in his word bank
+#: (2026-11-09): کاربن یک is پیشین‌کاربن, کاربن دو is کنون‌کاربن.
 TYPE_FA: dict[str, str] = {
-    "karbon_yek": "کاربن یک",
-    "karbon_do": "کاربن دو",
+    "karbon_yek": "پیشین‌کاربن",
+    "karbon_do": "کنون‌کاربن",
     "nabesudkarvaze": "نابسودکارواژه",
     "karnam": "کارنام",
     "nam": "نام",

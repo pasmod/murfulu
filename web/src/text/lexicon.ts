@@ -16,8 +16,9 @@
  * gap list — the ordinary word is still the right one and stays.
  *
  * Note for whoever raises it with the linguist: «کاربن» is also this project's
- * grammar term for a verb stem — کاربن یک، کاربن دو — so «واژه‌نامهٔ کاربن»
- * can be read for a moment as *the dictionary of stems*. It is the library's
+ * grammar term for a verb stem — پیشین‌کاربن، کنون‌کاربن, until 2026-11 کاربن
+ * یک، کاربن دو — so «واژه‌نامهٔ کاربن» can be read for a moment as *the
+ * dictionary of stems*. It is the library's
  * own name, and the collision is recorded rather than worked around.
  */
 
@@ -95,4 +96,22 @@ export const LEXICON_CUT = 199;
  */
 export function wasCut(definition: string): boolean {
   return definition.length >= LEXICON_CUT;
+}
+
+/**
+ * What a word *is*, in the linguist's words where we have them.
+ *
+ * Since karbon 1.3.0 every entry carries the linguist's word-bank groups
+ * (نام، کارنام، برنام، وام‌واژه…), several per word; they replace the
+ * dictionary's own label (اسم معنی، صفت مرکب…), the vocabulary the project
+ * exists to replace. A record from before the bank has only the label, and
+ * shows it as it is written.
+ */
+export function wordGroup(record: {
+  bank_groups?: string[] | null;
+  lexicon_category?: string | null;
+}): string {
+  const groups = record.bank_groups ?? [];
+  if (groups.length > 0) return groups.join("، ");
+  return record.lexicon_category ?? "";
 }

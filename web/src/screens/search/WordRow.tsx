@@ -25,6 +25,7 @@ import {
   FUNCTION_WORD_SHORT,
   NO_READING,
   POPULATION_LABEL,
+  wordGroup,
 } from "../../text/lexicon";
 import { persianCenturyRange } from "../../text/numbers";
 import styles from "./WordRow.module.css";
@@ -62,7 +63,7 @@ export function WordRow({ word }: WordRowProps) {
         )}
       </Link>
 
-      <span className={styles.category}>{word.lexicon_category ?? ""}</span>
+      <span className={styles.category}>{wordGroup(word)}</span>
 
       <span className={styles.populations}>
         {(word.population ?? []).map((where) => (

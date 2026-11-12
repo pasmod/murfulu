@@ -70,6 +70,10 @@ class AffixMap:
 
     by_word_type: dict[str, dict[str, list[str]]] = field(default_factory=dict)
     corpus_version: str = ""
+    #: The rule pack the derivations were built with — its version carries
+    #: ``+karnam-as-nam`` when L26's switch was on. Empty in a map written
+    #: before 2026-11-12. A map is never applied under another pack.
+    rule_pack_version: str = ""
     #: Derivations whose spelling the corpus reads as a different word.
     #: Counted, never attached: how often our form collides with another.
     refused_homographs: int = 0
@@ -101,6 +105,7 @@ class AffixMap:
         """The stored shape, for handing between pipeline runs."""
         return {
             "corpus_version": self.corpus_version,
+            "rule_pack_version": self.rule_pack_version,
             "refused_homographs": self.refused_homographs,
             "word_types": self.by_word_type,
             "proposed": self.proposed,
@@ -113,6 +118,7 @@ class AffixMap:
         return cls(
             by_word_type=raw.get("word_types") or {},
             corpus_version=raw.get("corpus_version", ""),
+            rule_pack_version=raw.get("rule_pack_version", ""),
             refused_homographs=int(raw.get("refused_homographs", 0)),
             proposed=raw.get("proposed") or {},
             contested=raw.get("contested") or {},
@@ -170,6 +176,17 @@ def build(
         affix_map.corpus_version = affix_map.corpus_version or (
             derivation.corpus_version
         )
+        if derivation.rule_pack_version:
+            if (
+                affix_map.rule_pack_version
+                and affix_map.rule_pack_version != derivation.rule_pack_version
+            ):
+                raise ValueError(
+                    f"derivations from two rule packs in one affix map: "
+                    f"{affix_map.rule_pack_version!r} and "
+                    f"{derivation.rule_pack_version!r}"
+                )
+            affix_map.rule_pack_version = derivation.rule_pack_version
         if evidence.function_word:
             # Written, but as another word: nothing to claim, and every rule
             # that would have claimed it is recorded as contested.

@@ -192,8 +192,12 @@ class Lexicon:
 
     @property
     def overrides_applied(self) -> int:
-        """How many authored values are held over this snapshot."""
-        return len(self._overrides)
+        """How many authored values are held over this snapshot.
+
+        A correction confined to older snapshots (``only_on``) is not counted
+        on a newer one, where karbon itself now carries the value.
+        """
+        return self._overrides.applicable(self.snapshot_id)
 
     def describe_overrides(self) -> str:
         """One line for a build log: applied, or dropped and why."""
@@ -486,6 +490,11 @@ class Lexicon:
                     present_stem_latin=addition.fields.get("present_stem_latin"),
                     # Flagged, because nobody has ruled on it yet.
                     needs_review=True,
+                    bank_groups=(
+                        tuple(addition.fields.get("bank_groups") or ())
+                        if self.has_bank
+                        else ()
+                    ),
                     source_entry_ids=(),
                     sense_count=1,
                     snapshot_id=self.snapshot_id,

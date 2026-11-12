@@ -108,6 +108,7 @@ WORD_TYPES: dict[str, Any] = {
         # mid-word, and no مصدر has one at all.
         "definition_fa": _TEXT_FA,
         "lexicon_category": _KEYWORD,
+        "bank_groups": _KEYWORD,
         "word_class": _KEYWORD,
         "pos_observed": {"type": "object", "dynamic": True},
         # stems and structure

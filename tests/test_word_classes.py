@@ -52,16 +52,18 @@ def test_a_class_with_no_coined_term_says_it_fell_back() -> None:
     assert vocative.label_is_traditional is True
 
 
-def test_four_terms_are_marked_unconfirmed() -> None:
-    """Read off the source's Behnevis by us, not stated by the linguist.
+def test_only_the_vocative_is_unconfirmed() -> None:
+    """Three of the four terms we read off the source are his group names now.
 
-    They are shown, not withheld — the project's standing rule is to build what
-    it believes is right and mark it, never to wait. L17 asks for the ruling.
+    چون‌واژه، جانام and پیش‌واژه are groups in the linguist's word bank
+    (2026-11-09), which settles L17 and L17b. The vocative has no group and no
+    coined term (L17c). Unconfirmed is shown, not withheld — the standing rule
+    is to build what we believe is right and mark it, never to wait.
     """
     table = word_classes.loaded()
     unconfirmed = sorted(name for name, one in table.items() if not one.confirmed)
 
-    assert unconfirmed == ["janam", "jonvaze", "nedayi", "pisvaze"]
+    assert unconfirmed == ["nedayi"]
     for name in unconfirmed:
         assert table[name].label_fa, f"{name} is unconfirmed but must still show"
 
@@ -121,3 +123,10 @@ def test_a_class_left_out_of_the_table_is_refused(tmp_path: Path) -> None:
         word_classes.WordClassError, match="no Persian term for: barnam"
     ):
         word_classes.load(tmp_path)
+
+
+def test_the_stems_carry_the_linguists_word_bank_names() -> None:
+    """کاربن یک and کاربن دو were renamed in the word bank; the ids stay."""
+    table = word_classes.loaded()
+    assert table["karbon_yek"].label_fa == "پیشین‌کاربن"
+    assert table["karbon_do"].label_fa == "کنون‌کاربن"
