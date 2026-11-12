@@ -407,8 +407,7 @@ Everything below was built and checked on the Mac (ENGINEERING, v15;
 (`data/backups/db-before-v15-20261112.dump` on the server — under `data/`,
 because `deploy`'s rsync deletes anything else the Mac does not have); the
 transfer read 133,148 / 411,670 / 2,949,164 documents on both sides; the
-questions load reworded 10, withdrew 3 and deferred 1; `check` passed. The
-move to the demo's own host, below, was **not** run.
+questions load reworded 10, withdrew 3 and deferred 1; `check` passed.
 
 | step | command | what it does |
 |---|---|---|
@@ -427,37 +426,15 @@ memory as before. Building: 7.2 GB peak, which is why v15 is built on the Mac
 (OPEN_QUESTIONS S35). L26's switch, if it is ever turned on, multiplies the
 build about tenfold and needs its own plan first.
 
-**The message to the linguist** points at `/questions`; it goes after step 6,
-and after the move below if the address changes in the same deploy.
+**The message to the linguist** points at `/questions`; it goes after step 6.
 
-### Moving the demo to its own host — decided 2026-11-09, prepared, not run
+### If the public address ever changes
 
-The project lead decided to take the demo off Mosaic. Two choices are his
-before anything runs, and nothing here guesses them:
-
-- **Which address.** A name outside Mosaic's domain. Whatever it is goes into
-  the server `.env` as `MURFULU_DOMAIN` and `MURFULU_SITE_ADDRESS`, into
-  `deploy/host.env` as `MURFULU_SITE` (what `check`, `cutover` and `rollback`
-  probe; it defaults to the old address), and into the tunnel's ingress in
-  `deploy/cloudflared/config.yml`. DNS: `cloudflared tunnel route dns <tunnel>
-  <hostname>` on the zone that holds the name — a zone in another Cloudflare
-  account needs a tunnel of its own there (`tunnel` copies its credentials).
-  Then `deploy`, which recreates Caddy because its environment changed, and a
-  restart of murfulu's own connector, `murfulu_cloudflared` (§0) — `deploy`
-  never touches the tunnel, and no other connector on the host is restarted.
-  Check through the new hostname: 401 logged out, the app logged in.
-- **Which machine.** Keep serving from the VPS beside Sokhan and only change
-  the address, or a machine of its own. Measured for the second: serving needs
-  what it needs today (the stack is capped at 5 GB, Elasticsearch holds
-  `passages` 2 GB plus one version's three indices); building a version needs
-  7.2 GB more, so a builder of its own needs 16 GB — or the builds stay on the
-  Mac and only the snapshot travels, as for v15. A new machine is set up the
-  way the VPS was on 2026-10-27 (§0), with `deploy` first, because it brings
-  the compose files every later step runs: `deploy`, `env`, `tunnel`, `data`,
-  `corpus-mac v15`, `release v15 lexicon-20261111` (no alias exists before
-  it), `db`, `migrate`, `questions --apply`, `check`, `cutover`; the VPS stays
-  the fallback until the project lead retires it.
-
-After either: the old address answers with a redirect for a while or not at
-all (his call); the README, the questions link sent to the linguist and the
-pages that name the address are updated.
+Nothing is planned; this is where the address lives, for whoever changes it.
+It is `MURFULU_DOMAIN` and `MURFULU_SITE_ADDRESS` in the server `.env`, the
+hostname in the tunnel's ingress (`deploy/cloudflared/config.yml`) and its DNS
+route (`cloudflared tunnel route dns`), and `MURFULU_SITE` in
+`deploy/host.env`, which `check`, `cutover` and `rollback` probe (it defaults
+to the current address). `deploy` recreates Caddy when its environment
+changes; it never touches the tunnel, so murfulu's own connector,
+`murfulu_cloudflared` (§0), is restarted by hand, and no other.

@@ -42,8 +42,8 @@ done
 . "$HOST_ENV"
 SERVER=${MURFULU_SSH_HOST:?set MURFULU_SSH_HOST in deploy/host.env}
 REMOTE_DIR=${MURFULU_REMOTE_DIR:-murfulu}
-# The public address. Set MURFULU_SITE in deploy/host.env when the demo
-# moves to its own host (DEPLOY §9); the default is the address it has had.
+# The public address `check`, `cutover` and `rollback` probe. MURFULU_SITE in
+# deploy/host.env overrides it, should it ever change (DEPLOY §9).
 SITE=${MURFULU_SITE:-murfulu.mosaic-hub.de}
 COMPOSE="docker compose -p murfulu -f docker-compose.prod.yml -f docker-compose.server.yml"
 APP_SERVICES="db elasticsearch api web caddy"
