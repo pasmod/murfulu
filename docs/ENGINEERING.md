@@ -164,6 +164,16 @@ on 2026-11-12: the three v15 indices (about 1.05 GB) went to the VPS as a
 snapshot taken on the Mac, `deploy/server.sh corpus-mac v15`, then `release
 v15 lexicon-20261111` (DEPLOY §9).
 
+**v16 (2026-11-13) is v15's recipe with one code change**: the Persian side of
+a join writes a zero-width non-joiner after a silent ه and the glide ی only
+once (commit 08a954a, `engine/glides.py`). Same lexicon and inputs, same
+commands with `v16`, 6.5 minutes on the Mac. The comparison
+(`data/compare-v15-v16.md`) reads the five figures, records and paths
+unchanged and no rule's output moved; 692,606 records changed spelling,
+1,451 are newly found in the corpus and 125 false credits are gone. Released
+the same way as v15: `deploy`, `data`, `corpus-mac v16`, `release v16
+lexicon-20261111`, `check`. **The rollback is `release v15 lexicon-20261111`.**
+
 **The precompute runs first, and this order is not cosmetic.** The ingest
 takes the precompute's affix map, so an ingest run before it has nothing to
 pass. This file listed the two the other way round until 2026-08-14, and **v6
