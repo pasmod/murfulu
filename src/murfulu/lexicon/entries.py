@@ -68,6 +68,18 @@ class Reading:
     #: Which snapshot this came out of. Travels with the record.
     snapshot_id: str = ""
 
+    #: The linguist's word-bank groups (نام، کارنام، برنام، وام‌واژه…), from
+    #: karbon's ``bank_group`` table — **every** group of every collapsed row,
+    #: in the order karbon lists its labels. Empty for a snapshot from before
+    #: karbon 1.3.0, which has no such table. A word may sit in several groups
+    #: (2,986 of 58,983 in 1.3.2). ``lexicon_categories`` stays the
+    #: dictionary's own label beside it.
+    bank_groups: tuple[str, ...] = ()
+
+    #: Whether karbon cut ``definition_fa`` at 200 characters. None for a
+    #: snapshot that does not say (before 1.3.0).
+    definition_truncated: bool | None = None
+
     @property
     def lexicon_category(self) -> str | None:
         """The first of the collapsed rows' categories, or None."""

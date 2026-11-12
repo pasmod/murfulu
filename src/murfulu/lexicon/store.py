@@ -56,6 +56,25 @@ REQUIRED_COLUMNS = frozenset(
 #: audit can say "dropped upstream" instead of leaving a reader to wonder.
 NOT_SHIPPED_SINCE_1_2_0 = ("file_path", "notes")
 
+#: What karbon 1.3.0 added, which this module reads **when present** and does
+#: without when not, so the snapshots before it still open unchanged:
+#:
+#: - ``bank_group`` (word_id, bank_group): the linguist's word-bank groups, one
+#:   row per word and group. A word sits in several (2,986 of 58,983 in 1.3.2).
+#: - ``bank_labels`` (key, label_fa): the groups' Persian names, and the names
+#:   of the two stems (پیشین‌کاربن، کنون‌کاربن). Its row order is karbon's
+#:   order of the groups.
+#: - ``merge_map`` (old_id, new_id, merged_at): rows karbon merged into one
+#:   entry per word. 3,569 old ids into 2,987 in 1.3.2, no chains.
+#: - ``infinitives.definition_truncated``: the preview was cut at 200 characters.
+BANK_TABLES = ("bank_group", "bank_labels")
+MERGE_TABLE = "merge_map"
+TRUNCATED_COLUMN = "definition_truncated"
+
+#: Separates group names inside one aggregated column. The ASCII unit
+#: separator: it cannot occur in a Persian group name, a ZWNJ can.
+_GROUP_SEPARATOR = "\x1f"
+
 _log = logging.getLogger(__name__)
 
 #: Snapshot ids already warned about, so a process opening the lexicon per
@@ -136,6 +155,28 @@ class Lexicon:
         self._connection = sqlite3.connect(uri, uri=True)
         self._connection.row_factory = sqlite3.Row
         self._check_schema()
+        tables = {
+            row[0]
+            for row in self._connection.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table'"
+            )
+        }
+        columns = {
+            row[1] for row in self._connection.execute("PRAGMA table_info(infinitives)")
+        }
+        #: Whether this snapshot carries the linguist's word bank (karbon ≥ 1.3.0).
+        self.has_bank = all(name in tables for name in BANK_TABLES)
+        self._has_merge_map = MERGE_TABLE in tables
+        self._has_truncated = TRUNCATED_COLUMN in columns
+        self._select = _COLUMNS
+        if self.has_bank:
+            self._select += (
+                ", (SELECT group_concat(bank_group, char(31)) FROM bank_group "
+                "WHERE bank_group.word_id = infinitives.id) AS bank_groups_raw"
+            )
+        if self._has_truncated:
+            self._select += f", {TRUNCATED_COLUMN}"
+        self._group_order = self._read_group_order() if self.has_bank else {}
 
     @classmethod
     def open(
@@ -269,6 +310,89 @@ class Lexicon:
         """
         yield from self._query("1 = 1")
 
+    def by_id(self, row_id: int) -> list[Reading]:
+        """The reading a lexicon row id belongs to, following ``merge_map``.
+
+        An id karbon merged away (1.3.0 kept one entry per word) resolves to
+        the entry it went into, so anything that stored an old id still finds
+        its word. Empty when the id is neither a row nor a merged one.
+        """
+        current = self.current_id(row_id)
+        if current is None:
+            return []
+        rows = self._connection.execute(
+            f"SELECT headword, phonemic FROM infinitives "  # noqa: S608
+            f"WHERE {_ACTIVE} AND id = ?",
+            (current,),
+        ).fetchall()
+        found: list[Reading] = []
+        for row in rows:
+            found += [
+                one
+                for one in self._query(
+                    "headword = ? AND phonemic = ?", (row["headword"], row["phonemic"])
+                )
+                if current in one.source_entry_ids
+            ]
+        return found
+
+    def current_id(self, row_id: int) -> int | None:
+        """Where a row id lives in this snapshot: itself, its merge, or None."""
+        present = self._connection.execute(
+            f"SELECT 1 FROM infinitives WHERE {_ACTIVE} AND id = ?",  # noqa: S608
+            (row_id,),
+        ).fetchone()
+        if present:
+            return row_id
+        if not self._has_merge_map:
+            return None
+        merged = self._connection.execute(
+            f"SELECT new_id FROM {MERGE_TABLE} WHERE old_id = ?",  # noqa: S608
+            (row_id,),
+        ).fetchone()
+        return int(merged[0]) if merged else None
+
+    def merge_map(self) -> dict[int, int]:
+        """Every merged id and the id it went into. Empty before 1.3.0."""
+        if not self._has_merge_map:
+            return {}
+        return {
+            int(old): int(new)
+            for old, new in self._connection.execute(
+                f"SELECT old_id, new_id FROM {MERGE_TABLE}"  # noqa: S608
+            )
+        }
+
+    def bank_labels(self) -> dict[str, str]:
+        """Karbon's Persian label for each key in ``bank_labels``, in its order.
+
+        Holds the twelve groups and the two stem names. Empty before 1.3.0.
+        """
+        if not self.has_bank:
+            return {}
+        return {
+            str(key): str(label)
+            for key, label in self._connection.execute(
+                "SELECT key, label_fa FROM bank_labels ORDER BY rowid"
+            )
+        }
+
+    def count_by_bank_group(self) -> dict[str, int]:
+        """How many active rows each group holds, in karbon's group order."""
+        if not self.has_bank:
+            return {}
+        counted = {
+            str(group): int(count)
+            for group, count in self._connection.execute(
+                f"SELECT bank_group, COUNT(*) FROM bank_group "  # noqa: S608
+                f"JOIN infinitives ON infinitives.id = bank_group.word_id "
+                f"WHERE {_ACTIVE} GROUP BY bank_group"
+            )
+        }
+        return dict(
+            sorted(counted.items(), key=lambda item: self._group_order.get(item[0], 99))
+        )
+
     def count_active(self) -> int:
         """How many rows the snapshot holds once deleted ones are excluded."""
         row = self._connection.execute(
@@ -280,11 +404,42 @@ class Lexicon:
 
     def _query(self, where: str, parameters: tuple[str, ...] = ()) -> list[Reading]:
         rows = self._connection.execute(
-            f"SELECT {_COLUMNS} FROM infinitives "  # noqa: S608
+            f"SELECT {self._select} FROM infinitives "  # noqa: S608
             f"WHERE {_ACTIVE} AND {where} ORDER BY id",
             parameters,
         ).fetchall()
         return self._collapse(rows)
+
+    def _read_group_order(self) -> dict[str, int]:
+        """Each group's position in karbon's label table, which is its order."""
+        return {
+            str(key): position
+            for position, (key,) in enumerate(
+                self._connection.execute("SELECT key FROM bank_labels ORDER BY rowid")
+            )
+        }
+
+    def _groups_of(self, group: list[sqlite3.Row]) -> tuple[str, ...]:
+        """Every bank group of every collapsed row, once each, in karbon's order."""
+        if not self.has_bank:
+            return ()
+        found: set[str] = set()
+        for row in group:
+            raw = row["bank_groups_raw"]
+            if raw:
+                found.update(name for name in str(raw).split(_GROUP_SEPARATOR) if name)
+        return tuple(
+            sorted(found, key=lambda name: (self._group_order.get(name, 99), name))
+        )
+
+    def _truncated(self, group: list[sqlite3.Row]) -> bool | None:
+        """Whether the definition a reading shows was cut — the shown row's flag."""
+        if not self._has_truncated:
+            return None
+        for row in group:
+            if row["definition_preview"] is not None:
+                return bool(row[TRUNCATED_COLUMN])
+        return None
 
     def _collapse(self, rows: Iterable[sqlite3.Row]) -> list[Reading]:
         """Group rows into readings, keyed on spelling plus Latin form.
@@ -376,6 +531,8 @@ class Lexicon:
             source_entry_ids=tuple(int(row["id"]) for row in group),
             sense_count=len(group),
             snapshot_id=self.snapshot_id,
+            bank_groups=self._groups_of(group),
+            definition_truncated=self._truncated(group),
         )
 
 

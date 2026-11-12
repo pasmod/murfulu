@@ -37,6 +37,11 @@ node_modules/
 data/*.sqlite
 data/*.jsonl
 
+# karbon's release files as downloaded (the bank ZIP, the wheel) and anything
+# unpacked from them. karbon's data is not this repository's to publish
+# (NOTICE); tools/fetch_lexicon.py takes the lexicon out into data/*.sqlite.
+/data/karbon-*/
+
 # SQLite's own sidecars: the write-ahead log and its shared-memory index.
 # They belong to a database this file already ignores, they are meaningless
 # without it, and both were committed for months because `git add -A` swept

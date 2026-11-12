@@ -2,6 +2,58 @@
 
 Large files here are gitignored.
 
+## lexicon-20261111.sqlite — karbon 1.3.2, the final word bank (from corpus v15)
+
+**karbon release 1.3.2** (2026-11-11), the lexicon inside its wheel, taken out
+with `python tools/fetch_lexicon.py v1.3.2` (needs read access to karbon's
+repository; `--wheel` takes a downloaded wheel instead). 58,983 rows, **none
+soft-deleted**, 56,366 reviewed by the linguist (`needs_review` on 2,617, was
+14,467). `karbon_meta`: build_date 2026-11-11, ruleset `V.7+V.9e-adj`, source
+`dehkhoda-workshop`. Snapshot id `lexicon-20261111:e300dbc27083`. Journal mode
+`delete`, so it opens `immutable=1` like the others.
+
+New in the schema, all read only when present (tests in
+`tests/test_karbon_1_3_2.py`), so the older snapshots open unchanged:
+
+- **`bank_group`** — the linguist's twelve word-bank groups, one row per word
+  and group: نام 23,306 · برنام 15,957 · کارنام 10,866 · وام‌واژه 6,454 ·
+  نابسودکارواژه 1,772 · چون‌واژه 1,691 · کاربهر 1,106 · صوت 542 · پسوند 206 ·
+  پیوند‌واژه 127 · پیش‌واژه 119 · جانام 114 (62,260 rows; 2,986 words sit in
+  more than one group). A `Reading` carries every group of every row it
+  collapses, as `bank_groups`, in karbon's order.
+- **`bank_labels`** — the groups' Persian names and the two stems' new names,
+  پیشین‌کاربن (past) and کنون‌کاربن (present).
+- **`merge_map`** — karbon keeps one entry per word since 1.3.0: 3,569 old ids
+  went into 2,987, no chains. `Lexicon.current_id` and `Lexicon.by_id` follow
+  it, so an old id still finds its word.
+- **`definition_truncated`** — the preview was cut at 200 characters.
+
+`pos` still holds one dictionary label per row, now with seven more values
+(چون‌واژه، کاربهر، صوت، پسوند، پیوند‌واژه، پیش‌واژه، جانام). The bank group is
+derived from it plus the linguist's extra groups; karbon's own README in the
+release ZIP gives the derivation.
+
+**887 spelling + reading pairs are still on more than one row** (778 on two, 109 on three to seven). They are homonyms with
+different senses (آب the water and آب the month), and collapse into one
+reading as before; آرش is one of them, filed نام on one row and کارنام on the
+other, and carries both groups.
+
+Against `lexicon-20261012`, row by row on `id`:
+
+| | rows |
+|---|---:|
+| 1.2.0's active rows | 45,577 |
+| still there under the same id | 44,642 |
+| merged into another row (`merge_map`) | 509 |
+| gone, neither present nor merged | 426 (اسم ذات 207, وام‌واژه 85, اسم مرکب 66, صفت مرکب 32, اسم معنی 30, صفت 6) |
+| Latin reading changed, same id | 9,980 (صفت مرکب 4,423, اسم مرکب 2,825, اسم ذات 2,155, وام‌واژه 355, اسم معنی 156, صفت 54, مصدر 6, صفت-اسم 2, no category 4), 134 of them in case only |
+| verbs with a changed Latin stem | 13 (17 counting the Persian stem columns too) |
+| category changed, same id | 12 (11 from none to مصدر) |
+| new ids | 14,341 (اسم معنی 8,113, وام‌واژه 1,190, چون‌واژه 1,142, صفت 1,070, صفت مرکب 1,026, کاربهر 788, صوت 478, پسوند 152, پیوند‌واژه 119, پیش‌واژه 103, جانام 102, اسم مرکب 55, مصدر 3) |
+
+3,060 of the merged ids never were 1.2.0 rows: they were added and merged
+between the two releases.
+
 ## lexicon-20261012.sqlite — served since corpus v13 (2026-10-18)
 
 **karbon release 1.2.0**: the lexicon inside karbon's v1.2.0 wheel, 45,577
