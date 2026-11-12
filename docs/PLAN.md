@@ -1599,6 +1599,14 @@ queue was written, which is the argument for running it by hand again.
       the vectors have nothing. It is a stand-in, not a rival: wherever the
       semantic score *can* speak it remains the better measure.
 
+- [x] **9.14 The word bank screen.** DONE 2026-11-12, asked for by the linguist
+      with the word bank. `/bank` lists every reading of karbon 1.3.2 in his
+      twelve groups and under his names, in Persian alphabetical order,
+      searchable in Persian letters or Behnevis, a verb with both stems
+      (پیشین‌کاربن، کنون‌کاربن), a loanword listed and marked as building
+      nothing. Read from the lexicon snapshot by `api/bank.py`, no corpus
+      needed. His second wish, classical verse beside its Behnevis, is IDEAS
+      item 12 and not built.
 - [x] **9.13 Offer depth 3 on the build screen, or 9.10 is invisible.**
       DONE 2026-08-17. Three steps are offered; the route ranks and then pages;
       the screen asks for the best thousand and says how many of how many it is

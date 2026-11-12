@@ -11,6 +11,7 @@ from fastapi import FastAPI, Response, status
 from murfulu import __version__
 from murfulu.api import (
     accounts,
+    bank,
     compound,
     feedback,
     generate,
@@ -29,6 +30,7 @@ app = FastAPI(
 )
 
 app.include_router(rules.router)
+app.include_router(bank.router)
 app.include_router(generate.router)
 app.include_router(compound.router)
 app.include_router(rulings.router)

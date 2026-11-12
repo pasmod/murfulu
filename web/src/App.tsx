@@ -11,6 +11,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import { Placeholder } from "./screens/Placeholder";
 import { Affixes } from "./screens/affixes/Affixes";
+import { Bank } from "./screens/bank/Bank";
 import { Build } from "./screens/build/Build";
 import { Compound } from "./screens/compound/Compound";
 import { Corpus } from "./screens/corpus/Corpus";
@@ -31,6 +32,7 @@ const BUILT: Record<string, () => React.ReactElement> = {
   "/affixes": Affixes,
   "/explain": Explain,
   "/rules": Rules,
+  "/bank": Bank,
   "/corpus": Corpus,
   "/questions": Questions,
 };

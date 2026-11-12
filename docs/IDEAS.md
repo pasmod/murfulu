@@ -110,6 +110,7 @@ models, three scripts) are listed at the end.
 | 8 | **Name maker** | Names for children, brands, magazines and columns that are new and whose meaning shows in their form. | Same for German names. | idea — possible income |
 | 9 | **Worldbuilding vocabulary** | Writers of science fiction and game designers get vocabulary that sounds foreign yet stays Persian. | Same in German. | idea |
 | 10 | **Transparent legal and administrative language** | Words understood from their form make laws and official letters readable for the people they bind. | Fits plain-language German (*Leichte Sprache*, *Einfache Sprache*). | idea |
+| 12 | **Classical verse beside its Behnevis, word by word** | The linguist's wish with the word bank (2026-11-09): a page of classical poetry in Persian script and in Behnevis side by side, every word clickable through to its entry in the word bank. Reading becomes a way into the bank, and the bank's readings get checked against real lines. Not built; the word bank screen (`/bank`) is the first half. | Any language with a transliteration standard. | idea |
 | 11 | **A method for any language** | If the rule pack, lexicon and corpus stay separate from the engine, the same map can be drawn for Kurdish, Tajik, Pashto or German. | See the direction above. | candidate |
 
 **The obvious uses**, kept for completeness: teaching Persian; translation and

@@ -1,0 +1,199 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+  max-inline-size: var(--measure);
+}
+
+.note,
+.trouble {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  line-height: var(--leading-normal);
+  max-inline-size: var(--measure);
+}
+
+/* The twelve groups, wrapping on a phone. The chosen one is filled. */
+.groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.groups button {
+  min-block-size: var(--touch-target);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.groups button[aria-pressed="true"] {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+}
+
+.search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.search label {
+  inline-size: 100%;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.search input {
+  min-block-size: var(--touch-target);
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+
+.search button,
+.pages button {
+  min-block-size: var(--touch-target);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper-sunk);
+  font: inherit;
+  cursor: pointer;
+}
+
+.pages button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.count {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.word {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--line);
+}
+
+/* A loanword: listed, and quieter, because it builds nothing. */
+.word[data-out] .spelling {
+  color: var(--ink-soft);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.spelling {
+  font-size: var(--text-xl);
+}
+
+.latin {
+  font-size: var(--text-base);
+}
+
+.variants {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.group,
+.out,
+.review,
+.senses {
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.group {
+  background: var(--accent-wash);
+  color: var(--ink);
+}
+
+.out {
+  background: var(--paper-sunk);
+  color: var(--ink-soft);
+}
+
+.review,
+.senses {
+  color: var(--ink-faint);
+}
+
+.stems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.stems div {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.stems dt {
+  color: var(--ink-soft);
+}
+
+.stems dt::after {
+  content: ":";
+}
+
+.stems dd {
+  margin: 0;
+}
+
+.definition {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  line-height: var(--leading-normal);
+  max-inline-size: var(--measure);
+}
+
+.actions {
+  font-size: var(--text-sm);
+}
+
+.pages {
+  display: flex;
+  gap: var(--space-2);
+}
