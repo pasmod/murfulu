@@ -402,12 +402,12 @@ class TestTheSilentHeBeforeGaf:
         assert join_fa("بنده", "bande", "", "گی") == "بندگی"
         assert join_fa("میوه", "mive", "", "گی") == "میوگی"
 
-    def test_nothing_else_changes(self):
-        """Only گ takes the ه. Every other join is still concatenation."""
+    def test_only_gaf_takes_the_he(self):
+        """Only گ takes the ه. Other joins keep it; see the next class for how."""
         from murfulu.engine.glides import join_fa
 
         assert join_fa("دانا", "dānā", "ی", "ی") == "دانایی"
-        assert join_fa("خانه", "xāne", "", "ها") == "خانهها"
+        assert join_fa("خانه", "xāne", "", "ها") == "خانه‌ها"
         assert join_fa("گفت", "goft", "", "ار") == "گفتار"
 
     def test_the_engine_builds_it_end_to_end(self):
@@ -416,6 +416,84 @@ class TestTheSilentHeBeforeGaf:
         spellings = {form.fa for form in built}
         assert "زندگی" in spellings, sorted(spellings)
         assert not any("هگ" in one for one in spellings)
+
+
+class TestTheSilentHeBeforeAnythingElse:
+    """آزاده‌تر, not آزادهتر.
+
+    Persian closes off a silent ه with a zero-width non-joiner before whatever
+    follows, and the corpus keeps that non-joiner inside a word. Glued, the
+    form is unreadable and can never be found: 137,535 forms of corpus v14 were
+    spelled that way, and *-tar* built 328 on bases in silent ه without finding
+    one. Found 2026-11-12 by the scoring research.
+    """
+
+    @pytest.mark.parametrize(
+        ("base_fa", "base_latin", "affix_fa", "expected"),
+        [
+            ("آزاده", "āzāde", "تر", "آزاده‌تر"),
+            ("سپرده", "seporde", "اندر", "سپرده‌اندر"),
+            ("استوده", "ostude", "واره", "استوده‌واره"),
+            ("خانه", "xāne", "ها", "خانه‌ها"),
+        ],
+    )
+    def test_a_non_joiner_follows_the_silent_he(
+        self, base_fa: str, base_latin: str, affix_fa: str, expected: str
+    ):
+        from murfulu.engine.glides import join_fa
+
+        assert join_fa(base_fa, base_latin, "", affix_fa) == expected
+
+    def test_the_bare_i_is_written_ai(self):
+        """رفته + i is رفته‌ای, as Persian writes it, not رفته‌ی."""
+        from murfulu.engine.glides import join_fa
+
+        assert join_fa("رفته", "rafte", "", "ی") == "رفته‌ای"
+
+    def test_a_pronounced_he_still_joins(self):
+        """شاه is *šāh*: its ه is a consonant and joins like any other letter."""
+        from murfulu.engine.glides import join_fa
+
+        assert join_fa("شاه", "šāh", "", "ی") == "شاهی"
+        assert join_fa("شاه", "Šāe", "", "وار") == "شاهوار"
+        assert join_fa("کوه", "kuh", "", "سار") == "کوهسار"
+
+    def test_the_engine_builds_it_end_to_end(self):
+        built = apply_all(PACK, Word(latin="āzāde", fa="آزاده", word_class="barnam"))
+        spellings = {form.fa for form in built}
+        assert "آزاده‌تر" in spellings, sorted(spellings)
+        assert not any("هت" in one for one in spellings), sorted(spellings)
+
+
+class TestTheGlideLetterIsNotWrittenTwice:
+    """زیان, not زییان.
+
+    A base ending in *i* ends in ی, and that ی already carries the glide. Adding
+    the rule's own ی after it wrote 14,374 forms of corpus v14 with three ی in a
+    row. Found 2026-11-12 by the scoring research.
+    """
+
+    def test_the_source_grammars_own_example(self):
+        """G-12: zi + ān = Ziyān."""
+        from murfulu.engine.glides import join_fa
+
+        assert join_fa("زی", "zi", "ی", "ان") == "زیان"
+
+    def test_i_meeting_i(self):
+        """G-14: ni + i = niyi, written نیی."""
+        from murfulu.engine.glides import join_fa
+
+        assert join_fa("نی", "ni", "ی", "ی") == "نیی"
+
+    def test_the_glide_is_still_written_after_other_vowels(self):
+        from murfulu.engine.glides import join_fa
+
+        assert join_fa("دانا", "dānā", "ی", "ی") == "دانایی"
+        assert join_fa("گو", "gu", "ی", "ا") == "گویا"
+
+    def test_the_engine_never_writes_three_ye(self):
+        built = apply_all(PACK, Word(latin="xatli", fa="ختلی", word_class="barnam"))
+        assert not any("ییی" in form.fa for form in built), sorted(f.fa for f in built)
 
 
 def test_an_infix_rule_builds_nothing_rather_than_building_it_wrongly():

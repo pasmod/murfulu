@@ -52,6 +52,14 @@ SILENT_HE = "ه"
 #: which is why :func:`join_fa` reads the Latin.
 SOUNDED_HE_AFTER = "اه"
 
+#: The zero-width non-joiner (نیم‌فاصله). Persian writes it after a silent ه
+#: that something follows — آزاده‌تر, سپرده‌اندر — and the corpus keeps it
+#: inside a word, so a form spelled without it can never be found there.
+ZWNJ = "\u200c"
+
+#: What the bare suffix *-i* is written as after a silent ه: رفته‌ای, خانه‌ای.
+I_AFTER_SILENT_HE = "ای"
+
 
 def join_fa(base_fa: str, base_latin: str, infix_fa: str, affix_fa: str) -> str:
     """Join the Persian side, where it is not plain concatenation.
@@ -91,15 +99,35 @@ def join_fa(base_fa: str, base_latin: str, infix_fa: str, affix_fa: str) -> str:
     grammar's own examples (*Tāzegi*, *Mordegān*) assume it, but the Behnevis
     joining specification has not been extracted — see OPEN_QUESTIONS M and K,
     and FOR_THE_LINGUIST L7.
+
+    **The glide letter is not written twice.** A base that ends in *i* ends in
+    ی, and that ی already carries the glide: zi + ān is *Ziyān*, written زیان,
+    not زییان. Adding the rule's ی after it wrote **14,374** forms of corpus v14
+    with three ی in a row (چپانییی, ختلیییده), none of which Persian writes.
+
+    **And a silent ه that anything else follows is closed off.** Before گ it
+    goes; before every other letter Persian writes a zero-width non-joiner
+    after it — آزاده‌تر, سپرده‌اندر — and the bare suffix *-i* as ای: رفته‌ای.
+    Gluing the letters instead wrote **137,535** forms of corpus v14 as one
+    unreadable string (آزادهتر, سپردهاندر) that the corpus, which keeps the
+    non-joiner inside a word, could never match: *-tar* alone built 328 forms on
+    bases in silent ه and found none of them. Found 2026-11-12 by the scoring
+    research (`docs/SCORING_DESIGN.md`).
     """
+    if infix_fa == GLIDE_FA and base_fa.endswith(GLIDE_FA):
+        infix_fa = ""
     following = infix_fa + affix_fa
-    if (
-        following.startswith(GAF_FA)
-        and base_fa.endswith(SILENT_HE)
+    silent_he = (
+        base_fa.endswith(SILENT_HE)
         and not base_fa.endswith(SOUNDED_HE_AFTER)
         and base_latin.lower().endswith("e")
-    ):
+    )
+    if silent_he and following.startswith(GAF_FA):
         return base_fa[:-1] + following
+    if silent_he and following:
+        if following == GLIDE_FA:
+            following = I_AFTER_SILENT_HE
+        return base_fa + ZWNJ + following
     return base_fa + following
 
 
