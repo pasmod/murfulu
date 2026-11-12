@@ -159,12 +159,10 @@ docker stop murfulu-es-forward
 The comparison is `data/compare-v14-v15.md`: +1,105,121 records (+60%), no
 rule builds less, and every lost and gained path traced to a lexicon reading
 that changed. `tools/attribute_lexicon_change.py` follows `merge_map` now and
-takes `--old-overrides` (the table as it stood for the older build). Not
-released. The route to the VPS is a snapshot of the three v15 indices (about
-1.05 GB) taken on the Mac — `deploy/server.sh corpus` takes its snapshot on the
-previous host and includes `passages`, which the VPS already holds, so a Mac
-route still has to be written into DEPLOY; it belongs to the deploy step and
-runs only on the project lead's word.
+takes `--old-overrides` (the table as it stood for the older build). Released
+on 2026-11-12: the three v15 indices (about 1.05 GB) went to the VPS as a
+snapshot taken on the Mac, `deploy/server.sh corpus-mac v15`, then `release
+v15 lexicon-20261111` (DEPLOY §9).
 
 **The precompute runs first, and this order is not cosmetic.** The ingest
 takes the precompute's affix map, so an ingest run before it has nothing to

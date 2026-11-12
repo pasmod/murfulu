@@ -34,8 +34,8 @@ names. What L13 leaves is ours: the engine puts a vowel into a joint the
 finished word does not have (S37).
 
 **A build no longer fits a container on the Mac or the VPS beside Sokhan:**
-7.2 GB peak. Built on the Mac outside Docker; the snapshot transfer to the
-server is prepared, not run (DEPLOY §9).
+7.2 GB peak. Built on the Mac outside Docker and moved to the server as a
+snapshot; served since 2026-11-12 (DEPLOY §9).
 
 **Two old faults surfaced by the switch itself.** The آزردن / گسیختن overrides
 had corrected only the Persian stem since August, so v12–v14 built them on

@@ -123,9 +123,11 @@ after a login.
 
 **Corpus versions are built on the server since v13** (2026-10-18, ENGINEERING
 "Building a corpus version"): 16 minutes in a one-shot container, against
-v12's 58 minutes of copying. **Serving v14 since 2026-10-18** (v13 plus the
-function-word rule, `data/compare-v13-v14.md`) with karbon 1.2.0's lexicon
-(`lexicon-20261012`). **The VPS holds v14 only** (and `passages`); v12 and v13
+v12's 58 minutes of copying. **Serving v15 since 2026-11-12** — karbon 1.3.2's
+lexicon (`lexicon-20261111`), built on the Mac and moved by snapshot (§9). Before
+it, v14 from 2026-10-18 (v13 plus the function-word rule,
+`data/compare-v13-v14.md`) with karbon 1.2.0's lexicon (`lexicon-20261012`).
+**The VPS holds v14 and v15** (and `passages`); v12 and v13
 stay on the previous host with their `.env` backups (`~/murfulu/.env.bak-v13-20261018`,
 `.env.bak-v12-20261018`), so returning to an earlier corpus version is a
 rollback to the previous host followed by `release v13 lexicon-20261012` there (with
@@ -397,11 +399,16 @@ The app already knows who its experts are; what it does not have is a session
 the browser carries, which is what would let Caddy check a person instead of a
 shared secret. Worth doing if more than a handful of people ever need in.
 
-## 9. The next deploy: karbon 1.3.2 and corpus v15 — prepared 2026-11-12, not run
+## 9. The deploy of karbon 1.3.2 and corpus v15 — run 2026-11-12
 
 Everything below was built and checked on the Mac (ENGINEERING, v15;
-`data/compare-v14-v15.md`). **None of it has been run against the server.** It
-waits for the project lead's word, and then goes in this order:
+`data/compare-v14-v15.md`) and **run on the project lead's word on
+2026-11-12, in this order, each step clean**: the database was dumped first
+(`data/backups/db-before-v15-20261112.dump` on the server — under `data/`,
+because `deploy`'s rsync deletes anything else the Mac does not have); the
+transfer read 133,148 / 411,670 / 2,949,164 documents on both sides; the
+questions load reworded 10, withdrew 3 and deferred 1; `check` passed. The
+move to the demo's own host, below, was **not** run.
 
 | step | command | what it does |
 |---|---|---|
