@@ -260,6 +260,8 @@ export function Build() {
     if (!wanted) {
       setBuilt(null);
       setError(null);
+      // The request this replaces was cancelled and will not clear it itself.
+      setBusy(false);
       return;
     }
     const stop = new AbortController();
@@ -277,7 +279,15 @@ export function Build() {
             : new ApiError("unreachable", 0, String(reason)),
         );
       })
-      .finally(() => setBusy(false));
+      // **Only the request that is still the current one may say the wait is
+      // over.** A change of word or of depth cancels the request before it, and a
+      // cancelled request settles too: its `finally` used to clear `busy`
+      // although the request that replaced it had only just started, so the
+      // button read as ready while an answer was on its way. In development
+      // that was every first load, because strict mode runs an effect twice.
+      .finally(() => {
+        if (!stop.signal.aborted) setBusy(false);
+      });
     return () => stop.abort();
   }, [wanted, depth]);
 

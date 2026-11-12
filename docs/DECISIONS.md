@@ -2,6 +2,24 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-13 — a cancelled request no longer ends the wait of the one that replaced it
+
+Was OPEN_QUESTIONS S38, found while the interface was being tidied. The build
+and the search screen each cancel the request in flight when the word, the
+depth or the query changes, and each cleared its *busy* state in `finally` —
+which a cancelled request reaches too. So the old request switched *busy* off
+although the new one had only just started: the button read «بساز» and was
+live while an answer was on its way, and the waiting line did not show. In the
+served app that needed a reader to change the word or the depth mid-request,
+which the three-step build's wait invites; in development it was every first
+load, because strict mode runs an effect twice.
+
+**Only the request that is still current may clear *busy*** (`!stop.signal.aborted`),
+and taking the word or the query away clears it directly, because the request
+that was cancelled for it no longer will. The word bank already did it this
+way. `web/src/screens/busy.test.tsx` holds both screens to it, and its two
+*stays busy* tests fail on the old code.
+
 ## 2026-11-13 — cards, a menu that stays, denser lists, larger small print
 
 **Adopted by the project lead on 2026-11-13 and served since that day**, after

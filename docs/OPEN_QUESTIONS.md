@@ -7,21 +7,6 @@ Things we need answered before or during planning. Move each one to
 
 ## Opened 2026-10-27 (the move to the VPS)
 
-### S38. A cancelled request switches off the *busy* state of the one that replaced it
-
-Found 2026-11-12 while photographing the build screen's waiting state. In
-`web/src/screens/build/Build.tsx` (and the search screen, written the same way)
-each request sets `busy` and clears it in `finally`. When the word or the depth
-changes while a request is still out, the old request is aborted — and its
-`finally` then clears `busy` although the new request has only just started.
-The button reads «بساز» and is live while an answer is on its way, and the
-waiting line added on `ui-polish` does not show. In development it happens on
-every first load, because React's strict mode runs each effect twice; in the
-served app only when a reader changes the word or the depth mid-request, which
-is exactly what the three-step build's second of waiting invites. Not fixed
-here: it is behaviour, not appearance. The fix is to clear `busy` only when the
-request that is finishing is still the current one.
-
 ### S37. The engine puts a vowel into a joint the finished word does not have
 
 Found 2026-11-12 re-measuring the rule examples on karbon 1.3.2
