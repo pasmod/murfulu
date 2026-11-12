@@ -4,8 +4,8 @@ Settled choices, with the reason. Append; do not rewrite history.
 
 ## 2026-11-13 — cards, a menu that stays, denser lists, larger small print
 
-**Adopted by the project lead on 2026-11-13**, after seeing it on the branch
-`ui-polish`, together with the first round below. Run past the tests and an
+**Adopted by the project lead on 2026-11-13 and served since that day**, after
+he had seen it on the branch `ui-polish`, together with the first round below. Run past the tests and an
 independent review before it went out; the review's two findings — a note in
 the search results that ran over the figure beside it, and a waiting line no
 screen reader was told about — were fixed first.
