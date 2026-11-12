@@ -1,45 +1,33 @@
 .screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
+  composes: screen from "../../styles/page.module.css";
+  --screen-gap: var(--space-5);
 }
 
 .purpose {
-  color: var(--ink-soft);
-  font-size: var(--text-lg);
-  max-inline-size: var(--measure);
+  composes: purpose from "../../styles/page.module.css";
 }
 
-.note,
-.trouble {
+.note {
   font-size: var(--text-sm);
   color: var(--ink-soft);
   line-height: var(--leading-normal);
   max-inline-size: var(--measure);
 }
 
-/* The twelve groups, wrapping on a phone. The chosen one is filled. */
+/* The twelve groups, wrapping on a phone. Each is a chip, and the chosen one
+   is marked the way every chosen chip is — see styles/controls.module.css. */
 .groups {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
 }
 
-.groups button {
-  min-block-size: var(--touch-target);
-  padding: var(--space-1) var(--space-3);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--paper);
-  color: var(--ink);
-  font: inherit;
-  font-size: var(--text-sm);
-  cursor: pointer;
+.pick {
+  composes: chip from "../../styles/controls.module.css";
 }
 
-.groups button[aria-pressed="true"] {
-  background: var(--accent-wash);
-  border-color: var(--accent);
+.pickCount {
+  composes: chipCount from "../../styles/controls.module.css";
 }
 
 .search {
@@ -55,30 +43,20 @@
   color: var(--ink-soft);
 }
 
-.search input {
-  min-block-size: var(--touch-target);
-  flex: 1 1 16rem;
-  min-inline-size: 0;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  font: inherit;
+.query {
+  composes: fieldLead from "../../styles/controls.module.css";
+
+  /* No basis of its own: with one, the box claimed 16rem and pushed the button
+     to a line by itself on a phone. */
+  flex: 1;
 }
 
-.search button,
-.pages button {
-  min-block-size: var(--touch-target);
-  padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--paper-sunk);
-  font: inherit;
-  cursor: pointer;
+.go {
+  composes: primary from "../../styles/controls.module.css";
 }
 
-.pages button:disabled {
-  opacity: 0.5;
-  cursor: default;
+.page {
+  composes: secondary from "../../styles/controls.module.css";
 }
 
 .count {
@@ -196,4 +174,8 @@
 .pages {
   display: flex;
   gap: var(--space-2);
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
 }

@@ -55,6 +55,10 @@
      most likely to break. */
   --touch-target: 44px;
 
+  /* How far apart a screen's sections stand. The default; a screen with
+     heavier sections sets its own on its frame — see styles/page.module.css. */
+  --screen-gap: var(--space-4);
+
   /* ---- colour ---------------------------------------------------------- */
 
   --ink: #16181d;

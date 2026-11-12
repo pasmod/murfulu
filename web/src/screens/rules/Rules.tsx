@@ -26,6 +26,7 @@ import {
 } from "../../api/rules";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
+import { Waiting } from "../../text/Waiting";
 import { SCREENS } from "../../shell/screens";
 import { GlideRow } from "./GlideRow";
 import { RuleRow } from "./RuleRow";
@@ -130,6 +131,8 @@ export function Rules() {
           دستورها خوانده نشد. کمی بعد دوباره بیازمایید.
         </p>
       ) : null}
+
+      {!pack && !error ? <Waiting /> : null}
 
       {pack ? (
         <>

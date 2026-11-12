@@ -61,19 +61,28 @@
 }
 
 .reading {
+  /* **As wide as its content, not as the page.** The chart is a flex column
+     and a table in one stretches to fill it, so on a 1280px window «سدهٔ ۱۳»
+     stood 700px from its own «۱٬۰۸۸» and the eye had to carry the row across. */
+  align-self: flex-start;
   border-collapse: collapse;
   font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
 }
 
 .reading th {
   text-align: start;
   font-weight: var(--weight-normal);
   color: var(--ink-soft);
-  padding-inline-end: var(--space-4);
+  padding-block: var(--space-1);
+  padding-inline-end: var(--space-6);
 }
 
 .reading td {
-  text-align: start;
+  /* Figures line up on their last digit, so their size can be read down the
+     column. */
+  text-align: end;
+  padding-block: var(--space-1);
 }
 
 .undated,

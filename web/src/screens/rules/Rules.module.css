@@ -1,17 +1,14 @@
 .screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  composes: screen from "../../styles/page.module.css";
+  --screen-gap: var(--space-3);
 }
 
 .purpose {
-  color: var(--ink-soft);
-  font-size: var(--text-lg);
+  composes: purpose from "../../styles/page.module.css";
 }
 
 .provenance,
 .total,
-.trouble,
 .findingNote {
   font-size: var(--text-sm);
   color: var(--ink-faint);
@@ -21,22 +18,9 @@
    the one thing to do at the bottom of the list, and it has to be hittable
    with a thumb. */
 .more {
-  display: block;
+  composes: secondary from "../../styles/controls.module.css";
   inline-size: 100%;
-  min-block-size: var(--touch-target);
   margin-block-start: var(--space-4);
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-sm);
-  background: none;
-  color: var(--accent-strong);
-  font-family: inherit;
-  font-size: var(--text-sm);
-  cursor: pointer;
-}
-
-.more:hover {
-  background: var(--paper-sunk);
 }
 
 /* The finding, set apart by a tint rather than a border. */
@@ -59,33 +43,20 @@
   gap: var(--space-2);
 }
 
-.filter,
-.chosen {
-  min-height: var(--touch-target);
-  padding: 0 var(--space-4);
-  border: 0;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-size: var(--text-sm);
-}
-
 .filter {
-  background: var(--paper-sunk);
-  color: var(--ink-soft);
-}
-
-.filter:hover {
-  background: var(--accent-wash);
-  color: var(--accent-strong);
+  composes: chip from "../../styles/controls.module.css";
 }
 
 .chosen {
-  background: var(--accent);
-  color: var(--paper);
+  composes: chip chipOn from "../../styles/controls.module.css";
 }
 
 .rules {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
 }

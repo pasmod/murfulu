@@ -19,10 +19,15 @@
   font-size: var(--text-sm);
   cursor: pointer;
   box-shadow: var(--shadow-raised);
+  transition: background-color var(--motion-fast) var(--ease);
 }
 
 .launcher:hover {
   background: var(--accent-strong);
+}
+
+.launcher:active {
+  transform: translateY(1px);
 }
 
 /* Not modal. A reader has to be able to look at the word while writing about
@@ -57,15 +62,7 @@
 }
 
 .close {
-  min-block-size: var(--touch-target);
-  padding: 0 var(--space-3);
-  border: 0;
-  border-radius: var(--radius-md);
-  background: var(--paper-sunk);
-  color: var(--ink-soft);
-  font-family: inherit;
-  font-size: var(--text-sm);
-  cursor: pointer;
+  composes: secondary from "../styles/controls.module.css";
 }
 
 .about,
@@ -126,13 +123,19 @@
   flex-direction: column;
   gap: var(--space-1);
   min-block-size: var(--touch-target);
-  padding: var(--space-2) var(--space-4);
-  border: 0;
+  /* There from the start and transparent, so choosing one does not move the
+     others by a pixel — and taken back out of the padding, so three choices
+     are no taller than they were and the panel's last line stays in view. */
+  padding: calc(var(--space-2) - 1px) var(--space-4);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
   font-family: inherit;
   font-size: var(--text-sm);
   text-align: start;
   cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease),
+    border-color var(--motion-fast) var(--ease);
 }
 
 .choice {
@@ -140,18 +143,24 @@
   color: var(--ink);
 }
 
+@media (hover: hover) {
+  .choice:hover:not(:disabled) {
+    background: var(--accent-wash);
+  }
+}
+
 .choice:disabled {
   cursor: not-allowed;
   color: var(--ink-faint);
 }
 
+/* Chosen the way every chosen thing in the app is — the accent's wash and the
+   accent's edge — rather than a filled block, which is what the one action
+   under it looks like. */
 .chosen {
-  background: var(--accent);
-  color: var(--paper);
-}
-
-.chosen .hint {
-  color: var(--paper);
+  background: var(--accent-wash);
+  border-color: var(--accent);
+  color: var(--ink);
 }
 
 .field {
@@ -166,20 +175,17 @@
   color: var(--ink-faint);
 }
 
-.note,
-.token {
+.note {
+  composes: fieldArea from "../styles/controls.module.css";
   inline-size: 100%;
-  padding: var(--space-3);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-md);
-  background: var(--paper);
-  color: var(--ink);
-  font-family: inherit;
-  font-size: var(--text-base);
 }
 
-.token {
-  font-family: var(--font-latin);
+/* The panel is 70dvh at most and the button that sends is its last line. At
+   the page's line height four rows of note pushed that button out of sight on
+   a 900px window; at the tight one the panel is as tall as it was. Said from
+   inside the form, so it outweighs the shared field. */
+.form .note {
+  line-height: var(--leading-tight);
 }
 
 .actions {
@@ -189,19 +195,6 @@
 }
 
 .send {
-  min-block-size: var(--touch-target);
-  padding: 0 var(--space-5);
-  border: 0;
-  border-radius: var(--radius-md);
-  background: var(--accent);
-  color: var(--paper);
-  font-family: inherit;
-  font-size: var(--text-base);
-  cursor: pointer;
+  composes: primary from "../styles/controls.module.css";
 }
 
-.send:disabled {
-  background: var(--paper-sunk);
-  color: var(--ink-faint);
-  cursor: not-allowed;
-}

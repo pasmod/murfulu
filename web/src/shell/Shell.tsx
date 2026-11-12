@@ -13,14 +13,48 @@
  * it must not be.
  */
 
-import { NavLink, Outlet } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { Feedback } from "../feedback/Feedback";
 import { FeedbackProvider } from "../feedback/context";
 import { NAVIGATION } from "./screens";
 import styles from "./Shell.module.css";
 
+/**
+ * Brings the current screen's link into the middle of the menu.
+ *
+ * On a phone the menu is a scrolling row and shows three of nine items, so on
+ * six screens out of nine the one item that says *you are here* was off the
+ * edge — the reader had a heading and no place in the menu. The row is moved
+ * rather than the link scrolled into view, because `scrollIntoView` moves the
+ * page as well, and following a link half-way down a list must not throw the
+ * reader to the top.
+ */
+function useCurrentLinkInView(): React.RefObject<HTMLElement | null> {
+  const nav = useRef<HTMLElement | null>(null);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const row = nav.current;
+    const current = row?.querySelector<HTMLElement>('[aria-current="page"]');
+    // No layout engine, nothing to scroll: jsdom has neither.
+    if (!row || !current || typeof row.scrollBy !== "function") return;
+    if (row.scrollWidth <= row.clientWidth) return;
+
+    const frame = row.getBoundingClientRect();
+    const link = current.getBoundingClientRect();
+    // A distance on the screen, so it is right whichever way the text runs.
+    const off = link.left + link.width / 2 - (frame.left + frame.width / 2);
+    row.scrollBy({ left: off });
+  }, [pathname]);
+
+  return nav;
+}
+
 export function Shell() {
+  const nav = useCurrentLinkInView();
+
   return (
     <FeedbackProvider>
       <div className={styles.page}>
@@ -34,7 +68,7 @@ export function Shell() {
             <span className={styles.tagline}>واژه‌سازی فارسی</span>
           </div>
 
-          <nav className={styles.nav} aria-label="بخش‌های اصلی">
+          <nav ref={nav} className={styles.nav} aria-label="بخش‌های اصلی">
             <ul className={styles.navList}>
               {NAVIGATION.map((screen) => (
                 <li key={screen.path}>

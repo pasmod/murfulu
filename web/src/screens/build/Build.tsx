@@ -32,6 +32,7 @@ import {
 } from "../../api/generate";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
+import { Waiting } from "../../text/Waiting";
 import {
   ALSO_WRITTEN,
   FROM_LEXICON,
@@ -409,6 +410,8 @@ export function Build() {
             : "پاسخی از سرور نرسید. کمی بعد دوباره بیازمایید."}
         </p>
       ) : null}
+
+      {busy && !built && !error ? <Waiting /> : null}
 
       {built?.readings.map((reading) => (
         <section

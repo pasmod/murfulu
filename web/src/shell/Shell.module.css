@@ -84,7 +84,16 @@
   mask-image: linear-gradient(to left, black calc(100% - 2rem), transparent);
 }
 
-@media (min-width: 48rem) {
+/* **The fade goes when the row fits, not at a device size.** It used to go at
+   48rem, which was right while the menu had six items. It has nine now and is
+   959px wide at this padding, so between 768px and 1310px — every tablet and
+   most laptops — the last items were cut off flat with nothing to say they
+   were there: no fade, and the scrollbar is hidden. Measured on 2026-11-12 at
+   1024px, where «پرسش‌ها» and «پیکره» could not be seen at all, and at 1280px,
+   where «پیکره» lost its last 29px.
+
+   64rem is the first width at which the whole row fits under the brand. */
+@media (min-width: 64rem) {
   .nav {
     /* Everything fits, so nothing should look cut off. */
     mask-image: none;
@@ -101,6 +110,19 @@
   margin: 0;
   padding: 0;
   list-style: none;
+
+  /* The fade covers the last 2rem of the row whether or not there is more to
+     scroll to, so the last item needs that much room after it or it can never
+     be read at full strength. `max-content` because a flex item's padding is
+     otherwise taken out of its own content. */
+  width: max-content;
+  padding-inline-end: var(--space-6);
+}
+
+@media (min-width: 64rem) {
+  .navList {
+    padding-inline-end: 0;
+  }
 }
 
 .navLink {
@@ -118,6 +140,16 @@
   text-decoration: none;
   white-space: nowrap;
   transition: color var(--motion-fast) var(--ease);
+}
+
+/* Nine items at the phone's padding are 1031px, which is more than a 1280px
+   laptop has beside the brand. A thumb needs that padding and a pointer does
+   not, so from the first breakpoint the links stand a step closer and the row
+   fits; the widest windows get the room back. */
+@media (min-width: 48rem) and (max-width: 85.999rem) {
+  .navLink {
+    padding-inline: var(--space-2);
+  }
 }
 
 .navName {
@@ -160,6 +192,22 @@
 }
 
 @media (min-width: 48rem) {
+  .masthead {
+    padding-inline: var(--space-6);
+  }
+
+  .main {
+    padding-inline: var(--space-6);
+  }
+}
+
+/* **One row only where one row holds everything.** This was 48rem, and from
+   there to 1310px the menu did not fit beside the brand — see the note on the
+   fade above. Below 80rem the brand keeps its own line and the menu the next,
+   which is the phone's layout and costs one line of height; from 80rem the
+   brand, the 959px menu, the two gaps and the page's padding come to 1237px
+   and fit a 1280px window with room to spare. */
+@media (min-width: 80rem) {
   /* Three columns rather than a row, so the navigation is centred on the
      *page* and not merely in the space the brand leaves over. The outer two
      are equal, the brand sits at the start of the first and the third is
@@ -178,16 +226,11 @@
     grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
     align-items: center;
     gap: var(--space-6);
-    padding-inline: var(--space-6);
   }
 
   /* The brand keeps to its own column; without this it would stretch across
      it and the tagline would drift away from the name. */
   .brand {
     justify-self: start;
-  }
-
-  .main {
-    padding-inline: var(--space-6);
   }
 }

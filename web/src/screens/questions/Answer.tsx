@@ -131,6 +131,7 @@ export function Answer({
           </span>
         ) : null}
         <textarea
+          className={styles.area}
           value={persian}
           onChange={(e) => setPersian(e.currentTarget.value)}
           rows={3}

@@ -1,9 +1,8 @@
 /* Space over lines. The word is large; everything else supports it. */
 
 .screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
+  composes: screen from "../../styles/page.module.css";
+  --screen-gap: var(--space-6);
 }
 
 .head {
@@ -87,6 +86,10 @@
   grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
   gap: var(--space-4);
   margin: 0;
+
+  /* Four figures read as one group. Across a 1280px window they stood 270px
+     apart, each one alone. */
+  max-inline-size: 44rem;
 }
 
 .stats dt {
@@ -124,4 +127,8 @@
 .source {
   font-size: var(--text-sm);
   color: var(--ink-faint);
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
 }

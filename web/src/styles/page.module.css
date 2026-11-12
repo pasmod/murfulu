@@ -1,0 +1,71 @@
+/*
+ * What every screen has in common: its frame, the line under its heading, and
+ * the three things it says when it has no answer to show — *wait*, *something
+ * went wrong*, and *nothing here*.
+ *
+ * Each screen wrote these for itself, and they drifted. The line under the
+ * heading stood 12px below it on two screens, 16px on four, 24px on two and
+ * 32px on one, so it jumped on every change of screen; and a failed request
+ * was one line of the faintest grey text, the same style as a footnote, which
+ * is the opposite of what docs/FRONTEND.md asks of an error state. A screen
+ * takes these with `composes` and adds nothing to them — see
+ * `controls.module.css` for why.
+ */
+
+/* The frame. A screen says how far apart its own sections stand by setting
+   `--screen-gap`; a dense list wants less than a page of figures. */
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--screen-gap);
+}
+
+/* **The line under the heading sits the same distance below it everywhere**,
+   whatever the screen's own gap is. The gap is taken back out and the one
+   distance put in its place. */
+.screen > h1 + p {
+  margin-block-start: calc(var(--space-4) - var(--screen-gap));
+}
+
+/* What the screen is for, in one sentence. */
+.purpose {
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+  max-inline-size: var(--measure);
+}
+
+/* Something went wrong, or the answer is *no*. Set apart by a ground and an
+   edge in the caution colour — the one the app already uses for *the corpus
+   has the letters only* — and in the body's ink, because this is the one line
+   on the screen the reader has to see. Never by colour alone: the box is a
+   shape and the sentence says what to do next. */
+.trouble {
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-sunk);
+  border-inline-start: 3px solid var(--evidence-spelling);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  max-inline-size: var(--measure);
+}
+
+/* The answer is on its way. docs/FRONTEND.md asks for no spinners where they
+   can be avoided, so this is a line of text — and it holds back for a moment,
+   because most answers arrive faster than a reader can read «در حال خواندن»,
+   and a word that flashes and goes is worse than a short blank. */
+.waiting {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+  animation: arrive var(--motion-slow) var(--ease) 300ms both;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

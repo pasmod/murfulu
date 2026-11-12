@@ -76,25 +76,8 @@
 /* **One shape for every control.** Same height, same edge, same corner — the
    select had the platform's and sat a few pixels shorter than the input next
    to it, which is most of what read as dated. */
-.select,
-.text,
-.number {
-  min-height: var(--touch-target);
-  min-width: 0;
-  padding: 0 var(--space-3);
-  font: inherit;
-  font-size: var(--text-base);
-  color: var(--ink);
-  background-color: var(--paper);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-sm);
-  transition: border-color var(--motion-fast) var(--ease);
-}
-
-.select:hover,
-.text:hover,
-.number:hover {
-  border-color: var(--ink-soft);
+.select {
+  composes: field from "../../styles/controls.module.css";
 }
 
 /* **A control is never narrower than its longest word.**
@@ -102,7 +85,7 @@
    by its container clips them to «پایان‌یافت…». `auto` lets the browser size
    each one to its own content; the minimum keeps the short ones — «هر جا»,
    «دقیقاً» — from reading as a different kind of control from the long ones. */
-.select {
+.picker .select {
   width: auto;
   min-width: 11rem;
   max-width: 100%;
@@ -140,14 +123,20 @@
 }
 
 .text {
-  /* A Latin form is data and is read as written; the same rule as the results
-     and the examples. */
+  composes: field from "../../styles/controls.module.css";
   flex: 1 1 12rem;
-  font-family: var(--font-latin);
 }
 
 .number {
+  composes: field from "../../styles/controls.module.css";
   flex: 0 0 6rem;
+}
+
+/* A Latin form is data and is read as written; the same rule as the results
+   and the examples. Said from inside the row, so it outweighs the face the
+   shared field inherits. */
+.controls .text,
+.controls .number {
   font-family: var(--font-latin);
 }
 
@@ -196,7 +185,7 @@
     flex: 1 1 12rem;
   }
 
-  .select {
+  .picker .select {
     width: 100%;
     min-width: 0;
   }

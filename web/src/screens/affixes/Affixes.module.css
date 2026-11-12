@@ -1,12 +1,10 @@
 .screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  composes: screen from "../../styles/page.module.css";
+  --screen-gap: var(--space-3);
 }
 
 .purpose {
-  color: var(--ink-soft);
-  font-size: var(--text-lg);
+  composes: purpose from "../../styles/page.module.css";
 }
 
 .filterLabel {
@@ -15,17 +13,7 @@
 }
 
 .filter {
-  min-height: var(--touch-target);
-  padding: 0 var(--space-4);
-  font: inherit;
-  font-size: var(--text-lg);
-  background: var(--paper);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-md);
-}
-
-.filter:hover {
-  border-color: var(--ink-faint);
+  composes: fieldLead from "../../styles/controls.module.css";
 }
 
 /* The meanings offered as buttons. The same shape the build and compound
@@ -45,30 +33,14 @@
 }
 
 .suggest {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: var(--touch-target);
-  padding: 0 var(--space-3);
-  font: inherit;
-  background: var(--paper-sunk);
-  border: 0;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-}
-
-.suggest[aria-pressed="true"] {
-  background: var(--accent-wash);
-  box-shadow: inset 0 0 0 1px var(--line-strong);
+  composes: chip from "../../styles/controls.module.css";
 }
 
 .suggestCount {
-  font-size: var(--text-sm);
-  color: var(--ink-faint);
+  composes: chipCount from "../../styles/controls.module.css";
 }
 
 .total,
-.trouble,
 .silentNote {
   font-size: var(--text-sm);
   color: var(--ink-faint);
@@ -151,4 +123,8 @@
 .noExample {
   color: var(--ink-faint);
   font-size: var(--text-sm);
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
 }

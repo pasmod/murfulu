@@ -1,12 +1,10 @@
 .screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
+  composes: screen from "../../styles/page.module.css";
+  --screen-gap: var(--space-6);
 }
 
 .purpose {
-  color: var(--ink-soft);
-  font-size: var(--text-lg);
+  composes: purpose from "../../styles/page.module.css";
 }
 
 .block {
@@ -29,7 +27,6 @@
 }
 
 .note,
-.trouble,
 .unmeasured {
   font-size: var(--text-sm);
   color: var(--ink-faint);
@@ -135,4 +132,8 @@
   font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
   line-height: var(--leading-tight);
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
 }

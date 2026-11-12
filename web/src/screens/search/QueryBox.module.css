@@ -17,50 +17,12 @@
 }
 
 .input {
+  composes: fieldLead from "../../styles/controls.module.css";
   flex: 1;
-
-  /* **A flex item will not shrink below its own content**, and an <input>'s
-     content is its intrinsic size — about twenty characters. So `flex: 1` on
-     its own let the box keep that width and push the row, and the page with
-     it, sideways on a narrow screen. Same trap as the navigation row.
-
-     It only showed where the default face is a little wider than the one here:
-     green on macOS, 43px past the edge on CI's Linux Chromium, on every run
-     from 2026-08-14. Reproduced at 320px, where the row holds 351px of content
-     in 288px of space. */
-  min-width: 0;
-  min-height: var(--touch-target);
-  padding: 0 var(--space-4);
-  font: inherit;
-  font-size: var(--text-lg);
-  color: var(--ink);
-  background: var(--paper);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-md);
-}
-
-.input:hover {
-  border-color: var(--ink-faint);
 }
 
 .submit {
-  min-height: var(--touch-target);
-  padding: 0 var(--space-5);
-  background: var(--accent);
-  color: var(--paper);
-  border: 0;
-  border-radius: var(--radius-md);
-  font-weight: var(--weight-medium);
-  cursor: pointer;
-}
-
-.submit:hover:not(:disabled) {
-  background: var(--accent-strong);
-}
-
-.submit:disabled {
-  background: var(--ink-faint);
-  cursor: default;
+  composes: primary from "../../styles/controls.module.css";
 }
 
 /* The builder and the reference sit side by side where there is room and

@@ -119,16 +119,32 @@ describe("things that are not text", () => {
   });
 
   it("puts the stronger line on every control, and only there", () => {
+    // The edge is written once, in the shared controls, and every screen with
+    // a field takes its field from there. Until 2026-11-12 each screen wrote
+    // its own, which is how two of them — the word bank and the questions —
+    // came to draw theirs with `--line`, the 1.26:1 separator.
+    const shared = readFileSync(
+      join(process.cwd(), "src/styles/controls.module.css"),
+      "utf8",
+    );
+    expect(shared).toContain("border: 1px solid var(--line-strong)");
+
     const controls = [
       "screens/search/QueryBox.module.css",
+      "screens/search/Builder.module.css",
       "screens/build/WordInput.module.css",
+      "screens/compound/Compound.module.css",
       "screens/explain/Explain.module.css",
       "screens/affixes/Affixes.module.css",
+      "screens/bank/Bank.module.css",
+      "screens/questions/Questions.module.css",
       "feedback/Feedback.module.css",
     ];
     for (const file of controls) {
       const css = readFileSync(join(process.cwd(), "src", file), "utf8");
-      expect(css, file).toContain("var(--line-strong)");
+      expect(css, file).toMatch(
+        /composes: field(Lead|Area)? from "(\.\.\/)+styles\/controls\.module\.css"/,
+      );
     }
   });
 });

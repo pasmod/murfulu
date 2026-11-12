@@ -1,0 +1,201 @@
+/*
+ * The controls, once.
+ *
+ * A button, a field and a chip each looked the way the screen that drew them
+ * happened to write them: five copies of the same text input, three different
+ * "this one is chosen" states, and two screens whose buttons were the
+ * browser's own grey ones because nobody had written a rule for them at all.
+ * This file is the one place that says what each of them looks like, in every
+ * state — at rest, under the pointer, pressed, chosen and switched off.
+ *
+ * A screen's stylesheet takes a control from here with `composes` and adds
+ * only where it sits — `flex: 1`, a margin, a width. **It must not restate
+ * what is set here**: two classes of equal weight are settled by the order the
+ * files load in, and that order is nothing a stylesheet should depend on. A
+ * control that has to look different is a new class in this file.
+ *
+ * **Under the pointer is asked of a pointer.** Every `:hover` here sits inside
+ * `@media (hover: hover)`. A phone has no pointer, and a touch leaves `:hover`
+ * stuck on whatever is under the finger afterwards — after a tap that moved the
+ * page, on a control the reader never touched.
+ *
+ * Focus is not here. `base.css` draws it for every element, in its own colour,
+ * and a control that drew its own would be the one that forgot to.
+ */
+
+/* ---- fields -------------------------------------------------------------- */
+
+/* An input, a select or a textarea. The edge is `--line-strong` because the
+   border is the only thing saying where to type — docs/FRONTEND.md, and
+   `contrast.test.ts` holds it to 3:1. */
+.field {
+  min-height: var(--touch-target);
+
+  /* **A flex item will not shrink below its own content**, and an <input>'s
+     content is its intrinsic size — about twenty characters. So `flex: 1` on
+     its own let a search box keep that width and push its row, and the page
+     with it, sideways on a narrow screen. Same trap as the navigation row.
+
+     It only showed where the default face is a little wider than the one here:
+     green on macOS, 43px past the edge on CI's Linux Chromium, on every run
+     from 2026-08-14. Reproduced at 320px, where the row holds 351px of content
+     in 288px of space. It was fixed in four stylesheets, one at a time; it is
+     here so that the fifth text box has it without being caught first. */
+  min-width: 0;
+  padding: 0 var(--space-4);
+  font: inherit;
+  color: var(--ink);
+  background-color: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  transition: border-color var(--motion-fast) var(--ease);
+
+  /* A hint longer than a phone's box ends in «…» rather than half a letter. */
+  text-overflow: ellipsis;
+}
+
+@media (hover: hover) {
+  .field:hover {
+    border-color: var(--ink-soft);
+  }
+}
+
+.field::placeholder {
+  color: var(--ink-faint);
+  opacity: 1;
+}
+
+.field:disabled {
+  background-color: var(--paper-sunk);
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+/* The one box a screen is about — the word to build from, the query. */
+.fieldLead {
+  composes: field;
+  font-size: var(--text-lg);
+}
+
+/* More than one line. The padding is the only difference: a single-line field
+   centres its text by its height, a textarea cannot. */
+.fieldArea {
+  composes: field;
+  padding: var(--space-3) var(--space-4);
+  line-height: var(--leading-normal);
+  resize: vertical;
+}
+
+/* ---- buttons ------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  font: inherit;
+  line-height: var(--leading-tight);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease),
+    border-color var(--motion-fast) var(--ease),
+    color var(--motion-fast) var(--ease);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+/* The one action a screen is for. There is one of these on a screen. */
+.primary {
+  composes: button;
+  padding: 0 var(--space-5);
+  background-color: var(--accent);
+  color: var(--paper);
+  font-weight: var(--weight-medium);
+}
+
+@media (hover: hover) {
+  .primary:hover:not(:disabled) {
+    background-color: var(--accent-strong);
+  }
+}
+
+.primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Switched off reads as *not now*, not as a darker button: the ground of the
+   page with the faintest ink, and an edge so it is still a shape. */
+.primary:disabled {
+  background-color: var(--paper-sunk);
+  border-color: var(--line);
+  color: var(--ink-faint);
+}
+
+/* Everything else a reader may press: next, previous, more, close. */
+.secondary {
+  composes: button;
+  background-color: var(--paper);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .secondary:hover:not(:disabled) {
+    background-color: var(--paper-sunk);
+    border-color: var(--ink-soft);
+  }
+}
+
+.secondary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.secondary:disabled {
+  border-color: var(--line);
+  color: var(--ink-faint);
+}
+
+/* ---- chips --------------------------------------------------------------- */
+
+/* A small choice among several: a filter, a group, an example to try. At rest
+   it is a quiet tile; under the pointer it takes the accent's wash; chosen, it
+   keeps the wash and gains the accent's edge. The edge is there from the start
+   and transparent, so choosing one does not move its neighbours by a pixel.
+
+   Chosen is said twice on purpose — by `aria-pressed`, which is what a screen
+   reader hears, and by `.chipOn` for the lists that mark their choice with a
+   class. Never by colour alone: the edge is a shape. */
+.chip {
+  composes: button;
+  padding: 0 var(--space-3);
+  background-color: var(--paper-sunk);
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .chip:hover:not(:disabled) {
+    background-color: var(--accent-wash);
+    color: var(--accent-strong);
+  }
+}
+
+.chip[aria-pressed="true"],
+.chipOn {
+  background-color: var(--accent-wash);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+/* The figure inside a chip — how many words a group holds. */
+.chipCount {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}

@@ -274,6 +274,29 @@ build in than to retrofit.
   page sideways, touch targets at 44 px, the navigation reachable, the layout
   actually right-to-left. It caught two bugs on its first run.
 
+## Settled when the interface was tidied (2026-11-12, branch `ui-polish`)
+
+- **A control is taken, not written.** `styles/controls.module.css` has the
+  field, the primary and the secondary button and the chip, each in every
+  state: at rest, under the pointer, pressed, chosen, switched off. A screen's
+  stylesheet takes one with `composes` and adds only where it sits. It must not
+  restate what the shared class sets; a control that has to look different is a
+  new class there.
+- **Chosen is the accent's wash and the accent's edge**, everywhere, and is
+  said by `aria-pressed` as well as by the look.
+- **Under the pointer is asked of a pointer** — `:hover` sits inside
+  `@media (hover: hover)`, because a touch leaves it stuck.
+- **A screen's frame and its three "no answer" states are shared** —
+  `styles/page.module.css`: the line under the heading, *something went wrong*
+  (a box with a caution edge, never one faint line), and *wait*
+  (`text/Waiting.tsx`, one sentence, held back 300ms).
+- **A breakpoint is where the content stops fitting, measured.** The menu has
+  nine items now; the masthead is one row from 80rem and the fade stays below
+  64rem. A list that shares its row with a side column is laid out by a
+  container query, not a media query.
+- **Nine items still need no hamburger**: the row scrolls, fades, and keeps the
+  current screen's link in view.
+
 ## Open
 
 Settled: **Persian digits (۱۲۳)** throughout. **All seven screens** are built,

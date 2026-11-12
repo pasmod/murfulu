@@ -26,6 +26,7 @@ import { corpus as fetchCorpus, type CorpusState } from "../../api/corpus";
 import { Info } from "../../text/Info";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
+import { Waiting } from "../../text/Waiting";
 import { LEXICON } from "../../text/lexicon";
 import { SCREENS } from "../../shell/screens";
 import { Coverage } from "./Coverage";
@@ -112,6 +113,8 @@ export function Corpus() {
             : "وضعیت پیکره خوانده نشد. کمی بعد دوباره بیازمایید."}
         </p>
       ) : null}
+
+      {!state && !error ? <Waiting /> : null}
 
       {state ? (
         <section className={styles.block} aria-labelledby="serving">

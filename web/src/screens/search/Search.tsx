@@ -19,6 +19,7 @@ import { useSearchParams } from "react-router-dom";
 import { ApiError } from "../../api/client";
 import { affixOf, search, type SearchResult } from "../../api/search";
 import { Num } from "../../text/Num";
+import { Waiting } from "../../text/Waiting";
 import { SCREENS } from "../../shell/screens";
 import { Facets } from "./Facets";
 import { QueryBox } from "./QueryBox";
@@ -138,6 +139,8 @@ export function Search() {
           <p className={styles.troubleAdvice}>{trouble(error).advice}</p>
         </div>
       ) : null}
+
+      {busy && !result && !error ? <Waiting /> : null}
 
       {result ? (
         <div className={styles.answer}>

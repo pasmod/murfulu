@@ -1,14 +1,11 @@
 /* One clear action at the top, the answer under it. */
 
 .screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+  composes: screen from "../../styles/page.module.css";
 }
 
 .purpose {
-  color: var(--ink-soft);
-  font-size: var(--text-lg);
+  composes: purpose from "../../styles/page.module.css";
 }
 
 .answer {
@@ -31,9 +28,7 @@
 
 /* An error says what to do next, never only what failed. */
 .trouble {
-  padding: var(--space-4) var(--space-5);
-  background: var(--paper-sunk);
-  border-radius: var(--radius-lg);
+  composes: trouble from "../../styles/page.module.css";
 }
 
 .troubleTitle {

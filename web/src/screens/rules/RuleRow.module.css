@@ -63,6 +63,29 @@
   flex-wrap: wrap;
   gap: var(--space-1) var(--space-3);
   font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* **Three columns, the same three in every row.** How many a rule built, how
+   many of those are written somewhere, and the share: a reader compares these
+   down the list, and they stood wherever each row's own digits ended, so no
+   two rows lined up. Only where the row is one line — on a phone the figures
+   wrap under the rule and a fixed column would only make holes. */
+@media (min-width: 48rem) {
+  .numbers {
+    display: grid;
+    grid-template-columns: 5.5rem 7rem 3rem;
+    gap: 0 var(--space-3);
+  }
+
+  .rateValue {
+    text-align: end;
+  }
+
+  .numbers .unmeasured {
+    grid-column: 1 / -1;
+    text-align: end;
+  }
 }
 
 .built {

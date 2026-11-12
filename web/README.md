@@ -7,7 +7,7 @@ The screens and the rules they follow are in
 [docs/PLAN.md](../docs/PLAN.md), Phase 7.
 
 ```
-src/styles/   the design system as tokens; nothing hard-codes a value
+src/styles/   the design system: the tokens, the shared controls, the shared page states
 src/shell/    the frame: navigation, routing, the list of screens
 src/text/     Persian and Latin together — the LTR island, numerals, terms
 src/screens/  one module per screen
@@ -25,7 +25,7 @@ The dev server proxies `/api` to `MURFULU_API_URL`, default
 `http://localhost:8000`. In the container nginx does the same. The app never
 names a host.
 
-## Three rules that are enforced by tests
+## Four rules that are enforced by tests
 
 - **Every value comes from a token.** A stylesheet may not write a colour, and
   may not name a token that `styles/tokens.css` does not define.
@@ -33,3 +33,5 @@ names a host.
   built by mirroring breaks the first time a component is nested.
 - **A Latin form is an island.** `dir="ltr"` *and* `unicode-bidi: isolate`, and
   never lower-cased — capitalisation carries grammar in Behnevis.
+- **A field is taken, not written.** Every stylesheet with a text box takes it
+  from `styles/controls.module.css`, which is where the 3:1 edge is drawn.

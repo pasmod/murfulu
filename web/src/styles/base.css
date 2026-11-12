@@ -73,6 +73,19 @@ button {
   color: inherit;
 }
 
+/* A radio or a checkbox stays the browser's, because that is the one a
+   keyboard and a screen reader already know. It only takes the accent and a
+   size a thumb can find — the default is 13px and the system's blue. */
+input[type="radio"],
+input[type="checkbox"] {
+  flex: none;
+  inline-size: 1.15rem;
+  block-size: 1.15rem;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
 /* A real focus state, not a removed one. WCAG 2.1 AA, and the accent colour
    is not used for it: focus has to be visible on top of an accented element
    as well. */

@@ -41,6 +41,7 @@ import {
   type Questions as QuestionList,
 } from "../../api/questions";
 import { Num } from "../../text/Num";
+import { Waiting } from "../../text/Waiting";
 import { SCREENS } from "../../shell/screens";
 import { Answer } from "./Answer";
 import styles from "./Questions.module.css";
@@ -347,7 +348,12 @@ function Pager({
       {/* In Persian the page runs right to left, so *previous* is the button
           on the right and *next* the one on the left. Writing them in this
           order puts each on its own side without a direction being named. */}
-      <button type="button" onClick={() => onGo(at - 1)} disabled={at <= 0}>
+      <button
+        type="button"
+        className={styles.step}
+        onClick={() => onGo(at - 1)}
+        disabled={at <= 0}
+      >
         پرسش پیشین
       </button>
       <span className={styles.place}>
@@ -355,6 +361,7 @@ function Pager({
       </span>
       <button
         type="button"
+        className={styles.step}
         onClick={() => onGo(at + 1)}
         disabled={at >= count - 1}
       >
@@ -437,6 +444,8 @@ export function Questions(): React.ReactElement {
       <p className={styles.purpose}>{SCREEN.purpose}</p>
 
       {error ? <Trouble error={error} /> : null}
+
+      {!list && !error ? <Waiting /> : null}
 
       {list ? (
         <>

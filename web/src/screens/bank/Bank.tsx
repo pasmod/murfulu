@@ -245,19 +245,29 @@ export function Bank(): React.ReactElement {
       <nav className={styles.groups} aria-label="گروه‌های بانک واژه">
         <button
           type="button"
+          className={styles.pick}
           aria-pressed={group === ""}
           onClick={() => choose({ group: "", page: 1 })}
         >
-          همه {groups ? <Num value={groups.total} /> : null}
+          همه{" "}
+          {groups ? (
+            <span className={styles.pickCount}>
+              <Num value={groups.total} />
+            </span>
+          ) : null}
         </button>
         {groups?.groups.map((one) => (
           <button
             key={one.key}
             type="button"
+            className={styles.pick}
             aria-pressed={group === one.key}
             onClick={() => choose({ group: one.key, page: 1 })}
           >
-            {one.label_fa} <Num value={one.words} />
+            {one.label_fa}{" "}
+            <span className={styles.pickCount}>
+              <Num value={one.words} />
+            </span>
           </button>
         ))}
       </nav>
@@ -273,13 +283,16 @@ export function Bank(): React.ReactElement {
         <label htmlFor="bank-query">جست‌وجو در بانک واژه</label>
         <input
           id="bank-query"
+          className={styles.query}
           type="search"
           value={typed}
           onChange={(event) => setTyped(event.target.value)}
           placeholder={SCREEN.invitation}
           maxLength={60}
         />
-        <button type="submit">جست‌وجو</button>
+        <button type="submit" className={styles.go}>
+          جست‌وجو
+        </button>
       </form>
 
       {found && !busy ? (
@@ -308,6 +321,7 @@ export function Bank(): React.ReactElement {
         <nav className={styles.pages} aria-label="صفحه‌ها">
           <button
             type="button"
+            className={styles.page}
             disabled={pageNumber <= 1}
             onClick={() => choose({ page: pageNumber - 1 })}
           >
@@ -315,6 +329,7 @@ export function Bank(): React.ReactElement {
           </button>
           <button
             type="button"
+            className={styles.page}
             disabled={last >= total}
             onClick={() => choose({ page: pageNumber + 1 })}
           >

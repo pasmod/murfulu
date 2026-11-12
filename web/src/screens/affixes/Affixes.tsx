@@ -36,6 +36,7 @@ import {
 import { ApiError } from "../../api/client";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
+import { Waiting } from "../../text/Waiting";
 import { SCREENS } from "../../shell/screens";
 import styles from "./Affixes.module.css";
 import { MeaningCard } from "./MeaningCard";
@@ -124,6 +125,8 @@ export function Affixes() {
           دستورها خوانده نشد. کمی بعد دوباره بیازمایید.
         </p>
       ) : null}
+
+      {!data && !error ? <Waiting /> : null}
 
       {data ? (
         <>

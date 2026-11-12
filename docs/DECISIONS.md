@@ -2,6 +2,53 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-12 — the interface's controls and states are written once
+
+**On the branch `ui-polish`, shown to the project lead and not yet adopted.**
+The brief was to make the interface look more finished without changing its
+colours, its faces, its layout or its wording. Nothing here adds a token for a
+colour or a size; one token was added, `--screen-gap`.
+
+**A button, a field and a chip come from `web/src/styles/controls.module.css`.**
+Each screen had written its own. An audit of the running app on 2026-11-12
+found five copies of the same text box, three different ways of showing *this
+one is chosen* (a filled accent block on the rules screen, the accent's wash
+with the control edge on the compound screen, the page's white with a grey edge
+on the questions screen), and two screens — the word bank and the questions —
+whose buttons were the browser's own grey ones because no rule had been written
+for them. Those two also drew their text boxes with `--line`, the 1.26:1
+separator, against the rule that a control's edge is `--line-strong`. A screen's
+stylesheet now takes a control with `composes` and adds only where it sits.
+*Chosen* is one thing everywhere: the accent's wash and the accent's edge.
+`contrast.test.ts` holds every stylesheet with a field to the shared one.
+
+**A screen's frame, the line under its heading, its error line and its waiting
+line come from `web/src/styles/page.module.css`.** The line under the heading
+stood 12, 16, 24 or 32px below it depending on the screen. A failed request was
+one line of the faintest grey; it is now a box with an edge in the caution
+colour and the body's ink. Six screens showed nothing between the heading and
+the answer; they now say «در حال خواندن…», the word bank's own sentence, after
+300ms.
+
+**The masthead is one row only from 80rem.** It was 48rem, set when the menu
+had six items. With nine the menu did not fit beside the brand below 1310px:
+measured at 1024px, «پرسش‌ها» and «پیکره» were cut off with no fade and no
+scrollbar; at 1280px «پیکره» lost 29px. Below 80rem the brand keeps its own
+line; the links stand a step closer between 48rem and 86rem so the row fits a
+1280px window; the fade stays for as long as the row can overflow (below
+64rem); and the menu scrolls the current screen's link into its middle, because
+on a phone it shows three of nine and on six screens the current one was off
+the edge.
+
+**A search result lays itself out by the width of the list, not of the window**
+(a container query). From 960px the filters take a column beside the list, so
+between 960px and about 1130px the four-column row was wider than the list and
+the counts ran over the filters — seen at 1024px.
+
+**Left alone on purpose:** the palette, the faces, the type and space scales,
+the order and wording of the menu, the feedback button's corner, and every
+sentence in the interface except the one added waiting line.
+
 ## 2026-11-12 — the questions after the word bank, and what we decided instead of asking
 
 The project lead's rules for the questions (2026-11-12): only questions that

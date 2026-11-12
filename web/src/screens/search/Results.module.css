@@ -25,6 +25,9 @@
   margin: 0;
   padding: 0;
   list-style: none;
+
+  /* The rows ask this box how wide it is — see `WordRow.module.css`. */
+  container-type: inline-size;
 }
 
 /* "We have not worked this out" is not "there are none". */

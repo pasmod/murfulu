@@ -83,16 +83,34 @@
   color: var(--ink-faint);
 }
 
-@media (min-width: 48rem) {
+/* **One line where the list is wide enough for one, asked of the list and not
+   of the window.** This was `@media (min-width: 48rem)`, and the four columns
+   need 760px between them. But from 960px the filters take a column of their
+   own beside the list, so between 960px and about 1130px the list was narrower
+   than its own rows and the counts ran out over the filters — measured on
+   2026-11-12 at 1024px, where «در ۳٬۰۹۵ سروده» sat on top of «گونه در
+   واژه‌نامهٔ کاربن». A container query cannot be wrong that way: the row lays
+   itself out by the room it actually has. The list is the container; see
+   `Results.module.css`. */
+@container (min-width: 48rem) {
   .row {
     display: grid;
-    grid-template-columns: minmax(14rem, 2fr) 8rem 10rem minmax(12rem, 1fr);
+    grid-template-columns: minmax(12rem, 1.5fr) 7.5rem 10rem minmax(15rem, 1fr);
     align-items: baseline;
     gap: var(--space-4);
     padding-block: var(--space-3);
   }
 
+  /* Two columns of figures, the same two in every row, so «بار» stands under
+     «بار» and «شاعر» under «شاعر» down the whole list. They used to wrap
+     wherever each row's own numbers happened to end. */
   .counts {
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .counts > * {
+    white-space: nowrap;
   }
 }

@@ -1,18 +1,15 @@
 .screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
+  composes: screen from "../../styles/page.module.css";
+  --screen-gap: var(--space-5);
 }
 
 .purpose {
-  color: var(--ink-soft);
-  font-size: var(--text-lg);
+  composes: purpose from "../../styles/page.module.css";
 }
 
 .summary,
 .filter,
-.empty,
-.trouble {
+.empty {
   font-size: var(--text-sm);
   color: var(--ink-soft);
 }
@@ -50,11 +47,23 @@
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease),
+    border-color var(--motion-fast) var(--ease);
 }
 
+@media (hover: hover) {
+  .tally:hover {
+    background: var(--accent-wash);
+  }
+}
+
+/* Chosen the way every chosen thing in the app is: the accent's wash and the
+   accent's edge. It was the page's white with a grey edge, which read as the
+   one box that was switched *off*. */
 .tally[aria-pressed="true"] {
-  background: var(--paper);
-  border-color: var(--line-strong);
+  background: var(--accent-wash);
+  border-color: var(--accent);
 }
 
 .tallyCount {
@@ -90,13 +99,8 @@
   gap: var(--space-3);
 }
 
-.pager button {
-  min-height: var(--touch-target);
-}
-
-.pager button:disabled {
-  opacity: 0.45;
-  cursor: default;
+.step {
+  composes: secondary from "../../styles/controls.module.css";
 }
 
 .place {
@@ -318,15 +322,16 @@
   font-size: var(--text-sm);
 }
 
-.answer textarea {
+.area {
+  composes: fieldArea from "../../styles/controls.module.css";
   width: 100%;
-  padding: var(--space-2);
-  font: inherit;
-  line-height: 1.8;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--paper);
-  color: inherit;
+}
+
+/* The label it sits in is a caption and is set small; what the linguist writes
+   is not a caption. Said from inside the form so it outweighs the size the
+   shared field inherits. */
+.answer .area {
+  font-size: var(--text-base);
 }
 
 .reverses {
@@ -335,10 +340,12 @@
   gap: var(--space-2);
 }
 
+.send {
+  composes: primary from "../../styles/controls.module.css";
+}
+
 .answer .send {
   align-self: flex-start;
-  min-height: var(--touch-target);
-  padding-inline: var(--space-5);
 }
 
 /* **The options.** Each is a full Persian sentence, so each is a block with
@@ -439,4 +446,8 @@
 
 .rulingChoice + .rulingText {
   margin-block-start: var(--space-2);
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
 }
