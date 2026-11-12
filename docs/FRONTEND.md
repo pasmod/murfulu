@@ -274,7 +274,7 @@ build in than to retrofit.
   page sideways, touch targets at 44 px, the navigation reachable, the layout
   actually right-to-left. It caught two bugs on its first run.
 
-## Settled when the interface was tidied (2026-11-12, branch `ui-polish`)
+## Settled when the interface was tidied (2026-11-12 and 2026-11-13)
 
 - **A control is taken, not written.** `styles/controls.module.css` has the
   field, the primary and the secondary button and the chip, each in every

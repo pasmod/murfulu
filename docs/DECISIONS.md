@@ -4,7 +4,11 @@ Settled choices, with the reason. Append; do not rewrite history.
 
 ## 2026-11-13 — cards, a menu that stays, denser lists, larger small print
 
-**On the branch `ui-polish`, shown to the project lead and not yet adopted.**
+**Adopted by the project lead on 2026-11-13**, after seeing it on the branch
+`ui-polish`, together with the first round below. Run past the tests and an
+independent review before it went out; the review's two findings — a note in
+the search results that ran over the figure beside it, and a waiting line no
+screen reader was told about — were fixed first.
 The first round (the entry below) kept the look and made it consistent. The
 project lead's answer was that he had expected more, and of four further
 changes offered he chose all four. Colours and faces are still untouched.
@@ -47,7 +51,8 @@ default, and the feedback button's corner.
 
 ## 2026-11-12 — the interface's controls and states are written once
 
-**On the branch `ui-polish`, shown to the project lead and not yet adopted.**
+**Adopted on 2026-11-13 with the second round above**; built on the branch
+`ui-polish` and shown to the project lead first.
 The brief was to make the interface look more finished without changing its
 colours, its faces, its layout or its wording. Nothing here adds a token for a
 colour or a size; one token was added, `--screen-gap`.
