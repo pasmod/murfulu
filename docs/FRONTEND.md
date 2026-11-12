@@ -289,7 +289,8 @@ build in than to retrofit.
 - **A screen's frame and its three "no answer" states are shared** —
   `styles/page.module.css`: the line under the heading, *something went wrong*
   (a box with a caution edge, never one faint line), and *wait*
-  (`text/Waiting.tsx`, one sentence, held back 300ms).
+  (`text/Waiting.tsx`: one sentence, a status message, which the component
+  holds back 300ms so that a short wait is silent for every reader).
 - **A breakpoint is where the content stops fitting, measured.** The menu has
   nine items now; the masthead is one row from 80rem and the fade stays below
   64rem. A list that shares its row with a side column is laid out by a

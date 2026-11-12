@@ -83,6 +83,12 @@
   color: var(--ink-faint);
 }
 
+/* What a function word's row says instead of crediting it with a count. It is
+   laid out with the figures; see the container query below. */
+.says {
+  min-width: 0;
+}
+
 /* **One line where the list is wide enough for one, asked of the list and not
    of the window.** This was `@media (min-width: 48rem)`, and the four columns
    need 760px between them. But from 960px the filters take a column of their
@@ -112,5 +118,15 @@
 
   .counts > * {
     white-space: nowrap;
+  }
+
+  /* The note on a function word is a sentence, not a figure — «این املا در
+     پیکره تقریباً همیشه…» is 420px in a 114px column. It takes the width of
+     both columns and wraps inside them. Found in review on 2026-11-13: held
+     to one line it ran out over the figure beside it and on towards the
+     filters. */
+  .counts > .says {
+    grid-column: 1 / -1;
+    white-space: normal;
   }
 }

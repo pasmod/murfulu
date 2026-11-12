@@ -77,7 +77,7 @@ export function WordRow({ word }: WordRowProps) {
         {/* A function word's letters: a reading carries no count, and the
             spelling's own row says whose count it holds. */}
         {word.function_word ? (
-          <span className={styles.faint}>
+          <span className={`${styles.faint} ${styles.says}`}>
             {word.latin ? FUNCTION_WORD_SHORT : FUNCTION_WORD_LETTERS}
           </span>
         ) : null}

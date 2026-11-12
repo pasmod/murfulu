@@ -52,13 +52,13 @@
 }
 
 /* The answer is on its way. docs/FRONTEND.md asks for no spinners where they
-   can be avoided, so this is a line of text — and it holds back for a moment,
-   because most answers arrive faster than a reader can read «در حال خواندن»,
-   and a word that flashes and goes is worse than a short blank. */
+   can be avoided, so this is a line of text. It is not shown at once — the
+   component holds it back, see `text/Waiting.tsx` — and when it comes it fades
+   in rather than appearing. */
 .waiting {
   color: var(--ink-faint);
   font-size: var(--text-sm);
-  animation: arrive var(--motion-slow) var(--ease) 300ms both;
+  animation: arrive var(--motion-slow) var(--ease) both;
 }
 
 @keyframes arrive {
