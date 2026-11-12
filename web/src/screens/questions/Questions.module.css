@@ -156,7 +156,8 @@
   color: var(--evidence-spelling);
 }
 
-.state[data-state="withdrawn"] {
+.state[data-state="withdrawn"],
+.state[data-state="deferred"] {
   color: var(--ink-faint);
 }
 

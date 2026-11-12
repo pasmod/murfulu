@@ -157,6 +157,11 @@ def rule_on(
         raise RulingRefusedError(
             f"{question.reference} was withdrawn; it is not waiting on an answer"
         )
+    if question.state == "deferred":
+        raise RulingRefusedError(
+            f"{question.reference} is deferred; it is asked again when its "
+            f"deferral is lifted"
+        )
 
     chosen: dict[str, Any] | None = None
     if choice_id:
@@ -248,6 +253,7 @@ def reword(
     if blocks_work is not None:
         question.blocks_work = blocks_work
     context.pop("withdrawn_because", None)
+    context.pop("deferred_because", None)
     question.context = context or None
     waiting = "blocked" if question.blocks_work else "open"
     changed = (
@@ -282,7 +288,12 @@ def questions(
     if state:
         query = query.where(LinguistQuestion.state == state)
     if blocking_only:
-        query = query.where(LinguistQuestion.blocks_work.is_(True))
+        # What still stops work: a withdrawn or deferred question that once
+        # blocked work is not waited on.
+        query = query.where(
+            LinguistQuestion.blocks_work.is_(True),
+            LinguistQuestion.state.in_(("open", "blocked")),
+        )
     found = list(session.scalars(query))
     # **Natural order, not alphabetical.** Sorted as text, L10 lands between L1
     # and L2 and the list reads as though it were shuffled.
@@ -324,6 +335,26 @@ def standing(session: Session, question: LinguistQuestion) -> LinguistRuling | N
     """The ruling that currently stands, or ``None`` if it is unanswered."""
     found = rulings_on(session, question)
     return found[-1] if found else None
+
+
+def defer(session: Session, question: LinguistQuestion, *, why: str) -> None:
+    """Set a question aside until something else arrives. Not withdrawn.
+
+    L26 waits for the linguist's corrected rules: asked now it would sit at
+    the top of his list as though we needed it this week, and withdrawn it
+    would say we stopped caring about the most consequential question. The
+    reason is kept in ``context["deferred_because"]``; loading the wording
+    again without a deferral puts it back to waiting (:func:`reword`).
+    """
+    if question.state == "answered":
+        raise RulingRefusedError(f"{question.reference} is answered; nothing to defer")
+    if not why.strip():
+        raise RulingRefusedError("a deferral has to say why, in Persian")
+    question.state = "deferred"
+    context = dict(question.context or {}) if isinstance(question.context, dict) else {}
+    context["deferred_because"] = why
+    question.context = context
+    session.flush()
 
 
 def withdraw(session: Session, question: LinguistQuestion, *, why: str) -> None:

@@ -103,14 +103,39 @@ def test_no_one_is_named_in_the_file() -> None:
     assert not found
 
 
-def test_the_explanations_asked_about_are_the_ones_on_screen(data: dict) -> None:
-    """L17d quotes the twelve explanations; it must quote what the app shows."""
-    classes = yaml.safe_load(
-        (ROOT / "rules" / "word_classes.yaml").read_text(encoding="utf-8")
-    )["classes"]
+def test_l17d_names_every_group_of_the_word_bank(data: dict) -> None:
+    """L17d asks how his twelve groups feed the rules; it must name all twelve."""
+    groups = yaml.safe_load(
+        (ROOT / "rules" / "bank_groups.yaml").read_text(encoding="utf-8")
+    )["groups"]
     (asked,) = [q for q in data["questions"] if q["reference"] == "L17d"]
-    for one in classes:
-        assert one["explanation_fa"] in asked["question_fa"], one["name"]
+    for one in groups:
+        assert one["label_fa"] in asked["question_fa"], one["key"]
+
+
+def test_every_asked_question_ends_with_our_proposal(data: dict) -> None:
+    """The project lead's rule of 2026-11-12: one marked option, and why."""
+    for one in data["questions"]:
+        suggested = [c for c in one["choices"] if c.get("suggested")]
+        if one.get("defer"):
+            assert not suggested, f"{one['reference']} is deferred; no proposal yet"
+            continue
+        assert len(suggested) == 1, one["reference"]
+        assert suggested[0].get("settles", True), one["reference"]
+        text = one["question_fa"]
+        assert text.count("پیشنهاد ما:") == 1, one["reference"]
+        # The proposal follows the question, as the last paragraph.
+        assert text.index("پیشنهاد ما:") > text.index("پرسش:"), one["reference"]
+        assert text.rstrip().split("\n\n")[-1].startswith("پیشنهاد ما:")
+
+
+def test_the_old_stem_names_are_gone_from_every_question(data: dict) -> None:
+    """Only where L17d says they were replaced."""
+    replaced = "به جای کاربن یک و کاربن دو"
+    for one in data["questions"]:
+        text = one["question_fa"] + " ".join(c["text_fa"] for c in one["choices"])
+        text = text.replace(replaced, "")
+        assert "کاربن یک" not in text and "کاربن دو" not in text, one["reference"]
 
 
 def test_a_dry_run_writes_nothing(session: Session, data: dict) -> None:
@@ -125,23 +150,26 @@ def test_apply_adds_rewords_and_withdraws(session: Session, data: dict) -> None:
     plan = tool.load(session, data)
     session.commit()
 
-    added = store.by_reference(session, "L26")
-    assert added.state == "blocked" and added.blocks_work
-    assert added.context["covers"] == ["L18", "L26"]
-    assert [c["id"] for c in store.choices_of(added)][0] == "nam_or_karnam"
+    deferred = store.by_reference(session, "L26")
+    assert deferred.state == "deferred" and deferred.blocks_work
+    assert deferred.context["covers"] == ["L18", "L26", "L35"]
+    assert deferred.context["deferred_because"].strip()
+    assert [c["id"] for c in store.choices_of(deferred)][0] == "nam_or_karnam"
 
-    reworded = store.by_reference(session, "L13")
+    reworded = store.by_reference(session, "L2")
     assert reworded.state == "blocked"
     assert reworded.context["from_document"] == "evidence", "evidence is kept"
-    assert reworded.context["reworded"][0]["question_fa"] == "پرسش 13"
+    assert reworded.context["reworded"][0]["question_fa"] == "پرسش 2"
 
     withdrawn = store.by_reference(session, "L5")
     assert withdrawn.state == "withdrawn"
     assert withdrawn.context["withdrawn_because"].strip()
+    assert store.by_reference(session, "L13").state == "withdrawn"
 
-    assert plan.withdrawn == 9  # L1 L5 L6 L7 L8 L9 L12 L14 L15
-    assert plan.reworded == 4  # L2 L3 L10 L13
-    assert plan.added == len(data["questions"]) - 4
+    assert plan.withdrawn == 10  # L1 L5 L6 L7 L8 L9 L12 L13 L14 L15
+    assert plan.reworded == 3  # L2 L3 L10
+    assert plan.deferred == 1  # L26
+    assert plan.added == len(data["questions"]) - 3
 
 
 def test_an_answered_question_is_left_alone(session: Session, data: dict) -> None:
@@ -194,3 +222,80 @@ def test_the_proofreading_export_carries_every_option(data: dict) -> None:
         assert f"## {one['reference']}" in text
         for choice in one["choices"]:
             assert choice["text_fa"].strip() in text
+
+
+def test_a_blocking_question_listed_for_withdrawal_is_withdrawn(
+    session: Session, data: dict
+) -> None:
+    """L17 blocked work; his own group name settled it. Listing it decides."""
+    store.ask(session, reference="L17", question_fa="پرسش ۱۷", blocks_work=True)
+    tool.load(session, data)
+    closed = store.by_reference(session, "L17")
+    assert closed.state == "withdrawn"
+    assert "جانام" in closed.context["withdrawn_because"]
+
+
+def test_a_deferred_question_comes_back_when_its_deferral_is_lifted(
+    session: Session, data: dict
+) -> None:
+    tool.load(session, data)
+    assert store.by_reference(session, "L26").state == "deferred"
+    lifted = dict(data)
+    lifted["questions"] = [
+        {key: value for key, value in one.items() if key != "defer"}
+        for one in data["questions"]
+    ]
+    tool.load(session, lifted)
+    back = store.by_reference(session, "L26")
+    assert back.state == "blocked"
+    assert "deferred_because" not in back.context
+
+
+def test_a_deferral_without_a_reason_is_refused(tmp_path: Path) -> None:
+    path = tmp_path / "questions.yaml"
+    path.write_text(
+        "questions:\n"
+        "  - reference: L99\n"
+        "    question_fa: پرسش\n"
+        "    defer: ''\n"
+        "    choices: [{id: a, text_fa: یک}]\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="deferred without a reason"):
+        tool.read(path)
+
+
+def test_the_store_refuses_to_defer_an_answered_question_or_without_reason(
+    session: Session,
+) -> None:
+    with pytest.raises(store.RulingRefusedError):
+        store.defer(session, store.by_reference(session, "L16"), why="بعداً")
+    with pytest.raises(store.RulingRefusedError):
+        store.defer(session, store.by_reference(session, "L2"), why="  ")
+    store.defer(session, store.by_reference(session, "L2"), why="بعداً")
+    assert store.by_reference(session, "L2").state == "deferred"
+    # Not waiting: the list of what blocks work leaves it out.
+    assert "L2" not in {q.reference for q in store.questions(session, state="blocked")}
+
+
+def test_a_deferred_question_takes_no_ruling_and_does_not_block(
+    session: Session, data: dict
+) -> None:
+    tool.load(session, data)
+    deferred = store.by_reference(session, "L26")
+    author = session.query(User).first()
+    with pytest.raises(store.RulingRefusedError, match="deferred"):
+        store.rule_on(session, author=author, question=deferred, ruling_fa="بله")
+    blocking = {q.reference for q in store.questions(session, blocking_only=True)}
+    assert "L26" not in blocking and "L13" not in blocking
+
+
+def test_a_deferred_question_can_be_withdrawn_by_listing_it(
+    session: Session, data: dict
+) -> None:
+    tool.load(session, data)
+    moved = dict(data)
+    moved["questions"] = [q for q in data["questions"] if q["reference"] != "L26"]
+    moved["withdraw"] = {**data["withdraw"], "L26": "دیگر لازم نیست."}
+    tool.load(session, moved)
+    assert store.by_reference(session, "L26").state == "withdrawn"

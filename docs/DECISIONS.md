@@ -2,6 +2,35 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-12 — the questions after the word bank, and what we decided instead of asking
+
+The project lead's rules for the questions (2026-11-12): only questions that
+block work; each ends with our proposal and why, in one sentence; nothing is
+asked whose answer we are certain of — it is decided here instead. Applied in
+`rules/questions_fa.yaml` (version 2).
+
+**A question can be deferred** — a fifth state (migration 0010), neither
+waiting nor withdrawn, shown under «فعلاً پرسیده نمی‌شود» with its reason. L26
+is deferred until the linguist's corrected rules arrive, reworded with the
+1.3.2 numbers and with هوشواره (L35) as an example. A blocking question listed
+under `withdraw` is now withdrawn (L17, L17b, L13); before, only questions that
+did not block work could be.
+
+**Decided without asking, because the bank answers it:**
+
+- *The bank's spelling of a finished word wins over the grammar example and
+  over what the engine builds.* بخرد is *bexrad*, نستوه *nastuh*, دربان
+  *darbān* in the bank, as the grammar writes them; the grammar's «Drabān» is a
+  slip. Where the bank disagrees with an older grammar example — چشمه
+  *Češme* against the example's *Čašme* — the bank, his later and reviewed
+  work, wins.
+- *The vowel the engine puts into a joint is ours to fix, not his to rule
+  on.* bexerad, talxevaš and naseteh come from the engine joining a prefix or
+  suffix with a vowel the finished words do not have (مهوش *mahvaš* is the
+  pattern for تلخوش). Recorded in OPEN_QUESTIONS; nothing changed yet.
+- *آموزگار against آموزگاری* is karbon's own inconsistency (UPSTREAM A16),
+  not a question for the linguist.
+
 ## 2026-11-12 — the linguist's word bank decides what a word is
 
 Approved by the project lead on 2026-11-12: adopt the linguist's names one to
@@ -17,9 +46,10 @@ one group, and آرش, two dictionary rows filed نام and کارنام, now fe
 groups and falls back to `rules/lexicon_categories.yaml`, unchanged.
 
 **The mapping of the new groups is ours where it is not his** (`grounding:
-ours`, asked in L17d): کاربهر feeds کارنده‌کاربهر — Dehkhoda labels these
-entries نعت فاعلی and 442 of 1,106 end in *-ande*, while his done-to
-participles are filed برنام; پسوند، پیوند‌واژه and صوت feed no rule, because no
+ours`, asked in L17d): کاربهر feeds کارنده‌کاربهر — Dehkhoda labels most of
+these entries نعت فاعلی and 448 of 1,106 end in «نده», while the full done-to
+participles are filed برنام; about thirty are marked «ن مف» (پسند، دمید), and
+L17d proposes following that mark; پسوند، پیوند‌واژه and صوت feed no rule, because no
 rule takes one and an affix entry is not a base. صوت is not the rules'
 ندایی, which is a vocative form the rules build.
 

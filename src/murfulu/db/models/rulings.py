@@ -57,7 +57,9 @@ ORIGINS = ("document", "app")
 #: question nothing depends on can wait, and one that stops work should be
 #: visible as such. `withdrawn` is for a question that stopped mattering —
 #: kept, because "we asked and then stopped caring" is worth knowing.
-STATES = ("open", "blocked", "answered", "withdrawn")
+#: ``deferred`` (2026-11-12): set aside until something else arrives — L26
+#: waits for the linguist's corrected rules. Neither waiting nor withdrawn.
+STATES = ("open", "blocked", "answered", "withdrawn", "deferred")
 
 #: **Where a question keeps its answer options**: ``context["choices"]``, a
 #: list of ``{"id", "text_fa", "suggested", "settles"}``. Added 2026-10-18,

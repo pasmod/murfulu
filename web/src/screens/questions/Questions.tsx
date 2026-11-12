@@ -53,13 +53,16 @@ const STATE_LABEL: Record<string, string> = {
   blocked: "کار را متوقف کرده",
   answered: "پاسخ داده شده",
   withdrawn: "پس گرفته شده",
+  deferred: "فعلاً پرسیده نمی‌شود",
 };
 
 /**
  * The boxes at the top: how many questions are in each state, and the filter.
  *
- * **The states are the store's own four**, not a set invented here:
- * `open`, `blocked`, `answered`, `withdrawn` (see `db/models/rulings.py`).
+ * **The states are the store's own five**, not a set invented here:
+ * `open`, `blocked`, `answered`, `withdrawn`, and since 2026-11-12
+ * `deferred` — set aside until something else arrives (see
+ * `db/models/rulings.py`).
  * *Resolved* — a maintainer closing a question after the linguist has ruled
  * on it — is a fifth the database does not have yet.
  */
@@ -83,10 +86,18 @@ const TALLIES: Tally[] =
     {
       key: "blocked",
       label: "کار را متوقف کرده",
-      holds: (one) => one.state !== "answered" && one.blocks_work,
+      // Only what still waits: a withdrawn or deferred question that once
+      // blocked work stops nothing now.
+      holds: (one) =>
+        (one.state === "open" || one.state === "blocked") && one.blocks_work,
     },
     { key: "answered", label: "پاسخ داده شده", holds: (one) => one.state === "answered" },
     { key: "withdrawn", label: "پس گرفته شده", holds: (one) => one.state === "withdrawn" },
+    {
+      key: "deferred",
+      label: "فعلاً پرسیده نمی‌شود",
+      holds: (one) => one.state === "deferred",
+    },
   ];
 
 function Trouble({ error }: { error: ApiError }): React.ReactElement {
@@ -150,13 +161,21 @@ const PERSIAN = /[\u0600-\u06FF]/;
 
 /** Where `db/rulings.py` writes why a question was taken back. */
 const WITHDRAWN = "withdrawn_because";
+const DEFERRED = "deferred_because";
 
 /**
  * Context keys that are the form's own bookkeeping, not evidence: the options
  * (shown as the form), which handles a question covers, and its earlier
  * wording. Listed here so the evidence fold never opens onto raw JSON.
  */
-const NOT_EVIDENCE = new Set(["from_document", WITHDRAWN, "choices", "covers", "reworded"]);
+const NOT_EVIDENCE = new Set([
+  "from_document",
+  WITHDRAWN,
+  DEFERRED,
+  "choices",
+  "covers",
+  "reworded",
+]);
 
 /** The evidence a question carries, as it was written — if it is Persian.
  *
@@ -217,6 +236,7 @@ function Card({
 }): React.ReactElement {
   const [open, setOpen] = useState(false);
   const withdrawnBecause = question.context?.[WITHDRAWN];
+  const deferredBecause = question.context?.[DEFERRED];
 
   return (
     <article className={styles.card} data-state={question.state}>
@@ -232,9 +252,7 @@ function Card({
         </span>
         {/* Not when the state badge already says it: a blocked question
             read «کار را متوقف کرده» twice in one row. */}
-        {question.blocks_work &&
-        question.state !== "answered" &&
-        question.state !== "blocked" ? (
+        {question.blocks_work && question.state === "open" ? (
           <span className={styles.blocking}>کار را متوقف کرده</span>
         ) : null}
       </header>
@@ -287,8 +305,11 @@ function Card({
       {question.state === "withdrawn" && typeof withdrawnBecause === "string" ? (
         <p className={styles.withdrawn}>پس گرفته شد، چون {withdrawnBecause}</p>
       ) : null}
+      {question.state === "deferred" && typeof deferredBecause === "string" ? (
+        <p className={styles.withdrawn}>فعلاً پرسیده نمی‌شود، چون {deferredBecause}</p>
+      ) : null}
 
-      {mayAnswer && question.state !== "withdrawn" ? (
+      {mayAnswer && question.state !== "withdrawn" && question.state !== "deferred" ? (
         <Answer
           reference={question.reference}
           choices={question.choices ?? []}

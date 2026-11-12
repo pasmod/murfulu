@@ -7,6 +7,17 @@ Things we need answered before or during planning. Move each one to
 
 ## Opened 2026-10-27 (the move to the VPS)
 
+### S37. The engine puts a vowel into a joint the finished word does not have
+
+Found 2026-11-12 re-measuring the rule examples on karbon 1.3.2
+(`tools/check_examples.py`). The bank has بخرد *bexrad* and نستوه *nastuh*,
+exactly as the grammar's examples; the engine builds *bexerad* (from خرد
+*Xerad*) and *naseteh*, and *talxevaš* for the grammar's *talxvaš*. The base
+keeps its own vowel where the finished word drops it. Not a ruling for the
+linguist — his bank already says what the words are — but a change in how a
+prefix or suffix meets a base, and so a change to every form built that way.
+Not made; to be measured before it is.
+
 ### S36. بود، شد and نیست now claim the verb's corpus counts
 
 Found 2026-11-12 building v15 (`data/compare-v14-v15.md`). karbon 1.3.2 files

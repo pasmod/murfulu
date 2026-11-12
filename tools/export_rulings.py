@@ -101,10 +101,12 @@ def _render(session: Session) -> str:
     waiting = [q for q in everything if q.state in ("open", "blocked")]
     answered = [q for q in everything if q.state == "answered"]
     withdrawn = [q for q in everything if q.state == "withdrawn"]
+    deferred = [q for q in everything if q.state == "deferred"]
 
     lines += [
-        f"**{len(waiting)} waiting, {len(answered)} answered, "
-        f"{len(withdrawn)} withdrawn.** Answered in the app, at `/questions`; "
+        f"**{len(waiting)} waiting, {len(deferred)} deferred, {len(answered)} "
+        f"answered, {len(withdrawn)} withdrawn.** "
+        "Answered in the app, at `/questions`; "
         "this file is the export.",
         "",
     ]
@@ -121,6 +123,7 @@ def _render(session: Session) -> str:
 
     for heading, group in (
         ("## Waiting", waiting),
+        ("## Deferred — not asked now", deferred),
         ("## Answered", answered),
         ("## Withdrawn", withdrawn),
     ):
@@ -165,6 +168,8 @@ def _render(session: Session) -> str:
             context = question.context or {}
             if isinstance(context, dict) and context.get("withdrawn_because"):
                 lines += [f"*Withdrawn:* {context['withdrawn_because']}", ""]
+            if isinstance(context, dict) and context.get("deferred_because"):
+                lines += [f"*Deferred:* {context['deferred_because']}", ""]
             # **The evidence, carried through verbatim.** A question without
             # the measurement behind it is not answerable, and an export that
             # dropped it would be a worse document than the one it replaced.

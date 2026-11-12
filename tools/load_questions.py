@@ -18,8 +18,11 @@ What it does, in that database:
   :func:`murfulu.db.rulings.reword`);
 * **leaves alone** a question that has a ruling, and says so: after a ruling
   the wording is what the answer answered;
-* **withdraws** every other question still waiting that does not block work,
-  with the one-line Persian reason from the file. Never deletes.
+* **defers** a question the file marks ``defer`` — rewords it, then sets it
+  aside with that reason, neither waiting nor withdrawn;
+* **withdraws** every question listed under ``withdraw``, blocking or not —
+  listing it is the decision — and every other question still waiting that
+  does not block work, with the one-line Persian reason. Never deletes.
 
 **Dry run by default**, because the database it is pointed at may be
 production. ``--apply`` writes, in one transaction.
@@ -54,6 +57,7 @@ class Plan:
     unchanged: int = 0
     kept: int = 0
     withdrawn: int = 0
+    deferred: int = 0
 
     def say(self, line: str) -> None:
         """Add one line to the report."""
@@ -73,6 +77,8 @@ def read(path: Path = QUESTIONS) -> dict[str, Any]:
         if not str(one.get("question_fa") or "").strip():
             raise ValueError(f"{reference} has no Persian")
         store.check_choices(one.get("choices") or [])
+        if "defer" in one and not str(one.get("defer") or "").strip():
+            raise ValueError(f"{reference} is deferred without a reason")
     for reference, why in (data.get("withdraw") or {}).items():
         if reference in seen:
             raise ValueError(f"{reference} is both asked and withdrawn")
@@ -108,6 +114,10 @@ def load(session: Session, data: dict[str, Any], *, on: date | None = None) -> P
             plan.say(
                 f"add       {reference}  ({len(one.get('choices') or [])} options)"
             )
+            if one.get("defer"):
+                store.defer(session, row, why=str(one["defer"]).strip())
+                plan.deferred += 1
+                plan.say(f"defer     {reference}  {str(one['defer']).strip()}")
             continue
 
         if store.rulings_on(session, row):
@@ -115,6 +125,13 @@ def load(session: Session, data: dict[str, Any], *, on: date | None = None) -> P
             plan.say(f"keep      {reference}  has a ruling; its wording is left alone")
             continue
 
+        before = (
+            row.question_fa,
+            row.question_en,
+            row.blocks_work,
+            row.state,
+            dict(row.context) if isinstance(row.context, dict) else row.context,
+        )
         changed = store.reword(
             session,
             row,
@@ -125,6 +142,24 @@ def load(session: Session, data: dict[str, Any], *, on: date | None = None) -> P
             extra=extra,
             on=on,
         )
+        if one.get("defer"):
+            # Reworded to waiting, then set aside again: report it only if
+            # the two together moved anything, so a second load is a no-op.
+            store.defer(session, row, why=str(one["defer"]).strip())
+            after = (
+                row.question_fa,
+                row.question_en,
+                row.blocks_work,
+                row.state,
+                dict(row.context) if isinstance(row.context, dict) else row.context,
+            )
+            if after != before:
+                plan.deferred += 1
+                plan.say(f"defer     {reference}  {str(one['defer']).strip()}")
+            else:
+                plan.unchanged += 1
+                plan.say(f"same      {reference}  (deferred)")
+            continue
         if changed:
             plan.reworded += 1
             plan.say(
@@ -137,9 +172,14 @@ def load(session: Session, data: dict[str, Any], *, on: date | None = None) -> P
     reasons: dict[str, str] = data.get("withdraw") or {}
     default = str(data.get("withdraw_default") or "").strip()
     for row in store.questions(session):
-        if row.reference in asked or row.state not in ("open", "blocked"):
+        if row.reference in asked:
             continue
-        if row.blocks_work:
+        # Waiting questions, and a deferred one the file now withdraws.
+        if row.state not in ("open", "blocked") and not (
+            row.state == "deferred" and row.reference in reasons
+        ):
+            continue
+        if row.blocks_work and row.reference not in reasons:
             plan.say(f"blocking  {row.reference}  not in the file; left waiting")
             continue
         why = str(reasons.get(row.reference) or default).strip()
@@ -172,6 +212,8 @@ def markdown(data: dict[str, Any]) -> str:
         covers = one.get("covers")
         tail = f" (شامل {'، '.join(covers)})" if covers else ""
         lines += [f"## {one['reference']}{tail}", ""]
+        if one.get("defer"):
+            lines += [f"**فعلاً پرسیده نمی‌شود، چون** {str(one['defer']).strip()}", ""]
         if one.get("question_en"):
             lines += [f"*{one['question_en'].strip()}*", ""]
         for paragraph in one["question_fa"].strip().split("\n\n"):
@@ -225,7 +267,8 @@ def main(argv: list[str] | None = None) -> int:
             print(line)
         print(
             f"\n{plan.added} added, {plan.reworded} reworded, {plan.unchanged} "
-            f"unchanged, {plan.kept} kept (answered), {plan.withdrawn} withdrawn"
+            f"unchanged, {plan.kept} kept (answered), {plan.withdrawn} withdrawn, "
+            f"{plan.deferred} deferred"
         )
         if arguments.apply:
             session.commit()

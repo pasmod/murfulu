@@ -159,7 +159,7 @@ def test_an_answered_question_shows_its_ruling(session: Session, document: Path)
     written = TOOL._render(session)
     assert "پاسخ من." in written
     assert "My answer." in written
-    assert "2 waiting, 1 answered" in written
+    assert "2 waiting, 0 deferred, 1 answered" in written
 
 
 def test_a_reversal_is_visible_in_the_export(session: Session, document: Path):
@@ -181,3 +181,11 @@ def test_a_reversal_is_visible_in_the_export(session: Session, document: Path):
     written = TOOL._render(session)
     assert "خیر." in written
     assert "the answer changed" in written
+
+
+def test_a_deferred_question_is_exported_with_its_reason(session: Session) -> None:
+    store.ask(session, reference="L99", question_fa="پرسش", blocks_work=True)
+    store.defer(session, store.by_reference(session, "L99"), why="قاعده‌های تازه")
+    written = TOOL._render(session)
+    assert "## Deferred — not asked now" in written
+    assert "*Deferred:* قاعده‌های تازه" in written

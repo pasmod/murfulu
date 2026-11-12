@@ -15,6 +15,23 @@ changes if he rules the other way.
 
 ---
 
+## Where the questions stand (2026-11-12, after the word bank)
+
+The questions in the app were reworked against karbon 1.3.2, the linguist's
+final word bank (`rules/questions_fa.yaml`, loaded by `tools/load_questions.py`).
+Every question asked now ends with our proposal and the reason in one sentence.
+
+| | state | why |
+|---|---|---|
+| L17, L17b | **closed** | his own word-bank group names are جانام and پیش‌واژه |
+| L13 | **closed** | the bank spells the examples itself: بخرد *bexrad* and نستوه *nastuh* as the grammar writes them, دربان *darbān* where the grammar's «Drabān» is a slip; 8 of 15 now rebuild exactly; 3 fail on a word class (کوچه، رخسار، بیگانه), not on spelling. What remains is ours (DECISIONS 2026-11-12) |
+| L26 (with L18, L35) | **deferred** | he is revising his rules; asked again when they arrive, with the numbers measured now (10,645 words are کارنام only; 8 of 8 test words need it) |
+| L24 | **half answered** | *var* is the present stem of وشتن (2026-11-11); what the screen shows for دستور remains |
+| L17d | **rewritten** | his twelve groups against the rules' twelve classes; the open point is how کاربهر divides: Dehkhoda marks about thirty of its 1,106 words «ن مف» (پسند، دمید), the done-to participle. Our proposal follows that mark; until he answers, the whole group feeds the doer participle |
+| L2, L3, L25, L28, L17c, L10, L10b, L10c | open | each with our proposal now; L2 re-checked, the verb groups did not move in 1.3.2 |
+
+---
+
 ## L1. Two irregular stems, and one verb the lexicon does not have
 
 Measured 2026-08-12 against snapshot `lexicon-20260808`. Of the 39 exception

@@ -16,7 +16,7 @@
 import { get, post } from "./client";
 
 /** What a question is waiting on. */
-export type State = "open" | "blocked" | "answered" | "withdrawn";
+export type State = "open" | "blocked" | "answered" | "withdrawn" | "deferred";
 
 export interface Ruling {
   /**
