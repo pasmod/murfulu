@@ -47,16 +47,18 @@
 }
 
 .meanings {
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
   padding: 0;
   list-style: none;
 }
 
 .silent {
+  composes: card from "../../styles/page.module.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  margin-block-start: var(--space-6);
 }
 
 .silentTitle {

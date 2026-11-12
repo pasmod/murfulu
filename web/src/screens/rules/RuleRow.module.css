@@ -2,8 +2,57 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-4) 0;
+  padding: var(--space-3) 0;
   border-block-end: 1px solid var(--line);
+}
+
+/* The card the list stands in has its own edge. */
+.row:last-child {
+  border-block-end: 0;
+}
+
+/* **Two lines where there were four.** A rule took its name, its sentence, its
+   marks and its two buttons one under the other — 181px a rule. From the first
+   breakpoint the buttons stand at the end of the name's line and the marks at
+   the end of the sentence's, which is 99px: eight rules in the height that
+   held four. Nothing is left out: whatever a rule has
+   besides — why it was retired, the detail behind «جزئیات» — takes a line of
+   its own underneath. */
+@media (min-width: 48rem) {
+  .row {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    grid-template-areas:
+      "head actions"
+      "explanation marks";
+    align-items: center;
+    row-gap: var(--space-1);
+  }
+
+  .head {
+    grid-area: head;
+  }
+
+  .explanation {
+    grid-area: explanation;
+  }
+
+  .marks {
+    grid-area: marks;
+    justify-content: flex-end;
+  }
+
+  .actions {
+    grid-area: actions;
+    justify-content: flex-end;
+  }
+
+  .row > .retiredReason,
+  .row > .glideExamples,
+  .row > .detail {
+    grid-column: 1 / -1;
+  }
 }
 
 .head {

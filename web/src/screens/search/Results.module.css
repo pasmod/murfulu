@@ -1,6 +1,7 @@
 /* Two groups, clearly apart. The separation is the information. */
 
 .results {
+  composes: card from "../../styles/page.module.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -40,9 +41,7 @@
 }
 
 .none {
-  padding: var(--space-6) var(--space-5);
-  background: var(--paper-sunk);
-  border-radius: var(--radius-lg);
+  composes: card from "../../styles/page.module.css";
 }
 
 .noneTitle {

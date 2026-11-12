@@ -296,6 +296,17 @@ build in than to retrofit.
   container query, not a media query.
 - **Nine items still need no hamburger**: the row scrolls, fades, and keeps the
   current screen's link in view.
+- **A section is a white card on a grey page** (2026-11-13, the project lead's
+  choice). This replaces *space over lines* above for sections; inside a card
+  that principle still holds — rows are parted by a hairline and by space, and
+  a grey tile inside a card is the only box within a box. On a phone a card
+  runs edge to edge.
+- **The menu stays at the top of the window**; below 80rem only its row of
+  links does. `scroll-padding` keeps whatever is scrolled to out from under it.
+- **A list row puts its buttons at the end of its first line** and sets its
+  parts side by side where the window has room. It does not hide content to get
+  shorter.
+- **The small print is 13px and 15px**, not 12px and 14px.
 
 ## Open
 

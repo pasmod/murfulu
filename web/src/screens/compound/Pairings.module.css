@@ -4,16 +4,69 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
 }
 
+/* **A row in the reading's card, not a card of its own.** Each compound was a
+   grey box the width of the page with five short lines at its start — 187px,
+   most of it empty. It is a row of 75px now,
+   with a hairline under it, and from 60rem its five parts stand side by side:
+   the word, how it is joined, what the corpus says, and the derivation's
+   switch at the end. */
 .row {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  padding: var(--space-3);
-  background: var(--paper-sunk);
-  border-radius: var(--radius-md);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--line);
+}
+
+.row:last-child {
+  border-block-end: 0;
+}
+
+@media (min-width: 60rem) {
+  .row {
+    display: grid;
+    grid-template-columns: minmax(9rem, 1fr) minmax(14rem, 1.4fr) minmax(0, 2fr) auto;
+    grid-template-areas:
+      "word parts evidence how"
+      "word parts known    how";
+    align-items: baseline;
+    gap: 0 var(--space-5);
+    padding-block: var(--space-2);
+  }
+
+  .word {
+    grid-area: word;
+  }
+
+  .parts {
+    grid-area: parts;
+  }
+
+  .evidence {
+    grid-area: evidence;
+  }
+
+  .known {
+    grid-area: known;
+    justify-self: start;
+  }
+
+  .how {
+    grid-area: how;
+  }
+
+  /* Opened, the derivation is several lines and needs the row's whole width:
+     it leaves the end of the line and takes one of its own underneath. */
+  .how[open] {
+    grid-area: auto;
+    grid-column: 1 / -1;
+  }
+
+  .row > .warning {
+    grid-column: 1 / -1;
+  }
 }
 
 .word {
@@ -116,11 +169,7 @@
 }
 
 .more {
+  composes: secondary from "../../styles/controls.module.css";
   align-self: flex-start;
-  min-height: var(--touch-target);
-  padding: 0 var(--space-4);
-  background: var(--paper-sunk);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  cursor: pointer;
+  margin-block-start: var(--space-3);
 }

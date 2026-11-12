@@ -7,10 +7,10 @@
 }
 
 .reading {
+  composes: card from "../../styles/page.module.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  margin-block-start: var(--space-5);
 }
 
 .readingTitle {

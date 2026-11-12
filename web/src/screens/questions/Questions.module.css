@@ -43,8 +43,8 @@
   padding: var(--space-3) var(--space-4);
   font: inherit;
   text-align: start;
-  background: var(--paper-sunk);
-  border: 1px solid transparent;
+  background: var(--paper);
+  border: 1px solid var(--line);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition:
@@ -110,13 +110,10 @@
 }
 
 .card {
+  composes: card from "../../styles/page.module.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-4);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--paper);
 }
 
 /* An answered question steps back without disappearing: it is still evidence

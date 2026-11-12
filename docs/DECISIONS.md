@@ -2,6 +2,49 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-13 — cards, a menu that stays, denser lists, larger small print
+
+**On the branch `ui-polish`, shown to the project lead and not yet adopted.**
+The first round (the entry below) kept the look and made it consistent. The
+project lead's answer was that he had expected more, and of four further
+changes offered he chose all four. Colours and faces are still untouched.
+
+**A section stands on the page as a white card.** The page is painted in the
+sunk grey (`--ground`) and each thing a reader takes in as one — the results,
+one reading of a word, a block of figures — is a white surface with a hairline
+edge (`card` in `web/src/styles/page.module.css`). **This replaces *space over
+lines* for sections**, the first design principle in FRONTEND.md: with ten
+screens of dense rows, space alone no longer said where one thing ended. No
+colour was added — the grey has always been one of the three grounds every
+text colour is held to 4.5:1 on. On a phone a card runs edge to edge, so no row
+lost width; all screens still hold at 320px.
+
+**The menu stays at the top of the window.** In one row from 80rem, all of it
+(69px, with less room above it than before); below that only the row of links
+(60px), the name scrolling away above it. *You are here* is said three ways:
+the accent's wash behind the link, a 3px rule under it, the weight of the name.
+
+**A list row holds the same content in less height.** Nothing was moved behind
+an expander — what a row shows by default is the linguist's and the project
+lead's to decide. What changed is where things stand: buttons end the first
+line instead of taking a line of their own, and parts that stood under each
+other stand side by side where the window has room. Measured at 1280px, the
+median row: a rule 181px → 99px, a compound 187px (and a 12px gap) → 75px, a
+word in the bank 149px → 94px, a built word 277px → 226px. The built word gains
+least because most of its height is the note on its rule's bases, which is
+content. The rules' figures share one column through `subgrid`, so they line
+up down the list.
+
+**The small print is half a step larger**: `--text-xs` 12px → 13px, `--text-sm`
+14px → 15px. Most of what the app shows is set in these two. Half a step and
+not a whole one, which would have made `--text-sm` the body size. The line
+under each menu item keeps 12px (`--text-2xs`), because the menu's width was
+measured against the window.
+
+**Still left alone:** the palette, the faces, the order and wording of the
+menu, every sentence except the one waiting line, what each row shows by
+default, and the feedback button's corner.
+
 ## 2026-11-12 — the interface's controls and states are written once
 
 **On the branch `ui-polish`, shown to the project lead and not yet adopted.**

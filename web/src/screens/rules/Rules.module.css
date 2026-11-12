@@ -52,9 +52,20 @@
 }
 
 .rules {
-  margin: 0;
-  padding: 0;
+  composes: cardList from "../../styles/page.module.css";
   list-style: none;
+}
+
+/* The list is the grid and each rule borrows its columns (`subgrid`, in
+   `RuleRow.module.css`). The second column is as wide as the widest row needs
+   — a rule with three marks — and because it is one column for the whole list,
+   the figures that stand before it line up from the first rule to the last. */
+@media (min-width: 48rem) {
+  .rules {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-5);
+  }
 }
 
 .trouble {

@@ -8,6 +8,7 @@
 }
 
 .block {
+  composes: card from "../../styles/page.module.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -94,6 +95,16 @@
 @media (min-width: 40rem) {
   .facts {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Inside a card a quarter of the row is 260px, and the lexicon snapshot's
+   address is 290px: it broke after «lexicon-». The second and the fourth of
+   the four carry the long values — a licence sentence, an address — so they
+   get the wider share. */
+@media (min-width: 64rem) {
+  .facts {
+    grid-template-columns: 1fr 1.5fr 1fr 1.5fr;
   }
 }
 

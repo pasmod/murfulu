@@ -38,7 +38,23 @@
   flex-direction: column;
   gap: var(--space-4);
   padding: var(--space-5) var(--space-4) 0;
+  background: var(--paper);
   border-block-end: 1px solid var(--line);
+
+  /* **The menu stays while the page scrolls** — chosen by the project lead on
+     2026-11-12. A list here is fifty rows long and the way to another screen
+     was a scroll back to the top.
+
+     Only the menu, not the name above it. While the two stand on separate
+     lines the masthead sticks *above* the window by exactly the height of the
+     name's line, so the name scrolls away and the row of links is what
+     remains: its top padding, the name's line box and the gap under it. A
+     phone gives up 60px to this and not 138. */
+  position: sticky;
+  inset-block-start: calc(
+    -1 * (var(--space-5) + var(--text-xl) * var(--leading-normal) + var(--space-4))
+  );
+  z-index: 30;
 }
 
 .brand {
@@ -135,11 +151,15 @@
   /* Apple's 44 px, which is what makes this usable with a thumb. */
   min-height: var(--touch-target);
   padding: var(--space-2) var(--space-3);
-  border-block-end: 2px solid transparent;
+  border-block-end: 3px solid transparent;
+  border-start-start-radius: var(--radius-md);
+  border-start-end-radius: var(--radius-md);
   color: var(--ink-soft);
   text-decoration: none;
   white-space: nowrap;
-  transition: color var(--motion-fast) var(--ease);
+  transition:
+    color var(--motion-fast) var(--ease),
+    background-color var(--motion-fast) var(--ease);
 }
 
 /* Nine items at the phone's padding are 1031px, which is more than a 1280px
@@ -159,7 +179,10 @@
 /* The gloss is support, not a second label: quieter, smaller, and it never
    competes with the name it sits under. */
 .navGloss {
-  font-size: var(--text-xs);
+  /* The one text still set at 12px: the width of this row was measured against
+     the window — see the breakpoints below — and a size up, it no longer fits
+     a 1280px one beside the name. */
+  font-size: var(--text-2xs);
   line-height: var(--leading-tight);
   color: var(--ink-faint);
   font-weight: var(--weight-normal);
@@ -169,13 +192,22 @@
   color: var(--ink-soft);
 }
 
-.navLink:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .navLink:hover {
+    color: var(--ink);
+    background: var(--paper-sunk);
+  }
 }
 
-.current {
+/* **You are here**, said three ways and not by colour alone: the accent's wash
+   behind the link, the accent's rule under it, and the weight of the name. It
+   was the rule alone, two pixels of it, which is easy to miss in a row of
+   nine. */
+.current,
+.current:hover {
   color: var(--accent-strong);
   font-weight: var(--weight-medium);
+  background: var(--accent-wash);
   border-block-end-color: var(--accent);
 }
 
@@ -226,6 +258,11 @@
     grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
     align-items: center;
     gap: var(--space-6);
+
+    /* One row, so all of it stays at the top of the window — and with less
+       room above it, because what stays is paid for on every screen. */
+    inset-block-start: 0;
+    padding-block-start: var(--space-2);
   }
 
   /* The brand keeps to its own column; without this it would stretch across

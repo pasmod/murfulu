@@ -12,7 +12,7 @@
 
 .builder {
   border: 1px solid var(--line);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--paper);
   /* The header and footer strips carry their own ground to the panel's edge,
      and the radius has to cut them. Nothing focusable sits against the edge —

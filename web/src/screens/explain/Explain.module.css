@@ -35,8 +35,15 @@
   composes: chip from "../../styles/controls.module.css";
 }
 
-.results,
+.results {
+  composes: card from "../../styles/page.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
 .nothing {
+  composes: card from "../../styles/page.module.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-3);

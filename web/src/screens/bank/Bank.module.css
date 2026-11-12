@@ -65,19 +65,49 @@
 }
 
 .list {
+  composes: cardList from "../../styles/page.module.css";
   list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
 }
 
+/* **One line for the word, one for what it means.** The spelling, the groups,
+   the stems, the definition and the link each had a line of their own — 149px
+   a word. The link now ends the word's own line and the groups follow the
+   spelling on it, so a word is two lines and 94px.
+
+   The order on screen is not the order in the markup: the link is last there,
+   so a keyboard still reaches it after the word it belongs to. */
 .word {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
   padding-block: var(--space-3);
   border-block-end: 1px solid var(--line);
+}
+
+.word:last-child {
+  border-block-end: 0;
+}
+
+.word > .head {
+  order: 1;
+}
+
+.word > .badges {
+  order: 2;
+}
+
+.word > .actions {
+  order: 3;
+  margin-inline-start: auto;
+}
+
+.word > .stems,
+.word > .definition {
+  order: 4;
+  flex-basis: 100%;
 }
 
 /* A loanword: listed, and quieter, because it builds nothing. */

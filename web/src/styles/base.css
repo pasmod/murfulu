@@ -18,10 +18,15 @@ html {
   /* Users who set a larger text size get one. Nothing is sized in px except
      the touch target, which is a physical measurement. */
   -webkit-text-size-adjust: 100%;
+
+  /* The menu stays at the top of the window while the page scrolls. Whatever
+     the browser scrolls into view — a link's target, the field a keyboard has
+     just reached — has to stop below it, not under it. */
+  scroll-padding-block-start: 5.5rem;
 }
 
 body {
-  background: var(--paper);
+  background: var(--ground);
   color: var(--ink);
   font-family: var(--font-fa);
   font-size: var(--text-base);

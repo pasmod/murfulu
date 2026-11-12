@@ -41,7 +41,8 @@
    shape and the sentence says what to do next. */
 .trouble {
   padding: var(--space-3) var(--space-4);
-  background: var(--paper-sunk);
+  background: var(--paper);
+  border: 1px solid var(--line);
   border-inline-start: 3px solid var(--evidence-spelling);
   border-radius: var(--radius-sm);
   color: var(--ink);
@@ -67,5 +68,47 @@
 
   to {
     opacity: 1;
+  }
+}
+
+/* ---- the card ------------------------------------------------------------- */
+
+/* **A section stands on the page as a white card.** The page is the sunk grey
+   and each thing a reader takes in as one — the results, one reading of a
+   word, a block of figures — is a white surface with a hairline edge. Chosen
+   by the project lead on 2026-11-12 over the earlier rule of *space, not
+   boxes*: with ten screens of dense rows, space alone no longer said where one
+   thing ended and the next began. The edge is `--line`, the separator, because
+   nothing depends on seeing it — the white against the grey is the shape.
+
+   On a phone a card runs edge to edge. A card inside the page's gutter would
+   take 32px more from a 320px screen, and every row in the app was fitted to
+   the width it has now. */
+.card {
+  margin-inline: calc(var(--space-4) * -1);
+  padding: var(--space-4);
+  background: var(--paper);
+  border-block: 1px solid var(--line);
+}
+
+@media (min-width: 48rem) {
+  .card {
+    margin-inline: 0;
+    padding: var(--space-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+}
+
+/* A card that is a list of rows: the rows bring their own space above and
+   below and a hairline between them, so the card adds none. */
+.cardList {
+  composes: card;
+  padding-block: 0;
+}
+
+@media (min-width: 48rem) {
+  .cardList {
+    padding-block: 0;
   }
 }

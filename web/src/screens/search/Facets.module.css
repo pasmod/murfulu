@@ -1,9 +1,16 @@
 /* Supporting evidence, so it is quiet: no borders, no boxes, just space. */
 
 .facets {
+  composes: card from "../../styles/page.module.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+/* The last panel's rule would sit a hair above the card's own edge. */
+.panel:last-child {
+  border-block-end: 0;
+  padding-block-end: 0;
 }
 
 .panel {

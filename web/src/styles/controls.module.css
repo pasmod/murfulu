@@ -165,9 +165,11 @@
 /* ---- chips --------------------------------------------------------------- */
 
 /* A small choice among several: a filter, a group, an example to try. At rest
-   it is a quiet tile; under the pointer it takes the accent's wash; chosen, it
-   keeps the wash and gains the accent's edge. The edge is there from the start
-   and transparent, so choosing one does not move its neighbours by a pixel.
+   it is a white tile with a hairline edge, which reads on the page's grey
+   ground and inside a white card alike; under the pointer it takes the
+   accent's wash; chosen, it keeps the wash and gains the accent's edge. The
+   edge is there from the start, so choosing one does not move its neighbours
+   by a pixel.
 
    Chosen is said twice on purpose — by `aria-pressed`, which is what a screen
    reader hears, and by `.chipOn` for the lists that mark their choice with a
@@ -175,7 +177,8 @@
 .chip {
   composes: button;
   padding: 0 var(--space-3);
-  background-color: var(--paper-sunk);
+  background-color: var(--paper);
+  border-color: var(--line);
   color: var(--ink);
 }
 

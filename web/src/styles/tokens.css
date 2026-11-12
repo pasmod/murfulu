@@ -23,8 +23,18 @@
      a Behnevis form set in it would break apart mid-word into two faces. */
   --font-latin: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
+  /* **The small print grew half a step on 2026-11-12** — 12px to 13px and 14px
+     to 15px — at the project lead's choice. Most of what the app shows is set
+     in these two: every count, every caption, every rule's explanation.
+     Persian at 14px in this face is legible and tiring; at 15px it is not.
+     Half a step and not a whole one, because a whole one would make `--text-sm`
+     the body size and the hierarchy would be gone.
+
+     `--text-2xs` is the old 12px, kept for the one place whose width was
+     measured against the window: the line under each menu item. */
+  --text-2xs: 0.75rem;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.375rem;
@@ -75,6 +85,12 @@
 
   --paper: #ffffff;
   --paper-sunk: #f6f7f9;
+
+  /* What the page itself is painted in. Since 2026-11-12 that is the sunk
+     grey, and a section stands on it as a white card — see
+     styles/page.module.css. Every text colour was already held to 4.5:1 on
+     this grey, because it has always been one of the three grounds. */
+  --ground: var(--paper-sunk);
 
   /* Two lines, because they do different work.
      `--line` separates — a rule under a table head — and nothing depends on
