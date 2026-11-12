@@ -458,3 +458,47 @@ def test_affixes_and_glides_come_from_every_path_too() -> None:
 
     assert document["affixes"] == ["-ā", "-i"]
     assert document["glide_rules"] == ["G-03"]
+
+
+# -- the build script must stop on a short index --------------------------------
+
+
+def test_a_partial_index_write_fails_the_step(
+    lexicon_snapshot: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """`set -e` in tools/build_corpus_mac.sh stops only on a non-zero exit."""
+    import importlib.util
+    import sys
+
+    from murfulu.search import derivations as writer
+    from murfulu.search import indices
+    from murfulu.search.writer import WriteResult
+
+    class Admin:
+        def __init__(self, client: object) -> None:
+            pass
+
+        def create(self, *arguments: object) -> None:
+            pass
+
+        def release(self, *arguments: object) -> None:  # pragma: no cover
+            raise AssertionError("an incomplete write must not be released")
+
+    monkeypatch.setenv("MURFULU_LEXICON_PATH", str(lexicon_snapshot))
+    monkeypatch.setattr(indices, "connect", lambda: object())
+    monkeypatch.setattr(indices, "IndexAdmin", Admin)
+    monkeypatch.setattr(
+        writer,
+        "write",
+        lambda *a, **k: WriteResult(written=1, failures=[{"reason": "refused"}]),
+    )
+    path = Path(__file__).resolve().parents[1] / "tools" / "run_precompute.py"
+    spec = importlib.util.spec_from_file_location("run_precompute", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["run_precompute"] = module
+    spec.loader.exec_module(module)
+    status = module.main(
+        ["--no-corpus", "--no-semantics", "--elasticsearch", "--corpus-version", "vT"]
+    )
+    assert status == 1

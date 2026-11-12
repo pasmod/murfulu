@@ -140,6 +140,32 @@ and 7,118 sister lists moved, all following from them; nothing else.
 readings onto a document of its own). Released with `deploy/server.sh data`,
 `release v14 lexicon-20261012`, then `deploy` for the web.
 
+**v15 (2026-11-12) was built on the Mac, outside Docker** — karbon 1.3.2's
+lexicon (`lexicon-20261111`) and the word-bank groups. Its peak is **7.2 GB
+resident** (precompute 5.5 minutes, 7.5 in all), which fits neither the VPS
+beside Sokhan nor a container on the Mac, whose Docker Desktop has 7.7 GB for
+everything it runs. So the build runs in the Mac's own Python and reaches the
+stack's Elasticsearch through a forwarder published on 127.0.0.1 only
+(`tools/es_forward.py`, run in a throwaway container of the api image):
+
+```bash
+docker run -d --rm --name murfulu-es-forward --network murfulu_default \
+  -p 127.0.0.1:9201:9201 -v "$PWD/tools/es_forward.py:/fwd.py:ro" \
+  --memory 128m murfulu-api:latest python /fwd.py
+tools/build_corpus_mac.sh v15 lexicon-20261111   # steps 1-3, --no-release
+docker stop murfulu-es-forward
+```
+
+The comparison is `data/compare-v14-v15.md`: +1,105,121 records (+60%), no
+rule builds less, and every lost and gained path traced to a lexicon reading
+that changed. `tools/attribute_lexicon_change.py` follows `merge_map` now and
+takes `--old-overrides` (the table as it stood for the older build). Not
+released. The route to the VPS is a snapshot of the three v15 indices (about
+1.05 GB) taken on the Mac — `deploy/server.sh corpus` takes its snapshot on the
+previous host and includes `passages`, which the VPS already holds, so a Mac
+route still has to be written into DEPLOY; it belongs to the deploy step and
+runs only on the project lead's word.
+
 **The precompute runs first, and this order is not cosmetic.** The ingest
 takes the precompute's affix map, so an ingest run before it has nothing to
 pass. This file listed the two the other way round until 2026-08-14, and **v6

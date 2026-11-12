@@ -200,7 +200,11 @@ def _addition(raw: dict[str, Any]) -> Addition:
 
 def load(directory: Path | None = None) -> Overrides:
     """Read the authored file, or return nothing when there is none."""
-    path = (directory or default_directory()) / OVERRIDES_FILE
+    return load_file((directory or default_directory()) / OVERRIDES_FILE)
+
+
+def load_file(path: Path) -> Overrides:
+    """Read one overrides table by its path — an older revision of it, say."""
     if not path.is_file():
         return Overrides()
     document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}

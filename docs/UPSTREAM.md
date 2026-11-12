@@ -18,6 +18,58 @@ should eventually move to karbon so it is not implemented twice.
 Every item states what was measured, so a pull request can quote a number
 rather than an impression.
 
+## Re-checked against karbon 1.3.2 (2026-11-12)
+
+karbon 1.3.2 (`lexicon-20261111`) is the linguist's final word bank. What it
+settled of this register, and what the import turned up. The new items are
+drafted as issues for the karbon maintainer, to be sent on the project lead's
+word; the full measurement is in `data/compare-v14-v15.md`.
+
+**Settled upstream.** A12 — no ـواره entry reads `-uāre` any more; the 16
+found on 2026-11-10 are `-vāre` now. Three ـواره endings are still odd in
+another way: کهواره `Kahvārh`, مهواره `Mahvārh`, درواره `Dorvārre`. B4 — آزردن
+reads آزار and گسیختن گسل (the رُفتن reading is still missing, so that addition
+stays). که as the conjunction is a row of its own (`ke`, پیوند‌واژه) beside the
+adjective `keh`.
+
+**B7, in part.** چرا (`čerā` پیوند‌واژه, `Čarā` کارنام), چون (`čun`,
+پیش‌واژه + پیوند‌واژه) and بر (`bar`, پسوند + پیش‌واژه; `bar`/`bor`, کاربهر) are
+headwords now. What B7 asked for is still missing: بَر the fruit as a نام, and
+چرا and چون as چون‌واژه, which N-097 and N-095 need for چرایی and چونی.
+
+**A13. Readings that lost a vowel between the releases.** آذر 3170, reviewed,
+«آتش», `Āzar` → `Āzr`; بالشک 42861 `Bālešk` → `Bālšk`; آب‌بخش 2856 `ābabxš` →
+`ābbabxš`. Found by spot checks, not by a full search.
+
+**A14. 56 readings end in three consonants, 34 of them reviewed**, most
+unchanged since 1.2.0: خرفسر `Xarafsr`, زبرک `Zabrk`, گوسفنددزد `gusfandodzd`,
+تیزآهنگ `tizāhng`, پوست‌تخت `Pustatxt`. In the compounds the second part's
+vowel has moved into the joint.
+
+**A15. Five ـنیوش compounds are read `-niyvš`** (عذرنیوش `ozrniyvš`,
+مدح‌نیوش `madhniyvš`, نصیحت‌نیوش، باطل‌نیوش، ثنانیوش), where the ten others read
+the present stem of نیوشیدن correctly, *-niyuš*. All five are filed وام‌واژه,
+so out of word formation, but shown in the word bank.
+
+**A17. Three verb forms are filed as کارنام, and claim the verb's corpus
+counts.** بود 59840 `Bud`, شد 63673 `Šod` (both «مص مرخم») and نیست 66662
+`Nist` («فعل… نه هست»). In corpus v15 they newly link the verb forms *was*,
+*became* and *is not* — 143,873, 100,612 and 81,302 occurrences — to a
+کارنام, the way که did in v13 (data/compare-v14-v15.md).
+
+**A16. آموزگار and its own derivative disagree.** آموزگار was `āmuzgār` in 1.2.0
+and is `āmuzegār`; آموزگاری, new and reviewed, is `Āmuzgāri`, as the grammar's
+example for N-095 writes it.
+
+**B8. رخ «چهره» is not a headword.** The only row is 68742 `rex`, صوت,
+unreviewed; رخسار `Roxsār` is there, so N-053's example cannot be rebuilt
+from its base.
+
+**Two questions rather than faults.** Three function words carry the ezafe in
+the headword reading (بهر `bahré`, ازآن `azāné`, بی ز `bizé`). And a row in
+two groups carries one case: چشم 5692 is نام **and** صوت and reads `češm`,
+where a نام is capitalised.
+
 ---
 
 ## A — faults in karbon's data

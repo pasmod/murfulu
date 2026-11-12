@@ -15,8 +15,23 @@ reading it was built from (``source_spelling_fa`` + ``source_latin``):
 ``row added/removed``  the row is new, or gone
 ``stems changed``  same reading, other stems
 ``variants changed``  the list of second readings moved
-``source unchanged``  **nothing** about the source moved — the line that must
-                      be zero for the difference to be the lexicon's alone
+``word classes changed``  the word classes the build fed it moved — since
+                      karbon 1.3.0 they come from the linguist's word-bank
+                      groups (``rules/bank_groups.yaml``), several per word
+``now out of word formation``  the reading is a وام‌واژه, which builds nothing
+``merged into another row``  karbon 1.3.0 merged the row (``merge_map``)
+``source unchanged``  **nothing** about the source moved
+``metadata only``  only ``needs_review`` or the dictionary's label moved, and
+                      neither reaches what the build makes — so it cannot
+                      explain a path, and counts with ``source unchanged`` in
+                      the line that must be zero for the difference to be the
+                      lexicon's alone
+
+Row ids are followed through the newer snapshot's ``merge_map``, so a merged
+row is not mistaken for a removed one. ``--old-overrides`` reads the older side
+with the overrides table as it stood when that build ran (``git show
+REV:rules/lexicon_overrides.yaml``), so a later correction to the table is not
+mistaken for an unchanged source.
 
 Readings are taken through :class:`~murfulu.lexicon.store.Lexicon`, so the
 overrides and the look-alike repair are applied exactly as the build saw them.
@@ -31,6 +46,9 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
+from murfulu.generation import bases_of
+from murfulu.lexicon import overrides as held_overrides
+from murfulu.lexicon.bank import is_excluded
 from murfulu.lexicon.store import Lexicon
 from murfulu.scoring.precompute import REVIEWED_CATEGORIES
 
@@ -48,6 +66,13 @@ class Source:
     stems: tuple[str | None, ...]
     variants: tuple[str, ...]
     review: bool
+    #: The word classes the build entered it as (stems for a verb).
+    classes: tuple[str, ...] = ()
+    excluded: bool = False
+    #: Whether the build's input pool takes it: the pool is chosen by the
+    #: dictionary's label (``precompute.REVIEWED_CATEGORIES``), so a label
+    #: change can move a reading in or out of what is built at all.
+    in_pool: bool = False
 
 
 @dataclass
@@ -56,13 +81,27 @@ class Side:
 
     readings: dict[Key, Source]
     rows: dict[int, tuple[str, tuple[str, ...]]]
+    #: Old row id → the row it was merged into. Empty before karbon 1.3.0.
+    merged: dict[int, int]
 
 
-def _side(path: Path) -> Side:
+def _side(path: Path, overrides_file: Path | None = None) -> Side:
     readings: dict[Key, Source] = {}
+    primaries: set[Key] = set()
     rows: dict[int, tuple[str, tuple[str, ...]]] = {}
-    with Lexicon.open(path) as lexicon:
+    held = None
+    if overrides_file is not None:
+        if not overrides_file.is_file():
+            raise SystemExit(f"--old-overrides: no such file {overrides_file}")
+        held = held_overrides.load_file(overrides_file)
+    with Lexicon.open(path, overrides=held) as lexicon:
+        if held is not None and not held.applies_to(lexicon.snapshot_id):
+            raise SystemExit(
+                f"--old-overrides: {overrides_file} was not checked against "
+                f"{lexicon.snapshot_id}; it is the wrong table for this build"
+            )
         print(f"- `{lexicon.snapshot_id}`: overrides {lexicon.describe_overrides()}")
+        merged = lexicon.merge_map()
         for one in lexicon.all_readings():
             source = Source(
                 primary=one.latin,
@@ -76,12 +115,36 @@ def _side(path: Path) -> Side:
                 ),
                 variants=one.latin_variants,
                 review=one.needs_review,
+                classes=tuple(sorted({base.word_class for base in bases_of(one)})),
+                excluded=is_excluded(one),
+                in_pool=one.lexicon_category in REVIEWED_CATEGORIES,
             )
-            for latin in one.all_latin:
+            # A word's own reading wins over another row's second reading:
+            # 1.3.2 added کشنی *Košni* as a row of its own, which 1.2.0 had
+            # only as a variant of *Kešni*, and the build took it from the new
+            # row. First come, first kept among variants alone.
+            key = (one.spelling_fa, one.latin)
+            if key not in primaries:
+                readings[key] = source
+                primaries.add(key)
+            for latin in one.latin_variants:
                 readings.setdefault((one.spelling_fa, latin), source)
             for row in one.source_entry_ids:
                 rows[row] = (one.spelling_fa, one.all_latin)
-    return Side(readings, rows)
+    return Side(readings, rows, merged)
+
+
+#: Changes that do not reach what a build makes: the review flag, and the
+#: dictionary's label once the word classes it fed are compared directly.
+_METADATA = frozenset({"needs_review changed", "category changed"})
+
+#: Labels that explain nothing, and must count to zero in the check line.
+UNEXPLAINED = ("source unchanged", "metadata only", "source in neither snapshot")
+
+
+def unexplained(label: str) -> bool:
+    """True when a cause label does not account for a moved path."""
+    return label.startswith(UNEXPLAINED)
 
 
 def classify(key: Key, old: Side, new: Side) -> str:
@@ -96,15 +159,39 @@ def classify(key: Key, old: Side, new: Side) -> str:
                 ("variants changed", before.variants != after.variants),
                 ("needs_review changed", before.review != after.review),
                 ("primary/variant swapped", before.primary != after.primary),
+                ("word classes changed", before.classes != after.classes),
+                ("left the input pool", before.in_pool and not after.in_pool),
+                ("entered the input pool", after.in_pool and not before.in_pool),
+                (
+                    "now out of word formation",
+                    after.excluded and not before.excluded,
+                ),
             )
             if differs
         ]
-        return " + ".join(moved) or "source unchanged"
+        if not moved:
+            return "source unchanged"
+        explaining = [label for label in moved if label not in _METADATA]
+        if not explaining:
+            return "metadata only (" + " + ".join(moved) + ")"
+        return " + ".join(moved)
     present = before or after
     if present is None:
         return "source in neither snapshot"
     other = new if before else old
-    kept = [other.rows[row] for row in present.ids if row in other.rows]
+    if before:
+        # Old ids into the new snapshot, through its merge map.
+        across = [new.merged.get(row, row) for row in present.ids]
+    else:
+        # New ids back into the old one: the row itself, or what merged into it.
+        across = list(present.ids) + [
+            old_id for old_id, new_id in new.merged.items() if new_id in present.ids
+        ]
+    kept = [other.rows[row] for row in across if row in other.rows]
+    if before and any(row in new.merged for row in present.ids) and kept:
+        spelling, latin = kept[0]
+        if (spelling, key[1]) != key or key[1] not in latin:
+            return f"merged into another row ({present.category})"
     if kept:
         spelling, latin = kept[0]
         if spelling == key[0] and key[1] not in latin:
@@ -146,10 +233,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("new_lexicon", type=Path)
     parser.add_argument("old_derivations", type=Path)
     parser.add_argument("new_derivations", type=Path)
+    parser.add_argument(
+        "--old-overrides",
+        type=Path,
+        help="the overrides table as it stood when the older build ran",
+    )
     arguments = parser.parse_args(argv)
 
     print("## Lexicon\n")
-    old, new = _side(arguments.old_lexicon), _side(arguments.new_lexicon)
+    old = _side(arguments.old_lexicon, arguments.old_overrides)
+    new = _side(arguments.new_lexicon)
     pool = set(REVIEWED_CATEGORIES)
     differs: Counter[str] = Counter()
     for key in set(old.readings) | set(new.readings):
@@ -201,10 +294,12 @@ def main(argv: list[str] | None = None) -> int:
     print(f"- records {len(was):,} → {len(now):,} ({len(now) - len(was):+,})")
     print(f"- records gone {sum(gone.values()):,}, new {sum(appeared.values()):,}")
     print(f"- paths lost {sum(lost.values()):,}, gained {sum(gained.values()):,}")
+    not_lost = sum(count for label, count in lost.items() if unexplained(label))
+    not_gained = sum(count for label, count in gained.items() if unexplained(label))
     print(
-        f"- **paths whose source did not change: lost "
-        f"{lost['source unchanged']:,}, gained {gained['source unchanged']:,}** "
-        f"(must be 0 for the difference to be the lexicon's alone)"
+        f"- **paths no change in their source explains: lost {not_lost:,}, "
+        f"gained {not_gained:,}** (source unchanged, metadata only, or in "
+        f"neither snapshot; must be 0 for the difference to be the lexicon's alone)"
     )
     _table("Records gone, by what happened to their source", gone)
     _table("Records new, by what happened to their source", appeared)
@@ -215,7 +310,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"- {label}")
         for line in examples[label]:
             print(f"  - {line}")
-    return 0
+    # Non-zero when the check fails, so a script cannot read past it.
+    return 1 if not_lost or not_gained else 0
 
 
 if __name__ == "__main__":

@@ -7,6 +7,19 @@ Things we need answered before or during planning. Move each one to
 
 ## Opened 2026-10-27 (the move to the VPS)
 
+### S36. بود، شد and نیست now claim the verb's corpus counts
+
+Found 2026-11-12 building v15 (`data/compare-v14-v15.md`). karbon 1.3.2 files
+three verb forms as کارنام entries — بود *Bud* and شد *Šod* («مص مرخم»), نیست
+*Nist* («فعل») — so the link pass credits them with the verbs' occurrences:
+143,873, 100,612 and 81,302. A form built on *Bud* is then "attested" by every
+*was* in the corpus: که in v13 again (S-v14, `rules/function_words.yaml`).
+The function-word list left verb forms out on purpose («است and verb forms»).
+Two ways out, the project lead's to choose: put the three spellings on the
+list (they then credit nothing, like که), or ask karbon whether a shortened
+infinitive belongs in the bank as a کارنام at all (UPSTREAM A17). Nothing was
+changed; v15 carries the credit.
+
 ### S35. How much memory does a corpus build need, and where does it run now?
 
 The previous host built v13 and v14 in a one-shot container capped at 7 GB
@@ -19,6 +32,13 @@ holds everything a build needs, then either cap it to fit the VPS, run it
 on the previous host and move the result with `deploy/server.sh corpus`, or stop
 Sokhan's reclaimable page cache from being the margin. Unanswered until the
 next corpus version is due.
+
+**Measured 2026-11-12 on v15** (karbon 1.3.2, 2.95 million records): **peak
+7.2 GB resident**, 7.5 minutes, built on the Mac outside Docker
+(ENGINEERING, v15). So the VPS cannot build it beside Sokhan, and the open part
+is only where future builds run: the Mac with a snapshot moved to the server,
+as prepared for v15 (DEPLOY), or a host with room. L26's switch, if
+turned on, would multiply the build about tenfold (DECISIONS 2026-11-12).
 
 ---
 

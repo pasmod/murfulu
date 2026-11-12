@@ -265,6 +265,7 @@ def main(argv: list[str] | None = None) -> int:
     if arguments.out:
         job.report.output_bytes = _write_jsonl(arguments.out, job)
 
+    incomplete = False
     if arguments.elasticsearch:
         from murfulu.search import derivations as writer
         from murfulu.search.indices import IndexAdmin, connect
@@ -276,6 +277,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"elasticsearch  {result.summary()}")
         if not result.complete:
             print("alias          left alone; the write did not finish")
+            incomplete = True
         elif arguments.no_release:
             print(
                 f"built          derivations-{arguments.corpus_version}, "
@@ -288,7 +290,9 @@ def main(argv: list[str] | None = None) -> int:
     print(job.report.summary())
     silent = job.report.rules_that_never_fired(pack)
     print(f"rules unused   {len(silent)} of {len(pack.rules)}: {', '.join(silent)}")
-    return 0
+    # A short index must stop a build script: the next step would build on it
+    # and the comparison would read a partial version as a whole one.
+    return 1 if incomplete else 0
 
 
 if __name__ == "__main__":
