@@ -5,6 +5,70 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-10 (session 26) — هوشواره: a regular word the engine cannot build, for the reason it cannot build هوشمند
+
+The project lead asked about **هوشواره**, put forward in 2026 as a Persian
+word for *artificial intelligence*: is it well formed, by which rules, does it
+carry the meaning, was it used before, and is there a better word. Same
+protocol as sessions 21–25, run by hand. Candidates and evidence in
+[L35](FOR_THE_LINGUIST.md#l35-هوشواره--a-word-for-ai-the-engine-refuses-on-one-category);
+one karbon finding in [UPSTREAM A12](UPSTREAM.md#a12-a-consonantal-و-before-ā-is-written-u-and-sixteen-ـواره-words-cannot-be-taken-apart-in-their-own-spelling).
+Corpus v12 (25,497,189 words), snapshot `lexicon-20260808`. Five things for
+the record.
+
+**هوشواره is regular, and the engine refuses it on one word class.**
+`/explain?word=Hušvāre` returns `rebuilt: false` (depth 2, settled), with
+`-vāre` among the affixes tried without a base. هوش is filed **اسم معنی**, so a
+kārnām, and builds **1** form at one step (هوشی). Held as a nām in memory, the
+same base builds **64**, and هوشواره is two of them: **N-078** (`-vāre`,
+Mānand) and **N-079** (`-vāre`, Nesbat). The controls are one letter away:
+گوشواره rebuilds under nine accounts, N-078 and N-079 on گوش (اسم ذات) among
+them, and **جشنواره
+rebuilds from جشن, which karbon files اسم ذات** — a celebration counts as a
+thing, intelligence as a concept, and that is the whole difference. This is
+L26 on its clearest pair yet, and it costs classical words too: **هوشمند
+(255 / 236 / 54), بیهوش (432 / 385 / 87), باهوش (70 / 69 / 29) and
+فردوسی's هوشور** all fail to rebuild from هوش.
+
+**Every ـواره in the lexicon is a thing; none is a faculty or a discipline.**
+74 entries end in the letters; without the خوار + ه words and the ones where
+واره is not a suffix (آواره، سواره، همواره), what is left are count nouns:
+ornaments worn on the body (گوشواره، گریواره), holders (چراغواره، گاهواره),
+a load (پشتواره), a wage (ماهواره، مهواره), a likeness (دیواره «چیزی چون
+دیوار»), and the modern سنگواره. Dehkhoda's own entry for واره gives both
+«شبه. مانند. نظیر» and «پسوند آلت مانند گوشواره، دستواره». So هوشواره is
+heard as a **thing**: it fits *an AI* — a system, a model — and AI as a
+technology far better than the discipline.
+
+**ماهواره is the model, and it was a reused word.** The satellite term
+replaced قمر مصنوعی exactly as هوشواره would replace هوش مصنوعی. But in
+Dehkhoda, and in 4 of its 5 corpus lines (one poet), ماهواره is **a monthly
+wage**; one modern line is the satellite. The pack files `Māhvāre` under
+N-079, Nesbat — the wage — while the satellite is N-078's Mānand, *a moon-like
+thing*. سنگواره's four lines are all twentieth-century poets using it for
+*fossil, petrified*: a ـواره coinage the poets took up within decades.
+
+**The word is older than the 2026 wave, and none of it is in the corpus.**
+0 occurrences, no headword. Outside (S33): the name of a Persian NLP research
+group since at least 2020; Google's Persian interface, where AI Overviews is
+«مرور هوشواره‌ای» and *generative AI* is «هوشواره زایا»; and a 2026 note using
+it for any cognitive system, biological or artificial. The Academy said on
+2026-06-24 that it is **not approved** and not yet before its council; no later
+decision was found. Sources in L35.
+
+**The only route the engine has into هوش is a dictionary verb.** هوشیدن is a
+مصدر in karbon with no definition; Dehkhoda's entry is «تعقل کردن» from
+برهان، آنندراج، انجمن‌آرا with no verse, plus a Pahlavi «خشک شدن» — the
+profile session 25 learned to check on شوند. Through it the engine builds 34
+forms (هوشا، هوشنده، هوشش…), and **هوشور rebuilds only through it** (V-042),
+never from هوش. It is also why `/explain` at depth 3 is not settled: the build
+from هوشیدن hits the form cap. Nothing was proposed on it alone.
+
+**Nothing was changed.** The two rulings that would let the engine build
+هوشواره — هوش's class (L26) and which ـواره it is — are on L35.
+
+---
+
 ## 2026-09-05 (session 25) — جوهر، علت، معلول: a loan that can return, and the case in a Behnevis query
 
 Three terms through the protocol in one session, run by hand rather than by

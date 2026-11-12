@@ -55,6 +55,13 @@ Whether it should become a `tools/` script, a documented recipe, or the
 coining prototype that PLAN 9.6 defers is the project lead's call. Noted here
 because the cost of not deciding is now four repeats, not one.
 
+**2026-11-10:** the هوشواره run (L35) re-derived it once more, and needed two
+steps the earlier runs had not written down: for a word that is *already in
+use*, establish its origin and status outside the corpus before judging it;
+and test a base that `/explain` refuses by holding it in another word class
+in memory, which no endpoint offers — it was done with the engine library
+inside the api container.
+
 ---
 
 ## Opened 2026-08-20 (session 20)

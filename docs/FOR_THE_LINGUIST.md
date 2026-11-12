@@ -2371,3 +2371,203 @@ on the rules.
 
 **What we did meanwhile**: nothing. The page for the project lead carries the
 section «از تعریف ارسطو» with the same table.
+
+---
+
+## L35. هوشواره — a word for AI the engine refuses on one category
+
+Asked for by the project lead on 2026-11-10: is **هوشواره**, put forward in
+2026 for *artificial intelligence*, well formed; by which rules; does it carry
+the meaning; was it used before; is there a better word. Same protocol as
+L29–L33. Nothing in the code or the rules changed. Figures are corpus v12
+(25,497,189 words) and snapshot `lexicon-20260808`, and they are rough
+measurements on a corpus of mostly classical poetry.
+
+### Where the word comes from, as far as could be established
+
+| | source |
+|---|---|
+| Name of a Persian NLP research group (هوش‌واره in its README; first release 2020-05-27) | [github.com/hooshvare/parsbert](https://github.com/hooshvare/parsbert) |
+| Google's Persian interface: AI Overviews «مرور هوشواره‌ای», AI Mode «حالت هوشواره‌ای», generative AI «هوشواره زایا», used as a noun («… نوعی هوشواره است») — the pages carry no date | [support.google.com/websearch/answer/14901683?hl=fa](https://support.google.com/websearch/answer/14901683?hl=fa), […/16011537?hl=fa](https://support.google.com/websearch/answer/16011537?hl=fa) |
+| The Academy, 2026-06-24: **not approved**, not yet before the word-selection council; its AI working group has the file; هومص is also in circulation | [Mehr News](https://www.mehrnews.com/news/6868797/) |
+| A note (Khordad 1405) using it for any organised cognitive system, biological, artificial or hybrid — wider than AI | [civilica.com/note/23065](https://civilica.com/note/23065/) |
+| An opinion piece (2026-09-21) proposing it as the author's own, with هوشوارک for *AI agent* and زُوانا for *LLM*; the same author argued against coining altogether on 2026-11-03 | [Gooya News](https://news.gooya.com/2026/09/post-113377.php), [Iran Global](https://www.iranglobal.info/fa/node/203806) |
+| A newspaper column (Javan, 2026-09-25) arguing for it on the ماهواره model | [javanonline.ir](https://www.javanonline.ir/fa/news/1381374/) |
+
+**So the word did not start in 2026, and nobody could be found who coined
+it.** One blog says the Academy's group proposed it in Tir 1405; the
+Academy's own statement of that month contradicts this. No later decision
+was found. The word is **0 in the corpus** and **not a karbon headword**.
+
+### The engine: one wall, and it is L26
+
+```
+/explain?word=Hušvāre   rebuilt: false, settled (depth 2)
+    affixes tried without a base: -e, -vāre
+```
+
+هوش is filed **اسم معنی** → kārnām, and builds **1** form at one step (هوشی).
+Held as a nām, with nothing else changed, it builds **64**, and هوشواره is two
+of them:
+
+| rule | affix | tag | the pack's example |
+|---|---|---|---|
+| **N-078** | `-vāre` | Mānand — *like* | Sangvāre — سنگواره |
+| **N-079** | `-vāre` | Nesbat — *belonging to* | Māhvāre — ماهواره |
+
+**The controls are one letter away**, and they are the sharpest form of L26
+this project has:
+
+| | filed | `/explain` |
+|---|---|---|
+| **گوشواره** | گوش — اسم ذات | **true**, 9 accounts, N-078 and N-079 among them |
+| **جشنواره** | جشن — **اسم ذات** | **true**, 5 accounts, N-078 and N-079 |
+| **هوشواره** | هوش — **اسم معنی** | **false** |
+
+A celebration is filed as a thing and intelligence as a concept; that is the
+whole of the difference. And the same wall costs your classical words, not
+only the new one:
+
+| word | corpus | rebuilds from هوش? |
+|---|---|---|
+| بیهوش | 432 / 385 / 87 | no — N-008 if هوش were a nām |
+| هوشمند | 255 / 236 / 54 | no — N-071 |
+| باهوش | 70 / 69 / 29 | no — N-002 |
+| هوشور (فردوسی: «صاحب هوش. هوشمند») | 2 / 2 / 2 | no — N-080; it rebuilds **only from هوشیدن**, by V-042 |
+| هوشواره | 0 | no — N-078, N-079 |
+
+**The compound route is shut by the same class**: `/compound?word=هوش` with
+partner افزار, ساختن or اندیشیدن returns **0 rows**, as پی did in L33.
+
+### What the tail means, in your dictionary's own words
+
+74 entries end in واره. Leaving out the خوار + ه words (شیرخواره، آبخواره…)
+and the ones where واره is not a suffix (آواره، سواره، همواره), the
+derivations are:
+
+| kind | entries | Dehkhoda |
+|---|---|---|
+| worn on the body | گوشواره، گریواره | گریواره: «واره پسوند نسبت و اتصاف» |
+| a holder | چراغواره، گاهواره / گهواره | |
+| an amount | پشتواره | «آن مقدار باشد از بار که…» |
+| a wage | ماهواره، مهواره | «ماهیانه باشد که به نوکران دهند» |
+| a likeness | دیواره | «چیزی چون دیوار. مانند دیوار» |
+| modern | سنگواره | «فسیل» |
+
+And the entry for واره itself: «شبه. مانند. نظیر» **and** «پسوند آلت مانند
+گوشواره، دستواره». Under درواره it lists the senses «نوبت و مانند و بسیار و
+فصل».
+
+**Every one is a concrete count noun — a thing, an amount, a payment. None
+names a faculty, a capacity or a field.** So a reader hears هوشواره as *a
+thing*: either *an intelligence-like thing* (N-078) or *a thing that belongs
+to the mind* (N-079, the گوشواره reading). Both land on **an AI** — a system,
+a model, «یک هوشواره، هوشواره‌ها» — and on AI as a technology, as Google uses
+it. Neither lands on the discipline.
+
+### ماهواره is the model, and it was a reused word
+
+The satellite term replaced **قمر مصنوعی** — the Academy's word-selection
+group, via
+[Khabar Online (2021)](https://www.khabaronline.ir/news/1561099/),
+credits it to Mohsen Hashtroudi — which is exactly the move هوشواره makes on
+**هوش مصنوعی**: the *-vāre* of likeness does the work of مصنوعی. That is the
+strongest argument for the word.
+
+**But ماهواره had an older sense, and the pack's example is that sense.**
+Dehkhoda has only the monthly wage, and **4 of the 5 corpus lines** — all one
+poet, writing of stipends and salaries — mean that; one modern line is the
+satellite. The pack files `Māhvāre` under **N-079, Nesbat**: right for the
+wage, while the satellite is **Mānand**, N-078. (The example also fails on
+L13's vowel — karbon reads ماه as `Māe`.) **سنگواره's 4 lines are all
+twentieth-century poets using it for *petrified*** — a ـواره coinage taken up
+by the poets within decades.
+
+### The cost: گوشواره is one letter away, and the poets pair them
+
+**گوش و هوش is a fixed pair**: 40 documents, and هوش و گوش 9 more. So
+هوشواره will be heard against گوشواره (75 / 73 / 35; گوشوار 372). The second
+reading it invites — *an ornament for the mind* — is not new: one poet twice
+makes his verses a **گوشوار جان**, an earring for the soul. Not a confusion
+risk in speech, where ه and گ are distinct; a pun risk, and a pleasant one.
+
+### Candidates
+
+| rank | candidate | for | `/explain` / `/compound` | corpus | reason |
+|---|---|---|---|---|---|
+| **1** | **هوشواره** *Hušvāre* | **an AI** (system, model) and AI as a technology | **false** — N-078 / N-079 the moment هوش is a nām | 0 | regular; the ماهواره move on هوش مصنوعی; already in use; short |
+| **2** | **هوش مصنوعی** (keep) | **the field** | a phrase, not a coinage | 0 (modern) | established; no ـواره noun names a discipline. L30's rule: where Persian has a working word, report it |
+| 3 | **هوشافزار** *Hušafzār* | AI software | compound: **0 rows** (L26); a nām front would get N-104's ā (L28) — گوش + افزار → گوشاافزار | 0 | the نرم‌افزار / جنگ‌افزار tail is clear and modern; but it says *tool*, not *intelligence-like*, and is longer |
+| 4 | **هوشا** *hušā* | the adjective, *intelligent* (دانا، بینا، توانا) | **true**, 2 — V-024 / V-026 ← هوشیدن | 0 | the only candidate the engine builds today; but it rests on هوشیدن (below), carries nothing of *artificial*, and is also هوش + the vocative ـا (N-032) |
+| 5 | **هوشک** *Hušak* | a small AI agent (the پیامک shape) | false — N-059/060/061 if a nām | 0 | short; but ـک is first a diminutive, *a little wit* |
+
+**هوشیدن, stated plainly.** karbon has it as a مصدر with no definition;
+Dehkhoda's entry is «تعقل کردن» from **برهان، آنندراج، انجمن‌آرا, with no
+verse**, plus a Pahlavi «خشک شدن». That is the profile L33 taught us to check
+on شوند. The engine builds **34** forms off it against 1 off هوش, so if it is
+a real verb, *coin off the verb* (L31) opens the whole family — but nothing is
+recommended on it alone.
+
+### Rejected, with reasons
+
+| candidate | why |
+|---|---|
+| هوشنده | `true`, V-022 ← هوشیدن — *one who reasons*: a person, and the verb is doubtful |
+| هوشش | 90 / 86 / 48 — the lines are هوش + the clitic ش, *his mind*; the کردمان trap |
+| اندیشگر / اندیشنده | `true`, V-032 / V-022 ← اندیشیدن — *thinker*, occupied in modern Persian by the intellectual |
+| هوشور | فردوسی's adjective «صاحب هوش. هوشمند»: occupied |
+| هوش ماشینی | a phrase, and ماشین is not a headword (404) |
+| هومص | a clipping; no rule in the pack makes one, and it reads as an acronym |
+| هوشوارک | builds on هوشواره, so it waits on the same ruling |
+
+### Evidence
+
+| word | Behnevis | `/explain` (depth 2) | rules | corpus |
+|---|---|---|---|---|
+| **هوشواره** | Hušvāre | **false**, settled; depth 3 unsettled — the build from هوشیدن hits the cap | — | 0 |
+| هوش | Huš | headword, اسم معنی | 1 form at one step; 64 as a nām | 4,096 / 3,407 / 197 |
+| گوشواره | Gušvāre | true, 9 | N-078, N-079 ← گوش; N-086, N-089 ← گوشوار | 75 / 73 / 35 |
+| جشنواره | Jašnvāre | true, 5 | N-078, N-079 ← جشن | 2 / 2 / 2 |
+| سنگواره | Sangvāre | true, 5 | N-078, N-079 ← سنگ | 4 / 4 / 4 |
+| — in karbon's spelling | Sanguāre | **false** | UPSTREAM A12 | |
+| ماهواره | Māhvāre | true, 4 | N-086, N-089 ← ماهوار — **not** N-079 ← ماه (L13) | 5 / 5 / 2 |
+| چراغواره، پشتواره، گریواره | Čerāqvāre… | true, 5 each | N-078, N-079 | — |
+| هوشور | hušvar | true, 1 | **V-042 ← هوشیدن** | 2 / 2 / 2 |
+| هوشا | hušā | true, 2 | V-024, V-026 ← هوشیدن | 0 |
+| اندیشگر | andišgar | true, 1 | V-032 ← اندیشیدن | 0 |
+| هوشمند، بیهوش، باهوش | — | false | — | 255; 432; 70 |
+| هوشش | — | — | — | 90, the clitic |
+
+### What could not be verified
+
+- **Who coined it.** The earliest use found is the research group's name in
+  2020. Whether Google's localisation took it from there, and since when
+  Google uses it, could not be dated: the help pages carry no date and are not
+  in the Web Archive. One opinion piece reports, second hand, «2024».
+- **A linguist's published judgement.** Search results attribute to the
+  lexicographer Farhad Ghorbanzadeh the view that the word is sound, with two
+  senses, *having intelligence* and *intelligence-like*; the page
+  (motamem.org) refused the fetch, so it was not read.
+- **Meaning, throughout.** N-078 and N-079 carry tags and no sentence;
+  `meaning_fa` is null. Which reading a Persian ear takes first is your
+  judgement.
+- **Modern usage beyond these pages.** The corpus is classical (S33). The
+  Academy's council may have ruled after June 2026 without it reaching the
+  pages searched.
+
+### The questions, and they are yours
+
+1. **Is هوش a nām for word formation?** It is L26 again, on its clearest
+   pair: گوشواره and جشنواره build, هوشواره does not, and neither do هوشمند،
+   بیهوش، باهوش. One ruling settles all of them.
+2. **Which ـواره is هوشواره** — N-078, *intelligence-like*, or N-079, *of the
+   mind*? We read N-078, as in the satellite.
+3. **N-079's example.** Is `Māhvāre` there for the wage (Nesbat, as filed) or
+   the satellite (which would be N-078's Mānand)?
+4. **The division of labour**: هوشواره for *an AI* and for the technology,
+   هوش مصنوعی kept for the field — or one word for both?
+5. **هوشیدن**: a verb, or a dictionary word with no use behind it? If a verb,
+   هوشا and its family become derivations; if not, the engine should not be
+   building هوشور through it.
+
+**What we did meanwhile**: nothing in code or rules.

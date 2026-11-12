@@ -803,6 +803,26 @@ allowable*, is absent, although the compound **دست‌روا** is a headword g
 an archery practice-bow; the Arabic لزوم is not in the lexicon, so a reader
 searching for it gets a homograph with no warning.
 
+### A12. A consonantal و before ā is written u, and sixteen ـواره words cannot be taken apart in their own spelling
+
+Found 2026-11-10 by the هوشواره run (FINDINGS session 26). A1's mirror image:
+there و is read as `v` where it is a vowel; here it is read as `u` where it is
+a consonant, after a consonant and before ā.
+
+**Measured on `lexicon-20260808`: 16 of the 50 ـواره entries** (the خواره
+words left out) are written `-uāre` — سنگواره `Sanguāre`, گاهواره `Gāhuāre`,
+گهواره `Gahuāre`, پشتواره `Poštuāre`, راهواره `Rāhuāre`, ده‌واره `Dehuāre`,
+مهواره `Mahuāre` and nine more — while گوشواره, ماهواره, دیواره are `-vāre`.
+Over the whole snapshot, **289 readings** have a consonant + `uā` where the
+spelling has وا. That is an upper bound and was not read entry by entry: some
+are right (خالوان is خالو + ان, `Xāluān`), most look like the fault
+(آتشوار `ātašuār`, خروار `Xaruār`, حلوا `haluā`).
+
+**It reaches the analysis screen.** `/explain?word=Sanguāre` returns
+`rebuilt: false`; `/explain?word=Sangvāre` — N-078's own example — returns
+`true` from سنگ by N-078 and N-079. So the dictionary's spelling of a word
+cannot be taken apart and the grammar's spelling of the same word can.
+
 ### B6. Regular deverbal derivations are not headwords, and one of them has 4,488 occurrences
 
 Measured 2026-08-25 across the three coining runs. karbon headwords
