@@ -150,7 +150,7 @@ describe("the corpus screen", () => {
     });
     // Three entries, one of which is the empty slug: it is a real gap and
     // stays in the count, but there is nothing to print.
-    const said = within(block).getByText(/سراینده در جدول سده‌ها نیست/);
+    const said = within(block).getByText(/نویسنده در جدول سده‌ها نیست/);
     expect(said.querySelector("[data-value]")).toHaveAttribute("data-value", "2");
   });
 
@@ -186,7 +186,7 @@ describe("the words the screen uses for itself", () => {
     const block = await screen.findByRole("region", {
       name: "نسخه‌ای که به کار می‌رود",
     });
-    for (const name of ["سروده‌ها", "واژه‌گونه‌ها", "ساخته‌ها"]) {
+    for (const name of ["متن‌ها", "واژه‌گونه‌ها", "ساخته‌ها"]) {
       expect(
         within(block).getByRole("button", { name: `${name} چیست؟` }),
       ).toBeInTheDocument();

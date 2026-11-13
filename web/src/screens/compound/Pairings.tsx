@@ -151,7 +151,7 @@ export function Pairings({
               // look like two findings.
               <p className={styles.evidence}>
                 املای «{row.form_fa}» در <Num value={row.attestation.doc_count} />{" "}
-                سروده از <Num value={row.attestation.author_count} /> سراینده آمده
+                متن از <Num value={row.attestation.author_count} /> نویسنده آمده
                 است
               </p>
             ) : null}

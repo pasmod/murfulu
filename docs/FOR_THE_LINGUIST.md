@@ -30,6 +30,8 @@ Every question asked now ends with our proposal and the reason in one sentence.
 | L17d | **rewritten** | his twelve groups against the rules' twelve classes; the open point is how کاربهر divides: Dehkhoda marks about thirty of its 1,106 words «ن مف» (پسند، دمید), the done-to participle. Our proposal follows that mark; until he answers, the whole group feeds the doer participle |
 | L2, L3, L25, L28, L17c, L10, L10b, L10c | open | each with our proposal now; L2 re-checked, the verb groups did not move in 1.3.2 |
 | L36 | **open, not blocking** (2026-11-13) | the three levels the build screen gives a word — names and thresholds are ours, built and marked unconfirmed |
+| L38 | **open, not blocking** (2026-11-13) | four words in ten of a classical text have no reading in the bank — common words such as عشق and خدا, and every inflected form; which of them belong in his bank |
+| L37 | **open, not blocking** (2026-11-13) | «متن» and «نویسنده» in place of «سروده» and «شاعر» wherever a count is shown, now that the corpus holds prose |
 
 ---
 
@@ -2615,8 +2617,8 @@ what the API serves, and listed the two choices below for one answer.
 
 **What changes if he rules otherwise**: the names and their one-line
 explanations are in one file of the interface (`web/src/screens/build/levels.ts`);
-the ten poems are `MIN_POEMS` in `murfulu/scoring/level.py`, said again in
-that file's explanation. The lowest third is the productivity run's own
+the ten poems — ten texts since 2026-11-13, L37 — are `MIN_TEXTS` in
+`murfulu/scoring/level.py`, said again in that file's explanation. The lowest third is the productivity run's own
 division of the rules, so a different line for *weakly backed* is a rate in
 `level.py` in place of the band, or a different division in the run.
 
@@ -2628,3 +2630,64 @@ division of the rules, so a different line for *weakly backed* is a rate in
    *weakly backed*. A prefix such as *ham-* is weak in classical poetry and
    ordinary today (هم‌اندیش), which is the price of judging by the corpus
    (S33, S39).
+
+## L37. «متن» and «نویسنده» for what the corpus counts, now that it holds prose
+
+Built 2026-11-13 (DECISIONS 2026-11-13); **not blocking**. Every count the app
+showed was said in poems and poets: «در ۲٬۱۱۸ سروده از ۱۶۰ شاعر», the corpus
+screen's «سروده‌ها», the search syntax's «شاعر». The corpus is not only poetry:
+Ganjoor marks 82,499 paragraphs of prose (the Golestan's, Tazkirat al-Awliya's,
+the tazkiras'), and they had been counted all along; from corpus v17 they are
+counted on purpose, and the corpus is to take other books, prose included.
+
+**What we did meanwhile**: one word for a counted document and one for its
+author, everywhere a count is shown — **«متن»** and **«نویسنده»**: «در ۲٬۱۱۸ متن
+از ۱۶۰ نویسنده آمده است»; the search syntax's `author:` is «نویسنده»; the
+build screen's *familiar* is «دست‌کم در ده متن با همین خوانش آمده است»; the
+corpus is «متن‌های کهن فارسی، بیشترش شعر». Marked unconfirmed in DECISIONS.
+
+**What changes if he rules otherwise**: wording only, in the interface files
+named in that decision. Nothing counted changes: a document was always a
+Ganjoor page, whether a ghazal or a page of prose.
+
+### The question
+
+1. Is **«نویسنده»** right for Hafez and Saadi alike, or would he say
+   **«پدیدآورنده»** (the library word), **«سخنور»**, or keep «شاعر» for verse
+   and «نویسنده» for prose — which the screen can do per text, since each text
+   now knows whether it is verse or prose?
+2. Is **«متن»** right for one counted unit — a ghazal is one, so is one page of
+   the Golestan — or would he say «نوشته» or «اثر»?
+
+## L38. Four words in ten have no reading in the bank: عشق, خدا — and every inflected form
+
+Measured 2026-11-13 on corpus v17 and karbon 1.3.2 (UPSTREAM B9 has the full
+table); **not blocking**. The reading screen shows each word of a text over
+its Behnevis, and in Hafez's ghazal 3, 65 of 159 words have no reading in the
+bank; in the Golestan's preface, 1,195 of 2,442. They are of three kinds:
+
+- **common words that are not in the bank at all**: of the corpus's 1,000
+  most frequent spellings, 236 — عشق، غم، عالم، خدا، عقل، نظر، صبر، نعمت، ساقی.
+  None was ever a row in karbon;
+- **inflected forms**: 128 of the 1,000 — باشد، گردد، کنم، گفتم، رسید — and
+  in the two texts بخشم، می‌رود، بردند. A headword list holds none;
+- **four function words with no row**: و، ز، بی، همی.
+
+**What we did meanwhile**: the screen shows «؟» for such a word, links to the
+bank's search for it, and never says the word does not exist. It does not show
+our inflection analyser's guess, because the guess is often wrong (جنت as
+جن + ت, بخارا as a vocative of بخار).
+
+**What changes if he rules**: the first kind is a request to karbon, ranked by
+corpus count. The second decides whether the screen may ever read an
+inflected form from its parts (*baxš* + *-am*), and on whose rules.
+
+### The question
+
+1. Do the common words of the first kind belong in **his** bank, as headwords
+   in his groups — and should we send him the list ranked by corpus count?
+2. For an inflected form, which should the reading screen do: keep «؟»; show
+   the stem's reading with the ending marked as ours and unconfirmed; or wait
+   for a reading of inflection in the bank itself?
+3. و has no row. Is it *va*, *o*, or both — and should a function word's
+   reading be his too?

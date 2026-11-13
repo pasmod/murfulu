@@ -5,6 +5,57 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-13 (session 29) — Ganjoor's positions from Ganjoor's code, texts with units, corpus v17
+
+The reading screen (FRONTEND, *Reading a text*) needed a text's structure, and
+its drafts found two faults on the way. What was established:
+
+**Ganjoor's verse positions, from Ganjoor's own source.** The `VersePosition`
+enum of the desktop application whose dump we read (`ganjoor/desktop`,
+`DesktopGanjoorDbBrowser/Base Data Models/VersePosition.cs`, commit `caecff0`),
+copied unchanged into the web service (`ganjoor/GanjoorService`,
+`RMuseum/Models/Ganjoor/VersePosition.cs`, `448fb20`): 0 Right and 1 Left, a
+couplet's halves; 2 CenteredVerse1, *the first or only* half of a band couplet
+(tarji'band, tarkib-band); 3 CenteredVerse2, its second half; 4 Single, free
+verse; 5 Comment, *paragraphs of an explanatory kind*; −1 Paragraph, prose.
+The dump's distribution agrees: 1,430,018 / 1,429,964 / 13,342 / 7,135 /
+78,497 / 1,676 / 83,273. **Our adapter had taken 3 for prose since the start**
+and dropped it: 7,122 non-empty lines of poetry were missing from every
+version up to v16, while the 1,676 notes were counted as text and the 83,273
+prose paragraphs were counted without anyone deciding to.
+
+**Most notes are headings.** In the tazkiras (`rhedayat/riazolarefin`,
+`abbadi/managheb-o-sufieh`) position 5 holds the next poet's name or «مِنْ
+غزلیاته», and six pages hold nothing else. Their words were counted as
+poetry: جواب lost 251 occurrences in v17, رباعی 113, ایضا 66; *Herāti* and
+*Emruziyān* lost their only evidence. A page of notes alone is no document
+now (133,148 → 133,142).
+
+**Corpus v17** (`data/compare-v16-v17.md`): +34,870 running words (+0.14%),
++7,122 counted lines of band halves, −1,351 lines of notes, −344 lines with the
+six pages. The build is untouched — records, paths and every rule's output
+the same — and 22 records changed attestation level: 14 newly found once in a
+band half, 8 lost with the notes. Built in 88 minutes on a Mac with a load
+average near 29; v16 took 6.5 on an idle one.
+
+**The word bank reads about six words in ten of the running text** (UPSTREAM
+B9, L38): one reading 33.0%, several 27.8%, none 39.2% — function words 5.8%,
+inflected forms 11.3%, the rest 22.1%. Of the 1,000 most frequent spellings,
+236 have no reading and no inflectional pattern reaches them — عشق، غم، عالم،
+خدا، عقل، صبر، نعمت — and none was ever a row in any karbon snapshot we hold.
+On Hafez's ghazal 3, 65 of 159 words have no reading; on the Golestan's
+preface 1,195 of 2,442.
+
+**Two old faults surfaced by running the live tests against the Mac's stack**
+(they skip without Postgres, so nobody had): migration 0004 makes
+`linguist_questions.context` and `linguist_rulings.affects` nullable and the
+models said NOT NULL — `Mapped[Any]` alone reads as NOT NULL to SQLAlchemy;
+and alembic's `fileConfig` switched off every existing logger, so after the
+schema test ran, a later test's expected warning never reached the log. Both
+fixed; neither changed the database.
+
+---
+
 ## 2026-11-13 (session 28) — a level for every built word
 
 The build screen now gives each word one of three levels — familiar,

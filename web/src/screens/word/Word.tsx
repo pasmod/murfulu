@@ -187,13 +187,13 @@ export function Word() {
               </dd>
             </div>
             <div>
-              <dt>در چند سروده</dt>
+              <dt>در چند متن</dt>
               <dd>
                 <Num value={word.doc_count ?? 0} />
               </dd>
             </div>
             <div>
-              <dt>از چند شاعر</dt>
+              <dt>از چند نویسنده</dt>
               <dd>
                 <Num value={word.author_count ?? 0} />
               </dd>
@@ -229,7 +229,7 @@ export function Word() {
         </h2>
         {detail.citations.length === 0 ? (
           <p className={styles.note}>
-            بیتی برای نشان‌دادن پیدا نشد. این به معنای نبودن واژه نیست.
+            سطری برای نشان‌دادن پیدا نشد. این به معنای نبودن واژه نیست.
           </p>
         ) : (
           <ul className={styles.citations}>
@@ -238,6 +238,7 @@ export function Word() {
                 <p className={styles.line}>{one.line}</p>
                 <p className={styles.source}>
                   {one.author ?? "بی‌نام"}
+                  {one.work ? ` — ${one.work}` : ""}
                   {one.title ? ` — ${one.title}` : ""}
                   {one.century != null ? ` — ${persianCentury(one.century)}` : ""}
                 </p>

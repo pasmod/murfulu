@@ -7,11 +7,11 @@
 import type { FormLevel } from "../../api/generate";
 
 /**
- * Poems a word needs, under its own reading, to be familiar. **The API decides
- * the level with its own copy, `MIN_POEMS` in murfulu/scoring/level.py**; this
+ * Texts a word needs, under its own reading, to be familiar. **The API decides
+ * the level with its own copy, `MIN_TEXTS` in murfulu/scoring/level.py**; this
  * one only words the explanation and the reason, and the two change together.
  */
-export const MIN_POEMS = 10;
+export const MIN_TEXTS = 10;
 
 export const LEVEL_NAME: Record<1 | 2 | 3, string> = {
   3: "آشنا",
@@ -21,7 +21,7 @@ export const LEVEL_NAME: Record<1 | 2 | 3, string> = {
 
 /** What each name means, said once above the list and in each ⓘ. */
 export const LEVEL_SAYS: Record<1 | 2 | 3, string> = {
-  3: "دست‌کم در ده سروده با همین خوانش آمده است.",
+  3: "دست‌کم در ده متن با همین خوانش آمده است.",
   2: "کم آمده یا نیامده، ولی دستورهایش بارها واژه‌ای داده‌اند که در پیکره هست.",
   1: "کم آمده یا نیامده، و یکی از دستورهایش به‌ندرت چنین واژه‌ای داده است.",
 };

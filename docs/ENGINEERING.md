@@ -174,6 +174,29 @@ unchanged and no rule's output moved; 692,606 records changed spelling,
 the same way as v15: `deploy`, `data`, `corpus-mac v16`, `release v16
 lexicon-20261111`, `check`. **The rollback is `release v15 lexicon-20261111`.**
 
+**v17 (2026-11-13) is v16's recipe with new corpus text**: the Ganjoor
+adapter reads the verse positions as Ganjoor's own code defines them, so band
+second halves are counted and the source's notes are not, and each document
+stores its work, section and units (DECISIONS 2026-11-13). Same lexicon, same
+commands with `v17`, built on the Mac (88 minutes, against 6.5 for v16: the
+Mac's load average stood near 29 throughout, from other work). The semantic vectors and the
+suspect claims are v4's, carried forward although the text changed — a
+decision for the project lead (DECISIONS 2026-11-13, OPEN_QUESTIONS S41). The
+comparison has a second half from v17 on, **which lines moved**, because the
+report's five figures cannot say it:
+
+```bash
+env MURFULU_ELASTICSEARCH_URL=http://127.0.0.1:9201 \
+  .venv/bin/python tools/compare_documents.py v16 v17
+env MURFULU_ELASTICSEARCH_URL=http://127.0.0.1:9201 \
+    MURFULU_LEXICON_PATH="$PWD/data/lexicon-20261111.sqlite" \
+  .venv/bin/python tools/measure_bank_gaps.py v17 --top 1000
+```
+
+Both in `data/compare-v16-v17.md`. **Not released**: the Mac's aliases moved
+to v17 only to look at the reading screen locally; the server still serves
+v16, and moving v17 there waits for the project lead.
+
 **The precompute runs first, and this order is not cosmetic.** The ingest
 takes the precompute's affix map, so an ingest run before it has nothing to
 pass. This file listed the two the other way round until 2026-08-14, and **v6
@@ -461,6 +484,27 @@ Requirements:
 - **nothing under a source tree may be ignored by git.** `build/` for the
   batch job's output also matched `web/src/screens/build/`, and a whole screen
   went uncommitted for a week with every test still passing
+
+**Against the Mac's stack, nothing skips for want of a service.** The stack
+publishes no port, so the live tests and the browser suite reach it through
+`tools/es_forward.py`, one throwaway container per service, each published on
+127.0.0.1 only and stopped afterwards (2026-11-13):
+
+```bash
+for f in "9201 elasticsearch 9200" "8010 api 8000" "5433 db 5432"; do
+  set -- $f
+  docker run -d --rm --name "murfulu-fwd-$2" --network murfulu_default \
+    -p "127.0.0.1:$1:$1" -v "$PWD/tools/es_forward.py:/fwd.py:ro" \
+    --memory 128m murfulu-api:latest python /fwd.py "$1" "$2" "$3"
+done
+# MURFULU_ELASTICSEARCH_URL=http://127.0.0.1:9201, MURFULU_DATABASE_URL to
+# 127.0.0.1:5433 with the .env credentials; the browser suite proxies /api to
+# localhost:8010 by default
+```
+
+The live search tests move the `word_types` alias onto a fixture index and put
+it back (`tests/conftest.py`); the schema test works in a scratch database of
+its own. Check `_cat/aliases` afterwards all the same.
 
 ## Code quality
 

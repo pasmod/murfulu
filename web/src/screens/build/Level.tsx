@@ -25,7 +25,7 @@ import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { FUNCTION_WORD_HOMOGRAPH } from "../../text/lexicon";
 import styles from "./Level.module.css";
-import { LEVEL_NAME, LEVEL_SAYS, MIN_POEMS, NOT_KNOWN } from "./levels";
+import { LEVEL_NAME, LEVEL_SAYS, MIN_TEXTS, NOT_KNOWN } from "./levels";
 
 export function LevelBadge({ form }: { form: BuiltForm }) {
   const level = form.level;
@@ -98,15 +98,15 @@ function corpusSays(form: BuiltForm): React.ReactNode {
   if (found.level === "spelling") {
     return (
       <>
-        این حرف‌ها در <Num value={found.doc_count} /> سروده آمده‌اند، ولی
+        این حرف‌ها در <Num value={found.doc_count} /> متن آمده‌اند، ولی
         {form.inflection ? " خوانش دیگری هم دارند" : " شاید به خوانشی دیگر"}
       </>
     );
   }
   return (
     <>
-      {found.doc_count < MIN_POEMS ? "تنها " : ""}در <Num value={found.doc_count} /> سروده
-      از <Num value={found.author_count} /> شاعر آمده است
+      {found.doc_count < MIN_TEXTS ? "تنها " : ""}در <Num value={found.doc_count} /> متن
+      از <Num value={found.author_count} /> نویسنده آمده است
     </>
   );
 }
@@ -150,7 +150,7 @@ export function LevelIntro({ corpusVersion }: { corpusVersion: string | null }) 
         <strong>{LEVEL_NAME[1]}</strong>: {LEVEL_SAYS[1]}
       </p>
       <p>
-        پیکره شعر کهن فارسی است
+        پیکره متن‌های کهن فارسی است، بیشترش شعر
         {corpusVersion ? (
           <>
             ، در نسخهٔ <Latin>{corpusVersion}</Latin>

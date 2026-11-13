@@ -44,8 +44,8 @@ export function Evidence({ attestation }: { attestation: Attestation | null }) {
   return (
     <span className={confirmed ? styles.reading : styles.spelling}>
       <Num value={attestation.total_count} /> بار، در{" "}
-      <Num value={attestation.doc_count} /> سروده از{" "}
-      <Num value={attestation.author_count} /> شاعر
+      <Num value={attestation.doc_count} /> متن از{" "}
+      <Num value={attestation.author_count} /> نویسنده
       {confirmed ? null : (
         // A spelling-level hit counted the **letters**. بلندِ claimed 7,353
         // occurrences by 217 poets and every one of them is بلند. Naming the

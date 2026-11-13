@@ -193,7 +193,7 @@ describe("each word's level", () => {
   it("gives a familiar word's reason as its poems and poets", async () => {
     await open();
     const row = rowOf("دانا");
-    expect(row.textContent).toContain("در ۲٬۱۱۸ سروده از ۱۶۰ شاعر آمده است.");
+    expect(row.textContent).toContain("در ۲٬۱۱۸ متن از ۱۶۰ نویسنده آمده است.");
   });
 
   it("names the rule a coinage stands on, never that it does not exist", async () => {
@@ -215,7 +215,7 @@ describe("each word's level", () => {
   it("says the letters alone may be another word", async () => {
     await open();
     expect(rowOf("دانار").textContent).toContain(
-      "این حرف‌ها در ۲ سروده آمده‌اند، ولی شاید به خوانشی دیگر؛",
+      "این حرف‌ها در ۲ متن آمده‌اند، ولی شاید به خوانشی دیگر؛",
     );
   });
 
@@ -229,8 +229,8 @@ describe("each word's level", () => {
   it("explains the three names and the corpus once, above the list", async () => {
     await open();
     const intro = screen.getByText(/هر واژه یک درجه دارد/).closest("div")!;
-    expect(intro.textContent).toContain("دست‌کم در ده سروده");
-    expect(intro.textContent).toContain("پیکره شعر کهن فارسی است");
+    expect(intro.textContent).toContain("دست‌کم در ده متن");
+    expect(intro.textContent).toContain("پیکره متن‌های کهن فارسی است، بیشترش شعر");
     expect(within(intro).getByText("v16")).toHaveAttribute("dir", "ltr");
     expect(intro.textContent).toContain("ممکن است امروز به کار برود");
   });
@@ -313,7 +313,7 @@ describe("the evidence behind the button", () => {
     expect(within(row).getByRole("button", { name: "پیکره" })).toBeInTheDocument();
     expect(within(row).queryByText("سنجیده نشده")).toBeNull();
     await userEvent.click(within(row).getByRole("button", { name: "پیکره" }));
-    expect(row.textContent).toContain("۲٬۱۱۸ سروده");
+    expect(row.textContent).toContain("۲٬۱۱۸ متن");
   });
 
   it("draws the letters only as a ring, not a dot", async () => {

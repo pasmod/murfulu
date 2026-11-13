@@ -124,7 +124,9 @@ class LinguistQuestion(Base):
     #: The evidence: what was measured, the examples, the list. Free-shaped
     #: because a question about 21 words and a question about one verb do not
     #: carry the same thing.
-    context: Mapped[Any] = mapped_column(Json)
+    # Nullable, as migration 0004 made it: `Mapped[Any]` alone reads as NOT NULL
+    # to SQLAlchemy, and the live schema test found the two apart (2026-11-13).
+    context: Mapped[Any] = mapped_column(Json, nullable=True)
 
     origin: Mapped[str] = mapped_column(String(16), nullable=False, default="document")
     state: Mapped[str] = mapped_column(String(16), nullable=False, default="open")
@@ -195,7 +197,7 @@ class LinguistRuling(Base):
 
     #: What changes here as a result — a rule id, a decisions.yaml key. Held so
     #: an answer can be traced to what it altered instead of being read twice.
-    affects: Mapped[Any] = mapped_column(Json)
+    affects: Mapped[Any] = mapped_column(Json, nullable=True)
 
     #: True when this replaces the previous ruling on the same question rather
     #: than adding to it. Set by the author, so a reversal says it is one.

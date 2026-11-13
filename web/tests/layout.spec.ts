@@ -9,7 +9,7 @@
  * Every failure here is one a reader on a phone would have hit first.
  */
 
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 import { FROM_LEXICON } from "../src/text/lexicon";
 
@@ -169,20 +169,39 @@ test.describe("a real word", () => {
   });
 });
 
+/** The id of the first word type spelled this way, or null without a corpus. */
+async function wordId(page: Page, spelling: string): Promise<string | null> {
+  const answer = await page.request.get(
+    `/api/search?q=${encodeURIComponent(spelling)}&size=5`,
+  );
+  if (!answer.ok()) return null;
+  const body = await answer.json();
+  const hits = [...body.formed_with_affix, ...body.string_match_only] as {
+    id: string;
+    spelling_fa: string;
+  }[];
+  return hits.find((hit) => hit.spelling_fa === spelling)?.id ?? null;
+}
+
 test.describe("a word the search engine used to swallow", () => {
   // بود، رفت، گفت، شد are on Lucene's Persian stopword list, so until corpus
   // version v2 the counts were right and the quoted lines were empty. A
   // reader saw "written 143,873 times" and nothing to check it against.
   for (const spelling of ["بود", "رفت"]) {
     test(`${spelling} is quoted, not only counted`, async ({ page }) => {
+      // The word's id is asked for, not written down: since karbon 1.3.2 the
+      // bank reads both (Bud, Raft), so "بود:" — the id of a spelling with no
+      // reading — stopped existing and this test skipped from v15 to v17
+      // without anyone seeing it (found 2026-11-13).
+      const id = await wordId(page, spelling);
+      test.skip(id === null, "no corpus ingested");
       const answer = await page.request.get(
-        `/api/word/${encodeURIComponent(`${spelling}:`)}?index=word_types`,
+        `/api/word/${encodeURIComponent(id!)}?index=word_types`,
       );
-      test.skip(!answer.ok(), "no corpus ingested");
       const body = await answer.json();
       expect(body.citations.length).toBeGreaterThan(0);
 
-      await page.goto(`/word/${encodeURIComponent(`${spelling}:`)}`);
+      await page.goto(`/word/${encodeURIComponent(id!)}`);
       const quoted = page.getByRole("region", { name: "شاهدمثال‌ها" });
       await expect(quoted).toBeVisible();
       await expect(quoted.getByText(spelling).first()).toBeVisible();
@@ -474,24 +493,26 @@ test.describe("the rule families", () => {
 });
 
 test.describe("what the dictionary knows", () => {
-  test("برنا shows its second pronunciation and its meaning, on real data", async ({
+  test("برنا shows every pronunciation the bank gives, and its meaning, on real data", async ({
     page,
   }) => {
     // The reader asked why the screen writes barnā when the poems sound like
     // bornā. The lexicon held both all along and no screen drew either — nor
     // the definition, which 96.1% of karbon's rows carry. Both need corpus v6
     // or later; before that word_types had no field for them.
-    const id = encodeURIComponent("برنا:barnā");
+    // Since karbon 1.3.2 the bank reads برنا one way, bornā, with no second
+    // pronunciation; the id is asked for so the test follows the bank rather
+    // than skipping when it moves (it skipped from v15 to v17, unseen).
+    const found = await wordId(page, "برنا");
+    test.skip(found === null, "برنا is not in the corpus version being served");
+    const id = encodeURIComponent(found!);
     const answer = await page.request.get(`/api/word/${id}?index=word_types`);
-    test.skip(!answer.ok(), "برنا is not in the corpus version being served");
     const body = await answer.json();
-    test.skip(
-      !body.word?.latin_variants?.length,
-      "corpus version predates latin_variants",
-    );
 
     await page.goto(`/word/${id}?index=word_types`);
-    await expect(page.getByText("bornā")).toBeVisible();
+    for (const latin of [body.word.latin, ...(body.word.latin_variants ?? [])]) {
+      await expect(page.getByText(latin).first()).toBeVisible();
+    }
     await expect(page.getByText(FROM_LEXICON)).toBeVisible();
     await expect(page.getByText(/جوان/).first()).toBeVisible();
 

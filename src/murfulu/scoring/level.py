@@ -12,7 +12,7 @@ behind a button. This module decides the level; the screen writes the words.
 level  name             when
 =====  ===============  ====================================================
 3      familiar         the corpus has the word *under this reading* in at
-                        least :data:`MIN_POEMS` poems
+                        least :data:`MIN_TEXTS` texts
 2      well-formed      not familiar, and no rule on the chain is in the
                         lowest third of all measured rules
 1      weakly backed    not familiar, and some rule on the chain is in the
@@ -20,24 +20,24 @@ level  name             when
                         corpus has
 =====  ===============  ====================================================
 
-**Unconfirmed.** The names, the ten poems and the lowest third are ours,
+**Unconfirmed.** The names, the ten texts and the lowest third are ours,
 built and served while the linguist's ruling is open (FOR_THE_LINGUIST L36).
 The response says so with ``confirmed: false``. When he rules: the names and
-their explanations live in `web/src/screens/build/levels.ts`; the ten poems
-are :data:`MIN_POEMS` here, said again there; the lowest third is the
+their explanations live in `web/src/screens/build/levels.ts`; the ten texts
+are :data:`MIN_TEXTS` here, said again there; the lowest third is the
 productivity run's division (`Productivity.bands`), so another line for
 *weakly backed* is a rate tested here in place of the band.
 
 **What it deliberately does not use.** Whether the chain stands on a written
 intermediate: the project lead moved that test down the ranking on 2026-08-17
 because it is wrong about prefixed verbs (*bāzguyande*). A spelling-level hit
-does not make a word familiar either — دانست, 1,273 poems, is "he knew", not
+does not make a word familiar either — دانست, in 1,273 texts, is "he knew", not
 the noun the rule built. And *not measured* is never a level: an unasked
 corpus or a chain with no measured rule gives no level at all, and the ranking
 puts that between well-formed and weakly backed, never at the bottom.
 
 The three **marks** are the figures behind the button, each as up to three
-dots: the corpus by poems (1–9, 10–999, 1,000 and more), the rule by the third
+dots: the corpus by texts (1–9, 10–999, 1,000 and more), the rule by the third
 its weakest rule falls in, the meaning by the typicality band (lowest 30%,
 middle 40%, top 30%). They are decided here so the thresholds live in one
 place.
@@ -57,8 +57,8 @@ FAMILIAR = 3
 WELL_FORMED = 2
 WEAK = 1
 
-#: Poems a word must appear in, under its own reading, to be familiar.
-MIN_POEMS = 10
+#: Texts a word must appear in, under its own reading, to be familiar.
+MIN_TEXTS = 10
 
 #: The levels are ours until the linguist rules (FOR_THE_LINGUIST L36).
 CONFIRMED = False
@@ -124,7 +124,7 @@ class Assessment:
 
 
 def corpus_mark(found: Attestation | None) -> int | None:
-    """Up to three dots for the corpus: 0 not in it, then by poems.
+    """Up to three dots for the corpus: 0 not in it, then by texts.
 
     ``None`` where nothing can be said: the corpus was not asked, or the
     letters are a function word's and their count is that word's.
@@ -135,7 +135,7 @@ def corpus_mark(found: Attestation | None) -> int | None:
         return 0
     if found.doc_count >= 1000:
         return 3
-    return 2 if found.doc_count >= MIN_POEMS else 1
+    return 2 if found.doc_count >= MIN_TEXTS else 1
 
 
 def chain_of(steps: Sequence[Step]) -> list[RuleRecord]:
@@ -181,7 +181,7 @@ def assess(
     elif (
         found.level is Level.READING
         and not found.function_word
-        and found.doc_count >= MIN_POEMS
+        and found.doc_count >= MIN_TEXTS
     ):
         level = FAMILIAR
     elif low is None:

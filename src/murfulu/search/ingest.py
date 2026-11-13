@@ -1,13 +1,14 @@
 """Put the corpus into Elasticsearch: the documents, and the word types.
 
-Everything before this module happens in memory. The adapter yields poems, the
+Everything before this module happens in memory. The adapter yields texts, the
 word-type pass counts every spelling, the link pass attaches readings — and
 none of it was reaching the index, so a search had nothing to search. This is
 the step that was missing.
 
 Two shapes, from two sources:
 
-**A document** is one poem, and it carries its own licence and corpus version.
+**A document** is one text — a poem, or a page of prose — and it carries its
+own licence and corpus version, its work and section, and its units in order.
 Text is indexed with the Persian analyser so a phrase can be found in it.
 
 **A word type** is one *reading*, not one spelling. مرد the man and مرد the
@@ -65,7 +66,12 @@ def _word_classes(reading: Reading) -> list[str]:
 
 
 def document_source(document: Any, corpus_version: str, licence: str) -> dict[str, Any]:
-    """One poem as the ``documents`` index stores it."""
+    """One text as the ``documents`` index stores it."""
+    section = list(getattr(document, "section", ()))
+    work = getattr(document, "work", None)
+    heading = " ".join(
+        part for part in (document.author, work, *section, document.title) if part
+    )
     return {
         "source_id": document.source_id,
         "document_id": document.document_id,
@@ -76,6 +82,11 @@ def document_source(document: Any, corpus_version: str, licence: str) -> dict[st
         "licence": licence,
         "corpus_version": corpus_version,
         "extra": dict(document.extra),
+        "work": work,
+        "section": section,
+        "units": [unit.as_dict() for unit in getattr(document, "units", ())],
+        "order": getattr(document, "order", None),
+        "heading": heading,
     }
 
 
@@ -221,7 +232,7 @@ def write_documents(
 ) -> WriteResult:
     """Stream one corpus into ``documents-<version>``.
 
-    Streamed from the adapter, never collected: Ganjoor is 133,148 poems and
+    Streamed from the adapter, never collected: Ganjoor is 133,142 texts and
     three million verses, and holding the text of all of them at once buys
     nothing.
     """

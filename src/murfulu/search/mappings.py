@@ -2,7 +2,7 @@
 
 Three indices:
 
-``documents``    one poem, page or chapter — never a line
+``documents``    one text — a poem, a page or a chapter — never a line
 ``word_types``   one document per **reading**, not per spelling
 ``derivations``  one document per generated form
 
@@ -81,6 +81,16 @@ DOCUMENTS: dict[str, Any] = {
         "licence": _KEYWORD,
         "corpus_version": _KEYWORD,
         "extra": {"type": "object", "enabled": False},
+        # Where the text sits and what it is made of (corpus v17 on). The
+        # units are stored for the reading screen and not indexed: everything
+        # searched or counted reads text_fa, which is their counted lines.
+        "work": {"type": "text", "analyzer": ANALYZER, "fields": {"raw": _KEYWORD}},
+        "section": _KEYWORD,
+        "units": {"type": "object", "enabled": False},
+        "order": _INTEGER,
+        # Author, work, sections and title in one field, so "حافظ غزل ۳" finds
+        # the text with every word matched somewhere in its heading.
+        "heading": _TEXT_FA,
     },
 }
 

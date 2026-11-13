@@ -39,15 +39,15 @@ const SCREEN = SCREENS.find((one) => one.path === "/corpus")!;
 /**
  * The three stores, and what each one holds.
  *
- * A reader was asked to tell «سروده‌ها» from «واژه‌گونه‌ها» from «ساخته‌ها» on
+ * A reader was asked to tell «متن‌ها» (until 2026-11-13 «سروده‌ها») from «واژه‌گونه‌ها» from «ساخته‌ها» on
  * the label alone, with the same version number under each. The names are the
  * index names and they stay; what they mean is now said beside them.
  */
 const ALIASES: { key: string; label: string; what: string }[] = [
   {
     key: "documents",
-    label: "سروده‌ها",
-    what: "متن‌هایی که خوانده‌ایم: هر سروده یک متن است، با شاعر و سرچشمه‌اش. جست‌وجوی شاهدمثال در این‌جاست.",
+    label: "متن‌ها",
+    what: "متن‌هایی که خوانده‌ایم: هر متن یک شعر یا یک صفحه از نثر است، با نویسنده، کتاب و سرچشمه‌اش. جست‌وجوی شاهدمثال و خواندن متن در این‌جاست.",
   },
   {
     key: "word_types",
@@ -216,9 +216,10 @@ export function Corpus() {
             <dl className={styles.facts}>
               <div className={styles.fact}>
                 <dt>
-                  سروده
-                  <Info label="سروده">
-                    شمار متن‌هایی که خوانده‌ایم — هر شعر یک سروده.
+                  متن
+                  <Info label="متن">
+                    شمار متن‌هایی که خوانده‌ایم — هر شعر یا هر صفحه از نثر یک
+                    متن است.
                   </Info>
                 </dt>
                 <dd className={styles.big}>
@@ -270,6 +271,15 @@ export function Corpus() {
               <Num value={report.ambiguous_spellings} /> املا بیش از یک خوانش
               دارد و هر دو نگه داشته می‌شود.
             </p>
+            {report.units && Object.keys(report.units).length > 0 ? (
+              <p className={styles.note}>
+                این متن‌ها از <Num value={report.units.couplet ?? 0} /> بیت،{" "}
+                <Num value={report.units.half ?? 0} /> مصراع تنها و{" "}
+                <Num value={report.units.prose ?? 0} /> بند نثر ساخته شده‌اند.{" "}
+                <Num value={report.units.note ?? 0} /> یادداشتِ سرچشمه در کنار
+                متن نگه داشته شده ولی شمرده نشده است.
+              </p>
+            ) : null}
           </section>
 
           <section className={styles.block} aria-labelledby="coverage">

@@ -250,6 +250,12 @@ screen «در پیکرهٔ v3 نیامده است», *does not occur in corpus v
 the sentence under each built word, whose list states the version once above
 it (DECISIONS 2026-11-13).
 
+**A count is said in texts and authors, never in poems and poets** (since
+2026-11-13): «در ۲٬۱۱۸ متن از ۱۶۰ نویسنده». The corpus holds prose — 82,499
+paragraphs of it in Ganjoor alone — and will hold other books. Unconfirmed
+until the linguist rules (FOR_THE_LINGUIST L37); the words live in the screens
+that show a count, not in one shared file, because each sentence is its own.
+
 **Show the score's parts.** Rule, corpus, semantics, composite — visible and
 separate. A single opaque number is exactly what the project is arguing
 against.

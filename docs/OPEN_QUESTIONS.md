@@ -5,6 +5,38 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-13 (corpus v17, the texts' units)
+
+### S41. Rebuild the semantic vectors and suspect claims on v17's text?
+
+v17 carries v4's `semantic-v4.json` and `suspect-claims-v4.json` forward
+although its text changed (+7,122 band halves, −1,676 notes; DECISIONS
+2026-11-13). A base's vector is the mean embedding of up to six lines holding
+it, so a rebuild would move a base only where one of its six lines was a band
+half or a note. Rebuilding needs BGE-m3 outside the app (an hour or more, not
+measured on this Mac). **For the project lead**: rebuild before v17 is
+released, or carry forward and rebuild with the next text change?
+
+### S43. Three golden examples fail against the real lexicon, on main too
+
+With `MURFULU_LEXICON_PATH` set to `lexicon-20261111`, the golden suite (which
+skips without it, and so had not been run against karbon 1.3.2) fails three
+rules' own examples: N-086 *Čašme*, N-094 *čubi*, N-095 *Āmuzgāri*. The same
+three fail on `main` (checked 2026-11-13 in a worktree). N-086's is the
+spelling DECISIONS 2026-11-12 gave to the bank (*Češme*), N-095's is UPSTREAM
+A16; N-094 was not looked into. The fix is in the rule pack's examples, which
+are built, never hand-edited (ENGINEERING) — **for the project lead**: update
+the examples from the bank, or mark the three as known.
+
+### S42. Notes are kept but no screen reads them except the reading screen
+
+1,332 notes (Ganjoor's position 5) stay with their texts, uncounted. In the
+tazkiras they are the poets' names that head each entry — information the
+corpus has nowhere else (an author per entry, inside one document). Whether a
+tazkira's entries should become documents of their own, with the named poet as
+author, is open; v17 keeps Ganjoor's page as the document.
+
+
 ## Opened 2026-11-13 (a level per built word)
 
 ### S40. The server and the screen still order a level's words differently

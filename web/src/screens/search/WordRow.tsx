@@ -88,12 +88,12 @@ export function WordRow({ word }: WordRowProps) {
         ) : null}
         {word.doc_count != null ? (
           <span className={styles.faint}>
-            در <Num value={word.doc_count} /> سروده
+            در <Num value={word.doc_count} /> متن
           </span>
         ) : null}
         {word.author_count != null ? (
           <span className={styles.faint}>
-            از <Num value={word.author_count} /> شاعر
+            از <Num value={word.author_count} /> نویسنده
           </span>
         ) : null}
         {centuries ? <span className={styles.faint}>{centuries}</span> : null}

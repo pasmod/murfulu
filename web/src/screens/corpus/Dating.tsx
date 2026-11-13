@@ -46,30 +46,30 @@ export function Dating({ report }: DatingProps) {
         <strong className={styles.figure}>
           {PERCENT.format(undatedShare)}
         </strong>{" "}
-        از سروده‌ها تاریخ ندارند — <Num value={report.documents_without_century} />{" "}
+        از متن‌ها تاریخ ندارند — <Num value={report.documents_without_century} />{" "}
         از <Num value={report.documents} />. نمودار پراکندگی در صفحهٔ واژه بر
         همان بخشِ تاریخ‌دار استوار است، پس نبودِ ستون به معنای نبودِ واژه نیست.
       </p>
 
       {report.documents_without_author > 0 ? (
         <p className={styles.line}>
-          <Num value={report.documents_without_author} /> سروده سراینده‌ای ثبت
-          نشده دارد.
+          <Num value={report.documents_without_author} /> متن نام نویسنده‌ای
+          ندارد.
         </p>
       ) : null}
 
       {missing.length > 0 ? (
         <p className={styles.line}>
-          <Num value={missing.length} /> سراینده در جدول سده‌ها نیست، پس هرچه
-          سروده‌اند بی‌تاریخ می‌ماند.
+          <Num value={missing.length} /> نویسنده در جدول سده‌ها نیست، پس هرچه
+          نوشته‌اند بی‌تاریخ می‌ماند.
         </p>
       ) : null}
 
       {stale.length > 0 ? (
         <div className={styles.fault}>
           <p className={styles.line}>
-            <Num value={stale.length} /> مدخلِ جدول سده‌ها به سراینده‌ای اشاره
-            می‌کند که در این پیکره نیست. چنین مدخلی هیچ سروده‌ای را تاریخ‌دار
+            <Num value={stale.length} /> مدخلِ جدول سده‌ها به نویسنده‌ای اشاره
+            می‌کند که در این پیکره نیست. چنین مدخلی هیچ متنی را تاریخ‌دار
             نمی‌کند و از بیرون دقیقاً مانند مدخلی به نظر می‌رسد که کار می‌کند.
           </p>
           <ul className={styles.slugs}>

@@ -61,6 +61,12 @@ export interface CorpusReport {
   poets_without_a_century: string[];
   centuries_without_a_poet: string[];
   biggest_gaps: Gap[];
+  /**
+   * What the texts are made of: couplets, verse halves, prose paragraphs, and
+   * the source's notes, which are kept for the reader and not counted. Absent
+   * or empty on a report from before corpus v17.
+   */
+  units?: Partial<Record<"couplet" | "half" | "prose" | "note", number>>;
 }
 
 export interface CorpusState {

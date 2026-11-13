@@ -104,6 +104,11 @@ class CorpusReport:
 
     biggest_gaps: list[Gap] = field(default_factory=list)
 
+    #: What the texts are made of: couplets, verse halves, prose paragraphs,
+    #: and the source's notes, which are kept for the reader and not counted.
+    #: Empty on a report from before corpus v17, when the ingest kept no units.
+    units: dict[str, int] = field(default_factory=dict)
+
     @property
     def measured(self) -> bool:
         """False when no ingest has been reported here."""
@@ -145,6 +150,7 @@ def build(
     """Turn what the ingest already holds in memory into a report."""
     poets_missing = getattr(adapter, "poets_without_a_century", None)
     centuries_stale = getattr(adapter, "centuries_without_a_poet", None)
+    units_by_kind = getattr(adapter, "units_by_kind", None)
     return CorpusReport(
         corpus_version=corpus_version,
         source_id=adapter.source_id,
@@ -163,6 +169,7 @@ def build(
         ambiguous_spellings=linked.coverage.ambiguous_types,
         poets_without_a_century=list(poets_missing()) if poets_missing else [],
         centuries_without_a_poet=list(centuries_stale()) if centuries_stale else [],
+        units=dict(units_by_kind()) if units_by_kind else {},
         biggest_gaps=[
             Gap(
                 spelling_fa=item.spelling_fa,

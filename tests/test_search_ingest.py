@@ -30,9 +30,9 @@ VERSION = "test-ingest"
 class _Poems(SourceAdapter):
     """A handmade corpus that shares words with the fixture lexicon.
 
-    The Ganjoor fixture is two real lines of Hafez and Khayyam, and it has no
-    word in common with the handmade lexicon — so nothing links and the linked
-    half of this module would go untested.
+    The Ganjoor fixture's lines were written for it and were not chosen to
+    share words with the handmade lexicon — so too little links there, and the
+    linked half of this module would go untested.
     """
 
     @property
@@ -203,3 +203,24 @@ def test_a_stored_poem_keeps_its_provenance(admin: IndexAdmin, adapter: GanjoorC
     assert stored["author"] == first.author
     assert stored["licence"] == adapter.licence
     assert stored["corpus_version"] == VERSION
+
+
+def test_a_document_carries_its_place_and_its_units(adapter: GanjoorCorpus):
+    """The reading screen draws a text from these; nothing searches them."""
+    story = next(
+        ingest.document_source(document, VERSION, adapter.licence)
+        for document in adapter.documents()
+        if document.document_id.endswith(":104")
+    )
+    assert story["work"] == "گلستان"
+    assert story["section"] == ["باب نخست"]
+    assert story["heading"] == "سعدی گلستان باب نخست حکایت شمارهٔ ۱"
+    assert story["order"] == 104
+    assert [unit["kind"] for unit in story["units"]] == [
+        "prose",
+        "couplet",
+        "half",
+        "half",
+        "half",
+    ]
+    assert DOCUMENTS["properties"]["units"] == {"type": "object", "enabled": False}

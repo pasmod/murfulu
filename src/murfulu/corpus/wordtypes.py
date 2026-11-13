@@ -4,9 +4,9 @@ The counts are what let the app say *this word already exists* rather than
 *this word is possible*. Four of them matter, and they say different things:
 
 ``total_count``   how often the word occurs
-``doc_count``     in how many separate poems — 30 hits in one poem is a rhyme,
+``doc_count``     in how many separate texts — 30 hits in one poem is a rhyme,
                   not a word
-``author_count``  how many poets used it — one author means one coinage
+``author_count``  how many authors used it — one author means one coinage
 ``counts_by_century``  when it was used, and whether it survived
 
 Corpus text has no vowels, so a word type here is a **spelling**, not a
@@ -128,7 +128,7 @@ def build(adapter: SourceAdapter) -> Corpus:
         if document.century is None:
             corpus.documents_without_century += 1
 
-        # Counted per document, so one word repeated in a poem adds to
+        # Counted per document, so one word repeated in a text adds to
         # total_count but only once to doc_count.
         seen = Counter(tokenise(document.text_fa))
         corpus.token_count += sum(seen.values())

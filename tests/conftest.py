@@ -356,26 +356,50 @@ CREATE TABLE poem (id INTEGER PRIMARY KEY, cat_id INTEGER, title TEXT, url TEXT)
 CREATE TABLE verse (poem_id INTEGER, vorder INTEGER, position INTEGER, text TEXT);
 """
 
-# Two poets, one with a century in the table and one without; a poem whose
-# verses are prose paragraphs, and a poem with no verses at all.
+# Three authors, one with a century in the table; a ghazal; a quatrain with
+# the source's own note under it; a page of prose with a couplet in it, as the
+# Golestan's preface is; a section below a work, holding every other kind of
+# line Ganjoor's position enum has; a page with no verses; and a page with only
+# a note. Every line is written for this fixture — no Ganjoor text, which may
+# not be redistributed (NOTICE).
 GANJOOR_ROWS = {
-    "poet": [(2, "حافظ", 9, ""), (3, "خیام", 30, "")],
+    "poet": [(2, "حافظ", 9, ""), (3, "خیام", 30, ""), (4, "سعدی", 40, "")],
     "cat": [
         (9, 2, "حافظ", 0, "https://ganjoor.net/hafez"),
         (24, 2, "غزلیات", 9, "https://ganjoor.net/hafez/ghazal"),
         (30, 3, "خیام", 0, "https://ganjoor.net/khayyam"),
         (31, 3, "رباعیات", 30, "https://ganjoor.net/khayyam/robaee"),
+        (40, 4, "سعدی", 0, "https://ganjoor.net/saadi"),
+        (41, 4, "گلستان", 40, "https://ganjoor.net/saadi/golestan"),
+        (42, 4, "باب نخست", 41, "https://ganjoor.net/saadi/golestan/gbab1"),
     ],
     "poem": [
         (100, 24, "غزل شمارهٔ ۱", "https://ganjoor.net/hafez/ghazal/sh1"),
         (101, 31, "رباعی شمارهٔ ۱", "https://ganjoor.net/khayyam/robaee/sh1"),
         (102, 24, "بی‌بیت", "https://ganjoor.net/hafez/ghazal/sh2"),
+        (103, 41, "دیباچه", "https://ganjoor.net/saadi/golestan/dibache"),
+        (104, 42, "حکایت شمارهٔ ۱", "https://ganjoor.net/saadi/golestan/gbab1/sh1"),
+        (105, 24, "تنها یادداشت", "https://ganjoor.net/hafez/ghazal/sh3"),
     ],
+    # (poem, order, position, text). Positions as Ganjoor's VersePosition:
+    # 0 right, 1 left, 2 and 3 a band couplet's halves, 4 free verse,
+    # 5 the source's note, -1 prose.
     "verse": [
-        (100, 1, 0, "الا یا ایها الساقی ادر کاسا و ناولها"),
-        (100, 2, 1, "که عشق آسان نمود اول ولی افتاد مشکل‌ها"),
-        (101, 1, 0, "برخیز بتا بیا ز بهر دل ما"),
-        (101, 2, 3, "این یک بند نثر است و باید کنار گذاشته شود"),
+        (100, 1, 0, "دل ما با رفتار تو آرام گرفت"),
+        (100, 2, 1, "و هر روز راهی تازه پیدا شد"),
+        (101, 1, 0, "برخیز و بیا که روز نو آمد"),
+        (101, 2, 5, "این یادداشت گردآورنده است"),
+        (103, 1, -1, "این یک بند نثر است. نویسنده آن را برای آزمون نوشته است."),
+        (103, 2, 0, "سخن کوتاه بهتر از سخن دراز"),
+        (103, 3, 1, "و این را هر کسی می‌داند"),
+        (104, 1, -1, "روزی مردی به بازار رفت"),
+        (104, 2, 2, "بند نخست این سرود"),
+        (104, 3, 3, "بند دوم این سرود"),
+        (104, 4, 2, "بندی که تنها مانده است"),
+        (104, 5, 4, "سطری آزاد از شعری نو"),
+        (104, 6, 1, "نیمهٔ دومی که نیمهٔ نخست ندارد"),
+        (104, 7, 0, "   "),
+        (105, 1, 5, "تنها یک توضیح"),
     ],
 }
 

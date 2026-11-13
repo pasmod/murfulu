@@ -55,8 +55,8 @@ export function Gaps({ gaps, total }: GapsProps) {
             <tr>
               <th scope="col">املا</th>
               <th scope="col">بسامد</th>
-              <th scope="col">شمار سروده</th>
-              <th scope="col">شمار سراینده</th>
+              <th scope="col">شمار متن</th>
+              <th scope="col">شمار نویسنده</th>
             </tr>
           </thead>
           <tbody>

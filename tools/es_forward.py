@@ -11,9 +11,22 @@ in a throwaway container of the api image and published on 127.0.0.1 only::
       --memory 128m murfulu-api:latest python /fwd.py
     # … build …
     docker stop murfulu-es-forward
+
+**The same forwarder reaches the API and Postgres**, for the browser suite and
+the live tests against the stack (docs/ENGINEERING.md, Tests): give it the
+port to listen on, the service and its port — ``python /fwd.py 8010 api 8000``
+or ``python /fwd.py 5433 db 5432`` — and publish that port on 127.0.0.1.
 """
 
 import asyncio
+import sys
+
+#: Where to listen and what to join, from the command line or Elasticsearch's.
+LISTEN, TARGET, TARGET_PORT = (
+    (int(sys.argv[1]), sys.argv[2], int(sys.argv[3]))
+    if len(sys.argv) == 4
+    else (9201, "elasticsearch", 9200)
+)
 
 
 async def pipe(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
@@ -33,7 +46,7 @@ async def handle(
     client_r: asyncio.StreamReader, client_w: asyncio.StreamWriter
 ) -> None:
     """Join one client to Elasticsearch, both ways, and close when both end."""
-    server_r, server_w = await asyncio.open_connection("elasticsearch", 9200)
+    server_r, server_w = await asyncio.open_connection(TARGET, TARGET_PORT)
     try:
         await asyncio.gather(pipe(client_r, server_w), pipe(server_r, client_w))
     finally:
@@ -43,7 +56,7 @@ async def handle(
 
 async def main() -> None:
     """Listen on every interface of the container; publish only on 127.0.0.1."""
-    server = await asyncio.start_server(handle, "0.0.0.0", 9201)
+    server = await asyncio.start_server(handle, "0.0.0.0", LISTEN)
     async with server:
         await server.serve_forever()
 

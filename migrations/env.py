@@ -20,7 +20,12 @@ from murfulu.db.models import Base
 config = context.config
 
 if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+    # Keep the loggers that already exist. The default switches every one of
+    # them off, so a migration run inside the test suite (tests/test_db_live.py,
+    # which runs only with Postgres reachable) silenced murfulu's own warnings
+    # for every test after it — found 2026-11-13 when test_karbon_1_2_0 saw an
+    # empty log in the full run and a full one alone.
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 
 target_metadata = Base.metadata
 

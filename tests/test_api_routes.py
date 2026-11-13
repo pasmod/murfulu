@@ -344,7 +344,7 @@ def test_an_empty_chain_is_a_400(client: TestClient):
 
 
 def test_a_word_in_persian_script_is_refused_only_when_nothing_can_read_it(
-    client: TestClient,
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
 ):
     """A spelling the dictionary does not hold is still refused, and says why.
 
@@ -359,6 +359,9 @@ def test_a_word_in_persian_script_is_refused_only_when_nothing_can_read_it(
     correct, and a guess would put a wrong base under a real chain. This client
     has no lexicon, so the refusal is what is left of the old behaviour.
     """
+    # No lexicon, even where the shell configures the real one for the golden
+    # tests: with it, گفتار is read and the route rightly answers.
+    monkeypatch.delenv("MURFULU_LEXICON_PATH", raising=False)
     answer = client.get("/explain", params={"word": "\u06af\u0641\u062a\u0627\u0631"})
     assert answer.status_code == 400
     assert "Behnevis" in answer.json()["detail"]

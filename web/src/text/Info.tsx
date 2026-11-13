@@ -3,7 +3,7 @@
  *
  * The project lead's finding, going through the app on 2026-08-17: *the names
  * do not say what they do*. «املای جداگانه» beside «واژه‌گونه» is two numbers
- * a thousand apart with nothing saying why they differ; «سروده‌ها»،
+ * a thousand apart with nothing saying why they differ; «سروده‌ها» (now «متن‌ها»)،
  * «واژه‌گونه‌ها»، «ساخته‌ها» are three cards a reader is asked to tell apart
  * on the label alone. docs/FRONTEND.md already required this — *the interface
  * has to explain itself without a manual* — and it had been honoured for the

@@ -97,7 +97,7 @@ export const FIELDS: Field[] = [
   { name: "affix", title: "وند", example: "-eš", hint: "واژه‌هایی که این وند را دارند" },
   { name: "tag", title: "معنا", example: "ja", hint: "وندهایی که این معنا را می‌رسانند" },
   { name: "rule", title: "دستور", example: "V-010", hint: "ساخته‌شده با این دستور" },
-  { name: "author", title: "شاعر", example: "فردوسی", hint: "در سروده‌های این شاعر" },
+  { name: "author", title: "نویسنده", example: "فردوسی", hint: "در متن‌های این نویسنده" },
   { name: "source", title: "سرچشمه", example: "ganjoor", hint: "از این سرچشمه" },
 ];
 

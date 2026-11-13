@@ -927,3 +927,43 @@ noun spelled like a preposition. Dehkhoda has long entries for all three.
 An extension. What would close it: the function words as headwords with a
 category the class mapping can take — چرا and چون as چون‌واژه, بَر as اسم
 ذات — so that N-097 and N-095 can reach چرایی and چونی.
+
+### B9. The word bank reads a third of the running text one way, and has no reading for عشق, خدا, صبر — or for any inflected form
+
+Measured 2026-11-13 on corpus v17 and `lexicon-20261111` (karbon 1.3.2), for
+the reading screen, which shows every word of a text over its Behnevis
+(`tools/measure_bank_gaps.py v17 --top 1000`; the full output is in
+`data/compare-v16-v17.md`). Each corpus spelling falls in one of five kinds:
+
+| | spellings | running words |
+|---|---|---|
+| one reading in the bank | 21,736 | 8,423,574 (33.0%) |
+| more than one reading | 1,394 | 7,110,435 (27.8%) |
+| no reading, a function word (و، ز، بی، همی) | 4 | 1,484,047 (5.8%) |
+| no reading, **inflected** — strips to a bank word or stem | 55,685 | 2,876,176 (11.3%) |
+| no reading, **uninflected** as far as our patterns tell | 331,136 | 5,637,827 (22.1%) |
+
+**Among the 1,000 most frequent spellings, 236 have no reading and no
+inflectional pattern reaches them**: عشق، غم، عالم، خدا، نفس، خلق، حال، تیغ،
+نظر، عقل، آفتاب، عمر، حسن، جمله، علم, and ساقی، صبر، نعمت further down. None of
+them has ever been a row in any snapshot we hold (`lexicon-20260808`,
+`-20261012`, `-20261111`), so this is not a loss in 1.3.2. **128 more are
+inflected** — باشد، گردد، کنم، خواهد، نباشد، گفتم، رسید — and the bank, a
+headword list, holds none of them by design. (The patterns over-read: نور and
+دولت are among the 128; آید, which they miss, is among the 236.)
+
+**What it means on one text.** Hafez's ghazal 3 (159 words): 52 have one
+reading, 42 several, 12 are function words with none, 20 inflected and 33
+uninflected words have none. The Golestan's preface (2,442 words): 632, 615,
+183, 273 and 739. So about **four words in ten of a classical text have no
+reading in the bank**, half of them inflected.
+
+**Two requests, different in kind.** The uninflected words are headwords any
+dictionary has; the list ranked by corpus count is producible from
+`word_types` (latin null, no inflectional analysis) and should be sent the way
+B2c's was, with the count beside each. The inflected forms are a design
+question for karbon, not a gap: whether the bank, or a layer beside it, reads
+a conjugated verb and a noun with its clitic (بخشم، می‌رود، دلش). Until then
+the reading screen shows «؟» for them and does not guess (the project lead's
+brief of 2026-11-13: the inflection analyser's guesses are wrong too often —
+جنت as جن + ت).

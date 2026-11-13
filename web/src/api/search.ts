@@ -117,7 +117,14 @@ export interface Citation {
   author: string | null;
   title: string | null;
   century: number | null;
+  /** A verse half, or the sentence of prose around the word (cut with «…»). */
   line: string;
+  /** The book and the sections the text sits in. Absent before corpus v17. */
+  work?: string | null;
+  section?: string[];
+  /** The unit's index in the text, so the reading screen opens at it. */
+  unit?: number | null;
+  kind?: "couplet" | "half" | "prose" | null;
 }
 
 export interface WordDetail {

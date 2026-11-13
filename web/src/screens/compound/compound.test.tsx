@@ -207,7 +207,7 @@ describe("compound words", () => {
     // The numbers are their own elements, so the sentence is read off the
     // paragraph rather than matched as one text node.
     const said = await screen.findByText(/املای «دلبر» در/);
-    expect(said.textContent).toMatch(/املای «دلبر» در ۲٬۹۲۰ سروده از ۲۱۰ سراینده/);
+    expect(said.textContent).toMatch(/املای «دلبر» در ۲٬۹۲۰ متن از ۲۱۰ نویسنده/);
   });
 
   it("says how many it built and how many were ever written", async () => {

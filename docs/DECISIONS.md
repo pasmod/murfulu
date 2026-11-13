@@ -2,6 +2,62 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-13 — Ganjoor's positions are read from Ganjoor's own code, and a text keeps its units
+
+**What a verse's `position` means is now Ganjoor's, not ours.** The adapter
+took 3 for a prose paragraph and left it out, which no source said; Ganjoor's
+own `VersePosition` enum (the desktop application whose dump we read,
+`ganjoor/desktop`, commit `caecff0`; the same enum in `ganjoor/GanjoorService`,
+commit `448fb20`) says 0 and 1 are a couplet's halves, 2 and 3 the halves of a
+band couplet in a tarji'band or tarkib-band ("or the only one" for 2), 4 a line
+of free verse, 5 *پاراگرافهایی که حالت توضیحی دارند* — the source's own note —
+and −1 prose. So from corpus v17:
+
+- **band second halves (3) are counted** — they are poetry;
+- **prose (−1) stays counted**, as it was all along by accident, now on
+  purpose: the corpus is to take other books, prose included (the project
+  lead, 2026-11-13);
+- **a note (5) is kept with the text for the reader and never counted.** It
+  is the compiler's heading or remark — in a tazkira, mostly the next poet's
+  name — not the text. A page with nothing but notes is no document;
+- **a position outside the enum stops the build** (`UnknownPositionError`).
+  The last guess cost three months of missing lines and said nothing.
+
+**A document now knows where it sits and what it is made of** —
+`Document.work`, `.section` (the categories between the work and the page,
+outermost first), `.units` and `.order` (`corpus/documents.py`). A unit is a
+couplet, a verse half, a prose paragraph or a note; each line carries a
+position in this project's words (`first`, `second`, `band_first`,
+`band_second`, `free`, `prose`, `note`), not Ganjoor's numbers, so a second
+source can use them. **`text_fa` stays what everything counts and searches,
+and is by construction the counted units' lines** — the document refuses to
+exist otherwise, so a word cannot be counted that no reader can find. The
+`documents` index stores the units unindexed (`enabled: false`) plus `work`,
+`section`, `order` and a `heading` (author, work, sections, title) to find a
+text by.
+
+**A citation is as long as a line of verse, whatever the text is.** A prose
+paragraph can run to thousands of words; a citation from one is the sentence
+holding the word, and a long sentence the ten words either side, cut with «…».
+One citation per **author**, not per poet; each names its work and its unit.
+
+**The counted words say «متن» and «نویسنده», not «سروده» and «شاعر».**
+Everywhere a count is shown — search rows, the word page, the build screen's
+level and evidence, compounds, the corpus screen — and the search syntax's
+`author:` is «نویسنده». The level's ten poems are ten texts (`MIN_TEXTS`).
+The corpus is described as «متن‌های کهن فارسی، بیشترش شعر». **Unconfirmed**:
+the words are the linguist's (FOR_THE_LINGUIST L37).
+
+## 2026-11-13 — corpus v17 carries v4's semantic vectors and suspect claims forward
+
+ENGINEERING says both are rebuilt when the corpus text changes, and v17's text
+changed. They were carried forward anyway, because the change is small against
+what they are built from: a base's vector is the mean embedding of up to six
+corpus lines holding it, chosen from about three million, and v17 adds 7,122
+band halves and takes 1,676 notes out of the count (data/compare-v16-v17.md).
+Rebuilding needs the BGE-m3 model run outside the app. **Recorded as a choice
+for the project lead to confirm**, with the rebuild in OPEN_QUESTIONS S41.
+
 ## 2026-11-13 — *weakly backed* stays decided by the chain's weakest rule
 
 Was OPEN_QUESTIONS S39. With the weakest rule deciding, هماندیشنده
