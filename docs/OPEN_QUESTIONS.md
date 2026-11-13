@@ -31,25 +31,7 @@ list (they then credit nothing, like که), or ask karbon whether a shortened
 infinitive belongs in the bank as a کارنام at all (UPSTREAM A17). Nothing was
 changed; v15 carries the credit.
 
-### S35. How much memory does a corpus build need, and where does it run now?
-
-The previous host built v13 and v14 in a one-shot container capped at 7 GB
-(ENGINEERING, "Building a corpus version"). Production moved on 2026-10-27 to
-a 16 GB VPS that Sokhan shares: Sokhan needs ~7.5 GiB, murfulu's stack is
-capped at 4.9 GB, so ~3 GB are left and 7 GB does not fit. What the build
-actually peaked at was never recorded. Before v15: measure a build's peak
-(`docker stats` or the cgroup's `memory.peak`) on the previous host, which still
-holds everything a build needs, then either cap it to fit the VPS, run it
-on the previous host and move the result with `deploy/server.sh corpus`, or stop
-Sokhan's reclaimable page cache from being the margin. Unanswered until the
-next corpus version is due.
-
-**Measured 2026-11-12 on v15** (karbon 1.3.2, 2.95 million records): **peak
-7.2 GB resident**, 7.5 minutes, built on the Mac outside Docker
-(ENGINEERING, v15). So the VPS cannot build it beside Sokhan, and the open part
-is only where future builds run: the Mac with a snapshot moved to the server,
-as prepared for v15 (DEPLOY), or a host with room. L26's switch, if
-turned on, would multiply the build about tenfold (DECISIONS 2026-11-12).
+*S35 (where a corpus build runs) is answered: on the Mac, DECISIONS 2026-11-13.*
 
 ---
 

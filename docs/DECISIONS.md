@@ -2,6 +2,17 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-13 — corpus versions are built on the Mac
+
+Was OPEN_QUESTIONS S35. Measured on v15 (karbon 1.3.2, 2.95 million records):
+a corpus build peaks at **7.2 GB resident** and takes 7.5 minutes outside
+Docker (ENGINEERING, v15). The production host keeps about 3 GB free beside
+Sokhan, so a build does not fit there.
+
+**The project lead decided: corpus versions are built on the Mac**, as v15
+was, and the finished snapshot is moved to the server with
+`deploy/server.sh corpus` (DEPLOY). — project lead
+
 ## 2026-11-13 — a cancelled request no longer ends the wait of the one that replaced it
 
 Was OPEN_QUESTIONS S38, found while the interface was being tidied. The build
