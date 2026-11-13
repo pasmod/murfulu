@@ -5,6 +5,40 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-13 (session 28) — a level for every built word
+
+The build screen now gives each word one of three levels — familiar,
+well-formed, weakly backed — and sorts by it first (DECISIONS 2026-11-13; the
+names and lines are unconfirmed, L36). What was measured putting it in, on
+corpus v16 with `rule_productivity-v16`:
+
+**The lines.** The thirds of the 166 measured rules fall at a realisation of
+0.115% and 0.677%: below the first a rule almost never makes a word the corpus
+has (*zir-* 1 of 7,830, *ham-* 1 of 13,598), above the second it often does
+(*-gar* 139 of 8,339, *-ā* 748 of 8,337). The middle third is ordinary: *vā-*,
+38 of 7,835.
+
+**On دانستن at two steps** (655 forms): 17 familiar, 307 well-formed, 329
+weakly backed. In its doer-participle group (32): دانا، داننده، دانان familiar;
+eleven well-formed, from دانار to دانگار; eighteen weakly backed, sixteen on
+*zir-* or *var-* and two on the past stem's *-gār*. The old order had زیردانا above دانگر because the chain's median
+(4.5%) hid the weak step; the level puts it below.
+
+**On اندیشیدن at three steps** (17,780 forms): 7 familiar, 4,568 well-formed,
+13,205 weakly backed. هماندیشنده moves from 401 to 4,730 — out of the best
+1,000 the three-step screen asks for, because *ham-* is in the lowest third.
+That is OPEN_QUESTIONS S39. Positions measured with the corpus answered from
+`build/derivations-v16.jsonl` for the verb's own forms and every other form
+counted as absent, so they are close to live and not equal to it.
+
+**The rule pack's sentences showed every suffix as a prefix.** «با پسوند -ande»
+printed plain inside Persian put the dash on the far side: the browser drew
+«ande-». Measured on the build screen for -ā, -ande, -ān, -ār and -gar; the
+step rows' own affix chips were right all along, because they were `Latin`
+islands. Fixed by isolating the Latin in those sentences on four screens.
+
+---
+
 ## 2026-11-12 (session 27) — karbon 1.3.2: the linguist's word bank, corpus v15
 
 karbon 1.3.2 is the linguist's final word bank, and murfulu now reads it.

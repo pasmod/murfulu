@@ -8,6 +8,7 @@
 
 import type { Account as Analysis } from "../../api/explain";
 import { Latin } from "../../text/Latin";
+import { Mixed } from "../../text/Mixed";
 import { Num } from "../../text/Num";
 import { FUNCTION_WORD_SHORT, wordGroup } from "../../text/lexicon";
 import styles from "./Account.module.css";
@@ -66,7 +67,7 @@ export function Account({ account, form }: { account: Analysis; form: string }) 
               <Latin>{step.rule_id}</Latin>
             </span>
             <span className={styles.explanation}>
-              {step.explanation_fa ?? step.label_fa ?? ""}
+              <Mixed>{step.explanation_fa ?? step.label_fa ?? ""}</Mixed>
             </span>
             {/* A stem written one way and behaving another is never silent. */}
             {step.stem_form ? (

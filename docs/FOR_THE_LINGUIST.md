@@ -29,6 +29,7 @@ Every question asked now ends with our proposal and the reason in one sentence.
 | L24 | **half answered** | *var* is the present stem of وشتن (2026-11-11); what the screen shows for دستور remains |
 | L17d | **rewritten** | his twelve groups against the rules' twelve classes; the open point is how کاربهر divides: Dehkhoda marks about thirty of its 1,106 words «ن مف» (پسند، دمید), the done-to participle. Our proposal follows that mark; until he answers, the whole group feeds the doer participle |
 | L2, L3, L25, L28, L17c, L10, L10b, L10c | open | each with our proposal now; L2 re-checked, the verb groups did not move in 1.3.2 |
+| L36 | **open, not blocking** (2026-11-13) | the three levels the build screen gives a word — names and thresholds are ours, built and marked unconfirmed |
 
 ---
 
@@ -2588,3 +2589,38 @@ recommended on it alone.
    building هوشور through it.
 
 **What we did meanwhile**: nothing in code or rules.
+
+---
+
+## L36. Three levels for a built word — the names, and where the lines fall
+
+Built 2026-11-13 at the project lead's choice (DECISIONS 2026-11-13); **in the
+app's questions as L36**, not blocking. The build screen now says of every
+word it builds one of three things, with one sentence of reason, and keeps the
+three figures behind a button:
+
+| level | name on screen | when (ours) |
+|---|---|---|
+| 3 | **آشنا** (familiar) | the corpus has the word under this reading in at least ten poems |
+| 2 | **خوش‌ساخت** (well-formed) | otherwise, if no rule on the chain is in the lowest third of all measured rules |
+| 1 | **کم‌پشتوانه** (weakly backed) | otherwise: some rule on the chain almost never makes a word the corpus has |
+
+Measured on دانستن at two steps (655 forms, corpus v16): 17 familiar, 307
+well-formed, 329 weakly backed. In its doer-participle group دانا، داننده and
+دانان are familiar; دانار and دانگر well-formed; زیردانا weakly backed,
+because *zir-* has made 1 corpus word in 7,830.
+
+**What we did meanwhile**: built it, marked it unconfirmed in the code and in
+what the API serves, and listed the two choices below for one answer.
+
+**What changes if he rules otherwise**: three names in one file of the
+interface and two numbers in `murfulu/scoring/level.py`; nothing else.
+
+### The question
+
+1. **The names.** Do آشنا، خوش‌ساخت and کم‌پشتوانه say what is meant to a
+   reader who is not a linguist — or which names would he use?
+2. **The lines.** Ten poems for *familiar*; the lowest third of the rules for
+   *weakly backed*. A prefix such as *ham-* is weak in classical poetry and
+   ordinary today (هم‌اندیش), which is the price of judging by the corpus
+   (S33, S39).

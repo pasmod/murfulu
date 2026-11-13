@@ -5,6 +5,31 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-13 (a level per built word)
+
+### S39. The level puts هماندیشنده out of the three-step page
+
+Measured when the level went in (DECISIONS 2026-11-13). *Weakly backed* is
+decided by the chain's **weakest** rule, and *ham-* makes a word the corpus has
+1 time in 13,598 — the lowest third — so هماندیشنده *hamandišande*, the word
+PLAN 9.10 exists to reach, is weakly backed, and the list now sorts it below
+every well-formed form. On اندیشیدن at three steps (17,780 forms: 7 familiar,
+4,568 well-formed, 13,205 weakly backed) it moves **from 401 to 4,730**,
+outside the best 1,000 that the three-step screen asks for. Measured on the
+Mac with the corpus answered from `build/derivations-v16.jsonl` for the verb's
+own forms and every other form counted as absent, so the positions are close
+to the live ones, not equal to them.
+
+The level is honest about it — the corpus is classical poetry and *ham-* is a
+modern prefix (S33) — but the page no longer shows the word. Three ways out,
+the project lead's to choose: keep it as it is; decide *weakly backed* by the
+chain's median, as the ranking already summarises a chain, which keeps
+هماندیشنده and makes زیردانا well-formed (median 4.5%); or sort a three-step
+answer by level only inside the page it ranks. Nothing was changed beyond the
+choice as made.
+
+---
+
 ## Opened 2026-10-27 (the move to the VPS)
 
 ### S37. The engine puts a vowel into a joint the finished word does not have
@@ -55,6 +80,11 @@ should probably happen regardless; add a second, modern corpus and report the
 two separately; or leave it to the caller and document it. The first is cheap
 and the wording is currently doing harm on the build screen, where an
 unattested form is what the screen is *for*.
+
+**2026-11-13: the copy change is made.** The build screen says «در پیکره
+نیامده است» on the row and behind it, and the line above the list says the
+corpus is classical poetry and a word missing from it may be in use today
+(DECISIONS 2026-11-13). The second and third options remain open.
 
 ### S34. The coining protocol has no home in the repository
 

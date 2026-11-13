@@ -295,9 +295,14 @@ describe("a glide rule", () => {
     // screen made with its twelve empty chips.
     renderApp("/rules");
     const row = (await screen.findByText("G-03")).closest("li")!;
-    expect(within(row).getByText("ā")).toBeInTheDocument();
-    expect(within(row).getByText("āye")).toBeInTheDocument();
-    expect(within(row).getByText(/واج‌میانجی/)).toBeInTheDocument();
+    // The vowels head the row; the explanation names them too, each now an
+    // island of its own direction (text/Mixed.tsx).
+    expect(within(row).getAllByText("ā")[0]).toBeInTheDocument();
+    expect(within(row).getAllByText("āye")[0]).toBeInTheDocument();
+    const said = within(row).getByText(/واج‌میانجی/);
+    for (const latin of ["ā", "e", "āye"]) {
+      expect(within(said).getByText(latin)).toHaveAttribute("dir", "ltr");
+    }
     expect(within(row).getByText("Pā + e = Pāye")).toBeInTheDocument();
   });
 

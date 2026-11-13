@@ -1,9 +1,11 @@
 /**
  * One built word.
  *
- * The word and what it means are always visible; the derivation is behind an
- * expander. docs/FRONTEND.md's rule: a translator wants the word, an expert
- * wants the machinery, and they get the same screen at different depths.
+ * The word, its level and one sentence of reason are always visible; what the
+ * level rests on is behind «شواهد», and the derivation behind «راه ساخت».
+ * docs/FRONTEND.md's rule: a translator wants the word, an expert wants the
+ * machinery, and they get the same screen at different depths. The level is
+ * the project lead's choice of 2026-11-13 (`Level.tsx`, `Signals.tsx`).
  *
  * **Where more than one chain produced the same form, all of them are shown**,
  * nested under it. Two derivations for one word is information — it often
@@ -15,10 +17,11 @@ import { useState } from "react";
 import type { BuiltForm, Step } from "../../api/generate";
 import { Judge } from "../../feedback/Judge";
 import { Latin } from "../../text/Latin";
+import { Mixed } from "../../text/Mixed";
 import { Num } from "../../text/Num";
-import { persianPercent } from "../../text/numbers";
-import { Evidence } from "./Evidence";
 import styles from "./FormRow.module.css";
+import { LevelBadge, Reason } from "./Level";
+import { Signals } from "./Signals";
 
 /**
  * One route from the base to the word: its number, and its steps.
@@ -65,8 +68,11 @@ function Chain({
             <span className={styles.ruleId}>
               <Latin>{step.rule_id}</Latin>
             </span>
+            {/* The rule pack's sentence, with its Latin set apart: printed
+                plain, the dash of "-ande" took the line's direction and the
+                reader saw «ande-», a prefix (text/Mixed.tsx). */}
             <span className={styles.stepText}>
-              {step.explanation_fa ?? step.label_fa ?? ""}
+              <Mixed>{step.explanation_fa ?? step.label_fa ?? ""}</Mixed>
             </span>
             {/* What the rule *means*, where the pack gives it a tag. This is
                 often the only thing telling one route from another: the four
@@ -117,28 +123,7 @@ export interface FormRowProps {
 
 export function FormRow({ form, corpusVersion = null }: FormRowProps) {
   const [open, setOpen] = useState(false);
-
-  /** The word the first step makes, which is the second step's base. */
-  const middle = form.paths[0]?.[1]?.applied_to ?? null;
-
-  /**
-   * Each rule of the route this row shows, with its own record.
-   *
-   * The first route, not a merge of all of them: where routes differ they
-   * differ in their first rule, and every route is listed in full under
-   * «راه ساخت». A rule the run never measured is left out rather than shown
-   * as a zero.
-   */
-  const counted = (form.paths[0] ?? [])
-    .map((step) => ({ rule_id: step.rule_id, ...(step.built ?? {}) }))
-    .filter(
-      (one): one is {
-        rule_id: string;
-        types: number;
-        attested: number;
-        corpus_version: string;
-      } => typeof one.types === "number" && typeof one.attested === "number",
-    );
+  const [showing, setShowing] = useState(false);
 
   return (
     <li className={styles.row}>
@@ -147,159 +132,27 @@ export function FormRow({ form, corpusVersion = null }: FormRowProps) {
           <span className={styles.fa}>{form.form_fa}</span>
           <Latin className={styles.latin}>{form.form_latin}</Latin>
         </span>
-        <Evidence attestation={form.attestation} />
+        <LevelBadge level={form.level} />
       </div>
+
+      <Reason form={form} />
 
       {form.meaning_fa ? (
         <p className={styles.meaning}>{form.meaning_fa}</p>
       ) : null}
 
-      {/* Built on an intermediate form the corpus does not have. Said in the
-          project's wording — never "does not exist" — and shown rather than
-          hidden: it is the reason the row sits where it sits. */}
-      {/* One part of the score, shown as its own sentence — never folded
-          into a single number (docs/FRONTEND.md). Absent when unmeasured. */}
-      {/* **Part four: what the base means, against what the rule takes.**
-          This was a bare «۸۵٪», and the project lead's objection on
-          2026-08-18 was the right one: a reader cannot know what a number
-          means without knowing how it was measured. So the figure is shown
-          against the bases it was measured against — and it then says the
-          true thing it used to hide, that raft is further out than every one
-          of them where the old sentence called it «زیاد». */}
-      {form.semantic?.typical?.length ? (
-        <div className={styles.semantic}>
-          <p className={styles.semanticSays}>
-            {/* **Not «بن‌هایی که در پیکره یافته‌ایم».** That said the *stems*
-                were found in the corpus. What was found is a **word this rule
-                built from them** — the artefact counts *attested pairs*, and a
-                stem enters the count only when the rule's output on it was
-                written. The two are different claims and the first one shipped
-                on 2026-08-18 before being caught. */}
-            دستور <Latin>{form.semantic.rule_id}</Latin> از{" "}
-            <Num value={form.semantic.bases_measured} /> بن واژه‌ای ساخته که در
-            پیکرهٔ <Latin>{corpusVersion ?? "?"}</Latin> پیدا شده است.
-            نزدیک‌ترین‌های آن بن‌ها به مرکزِ معنایی این دستور:
-          </p>
-          {/* **The infinitive in brackets, where the base has one.** The list
-              read «رو ۹۰٪ · آور ۹۰٪ · هز ۹۰٪ · واز ۹۰٪ · چا ۹۰٪», and a
-              reader who cannot place هز cannot judge whether the centre is
-              where we say it is. The project lead asked for the مصدر on
-              2026-08-18. Nothing is invented: the verbs come from the same
-              snapshot the stems do, and a nominal rule's bases show none. */}
-          <p className={styles.semanticList}>
-            {form.semantic.typical.slice(0, 5).map((one, at) => (
-              <span key={one.latin}>
-                {at > 0 ? " · " : ""}
-                {one.fa}
-                {one.of?.length ? (
-                  <span className={styles.semanticOf}> ({one.of.join("، ")})</span>
-                ) : null}{" "}
-                {persianPercent(one.typicality)}
-              </span>
-            ))}
-            {" — و "}
-            <Latin>{form.semantic.base}</Latin>{" "}
-            {persianPercent(form.semantic.typicality)}
-          </p>
-
-          {/* **The rule, written the way every step writes it.** The block
-              named «دستور V-034» and left the reader to remember what that
-              was; the step rows above have carried the sentence all along.
-              Asked for on 2026-08-18: *write the rule here in the same way*. */}
-          {form.semantic.rule_says_fa ? (
-            <p className={styles.semanticRule}>
-              <Latin>{form.semantic.rule_id}</Latin>
-              <span className={styles.semanticRuleSays}>
-                {form.semantic.rule_says_fa}
-              </span>
-            </p>
-          ) : null}
-        </div>
-      ) : null}
-
-      {/* **Part two: the middle step.** This said «ساختی روی ساخت», a metaphor
-          that assumes the point it is making. It now names the intermediate
-          word, says where it was looked for, and says who made it. It does
-          **not** say nobody wrote it: FRONTEND.md forbids *does not exist*,
-          and the corpus is classical poetry — a word absent from it may be
-          ordinary prose. Corrected on 2026-08-18 after a draft of this
-          sentence claimed exactly that. */}
-      {form.base_attested === false ? (
-        <p className={styles.ungrounded}>
-          {middle ? (
-            <>
-              <Latin>{form.form_latin}</Latin> از <Latin>{middle}</Latin> ساخته
-              شده است، و <Latin>{middle}</Latin> در پیکرهٔ{" "}
-              <Latin>{corpusVersion ?? "?"}</Latin> پیدا نشد — آن را ما
-              ساخته‌ایم. پس این واژه دو گام از متنی که خوانده‌ایم دور است.
-            </>
-          ) : (
-            <>
-              پایهٔ میانی این واژه در پیکرهٔ{" "}
-              <Latin>{corpusVersion ?? "?"}</Latin> پیدا نشد — آن را ما
-              ساخته‌ایم.
-            </>
-          )}
-        </p>
-      ) : null}
-
-      {/* **Part three: the rules, with their own counts.**
-          The form-level `realisation` is a *median* over the chain and is
-          true of no rule in it — وارفته's steps realise 0.67% and 9.18%, and
-          their median 4.9% describes neither. Asked on 2026-08-18 what «۱۰۰
-          واژه» referred to, the answer was that there is no hundred: the
-          denominators are 5,196 and 6,926. So each rule states what it built
-          and what was found, and the screen computes nothing. */}
-      {counted.length ? (
-        <div className={styles.record}>
-          <p className={styles.recordSays}>این واژه با این دستورها ساخته شده:</p>
-          <ul className={styles.recordList}>
-            {counted.map((one) => (
-              <li key={one.rule_id}>
-                <Latin>{one.rule_id}</Latin> — <Num value={one.types!} /> واژه
-                ساخته، <Num value={one.attested!} /> تای آن‌ها در پیکرهٔ{" "}
-                <Latin>{one.corpus_version}</Latin> پیدا شد.
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      {/*
-        The letters also read as an inflection of a word the dictionary holds.
-
-        This is why the row sits where it sits, so it is said rather than left
-        to be guessed at from an unexplained position — رفتی has 1,565 poems
-        behind it and sits below رفتار, which has 1,091. Without the sentence
-        that looks like a bug.
-
-        **The second sentence is the honest half.** 95.6% of these are spelled
-        by a derivational rule too, so the letters cannot settle which reading
-        is meant, and the screen must not imply they can. The word is ranked
-        down and never removed; which reading is right is the linguist's.
-      */}
-      {form.inflection ? (
-        <p className={styles.inflection}>
-          این املا خوانشِ دیگری هم دارد: {form.inflection.label_fa} از{" "}
-          <span dir="rtl">{form.inflection.base}</span>.{" "}
-          {form.inflection.shared_with.length > 0 ? (
-            <>
-              همین حرف‌ها را دستورِ واژه‌سازی هم می‌نویسد (
-              {form.inflection.shared_with.map((id, index) => (
-                <span key={id}>
-                  {index > 0 ? "، " : ""}
-                  <Latin>{id}</Latin>
-                </span>
-              ))}
-              )، پس از روی املا نمی‌توان گفت کدام است.
-            </>
-          ) : (
-            "هیچ دستورِ واژه‌سازی این حرف‌ها را نمی‌نویسد."
-          )}
-        </p>
-      ) : null}
-
       <div className={styles.actions}>
+        {/* What the level rests on: the three parts of the score, separate,
+            one press away — never folded into the level and hidden. */}
+        <button
+          type="button"
+          className={styles.toggle}
+          aria-expanded={showing}
+          onClick={() => setShowing((was) => !was)}
+        >
+          {showing ? "بستن شواهد" : "شواهد"}
+        </button>
+
         <button
           type="button"
           className={styles.toggle}
@@ -335,10 +188,13 @@ export function FormRow({ form, corpusVersion = null }: FormRowProps) {
                 ) ?? [],
               meaning_fa: form.meaning_fa ?? null,
               attestation: form.attestation?.level ?? null,
+              level: form.level?.level ?? null,
             },
           }}
         />
       </div>
+
+      {showing ? <Signals form={form} corpusVersion={corpusVersion} /> : null}
 
       {open ? (
         <div className={styles.derivation}>

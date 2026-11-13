@@ -2,6 +2,62 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-13 — each built word gets a level, and the list is sorted by it first
+
+**The project lead's choice of 2026-11-13**, from three drafts of the build
+screen. A reader who is not a linguist could not tell from three separate
+figures — the corpus count, how often the chain's rules make words the corpus
+has, how typical the base is — whether a word is one Persian already has, a
+well-made coinage or a long shot. Each row now says it as **one of three
+levels with one sentence of reason**, and the three figures sit behind
+«شواهد» as three labelled fields of up to three dots, each giving its numbers
+on a press.
+
+| level | name | when |
+|---|---|---|
+| 3 | آشنا, familiar | the corpus has the word under **this reading** in at least 10 poems |
+| 2 | خوش‌ساخت, well-formed | not familiar, and no rule on the chain is in the lowest third of the measured rules |
+| 1 | کم‌پشتوانه, weakly backed | not familiar, and some rule on the chain is in the lowest third (it makes a word the corpus has less than 0.115% of the time on v16) |
+
+**Unconfirmed.** Names and thresholds are ours, built now under the working
+rule and served with `confirmed: false`; the ruling is the linguist's
+(FOR_THE_LINGUIST L36, in the app's questions). Where nothing can be said —
+the corpus was not asked, or no rule on the chain was measured — there is no
+level, never a guess and never *weak*.
+
+**Sorted by level first** (familiar, well-formed, no level, weakly backed),
+and **within a level by the score as before**. The level is decided by the API
+(`murfulu/scoring/level.py`) and `_ranked` sorts on it, because a three-step
+answer is ranked and paged on the server; the screen's own sort for one and
+two steps puts the level first the same way. *No level* sits above *weakly
+backed* because silence must not sink a word below one measured and found weak.
+
+**What the level does not use, on purpose.** A spelling-level hit never makes a
+word familiar (دانست, 1,273 poems, is "he knew", not the noun). The ground
+under the chain does not enter: the project lead moved it down the ranking on
+2026-08-17 because it is wrong about prefixed verbs. The weakest rule decides
+*weakly backed*, not the chain's median — the mockup the project lead chose
+put زیردانا (zir-: 1 of 7,830 words found) below دانگر, which the median did
+not. Its cost at three steps is measured in FINDINGS and is OPEN_QUESTIONS S39.
+
+**The corpus version is said once above the list, and beside every count
+behind «شواهد»** — not in the sentence under each word. A deviation from
+FRONTEND.md's "every count carries its corpus version": one answer is measured
+against one corpus, so «پیکرهٔ v16» on every row repeats the line above it and
+makes each row a Latin island longer. The numbers that matter for checking —
+the counts behind the button — still carry it.
+
+**A zero reads «در پیکره نیامده است»**, *does not occur in the corpus*, on the
+row and behind it; «یافت نشد» is gone from the build screen. The line above the
+list says the corpus is classical poetry and a word missing from it may be in
+use today. This is S33's first option, the copy change.
+
+**The rule pack's sentences have their Latin set apart** (`text/Mixed.tsx`), on
+the build, rules, compound and explain screens. Printed plain inside Persian,
+the dash of "-ande" took the line's direction and the reader saw «ande-», a
+prefix; measured in the browser for -ā, -ande, -ān, -ār and -gar. A test fails
+on the old row. — project lead (levels, order); engineering (the rest)
+
 ## 2026-11-13 — corpus versions are built on the Mac
 
 Was OPEN_QUESTIONS S35. Measured on v15 (karbon 1.3.2, 2.95 million records):

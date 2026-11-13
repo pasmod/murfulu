@@ -53,6 +53,19 @@ class Measured:
         rate = row.get("realisation_rate")
         return float(rate) if rate is not None else None
 
+    def band(self, rule_id: str) -> str | None:
+        """Which third of the measured rules this one falls in, or ``None``.
+
+        ``low``, ``middle`` or ``high``, as the run wrote it (terciles of the
+        realisation rate, `Productivity.bands`). ``None`` where the rule was
+        not measured, or the file predates the field.
+        """
+        row = self.by_rule.get(rule_id)
+        if row is None or not row.get("measured"):
+            return None
+        band = row.get("band")
+        return band if band in ("low", "middle", "high") else None
+
 
 def path() -> Path | None:
     """The configured file, if there is one and it exists."""

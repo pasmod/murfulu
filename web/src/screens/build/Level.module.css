@@ -1,0 +1,78 @@
+/* The level: three bars and a name, the bars rising in reading order. The
+   colour repeats what the shape says and is never alone: familiar is the
+   corpus's own green, weakly backed the caution the app already uses for a
+   chain on unwritten ground, well-formed the plain text colour. */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: center;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  color: var(--ink-faint);
+}
+
+.badge[data-level="3"] {
+  color: var(--evidence-reading);
+}
+
+.badge[data-level="2"] {
+  color: var(--ink-soft);
+}
+
+.badge[data-level="1"] {
+  color: var(--evidence-spelling);
+}
+
+.bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.bars i {
+  display: block;
+  inline-size: 5px;
+  border-radius: 1px;
+  background: var(--line);
+}
+
+.bars i:nth-child(1) {
+  block-size: 6px;
+}
+
+.bars i:nth-child(2) {
+  block-size: 10px;
+}
+
+.bars i:nth-child(3) {
+  block-size: 14px;
+}
+
+.bars i.on {
+  background: currentcolor;
+}
+
+.reason {
+  color: var(--ink-soft);
+}
+
+/* The line above the list: what the levels mean and what the corpus is. */
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-block-end: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.intro strong {
+  color: var(--ink);
+  font-weight: var(--weight-medium);
+}

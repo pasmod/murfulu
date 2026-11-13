@@ -41,11 +41,12 @@ participle…). Each row:
 | Persian | script form |
 | rule | `v-010: stem1 + -ār → kārnām`, clickable to the rule |
 | meaning | composed from the semantic tag |
-| evidence | attested *n×* in corpus v3, or "not found in corpus v3" |
+| level | one of three, with one sentence of reason — see below (2026-11-13) |
+| evidence | attested *n×* in corpus v3, or «در پیکرهٔ v3 نیامده است» — behind «شواهد» |
 | sisters | other words the same rule made that do exist |
 | score | its parts, never one number — corpus evidence, whether the
 chain rests on written ground, how often the chain's rules produce real
-words, and how typical the base is for its rule |
+words, and how typical the base is for its rule — behind «شواهد» |
 
 **Built 2026-08-17, and not as drafted.** Steps 1, 2 and 3 are offered as a
 choice rather than as a *go deeper* button, because the third step is not more
@@ -55,7 +56,23 @@ the route and then paged** — the screen asks for the best thousand and says ho
 many of how many it is showing. It takes about a second, and is *not* instant
 after that: the cache is still task 6.2.
 
-Sorted by score, **never by depth**.
+Sorted by **level first, then by score** within a level, **never by depth**
+(the project lead's choice of 2026-11-13). The API decides the level and ranks
+on it, because a deep answer is paged there; the screen sorts one and two
+steps the same way.
+
+**The level (2026-11-13).** Each row shows the word, one of three levels —
+آشنا (familiar: under this reading in at least ten poems), خوش‌ساخت
+(well-formed: no rule on the chain in the lowest third), کم‌پشتوانه (weakly
+backed: some rule there) — as a name with three bars and an ⓘ, and one
+sentence of reason under the word: the poems and poets for a familiar word,
+otherwise what the corpus says and the record of the chain's weakest rule. A
+line above the list says what the three mean and that the corpus is classical
+poetry. «شواهد» opens three fields — پیکره، دستور، معنا — of up to three dots
+each, and a press on a field gives its figures with the corpus version. The
+names and thresholds are **unconfirmed** until the linguist rules (L36). The
+corpus version is said once above the list and beside every count behind the
+button, not in each row's sentence (DECISIONS 2026-11-13).
 
 One row per word. Where more than one rule chain produced the same form, the
 paths are nested under it — that is information, not noise.
@@ -227,8 +244,11 @@ is the most common way Persian interfaces break.
 
 **Never lowercase Latin.** Capitalization carries grammar in Behnevis.
 
-**Never say "does not exist".** Say "not found in corpus v3". Every count
-carries its corpus version.
+**Never say "does not exist".** Say "not found in corpus v3" — on the build
+screen «در پیکرهٔ v3 نیامده است», *does not occur in corpus v3*, since
+2026-11-13 (S33). Every count carries its corpus version; the one exception is
+the sentence under each built word, whose list states the version once above
+it (DECISIONS 2026-11-13).
 
 **Show the score's parts.** Rule, corpus, semantics, composite — visible and
 separate. A single opaque number is exactly what the project is arguing

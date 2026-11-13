@@ -19,6 +19,11 @@
 # docs/DECISIONS.md instead. Answered earlier and not asked again: L16, L27,
 # L29, L31, L33. L1 is karbon's (UPSTREAM B4).
 #
+# **One question does not block work: L36** (2026-11-13), the three levels the
+# build screen gives a word. They are built and marked unconfirmed under the
+# working rule, and the project lead asked for the question to be put to him;
+# it carries `blocks_work: false`.
+#
 # **How the Persian is written** (the project lead, 2026-10-18 and 2026-11-12):
 # complete, simple sentences that carry the full meaning — nothing dropped to
 # shorten; enough context to see what is at stake for the engine, and no more;
@@ -397,6 +402,42 @@ questions:
       - id: nam_only
         text_fa: >-
           «نام» در این جدول تنها نام است و کارنام را دربر نمی‌گیرد؛ این نمونه‌ها از راه دیگری ساخته می‌شوند که آن را در جعبهٔ متن می‌نویسم.
+      - id: unsure
+        text_fa: نمی‌دانم و باید بیشتر بررسی کنم.
+        settles: false
+
+  - reference: L36
+    blocks_work: false
+    question_en: >-
+      The build screen now gives every built word one of three levels —
+      familiar, well-formed, weakly backed — by lines we drew ourselves (ten
+      poems; the lowest third of the rules). Are the names right for a reader
+      who is not a linguist, and are the lines in the right place?
+    question_fa: |
+      صفحهٔ ساخت واژه اکنون برای هر واژه‌ای که می‌سازد یکی از سه درجه را نشان می‌دهد، با یک جمله که دلیل آن را می‌گوید. این درجه‌ها و مرزهایشان را ما گذاشته‌ایم و هنوز به تأیید شما نرسیده‌اند:
+      آشنا: واژه با همین خوانش دست‌کم در ده سرودهٔ پیکره آمده است، مانند دانا (dānā) که در ۲٬۱۱۸ سروده آمده است.
+      خوش‌ساخت: واژه کم آمده یا نیامده است، ولی هیچ‌یک از قاعده‌هایی که آن را ساخته‌اند در یک‌سوم پایینیِ قاعده‌ها نیست، یعنی در آن یک‌سوم که کمتر از همه واژه‌ای ساخته‌اند که در پیکره آمده باشد؛ مانند دانگر (dāngar)، چون پسوند ـگر ۱۳۹ واژه ساخته که در پیکره آمده‌اند.
+      کم‌پشتوانه: واژه کم آمده یا نیامده است، و یکی از قاعده‌هایش در آن یک‌سوم است؛ مانند زیردانا (zirdānā)، چون پیشوند زیر از ۷٬۸۳۰ واژه‌ای که ساخته، تنها یکی را در پیکره دارد.
+
+      پیکره شعر کهن است. پیشوندی مانند «هم» در شعر کهن کم واژه ساخته و امروز بسیار به کار می‌رود، و از این رو واژه‌ای مانند هماندیشنده (hamandišande) کم‌پشتوانه به شمار می‌آید.
+
+      پرسش: آیا این سه نام برای خواننده‌ای که زبان‌شناس نیست درست‌اند، و آیا مرز ده سروده و مرز یک‌سوم پایینیِ قاعده‌ها به‌جا هستند؟
+
+      پیشنهاد ما: گزینهٔ نخست، چون هر سه نام واژه‌های روزمره‌اند و هر دو مرز از خود پیکره و از شمار واژه‌های هر قاعده گرفته شده‌اند، نه از داوری ما دربارهٔ تک‌تک واژه‌ها.
+    choices:
+      - id: keep
+        suggested: true
+        text_fa: >-
+          نام‌ها و مرزها همین‌گونه بمانند.
+      - id: other_names
+        text_fa: >-
+          مرزها درست‌اند، ولی نام‌ها باید دیگر باشند؛ نام‌هایی را که پیشنهاد می‌کنم در جعبهٔ متن می‌نویسم.
+      - id: other_lines
+        text_fa: >-
+          نام‌ها درست‌اند، ولی مرزها باید جای دیگری باشند؛ مرزهای درست را در جعبهٔ متن می‌نویسم.
+      - id: no_levels
+        text_fa: >-
+          واژه‌ها نباید درجه بگیرند؛ صفحه سه سنجه را تنها جداگانه نشان دهد، همان‌گونه که پیش از این نشان می‌داد.
       - id: unsure
         text_fa: نمی‌دانم و باید بیشتر بررسی کنم.
         settles: false

@@ -1,0 +1,134 @@
+/* The three fields behind «شواهد», side by side in equal thirds, and under
+   them the figures of the one that was pressed. A grey tile is the one box
+   allowed inside a card (FRONTEND.md); the fields are controls, so they take
+   the control's edge and its chosen state. */
+
+.signals {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  max-inline-size: 30rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  min-block-size: var(--touch-target);
+  padding: var(--space-2) var(--space-3);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  text-align: start;
+}
+
+@media (hover: hover) {
+  .field:hover {
+    border-color: var(--accent);
+  }
+}
+
+.field[aria-expanded="true"] {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.name {
+  color: var(--ink);
+}
+
+.field[aria-expanded="true"] .name {
+  color: var(--accent-strong);
+}
+
+/* Dots or the words that stand for none, at one height so the three fields
+   line up whatever each holds. */
+.mark {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.25rem;
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}
+
+.dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.dots i {
+  display: block;
+  inline-size: 9px;
+  block-size: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+}
+
+.dots i.on {
+  border-color: var(--ink-soft);
+  background: var(--ink-soft);
+}
+
+/* The letters only: a ring in the caution colour, so it is told apart by its
+   shape as well as its colour. */
+.dots i.ring {
+  border: 3px solid var(--evidence-spelling);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.list {
+  margin: 0;
+  padding-inline-start: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+/* A caution about the evidence, never a verdict on the word: the colour the
+   app uses for "the corpus has the letters only". */
+.caution {
+  color: var(--evidence-spelling);
+}
+
+.bases {
+  color: var(--ink);
+}
+
+.of {
+  color: var(--ink-faint);
+}
+
+.rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.ruleSays {
+  color: var(--ink-soft);
+}

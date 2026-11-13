@@ -218,6 +218,32 @@ test.describe("a real build", () => {
   });
 });
 
+test.describe("a built word's evidence", () => {
+  test("opens without pushing the page sideways, its fields thumb-sized", async ({
+    page,
+  }) => {
+    // Three fields side by side in a phone's width, from 2026-11-13. They are
+    // controls, so they are held to 44px like every other one.
+    const answer = await page.request.get("/api/generate?word=%D8%B1%D9%81%D8%AA%D9%86");
+    test.skip(!answer.ok(), "no lexicon configured");
+    await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86&depth=2");
+    const group = page.getByRole("heading", { level: 3 }).first();
+    await group.waitFor();
+    await group.getByRole("button").click();
+    const row = page.getByRole("listitem").filter({ hasText: "شواهد" }).first();
+    await row.getByRole("button", { name: "شواهد" }).click();
+    for (const name of [/^پیکره/, /^دستور/, /^معنا/]) {
+      const box = await row.getByRole("button", { name }).boundingBox();
+      expect(box?.height ?? 0, String(name)).toBeGreaterThanOrEqual(44);
+    }
+    await row.getByRole("button", { name: /^معنا/ }).click();
+    const overflow = await page.evaluate(
+      () => document.body.scrollWidth - document.body.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(1);
+  });
+});
+
 test.describe("affixes by meaning", () => {
   test("answers the founding question against the real rule pack", async ({
     page,

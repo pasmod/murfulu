@@ -18,6 +18,7 @@ import { useState } from "react";
 import type { Rule } from "../../api/rules";
 import { Judge } from "../../feedback/Judge";
 import { Latin } from "../../text/Latin";
+import { Mixed } from "../../text/Mixed";
 import { Num } from "../../text/Num";
 import styles from "./RuleRow.module.css";
 
@@ -88,7 +89,9 @@ export function RuleRow({ rule }: { rule: Rule }) {
       </div>
 
       {rule.explanation_fa ? (
-        <p className={styles.explanation}>{rule.explanation_fa}</p>
+        <p className={styles.explanation}>
+          <Mixed>{rule.explanation_fa}</Mixed>
+        </p>
       ) : null}
 
       <div className={styles.marks}>

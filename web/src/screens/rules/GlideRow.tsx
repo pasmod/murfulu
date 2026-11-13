@@ -16,6 +16,7 @@
 import type { Glide } from "../../api/rules";
 import { Judge } from "../../feedback/Judge";
 import { Latin } from "../../text/Latin";
+import { Mixed } from "../../text/Mixed";
 import styles from "./RuleRow.module.css";
 
 export function GlideRow({ glide }: { glide: Glide }) {
@@ -36,7 +37,9 @@ export function GlideRow({ glide }: { glide: Glide }) {
       </div>
 
       {glide.explanation_fa ? (
-        <p className={styles.explanation}>{glide.explanation_fa}</p>
+        <p className={styles.explanation}>
+          <Mixed>{glide.explanation_fa}</Mixed>
+        </p>
       ) : null}
 
       {glide.examples.length > 0 ? (

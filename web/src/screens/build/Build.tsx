@@ -7,9 +7,10 @@
  * rather than written here. The project's own coined terms (کارنام, کاربن دو)
  * are not in the data at all, so nothing shows them; see OPEN_QUESTIONS S3.
  *
- * **Sorted by evidence, never by depth.** A three-step form is not worse for
- * being three steps — *Guyāyi* is two steps and entirely ordinary. What ranks
- * a form is what the corpus says about it.
+ * **Sorted by level, then by evidence, never by depth.** A three-step form is
+ * not worse for being three steps — *Guyāyi* is two steps and entirely
+ * ordinary. What ranks a form is its level (`Level.tsx`, 2026-11-13), and
+ * within a level what the corpus says about it.
  *
  * **Three steps are offered, and a deep answer is a page.** One verb at three
  * steps builds tens of thousands of forms, of which fifty are words the corpus
@@ -45,6 +46,7 @@ import { SCREENS } from "../../shell/screens";
 import styles from "./Build.module.css";
 import { useSubject } from "../../feedback/subject";
 import { ClassTile, ClassWords } from "./Group";
+import { levelOrder } from "./levels";
 import { WordInput } from "./WordInput";
 
 const SCREEN = SCREENS.find((one) => one.path === "/build")!;
@@ -143,6 +145,12 @@ function standing(form: BuiltForm): number {
 
 function ranked(forms: BuiltForm[]): BuiltForm[] {
   return [...forms].sort((a, b) => {
+    // **The level first** — familiar, well-formed, not known, weakly backed:
+    // the project lead's choice of 2026-11-13 (`Level.tsx`). Everything below
+    // orders forms within a level, exactly as before. The API decides the
+    // level and `_ranked` sorts on it the same way.
+    const level = levelOrder(a.level) - levelOrder(b.level);
+    if (level !== 0) return level;
     const known = standing(a) - standing(b);
     if (known !== 0) return known;
     // Whether the letters also read as an inflection of a word the dictionary

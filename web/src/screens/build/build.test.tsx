@@ -14,7 +14,7 @@ import type { BuiltForm, Generated } from "../../api/generate";
 import { renderApp } from "../../test/render";
 import {
   FROM_LEXICON,
-  FUNCTION_WORD_SHORT,
+  FUNCTION_WORD_HOMOGRAPH,
   NEEDS_REVIEW,
   notFound,
 } from "../../text/lexicon";
@@ -171,6 +171,30 @@ async function showForms(name?: RegExp) {
   await userEvent.click(within(wanted!).getByRole("button"));
 }
 
+/**
+ * Open a row's evidence and press one of its three fields.
+ *
+ * The figures are behind «شواهد» since 2026-11-13 (the project lead's choice:
+ * a level and a sentence on the row, the parts of the score one press away),
+ * and each field opens on its own press — so a test that reads a figure asks
+ * for it the way a reader does.
+ */
+async function openEvidence(word: string, field: RegExp) {
+  const row = (await screen.findByText(word)).closest("li")!;
+  await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
+  await userEvent.click(within(row).getByRole("button", { name: field }));
+  return row;
+}
+
+/** The element whose whole text is this, even where a Latin island splits it. */
+function wholeText(text: string) {
+  return screen.getByText(
+    (_, node) =>
+      node?.textContent === text &&
+      !Array.from(node.children).some((child) => child.textContent === text),
+  );
+}
+
 describe("the build screen", () => {
   it("says when the dictionary itself doubts the reading", async () => {
     // بلند has two readings in the snapshot: Baland, filed as an اسم ذات and
@@ -239,6 +263,7 @@ describe("the build screen", () => {
     );
     renderApp(ROUTE);
     await showForms();
+    await openEvidence("یانیسار", /^معنا/);
     // Twice now: on the step that applied it, and under the semantic block,
     // which names the rule it belongs to instead of only its id.
     expect(await screen.findAllByText("N-098")).not.toHaveLength(0);
@@ -667,7 +692,8 @@ describe("the build screen", () => {
       .getAllByText(/^(که|کهین)$/)
       .map((node) => node.textContent);
     expect(words).toEqual(["کهین", "که"]);
-    expect(within(group).getByText(FUNCTION_WORD_SHORT)).toBeInTheDocument();
+    // Said on the row, in the sentence under the word, rather than a count.
+    expect(within(group).getByText(FUNCTION_WORD_HOMOGRAPH)).toBeInTheDocument();
   });
 
   it("does not rank a form on a count the dictionary says is another word", async () => {
@@ -769,8 +795,8 @@ describe("the build screen", () => {
     const toggles = screen.getAllByRole("button", { name: /راه ساخت/ });
     expect(toggles[0]).toHaveTextContent("۲ راه");
     await userEvent.click(toggles[0]!);
-    expect(screen.getByText("دستور V-010")).toBeInTheDocument();
-    expect(screen.getByText("دستور V-011")).toBeInTheDocument();
+    expect(wholeText("دستور V-010")).toBeInTheDocument();
+    expect(wholeText("دستور V-011")).toBeInTheDocument();
   });
 
   it("numbers each route and says what tells them apart", async () => {
@@ -853,7 +879,12 @@ describe("the evidence", () => {
     // Ravešnāk is the fixture's unattested word and it is a برنام, so the
     // class holding it is the one to open — one class is open at a time.
     await showForms(/برنام/);
-    expect(await screen.findByText(/یافت نشد/)).toBeInTheDocument();
+    // «نیامده است», not «یافت نشد»: the corpus is classical poetry, and a
+    // word missing from it may be in use (S33). On the row and behind it.
+    expect(await screen.findByText(/در پیکره نیامده است/)).toBeInTheDocument();
+    await openEvidence("روشناک", /^پیکره/);
+    expect(screen.getByText(/نیامده است/, { selector: "span" })).toBeInTheDocument();
+    expect(screen.queryByText(/یافت نشد/)).not.toBeInTheDocument();
     expect(screen.queryByText(/وجود ندارد/)).not.toBeInTheDocument();
   });
 
@@ -867,6 +898,7 @@ describe("the evidence", () => {
   it("says a spelling-level hit is read another way", async () => {
     renderApp(ROUTE);
     await showForms();
+    await openEvidence("روش", /^پیکره/);
     expect(await screen.findByText(/goftār/)).toBeInTheDocument();
   });
 
@@ -877,7 +909,7 @@ describe("the evidence", () => {
     // number might not be about this word.
     renderApp(ROUTE);
     await showForms();
-    await screen.findByText("روش");
+    await openEvidence("روش", /^پیکره/);
     expect(screen.getByText(/شمار برای این املاست/)).toBeInTheDocument();
   });
 
@@ -978,6 +1010,7 @@ describe("the ground under a chain", () => {
     serving([airborne]);
     renderApp(ROUTE);
     await showForms();
+    await openEvidence("دشرفتبان", /^دستور/);
     // Names the middle word, says where it was looked for, says who made it —
     // and never that nobody wrote it. FRONTEND.md: never "does not exist".
     expect(await screen.findByText(/آن را ما ساخته‌ایم/)).toBeInTheDocument();
@@ -1159,9 +1192,10 @@ describe("a form that also reads as an inflection", () => {
     showing([rafti, raftar]);
     renderApp(ROUTE);
     await showForms();
-    expect(
-      await screen.findByText(/خوانشِ دیگری هم دارد/),
-    ).toBeInTheDocument();
+    // The row says it in its sentence; the detail is behind the corpus field.
+    expect(await screen.findByText(/خوانش دیگری هم دارند/)).toBeInTheDocument();
+    await openEvidence("رفتی", /^پیکره/);
+    expect(screen.getByText(/خوانشِ دیگری هم دارد/)).toBeInTheDocument();
     expect(screen.getByText(/نمی‌توان گفت کدام است/)).toBeInTheDocument();
     expect(screen.getByText("N-095")).toBeInTheDocument();
   });

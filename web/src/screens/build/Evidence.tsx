@@ -9,9 +9,11 @@
  *   way we built it. The strongest answer.
  * - **spelling** — the letters are there, under a different reading or under
  *   none. The word we built may still be new.
- * - **none** — *not found in corpus v1*. **Never "does not exist"**, and the
- *   version travels with the answer, because that is the only thing the
- *   sentence is true of.
+ * - **none** — «در پیکرهٔ v1 نیامده است», *it does not occur in corpus v1*.
+ *   **Never "does not exist"**, and the version travels with the answer,
+ *   because that is the only thing the sentence is true of. It said «یافت
+ *   نشد», *was not found*, until 2026-11-13, which read as *free* on a screen
+ *   whose corpus is classical poetry (OPEN_QUESTIONS S33).
  */
 
 import type { Attestation } from "../../api/generate";
@@ -28,7 +30,7 @@ export function Evidence({ attestation }: { attestation: Attestation | null }) {
   if (attestation.level === "none") {
     return (
       <span className={styles.none}>
-        در پیکرهٔ <Latin>{attestation.corpus_version || "?"}</Latin> یافت نشد
+        در پیکرهٔ <Latin>{attestation.corpus_version || "?"}</Latin> نیامده است
       </span>
     );
   }

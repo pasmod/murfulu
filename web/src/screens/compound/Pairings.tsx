@@ -17,6 +17,7 @@ import { useState } from "react";
 import type { Pairing } from "../../api/compound";
 import type { WordClass } from "../../api/generate";
 import { Latin } from "../../text/Latin";
+import { Mixed } from "../../text/Mixed";
 import { Num } from "../../text/Num";
 import { Term } from "../../text/Term";
 import { FUNCTION_WORD_SHORT, LEXICON } from "../../text/lexicon";
@@ -134,7 +135,7 @@ export function Pairings({
                 <p className={styles.howRule}>
                   <Latin>{row.rule_id}</Latin>
                   {": "}
-                  {row.explanation_fa}
+                  <Mixed>{row.explanation_fa}</Mixed>
                 </p>
               ) : null}
             </details>

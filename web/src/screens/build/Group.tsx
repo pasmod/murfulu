@@ -35,6 +35,7 @@ import type { BuiltForm } from "../../api/generate";
 import { Num } from "../../text/Num";
 import styles from "./Build.module.css";
 import { FormRow } from "./FormRow";
+import { LevelIntro } from "./Level";
 
 /**
  * How many rows an opened class starts with.
@@ -114,6 +115,7 @@ export function ClassWords({
 
   return (
     <div id={panelId} className={styles.words}>
+      <LevelIntro corpusVersion={corpusVersion} />
       <ul className={styles.forms}>
         {shown.map((form) => (
           <FormRow
