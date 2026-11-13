@@ -2,6 +2,18 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-13 — *weakly backed* stays decided by the chain's weakest rule
+
+Was OPEN_QUESTIONS S39. With the weakest rule deciding, هماندیشنده
+*hamandišande* is weakly backed, because *ham-* makes a word the corpus has
+1 time in 13,598, and on اندیشیدن at three steps it moves from place 401 to
+4,730, outside the best 1,000 the screen asks for. Deciding by the chain's
+median instead would keep it on the page and would also make زیردانا
+well-formed, although *zir-* has 1 corpus word out of 7,830.
+
+**The project lead chose the weakest rule**, the stricter and more honest of
+the two: a word is weakly backed as soon as one of its steps is. — project lead
+
 ## 2026-11-13 — each built word gets a level, and the list is sorted by it first
 
 **The project lead's choice of 2026-11-13**, from three drafts of the build
