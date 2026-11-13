@@ -2613,8 +2613,12 @@ because *zir-* has made 1 corpus word in 7,830.
 **What we did meanwhile**: built it, marked it unconfirmed in the code and in
 what the API serves, and listed the two choices below for one answer.
 
-**What changes if he rules otherwise**: three names in one file of the
-interface and two numbers in `murfulu/scoring/level.py`; nothing else.
+**What changes if he rules otherwise**: the names and their one-line
+explanations are in one file of the interface (`web/src/screens/build/levels.ts`);
+the ten poems are `MIN_POEMS` in `murfulu/scoring/level.py`, said again in
+that file's explanation. The lowest third is the productivity run's own
+division of the rules, so a different line for *weakly backed* is a rate in
+`level.py` in place of the band, or a different division in the run.
 
 ### The question
 

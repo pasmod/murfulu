@@ -237,13 +237,35 @@ describe("each word's level", () => {
 });
 
 describe("the order", () => {
-  it("is by level first: familiar, well-formed, weakly backed", async () => {
-    // Served weak first and familiar third: the browser sorts steps 1 and 2.
+  it("is by level first, even where the old order said the opposite", async () => {
+    // Each pair is one the ranking before 2026-11-13 put the other way round,
+    // so this fails on the old comparator. The letters of a weak word in
+    // 1,565 poems outranked a well-formed word nobody wrote; the letters of a
+    // well-formed word in 4,000 poems outranked a familiar word in twelve.
+    const weakButWritten = built(
+      "zirdānān",
+      "زیردانان",
+      found("spelling", 1565, 90),
+      ZIRDANA.level,
+    );
+    const familiarFew = built(
+      "dānān",
+      "دانان",
+      found("reading", 12, 9),
+      levelOf(3, { corpus: 2, rule: 3, meaning: 3 }),
+    );
+    const formedMany = built(
+      "Dānest",
+      "دانست",
+      found("spelling", 4000, 150),
+      DANAR.level,
+    );
+    serving([weakButWritten, formedMany, DANGAR, familiarFew]);
     await open();
     const at = (word: string) => order().findIndex((text) => text.includes(word));
-    expect(at("دانا")).toBeLessThan(at("دانگر"));
-    expect(at("دانگر")).toBeLessThan(at("زیردانا"));
-    expect(at("دانار")).toBeLessThan(at("زیردانا"));
+    expect(at("دانان")).toBeLessThan(at("دانست"));
+    expect(at("دانگر")).toBeLessThan(at("زیردانان"));
+    expect(at("دانست")).toBeLessThan(at("زیردانان"));
   });
 
   it("puts a word with no level above a weak one and below a well-formed one", async () => {
@@ -282,6 +304,16 @@ describe("the evidence behind the button", () => {
     const row = await evidenceOf("دانگر");
     expect(within(row).getByRole("button", { name: /^پیکره: نیامده/ })).toBeInTheDocument();
     expect(within(row).getByRole("button", { name: /^معنا: سنجیده نشده/ })).toBeInTheDocument();
+  });
+
+  it("says nothing it does not know when an older API sends no level", async () => {
+    // Not «سنجیده نشده»: the figures may be behind the press all the same.
+    serving([built("dānā", "دانا", found("reading", 2118, 160), undefined)]);
+    const row = await evidenceOf("دانا");
+    expect(within(row).getByRole("button", { name: "پیکره" })).toBeInTheDocument();
+    expect(within(row).queryByText("سنجیده نشده")).toBeNull();
+    await userEvent.click(within(row).getByRole("button", { name: "پیکره" }));
+    expect(row.textContent).toContain("۲٬۱۱۸ سروده");
   });
 
   it("draws the letters only as a ring, not a dot", async () => {

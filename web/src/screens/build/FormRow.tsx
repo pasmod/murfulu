@@ -132,7 +132,7 @@ export function FormRow({ form, corpusVersion = null }: FormRowProps) {
           <span className={styles.fa}>{form.form_fa}</span>
           <Latin className={styles.latin}>{form.form_latin}</Latin>
         </span>
-        <LevelBadge level={form.level} />
+        <LevelBadge form={form} />
       </div>
 
       <Reason form={form} />

@@ -293,9 +293,17 @@ def _realisation(form: GroupedForm) -> dict[str, Any] | None:
     }
 
 
-def _level(form: GroupedForm, found: Attestation | None) -> levels.Assessment:
-    """Familiar, well-formed or weakly backed; see :mod:`murfulu.scoring.level`."""
-    typical = _typicality(form)
+def _level(
+    form: GroupedForm,
+    found: Attestation | None,
+    typical: dict[str, Any] | None,
+) -> levels.Assessment:
+    """Familiar, well-formed or weakly backed; see :mod:`murfulu.scoring.level`.
+
+    ``typical`` is the form's :func:`_typicality`, passed in rather than
+    measured again: it is a 1,024-wide cosine, and a three-step answer ranks
+    17,000 forms.
+    """
     return levels.assess(
         found,
         levels.chain_of(form.shortest_path),
@@ -329,6 +337,7 @@ def _form(
     base_attested: bool | None = None,
     worded: bool = True,
 ) -> dict[str, Any]:
+    typical = _typicality(form)
     return {
         "form_latin": form.latin,
         "form_fa": form.fa,
@@ -341,7 +350,7 @@ def _form(
         # level rests on and the three marks behind the evidence button. The
         # screen sorts on it first and writes the sentence; `confirmed` stays
         # false until the linguist rules on the levels (L36).
-        "level": _level(form, attestation).as_json(),
+        "level": _level(form, attestation, typical).as_json(),
         # Whether some route to this form rests on written ground throughout —
         # measured on رفتن, 231 of its 476 two-step words are built on an
         # intermediate nobody ever wrote, and a form's own attestation cannot
@@ -350,7 +359,7 @@ def _form(
         # One part of the score, never the score: how much the first step's
         # base resembles the bases its rule usually takes. None is "not
         # measured" — most rules have no centroid — never a low score.
-        "semantic": _typicality(form),
+        "semantic": typical,
         # The other part, and the one that can speak about a deep chain: how
         # often the rules on the way here produce words the corpus has. See
         # _realisation for why the semantic score cannot do this job.
@@ -705,19 +714,22 @@ def _ranked(
     # for the same reason. Not the global spread, which is null on a machine
     # that has never measured one; here there is always something to take a
     # middle of, or nothing carries a typicality and they all tie anyway.
+    # Measured once per form and read three times below: a typicality is a
+    # 1,024-wide cosine, and this list is 17,000 forms long at three steps.
+    typicals = {id(form): _typicality(form) for form in forms}
     scored = sorted(
-        found["typicality"] for form in forms if (found := _typicality(form))
+        found["typicality"] for form in forms if (found := typicals[id(form)])
     )
     no_opinion = scored[len(scored) // 2] if scored else 0.0
 
     def key(form: GroupedForm) -> tuple[Any, ...]:
         found = attestation(form)
         realised = _realisation(form)
-        typical = _typicality(form)
+        typical = typicals[id(form)]
         return (
             # **The level first** — the project lead's choice of 2026-11-13.
             # Everything below orders forms within a level, as before.
-            levels.order(_level(form, found).level),
+            levels.order(_level(form, found, typical).level),
             _standing(found),
             # 1 sinks. An unmeasured lexicon leaves this 0 for every form, so
             # a run without one ranks exactly as it did before — silence must

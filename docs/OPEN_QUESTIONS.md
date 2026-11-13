@@ -7,6 +7,23 @@ Things we need answered before or during planning. Move each one to
 
 ## Opened 2026-11-13 (a level per built word)
 
+### S40. The server and the screen still order a level's words differently
+
+Found by the review of the level (2026-11-13), and older than it. Both sorts
+put the level first and agree on it; **inside a level they disagree on whose
+count a spelling-level hit is.** The screen (`ours()` in `Build.tsx`) counts a
+hit as the word's own when the dictionary has no reading for the letters, or
+reads them as this word in another case — گفت is *Goft* to us and *goft* to
+the dictionary. The server (`_standing` in `api/generate.py`) counts only a
+hit under this exact reading. For گفتن, گفت (19,839 poems) and گویه (6) are both
+well-formed; the screen puts گفت first, the server گویه.
+
+At one and two steps the screen sorts the whole answer, so nothing shows. At
+three steps the server chooses the best 1,000 and the screen re-orders them,
+so the two can disagree at the edge of the page. Bringing the server to the
+screen's rule is a change to every three-step page and was not made here; it
+is a one-function change when it is wanted.
+
 ### S39. The level puts هماندیشنده out of the three-step page
 
 Measured when the level went in (DECISIONS 2026-11-13). *Weakly backed* is

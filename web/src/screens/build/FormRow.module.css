@@ -44,6 +44,7 @@
 /* The word, then its level beside it — not pushed to the far end, where on a
    wide screen it would sit nearer the buttons than the word it describes. */
 .head {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;

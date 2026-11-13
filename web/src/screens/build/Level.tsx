@@ -25,9 +25,14 @@ import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { FUNCTION_WORD_HOMOGRAPH } from "../../text/lexicon";
 import styles from "./Level.module.css";
-import { LEVEL_NAME, LEVEL_SAYS, NOT_KNOWN } from "./levels";
+import { LEVEL_NAME, LEVEL_SAYS, MIN_POEMS, NOT_KNOWN } from "./levels";
 
-export function LevelBadge({ level }: { level: FormLevel | undefined }) {
+export function LevelBadge({ form }: { form: BuiltForm }) {
+  const level = form.level;
+  // An older API sends no level. Then the badge says only what is known for
+  // certain — that the corpus was not asked, where it was not — and is
+  // otherwise left out rather than claiming «سنجیده نشده».
+  if (!level && form.attestation) return null;
   const value = level?.level ?? null;
   const name = value ? LEVEL_NAME[value] : NOT_KNOWN;
   return (
@@ -37,8 +42,8 @@ export function LevelBadge({ level }: { level: FormLevel | undefined }) {
           <i key={step} className={value && step <= value ? styles.on : ""} />
         ))}
       </span>
-      {name}
-      {value ? <Info label={`${name} یعنی چه`}>{LEVEL_SAYS[value]}</Info> : null}
+      <span className={styles.name}>{name}</span>
+      {value ? <Info label={name}>{LEVEL_SAYS[value]}</Info> : null}
     </span>
   );
 }
@@ -100,7 +105,7 @@ function corpusSays(form: BuiltForm): React.ReactNode {
   }
   return (
     <>
-      {found.doc_count < 10 ? "تنها " : ""}در <Num value={found.doc_count} /> سروده
+      {found.doc_count < MIN_POEMS ? "تنها " : ""}در <Num value={found.doc_count} /> سروده
       از <Num value={found.author_count} /> شاعر آمده است
     </>
   );

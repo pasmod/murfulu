@@ -22,8 +22,8 @@ on a press.
 **Unconfirmed.** Names and thresholds are ours, built now under the working
 rule and served with `confirmed: false`; the ruling is the linguist's
 (FOR_THE_LINGUIST L36, in the app's questions). Where nothing can be said —
-the corpus was not asked, or no rule on the chain was measured — there is no
-level, never a guess and never *weak*.
+the corpus was not asked, or, for a word that is not familiar, no rule on the
+chain was measured — there is no level, never a guess and never *weak*.
 
 **Sorted by level first** (familiar, well-formed, no level, weakly backed),
 and **within a level by the score as before**. The level is decided by the API

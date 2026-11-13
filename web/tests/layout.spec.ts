@@ -242,6 +242,27 @@ test.describe("a built word's evidence", () => {
     );
     expect(overflow).toBeLessThanOrEqual(1);
   });
+
+  test("explains a level on a press without leaving the screen", async ({ page }) => {
+    // The ⓘ sits after the word, near a phone's left edge. Its explanation
+    // grew from it towards the line's end and ran off that edge until the
+    // row's head was made to hold it (2026-11-13).
+    const answer = await page.request.get("/api/generate?word=%D8%B1%D9%81%D8%AA%D9%86");
+    test.skip(!answer.ok(), "no lexicon configured");
+    await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86&depth=2");
+    const group = page.getByRole("heading", { level: 3 }).first();
+    await group.waitFor();
+    await group.getByRole("button").click();
+    const info = page.getByRole("listitem").getByRole("button", { name: /چیست؟/ });
+    test.skip((await info.count()) === 0, "no corpus here, so no word has a level");
+    await info.first().click();
+    const tip = page.getByRole("tooltip");
+    await expect(tip).toBeVisible();
+    const box = await tip.boundingBox();
+    const width = page.viewportSize()?.width ?? 0;
+    expect(box?.x ?? -1).toBeGreaterThanOrEqual(0);
+    expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width);
+  });
 });
 
 test.describe("affixes by meaning", () => {

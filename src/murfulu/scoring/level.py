@@ -22,8 +22,11 @@ level  name             when
 
 **Unconfirmed.** The names, the ten poems and the lowest third are ours,
 built and served while the linguist's ruling is open (FOR_THE_LINGUIST L36).
-The response says so with ``confirmed: false``; when he rules, that and the
-constants here change, and nothing else has to.
+The response says so with ``confirmed: false``. When he rules: the names and
+their explanations live in `web/src/screens/build/levels.ts`; the ten poems
+are :data:`MIN_POEMS` here, said again there; the lowest third is the
+productivity run's division (`Productivity.bands`), so another line for
+*weakly backed* is a rate tested here in place of the band.
 
 **What it deliberately does not use.** Whether the chain stands on a written
 intermediate: the project lead moved that test down the ranking on 2026-08-17

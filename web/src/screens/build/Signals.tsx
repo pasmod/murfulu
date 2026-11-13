@@ -55,13 +55,15 @@ function Dots({ count, ring = false }: { count: number; ring?: boolean }) {
 
 /** What a field shows before it is pressed: dots, or why there are none. */
 function shown(form: BuiltForm, field: Field): { mark: React.ReactNode; said: string } {
-  const marks = form.level?.marks;
-  const value = marks ? marks[field] : null;
   if (field === "corpus") {
     const found = form.attestation;
     if (found?.function_word) return { mark: "نامعلوم", said: "نامعلوم" };
     if (found?.level === "none") return { mark: "نیامده", said: "نیامده" };
   }
+  // An older API sends no marks. That is not *not measured* — the figures
+  // may well be behind the press — so the field shows its name and nothing.
+  if (!form.level) return { mark: null, said: "" };
+  const value = form.level.marks[field];
   if (value === null || value === undefined) {
     return { mark: "سنجیده نشده", said: "سنجیده نشده" };
   }
@@ -247,7 +249,7 @@ export function Signals({
               className={styles.field}
               aria-expanded={open === field}
               aria-controls={open === field ? `${id}-${field}` : undefined}
-              aria-label={`${NAME[field]}: ${said}`}
+              aria-label={said ? `${NAME[field]}: ${said}` : NAME[field]}
               onClick={() => setOpen((was) => (was === field ? null : field))}
             >
               <span className={styles.name}>{NAME[field]}</span>

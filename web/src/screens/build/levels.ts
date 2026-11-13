@@ -6,6 +6,13 @@
 
 import type { FormLevel } from "../../api/generate";
 
+/**
+ * Poems a word needs, under its own reading, to be familiar. **The API decides
+ * the level with its own copy, `MIN_POEMS` in murfulu/scoring/level.py**; this
+ * one only words the explanation and the reason, and the two change together.
+ */
+export const MIN_POEMS = 10;
+
 export const LEVEL_NAME: Record<1 | 2 | 3, string> = {
   3: "آشنا",
   2: "خوش‌ساخت",

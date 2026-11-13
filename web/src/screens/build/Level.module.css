@@ -10,8 +10,22 @@
   align-self: center;
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
-  white-space: nowrap;
   color: var(--ink-faint);
+}
+
+/* **The ⓘ's explanation opens under the whole line, from its start.** Held by
+   the ⓘ itself, as everywhere else, it grew from the ⓘ towards the line's end
+   — and here the ⓘ sits after the word, so on a phone the explanation ran off
+   the left edge and pushed the page sideways. The row's head holds it instead
+   (`FormRow.module.css` gives the head its position). */
+.badge > span:last-child {
+  position: static;
+}
+
+/* The name keeps to one line. Only the name: set on the whole badge, the
+   ⓘ's tooltip inherited it and ran off a phone's edge in one line. */
+.name {
+  white-space: nowrap;
 }
 
 .badge[data-level="3"] {
