@@ -19,6 +19,7 @@ import { Explain } from "./screens/explain/Explain";
 import { Questions } from "./screens/questions/Questions";
 import { Rules } from "./screens/rules/Rules";
 import { Search } from "./screens/search/Search";
+import { Texts } from "./screens/texts/Texts";
 import { Word } from "./screens/word/Word";
 import { SCREENS } from "./shell/screens";
 import { Shell } from "./shell/Shell";
@@ -33,6 +34,7 @@ const BUILT: Record<string, () => React.ReactElement> = {
   "/explain": Explain,
   "/rules": Rules,
   "/bank": Bank,
+  "/texts": Texts,
   "/corpus": Corpus,
   "/questions": Questions,
 };

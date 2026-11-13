@@ -19,6 +19,7 @@ from murfulu.api import (
     rules,
     rulings,
     search,
+    texts,
 )
 from murfulu.lexicon.store import Lexicon
 from murfulu.search.indices import connect
@@ -38,6 +39,7 @@ app.include_router(search.router)
 app.include_router(feedback.router)
 app.include_router(accounts.router)
 app.include_router(proposals.router)
+app.include_router(texts.router)
 
 
 def _lexicon_reads() -> str:

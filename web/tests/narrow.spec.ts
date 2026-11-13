@@ -25,7 +25,7 @@ import { expect, test } from "@playwright/test";
  * dictionary «واژه‌نامهٔ کاربن» rather than «فرهنگ» on 2026-08-16 tripled that
  * label's length, and it sits in a heading and in a two-column definition list.
  */
-const NARROW = ["/", "/build", "/compound", "/explain", "/corpus"];
+const NARROW = ["/", "/build", "/compound", "/explain", "/corpus", "/texts"];
 
 test.describe("at the narrowest phone", () => {
   test.skip(({ viewport }) => (viewport?.width ?? 0) > 400, "phone only");

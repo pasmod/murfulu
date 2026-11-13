@@ -119,6 +119,9 @@ export function Bank(): React.ReactElement {
   const [params, setParams] = useSearchParams();
   const group = params.get("group") ?? "";
   const query = params.get("q") ?? "";
+  // The word itself, as the reading screen links to it: «دل» and not the
+  // three hundred words holding the letters. Dropped by a new search.
+  const exact = params.get("exact") === "1" && query !== "";
   // Only a whole page number from 1 up; anything else in the address is page 1.
   const asked = Number(params.get("page") ?? "1");
   const pageNumber = Number.isInteger(asked) && asked >= 1 ? asked : 1;
@@ -157,6 +160,7 @@ export function Bank(): React.ReactElement {
       {
         group: group || undefined,
         q: query || undefined,
+        exact,
         offset: (pageNumber - 1) * PAGE_SIZE,
         limit: PAGE_SIZE,
       },
@@ -173,10 +177,19 @@ export function Bank(): React.ReactElement {
         setBusy(false);
       });
     return () => stop.abort();
-  }, [group, query, pageNumber]);
+  }, [group, query, exact, pageNumber]);
 
-  function choose(next: { group?: string; q?: string; page?: number }, replace = false) {
-    const merged = { group, q: query, page: String(pageNumber), ...next } as Record<
+  function choose(
+    next: { group?: string; q?: string; page?: number; exact?: string },
+    replace = false,
+  ) {
+    const merged = {
+      group,
+      q: query,
+      exact: exact ? "1" : undefined,
+      page: String(pageNumber),
+      ...next,
+    } as Record<
       string,
       string | number | undefined
     >;
@@ -207,7 +220,7 @@ export function Bank(): React.ReactElement {
 
   function search(event: FormEvent) {
     event.preventDefault();
-    choose({ q: typed.trim(), page: 1 });
+    choose({ q: typed.trim(), page: 1, exact: undefined });
   }
 
   const labels = groups?.stem_labels ?? { past: "", present: "" };
@@ -295,10 +308,27 @@ export function Bank(): React.ReactElement {
         </button>
       </form>
 
+      {exact ? (
+        <p className={styles.note}>
+          تنها خودِ «{query}» نشان داده می‌شود.{" "}
+          <button
+            type="button"
+            className={styles.widen}
+            onClick={() => choose({ exact: undefined, page: 1 })}
+          >
+            همهٔ واژه‌هایی که این حرف‌ها را دارند
+          </button>
+        </p>
+      ) : null}
+
       {found && !busy ? (
         <p className={styles.count} role="status">
           {total === 0 ? (
-            "واژه‌ای پیدا نشد."
+            exact ? (
+              "این املا در بانک واژه مدخلی ندارد."
+            ) : (
+              "واژه‌ای پیدا نشد."
+            )
           ) : (
             <>
               <Num value={first} />–<Num value={last} /> از <Num value={total} /> واژه

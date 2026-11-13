@@ -2,6 +2,41 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-13 — the reading screen: direction A, every reading equal, a wrong reading goes to the feedback store
+
+**The project lead chose direction A** of three drafts (each word over its
+Behnevis, flowing right to left), and **that a spelling with several readings
+shows them all, equally, and proposes none**: the drafts' placeholder rule put
+*dall* under دل. A spelling with no reading shows «؟» and a link to search the
+bank; the inflection analyser's guesses are not shown. Built on the branch
+`texts`, not deployed (FRONTEND, *The reading screen*).
+
+**Decided here, under the working rule:**
+
+- *A wrong reading is a record in the feedback store, not a store of its own.*
+  `expert_feedback` already holds a linguistic verdict on a `lexicon_entry`,
+  owned by karbon and exported to it, append-only — exactly what marking a
+  bank reading wrong is. No migration. The target is the word type's id
+  (`spelling:latin`); the text, the unit and the word as written go in
+  `context`. `GET /texts/marked` reads them back for review, newest first.
+- *A mark asks once more before it is written*, with an optional note, because
+  the store refuses to delete it.
+- *The readings come in alphabetical order* (case folded): any other order —
+  the dictionary's, the corpus's — would say which comes first.
+- *The bank link names the word itself* (`/bank?exact=1`, added for this):
+  the bank's search is a substring search, and «دل» is first found inside
+  three hundred other words.
+- *A text is read 200 units at a time.* 1,072 of Ganjoor's pages are longer
+  than 200 lines; the longest has 2,492. A citation opens the window holding
+  its unit.
+- *A text from before v17*, with no units, is shown one unit per line («سطر»),
+  so the screen does not break on the server's v16 before v17 moves there.
+- *The source's notes are shown and never split or counted.*
+
+**Unconfirmed**, for the linguist (FOR_THE_LINGUIST L39): the control's
+wording «این خوانش نادرست است», «؟», the kind labels and the screen's
+sentences.
+
 ## 2026-11-13 — Ganjoor's positions are read from Ganjoor's own code, and a text keeps its units
 
 **What a verse's `position` means is now Ganjoor's, not ours.** The adapter

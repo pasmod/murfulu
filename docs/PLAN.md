@@ -1599,6 +1599,13 @@ queue was written, which is the argument for running it by hand again.
       the vectors have nothing. It is a stand-in, not a rival: wherever the
       semantic score *can* speak it remains the better measure.
 
+- [x] **9.15 The reading screen.** DONE 2026-11-13 on the branch `texts`,
+      not deployed. `/texts` opens any text of the corpus by author, work or
+      title, or from a citation straight at its line, and shows each word over
+      every reading the bank has, none proposed; a press gives the readings,
+      the spelling's corpus count and the way into `/bank`, and a reading can
+      be marked wrong for the linguist (FRONTEND, *The reading screen*). It
+      needed corpus v17, whose texts keep their units.
 - [x] **9.14 The word bank screen.** DONE 2026-11-12, asked for by the linguist
       with the word bank. `/bank` lists every reading of karbon 1.3.2 in his
       twelve groups and under his names, in Persian alphabetical order,

@@ -369,3 +369,64 @@ questions stays a list.
 **Refusal comes before the writing, not after.** The list says whether this
 account may rule, so a reader is told plainly instead of composing a ruling and
 losing it to a 403.
+
+## The reading screen (`/texts`, 2026-11-13)
+
+**Any text of the corpus, word by word, in Persian script and in Behnevis.**
+The linguist's wish (IDEAS 12), widened by the project lead to any text, not
+only poetry, because the corpus will take prose and other books. Built as
+**direction A** of three drafts, the one the project lead chose: each Persian
+word stands over its Behnevis in a block, and the blocks run right to left and
+wrap like text. A couplet's halves stand side by side from 48rem and one under
+the other below it, the second set in from the line's start as a printed divan
+sets it; prose flows as paragraphs. The cost, stated in the drafts: a text
+takes about twice the height, and a ghazal reads less like a poem.
+
+**Opening a text.** One box takes author, work, section or title together,
+and every word typed must be in the text's heading (`documents.heading`,
+corpus v17 on); equal matches keep the source's order, so «حافظ» lists the
+divan as printed. Every citation on a word's page has «در متن ←», which opens
+the text at that unit with the word underlined and the unit washed in the
+accent. Everything is in the address (`?q=`, `?text=&unit=&word=`, `?start=`
+for a long text's next 200 units, `?view=marked`).
+
+**The source line** is author · work · sections · title, then the corpus
+version and the source's name. Author and work are links to their lists.
+
+**Every reading, equally; none proposed** (the project lead's choice). A
+spelling the bank reads several ways shows all its readings, one under
+another, the same size, in alphabetical order, with a dotted rule under them;
+the panel says the bank reads it *n* ways and that which one this line needs
+is not said. The drafts' placeholder rule had put *dall* under دل.
+
+**«؟» for a word the bank does not read, never "not a word".** The panel says
+the bank has no reading for the spelling and links to the bank's search for
+it. The inflection analyser's guesses are not shown: they are wrong too often
+(جنت as جن + ت, بخارا as a vocative of بخار). About four words in ten of a
+classical text are «؟» today (UPSTREAM B9).
+
+**The panel**, opened by a press under the unit and the unit's full width: the
+word as written and its counted spelling where they differ; every reading with
+its other pronunciations, the linguist's group names and the dictionary's
+definition (two lines); the spelling's corpus count with the version — the
+letters' count, whichever word they are, said so for a function word; and the
+way into the bank: «این واژه در بانک واژه ←» opens `/bank?q=…&exact=1`, the
+word itself and not the three hundred words holding its letters.
+
+**«این خوانش نادرست است»**, under each reading, marks that one reading wrong
+for the linguist's review. It asks once more, with an optional note, because
+the mark cannot be taken back: it is an append-only record in the feedback
+store (`category: linguistic`, `verdict: wrong`, `target_type: lexicon_entry`,
+the word type's id as target, the text and unit in `context`), owned by karbon
+and exported to it. A marked reading says so in the panel. **The marks are
+reviewed on the screen itself** — the list under the opener, or
+`?view=marked`: the word as written, the reading struck through, the text,
+the note and a way back to the line.
+
+**A note is the source's own words** — in a tazkira, the next poet's name —
+shown in small type under «یادداشت سرچشمه», never split into words and never
+numbered, because it was never counted.
+
+**Unconfirmed**: the control's wording, «؟», the kind labels (بیت، مصراع، نثر،
+یادداشت سرچشمه) and the sentences of the legend and the panel are ours until
+the linguist rules (FOR_THE_LINGUIST L39).

@@ -242,6 +242,16 @@ export function Word() {
                   {one.title ? ` — ${one.title}` : ""}
                   {one.century != null ? ` — ${persianCentury(one.century)}` : ""}
                 </p>
+                {one.unit != null ? (
+                  // Straight to the line, on the reading screen, with the
+                  // word marked in it.
+                  <Link
+                    className={styles.inText}
+                    to={`/texts?text=${encodeURIComponent(one.document_id)}&unit=${one.unit}&word=${encodeURIComponent(word.spelling_fa ?? "")}`}
+                  >
+                    در متن ←
+                  </Link>
+                ) : null}
               </li>
             ))}
           </ul>

@@ -28,6 +28,10 @@ const SCREENS = [
   { path: "/explain", name: "explain" },
   { path: "/rules", name: "rules" },
   { path: "/corpus", name: "corpus" },
+  { path: "/texts", name: "texts" },
+  // An open text: the words, their readings and one word's panel are the
+  // screen's whole content, so the audit runs on a real one when there is one.
+  { path: "/texts?text=ganjoor%3Ahafez%3A2132", name: "a text" },
   // Reached by clicking a result rather than from the menu, and the only
   // screen carrying a chart. Its "not in this corpus" state is a real state
   // and is laid out like any other.

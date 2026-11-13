@@ -1,0 +1,149 @@
+.screen {
+  composes: screen from "../../styles/page.module.css";
+}
+
+.purpose {
+  composes: purpose from "../../styles/page.module.css";
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
+}
+
+.card {
+  composes: card from "../../styles/page.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-lg);
+}
+
+.note {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+/* ---- opening a text ----------------------------------------------------- */
+.open {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.input {
+  composes: fieldLead from "../../styles/controls.module.css";
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.go {
+  composes: primary from "../../styles/controls.module.css";
+}
+
+.hint {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+.back {
+  font-size: var(--text-sm);
+}
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.example {
+  composes: chip from "../../styles/controls.module.css";
+}
+
+/* ---- what a search found ------------------------------------------------ */
+.found {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.found > li + li {
+  border-block-start: 1px solid var(--line);
+}
+
+.foundLink {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  padding-block: var(--space-2);
+}
+
+.more {
+  composes: secondary from "../../styles/controls.module.css";
+  align-self: flex-start;
+}
+
+/* ---- the readings marked wrong ------------------------------------------ */
+.marks {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mark {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-3);
+  border-block-start: 1px solid var(--line);
+}
+
+.mark:first-child {
+  border-block-start: 0;
+}
+
+.markHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+}
+
+.markWord {
+  font-size: var(--text-lg);
+  color: var(--ink);
+}
+
+.markLatin {
+  color: var(--evidence-spelling);
+  text-decoration: line-through;
+}
+
+.markDate,
+.markWhere {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+.markNote {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.markLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  font-size: var(--text-sm);
+}

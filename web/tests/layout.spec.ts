@@ -21,6 +21,7 @@ const SCREENS = [
   { path: "/explain", heading: "تحلیل ساخت" },
   { path: "/rules", heading: "دستورهای واژه‌سازی" },
   { path: "/corpus", heading: "پیکره" },
+  { path: "/texts", heading: "خواندن متن" },
   // Not in the corpus, so the screen shows its "not here" state — which is
   // itself worth laying out correctly.
   { path: "/word/روش:Raveš", heading: "واژه" },

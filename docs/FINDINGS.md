@@ -46,6 +46,15 @@ inflected forms 11.3%, the rest 22.1%. Of the 1,000 most frequent spellings,
 On Hafez's ghazal 3, 65 of 159 words have no reading; on the Golestan's
 preface 1,195 of 2,442.
 
+**The reading screen, on real data** (`/texts`, FRONTEND). Shown with every
+reading and none proposed, a common spelling stands tall: به has five readings
+in the bank (*bah, be, Beh, beh, Boh*), دل four, است three — 27.8% of the
+running words have more than one. The text's own vowel signs often settle it
+(تُرکِ against *Tarak, Tark, tork*), and the screen does not use them yet: that
+would be proposing, which the project lead ruled out for now. The word split
+on screen equals the count's split on every one of 153,633 lines sampled from
+the dump (one in twenty), harakat, ZWNJ and the ezafe hamza included.
+
 **Two old faults surfaced by running the live tests against the Mac's stack**
 (they skip without Postgres, so nobody had): migration 0004 makes
 `linguist_questions.context` and `linguist_rulings.affects` nullable and the

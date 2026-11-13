@@ -1,0 +1,163 @@
+/* One word's readings, opened by a press, under the unit it stands in and the
+   unit's full width (direction A of the drafts). */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-start: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-raised);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  color: var(--ink);
+}
+
+.written {
+  font-size: var(--text-xl);
+}
+
+.spelling {
+  color: var(--ink-faint);
+}
+
+.close {
+  composes: secondary from "../../styles/controls.module.css";
+  margin-inline-start: auto;
+}
+
+.note {
+  color: var(--ink-soft);
+}
+
+.none {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--ink);
+}
+
+.mark {
+  padding: 0 var(--space-2);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--ink-faint);
+}
+
+.readings {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-2);
+  border-block-start: 1px solid var(--line);
+}
+
+.reading:first-child {
+  border-block-start: 0;
+  padding-block-start: 0;
+}
+
+.readingHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+}
+
+.latin {
+  font-size: var(--text-lg);
+  color: var(--ink);
+}
+
+.variants {
+  display: inline-flex;
+  gap: var(--space-2);
+  color: var(--ink-faint);
+}
+
+.groups {
+  color: var(--ink-soft);
+}
+
+.definition {
+  color: var(--ink-faint);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.wrong {
+  composes: secondary from "../../styles/controls.module.css";
+  align-self: flex-start;
+}
+
+.marked {
+  color: var(--evidence-spelling);
+}
+
+.ask {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+}
+
+.askLine {
+  color: var(--ink);
+}
+
+.noteLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.noteField {
+  composes: field fieldArea from "../../styles/controls.module.css";
+}
+
+.failed {
+  color: var(--ink);
+}
+
+.askActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.confirm {
+  composes: primary from "../../styles/controls.module.css";
+}
+
+.cancel {
+  composes: secondary from "../../styles/controls.module.css";
+}
+
+.count {
+  color: var(--ink-soft);
+}
+
+.links {
+  font-size: var(--text-sm);
+}

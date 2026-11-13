@@ -54,6 +54,8 @@ export interface BankPage {
   lexicon_snapshot_id: string;
   group: string | null;
   q: string | null;
+  /** True when only the word itself was asked for, not words holding it. */
+  exact?: boolean;
   total: number;
   offset: number;
   limit: number;
@@ -65,7 +67,13 @@ export function bankGroups(signal?: AbortSignal): Promise<BankGroups> {
 }
 
 export function bankPage(
-  options: { group?: string; q?: string; offset?: number; limit?: number },
+  options: {
+    group?: string;
+    q?: string;
+    exact?: boolean;
+    offset?: number;
+    limit?: number;
+  },
   signal?: AbortSignal,
 ): Promise<BankPage> {
   return get<BankPage>(
@@ -73,6 +81,7 @@ export function bankPage(
     {
       group: options.group,
       q: options.q,
+      exact: options.exact ? "true" : undefined,
       offset: options.offset,
       limit: options.limit,
     },

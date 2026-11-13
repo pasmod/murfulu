@@ -17,6 +17,16 @@ half or a note. Rebuilding needs BGE-m3 outside the app (an hour or more, not
 measured on this Mac). **For the project lead**: rebuild before v17 is
 released, or carry forward and rebuild with the next text change?
 
+### S44. Should the reading screen use the text's own vowel signs?
+
+Many Ganjoor lines carry harakat (تُرکِ، دلِ، بَخشَم). Where a sign rules out
+some of the bank's readings — a damma on ت leaves *tork* of *Tarak, Tark,
+tork* — the screen could say so, or grey out the others. It does not: every
+reading is shown alike (the project lead's choice of 2026-11-13). **For the
+project lead**: is a reading the text's own vowels contradict still to be
+shown as an equal, or marked? Measured nowhere yet; the drafts found one plain
+contradiction in a ghazal (تُرکان, the bank's only reading *Tarkān*).
+
 ### S43. Three golden examples fail against the real lexicon, on main too
 
 With `MURFULU_LEXICON_PATH` set to `lexicon-20261111`, the golden suite (which

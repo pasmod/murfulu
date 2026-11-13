@@ -30,6 +30,7 @@ Every question asked now ends with our proposal and the reason in one sentence.
 | L17d | **rewritten** | his twelve groups against the rules' twelve classes; the open point is how کاربهر divides: Dehkhoda marks about thirty of its 1,106 words «ن مف» (پسند، دمید), the done-to participle. Our proposal follows that mark; until he answers, the whole group feeds the doer participle |
 | L2, L3, L25, L28, L17c, L10, L10b, L10c | open | each with our proposal now; L2 re-checked, the verb groups did not move in 1.3.2 |
 | L36 | **open, not blocking** (2026-11-13) | the three levels the build screen gives a word — names and thresholds are ours, built and marked unconfirmed |
+| L39 | **open, not blocking** (2026-11-13) | the reading screen's words: «این خوانش نادرست است», «؟», بیت/مصراع/نثر, and how a wrong reading reaches him |
 | L38 | **open, not blocking** (2026-11-13) | four words in ten of a classical text have no reading in the bank — common words such as عشق and خدا, and every inflected form; which of them belong in his bank |
 | L37 | **open, not blocking** (2026-11-13) | «متن» and «نویسنده» in place of «سروده» and «شاعر» wherever a count is shown, now that the corpus holds prose |
 
@@ -2691,3 +2692,38 @@ inflected form from its parts (*baxš* + *-am*), and on whose rules.
    for a reading of inflection in the bank itself?
 3. و has no row. Is it *va*, *o*, or both — and should a function word's
    reading be his too?
+
+## L39. The reading screen's words, and the marks he will find there
+
+Built 2026-11-13 (DECISIONS 2026-11-13); **not blocking**. The screen he asked
+for (classical verse beside its Behnevis, word by word) exists on the branch
+`texts`, for any text — the Golestan's prose as well as a ghazal. Under each
+word stand **all** the bank's readings, alike and in alphabetical order; none
+is proposed, because the letters do not say which one a line needs.
+
+**What we did meanwhile** — these words are ours, built and marked
+unconfirmed:
+
+| where | our words |
+|---|---|
+| the control under each reading | **«این خوانش نادرست است»** — asks once more, with an optional note, because the mark cannot be removed |
+| a word the bank does not read | **«؟»**, and in the panel «بانک واژه برای این املا خوانشی ندارد.» — never "this is not a word" |
+| several readings | «بانک واژه این املا را به ۴ گونه می‌خواند. همه به ترتیب الفبا آمده‌اند؛ اینکه در این سطر کدام درست است، گفته نمی‌شود.» |
+| beside each unit | **بیت** (a couplet), **مصراع** (a half standing alone), **نثر** (a prose paragraph), **یادداشت سرچشمه** (the source's note) |
+| the review list | «خوانش‌هایی که نادرست دانسته شده‌اند» — the word as written, the reading struck through, where it stood, his note |
+
+**What changes if he rules otherwise**: wording only, in
+`web/src/screens/texts/` (`kinds.ts`, `WordPanel.tsx`, `Reader.tsx`,
+`Marked.tsx`). A mark is a record in the feedback store and stays as given.
+
+### The question
+
+1. Is «این خوانش نادرست است» the sentence he would press — or «خوانش درست
+   این نیست», or a choice of the right reading instead of a mark on the
+   wrong one?
+2. Is «؟» right for *the bank has no reading*, or would he rather see the
+   word's letters repeated, or nothing?
+3. بیت، مصراع، نثر — and for a band couplet of a tarji'band, is بیت enough,
+   or «بیتِ بند»?
+4. How does he want to go through the marks: on this list in the app, or
+   exported to him with the line beside each?

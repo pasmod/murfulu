@@ -82,11 +82,22 @@ class Entry:
     persian: str
     latin: tuple[str, ...]
 
-    def matches(self, query: str) -> bool:
-        """Persian letters match the spelling; Latin, any reading or stem."""
+    def matches(self, query: str, exact: bool = False) -> bool:
+        """Persian letters match the spelling; Latin, any reading or stem.
+
+        ``exact`` asks for the word itself rather than every word holding the
+        letters: the reading screen links a word to its entry, and «دل» as a
+        substring is دلبر، دلدار and three hundred more before it.
+        """
         if any("؀" <= letter <= "ۿ" for letter in query):
-            return _plain(query) in self.persian
+            return (
+                _plain(query) == self.persian
+                if exact
+                else _plain(query) in self.persian
+            )
         wanted = _latin(query)
+        if exact:
+            return wanted in self.latin
         return any(wanted in one for one in self.latin)
 
 
@@ -210,6 +221,7 @@ def groups() -> dict[str, Any]:
 def page(
     group: str | None = Query(None, description="one of the linguist's groups"),
     q: str | None = Query(None, max_length=60, description="Persian or Latin"),
+    exact: bool = Query(False, description="the word itself, not words holding it"),
     offset: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=MAX_LIMIT),
 ) -> dict[str, Any]:
@@ -223,13 +235,14 @@ def page(
         entry
         for entry in shelf.entries
         if (not group or group in entry.reading.bank_groups)
-        and (not query or entry.matches(query))
+        and (not query or entry.matches(query, exact))
     ]
     shown = found[offset : offset + limit]
     return {
         "lexicon_snapshot_id": shelf.snapshot_id,
         "group": group,
         "q": query or None,
+        "exact": exact,
         "total": len(found),
         "offset": offset,
         "limit": limit,

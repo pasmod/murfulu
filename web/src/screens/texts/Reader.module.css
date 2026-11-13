@@ -1,0 +1,260 @@
+/* One open text, direction A of the 2026-11-13 drafts: each Persian word over
+   its Behnevis, the words running right to left and wrapping like text. */
+
+.card {
+  composes: card from "../../styles/page.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
+}
+
+/* ---- the source line ---------------------------------------------------- */
+.source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.source a {
+  color: var(--ink);
+}
+
+.part {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.separator {
+  color: var(--ink-faint);
+  font-weight: var(--weight-normal);
+}
+
+.version {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  color: var(--ink-faint);
+}
+
+/* ---- what the marks mean ------------------------------------------------ */
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.window {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+/* ---- the units ---------------------------------------------------------- */
+.units {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.unit {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: var(--space-2);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--line);
+}
+
+.unit:last-child,
+.note:last-child {
+  border-block-end: 0;
+}
+
+.number {
+  display: flex;
+  flex-direction: column;
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+  padding-block-start: var(--space-1);
+}
+
+.kind {
+  font-size: var(--text-2xs);
+}
+
+/* The unit a citation led to. */
+.hit {
+  margin-inline: calc(var(--space-2) * -1);
+  padding-inline: var(--space-2);
+  background: var(--accent-wash);
+  border-radius: var(--radius-md);
+}
+
+.hitNote {
+  color: var(--accent-strong);
+  font-size: var(--text-sm);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+/* A couplet's halves: one under the other on a phone, the second set in from
+   the line's start as a printed divan sets it, so a wrapped half is not taken
+   for the next one; side by side where the window has room. */
+.couplet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.couplet > .line + .line {
+  padding-inline-start: var(--space-6);
+}
+
+@media (min-width: 48rem) {
+  .couplet {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .couplet > .line + .line {
+    padding-inline-start: 0;
+  }
+}
+
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+/* ---- a word ------------------------------------------------------------- */
+.word {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  min-inline-size: var(--touch-target);
+  padding: 2px var(--space-1);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .word:hover {
+    background: var(--paper-sunk);
+  }
+}
+
+.word[aria-expanded="true"] {
+  background: var(--accent-wash);
+  outline: 1px solid var(--accent);
+}
+
+.word[data-sought] .fa {
+  border-block-end: 2px solid var(--accent);
+}
+
+.fa {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.after {
+  color: var(--ink-soft);
+}
+
+.punctuation {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* Every reading, one under another and all alike: none is proposed. */
+.latins {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.latin {
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+/* Several readings are told apart by a mark, never by one being larger. */
+.word[data-state="several"] .latins {
+  padding-block-end: 1px;
+  border-block-end: 2px dotted var(--evidence-spelling);
+}
+
+.unread {
+  padding: 0 var(--space-2);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}
+
+/* ---- the source's note: shown, not counted ------------------------------ */
+.note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.noteKind {
+  font-size: var(--text-2xs);
+  color: var(--ink-faint);
+}
+
+.noteText {
+  max-inline-size: var(--measure);
+}
+
+/* ---- the windows of a long text ----------------------------------------- */
+.pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.page {
+  composes: secondary from "../../styles/controls.module.css";
+}

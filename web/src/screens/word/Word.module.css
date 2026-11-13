@@ -130,6 +130,14 @@
   color: var(--ink-faint);
 }
 
+/* A citation's way to its line on the reading screen. */
+.inText {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  font-size: var(--text-sm);
+}
+
 .trouble {
   composes: trouble from "../../styles/page.module.css";
 }

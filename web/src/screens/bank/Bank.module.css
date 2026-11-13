@@ -209,3 +209,9 @@
 .trouble {
   composes: trouble from "../../styles/page.module.css";
 }
+
+/* Widening an exact lookup to every word holding the letters. */
+.widen {
+  composes: chip from "../../styles/controls.module.css";
+  margin-inline-start: var(--space-2);
+}

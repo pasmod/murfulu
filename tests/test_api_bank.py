@@ -126,6 +126,20 @@ def test_search_finds_persian_letters_and_latin_readings(client: TestClient) -> 
     assert [one["spelling_fa"] for one in by_latin["words"]] == ["رفتن"]
 
 
+def test_exact_finds_the_word_itself_not_words_holding_its_letters(
+    client: TestClient,
+) -> None:
+    """The reading screen links a word to its entry, not to every word with it."""
+    held = client.get("/bank", params={"q": "رفت"}).json()
+    assert [one["spelling_fa"] for one in held["words"]] == ["رفتن"]
+    itself = client.get("/bank", params={"q": "رفت", "exact": True}).json()
+    assert itself["words"] == [] and itself["exact"] is True
+    word = client.get("/bank", params={"q": "هوش", "exact": True}).json()
+    assert [one["latin"] for one in word["words"]] == ["Huš"]
+    latin = client.get("/bank", params={"q": "huš", "exact": True}).json()
+    assert [one["spelling_fa"] for one in latin["words"]] == ["هوش"]
+
+
 def test_pages_are_counted_and_an_unknown_group_is_refused(client: TestClient) -> None:
     page = client.get("/bank", params={"offset": 2, "limit": 2}).json()
     assert page["total"] == len(ROWS) and len(page["words"]) == 2
