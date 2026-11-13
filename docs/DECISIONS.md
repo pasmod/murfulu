@@ -16,6 +16,9 @@ the two: a word is weakly backed as soon as one of its steps is. — project lea
 
 ## 2026-11-13 — each built word gets a level, and the list is sorted by it first
 
+**Served since 2026-11-13**, after the project lead's OK to deploy; the
+server's check passed and its `/generate` answers carry the level.
+
 **The project lead's choice of 2026-11-13**, from three drafts of the build
 screen. A reader who is not a linguist could not tell from three separate
 figures — the corpus count, how often the chain's rules make words the corpus
