@@ -18,10 +18,16 @@
  * append-only — so it asks once more before it is written.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { type MarkedWhere, type Reading, type WordKnown, markWrong } from "../../api/texts";
+import {
+  type MarkedWhere,
+  type Reading,
+  type WordKnown,
+  marked as fetchMarked,
+  markWrong,
+} from "../../api/texts";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import styles from "./WordPanel.module.css";
@@ -33,7 +39,7 @@ export interface WordPanelProps {
   known: WordKnown | undefined;
   corpusVersion: string | null;
   where: MarkedWhere;
-  /** Ids of readings already marked wrong, by anyone. */
+  /** Ids of readings marked wrong in this visit; earlier marks are asked for. */
   marked: ReadonlySet<string>;
   onMarked: (readingId: string) => void;
   onClose: () => void;
@@ -51,6 +57,20 @@ export function WordPanel({
 }: WordPanelProps) {
   const readings = known?.readings ?? [];
   const bank = `/bank?q=${encodeURIComponent(spelling)}`;
+  const [before, setBefore] = useState<ReadonlySet<string>>(new Set());
+
+  useEffect(() => {
+    // Every mark ever made on this spelling's readings, however old. Without
+    // the store the panel still reads; only the marks are missing.
+    if (readings.length === 0) return;
+    const stop = new AbortController();
+    fetchMarked({ spelling, limit: 500 }, stop.signal)
+      .then((found) =>
+        setBefore(new Set(found.marked.map((one) => one.target_id ?? "").filter(Boolean))),
+      )
+      .catch(() => undefined);
+    return () => stop.abort();
+  }, [spelling, readings.length]);
   return (
     <section id={id} className={styles.panel} aria-label={`خوانش‌های ${where.written}`}>
       <header className={styles.head}>
@@ -85,7 +105,7 @@ export function WordPanel({
                 spelling={spelling}
                 reading={reading}
                 where={where}
-                marked={marked.has(reading.id)}
+                marked={marked.has(reading.id) || before.has(reading.id)}
                 onMarked={onMarked}
               />
             ))}

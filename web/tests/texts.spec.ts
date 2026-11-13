@@ -100,9 +100,9 @@ test.describe("reading a text", () => {
     await page.goto(`/word/${encodeURIComponent(id)}`);
     await page.getByRole("link", { name: "در متن ←" }).first().click();
     await expect(page).toHaveURL(/\/texts\?text=.*&unit=\d+&word=/);
-    const hit = page.getByText(/همان سطرِ شاهدمثالِ «دل»/);
-    await expect(hit).toBeVisible();
-    await expect(hit).toBeInViewport();
-    await expect(page.locator("button[data-sought]").first()).toBeVisible();
+    await expect(page.getByText(/همان سطرِ شاهدمثالِ «دل»/)).toBeVisible();
+    // The word itself is in view, not merely its unit: a paragraph of prose
+    // can be taller than the window.
+    await expect(page.locator("button[data-sought]").first()).toBeInViewport();
   });
 });

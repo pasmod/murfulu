@@ -31,7 +31,17 @@ bank; the inflection analyser's guesses are not shown. Built on the branch
   its unit.
 - *A text from before v17*, with no units, is shown one unit per line («سطر»),
   so the screen does not break on the server's v16 before v17 moves there.
+  Finding a text by its heading needs v17 (v16 has no `heading`): on v16 the
+  search answers no texts rather than an error, and a citation still opens
+  its text.
 - *The source's notes are shown and never split or counted.*
+- *What is not a counted word stays as written*: punctuation touching a word
+  is written after it; a number, a Latin name or an opening « is a part of its
+  own, spaces kept, and isolated for direction (the review of 2026-11-13).
+- *The marks are paged* (`GET /texts/marked?offset=&limit=`, with the total),
+  and a word's panel asks for **its own spelling's** marks
+  (`?spelling=`), so a reading marked long ago still shows as marked and is not
+  marked twice by accident.
 
 **Unconfirmed**, for the linguist (FOR_THE_LINGUIST L39): the control's
 wording «این خوانش نادرست است», «؟», the kind labels and the screen's

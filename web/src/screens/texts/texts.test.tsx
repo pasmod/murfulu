@@ -105,8 +105,14 @@ const MARKED: Marked = {
 
 let posted: unknown[] = [];
 
+/** Marked before this visit: Del, on دل — the panel asks for it by spelling. */
+const EARLIER: Marked = { ...MARKED, id: 3, target_id: "دل:Del", latin: "Del", note: null };
+
 function answer(url: string): unknown {
-  if (url.includes("/texts/marked")) return { returned: 1, marked: [MARKED] };
+  if (url.includes("/texts/marked") && url.includes("spelling=")) {
+    return { total: 1, offset: 0, returned: 1, marked: [EARLIER] };
+  }
+  if (url.includes("/texts/marked")) return { total: 1, offset: 0, returned: 1, marked: [MARKED] };
   if (url.includes("/texts/")) return TEXT;
   return FOUND;
 }
@@ -179,7 +185,9 @@ describe("the reading screen", () => {
     const panel = within(text).getByRole("region", { name: "خوانش‌های دلِ" });
     expect(panel.textContent).toMatch(/به ۳ گونه می‌خواند/);
     expect(within(panel).getByText(/گفته نمی‌شود/)).toBeInTheDocument();
-    expect(within(panel).getAllByRole("button", { name: "این خوانش نادرست است" })).toHaveLength(3);
+    // Del was marked before this visit, so only Dal and dall offer the mark.
+    expect(await within(panel).findByText(/نادرست دانسته شده است/)).toBeInTheDocument();
+    expect(within(panel).getAllByRole("button", { name: "این خوانش نادرست است" })).toHaveLength(2);
     expect(panel.textContent).toMatch(/۱۴۸٬۶۹۷ بار، در ۶۵٬۸۰۷ متن/);
     expect(within(panel).getByRole("link", { name: /این واژه در بانک واژه/ })).toHaveAttribute(
       "href",

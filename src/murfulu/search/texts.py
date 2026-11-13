@@ -72,7 +72,8 @@ class Token:
     """One word as written, the spelling it was counted under, and what follows."""
 
     fa: str
-    #: The counted spelling. None for punctuation that opens a line.
+    #: The counted spelling. None for what is not a counted word: an opening
+    #: «, a number, a Latin name.
     spelling: str | None
     #: Punctuation written straight after the word, without a space between.
     after: str = ""
@@ -106,7 +107,6 @@ def tokens(line: str) -> list[Token]:
 
     found: list[Token] = []
     written_to = 0
-    lead = ""
     for match in _WORD.finditer(plain):
         word = match.group()
         spelling = word.strip(ZWNJ)
@@ -119,29 +119,31 @@ def tokens(line: str) -> list[Token]:
             unicodedata.combining(text[end]) or _MARKS.match(text[end])
         ):
             end += 1
-        between = "".join(text[written_to:start].split())
-        if between:
-            if found:
-                last_token = found[-1]
-                found[-1] = Token(
-                    last_token.fa, last_token.spelling, last_token.after + between
-                )
-            else:
-                lead = between
+        _between(found, text[written_to:start])
         found.append(Token(text[start:end], spelling))
         written_to = end
-    rest = "".join(text[written_to:].split())
-    if rest:
-        if found:
-            last_token = found[-1]
-            found[-1] = Token(
-                last_token.fa, last_token.spelling, last_token.after + rest
-            )
-        else:
-            lead += rest
-    if lead:
-        found.insert(0, Token(lead, None))
+    _between(found, text[written_to:])
     return found
+
+
+def _between(found: list[Token], gap: str) -> None:
+    """Place what stands between two words: attached punctuation, or text.
+
+    What touches the previous word with no space between — a comma, a
+    closing guillemet — is written after it. Anything else that is not a word
+    of the count — a number, a Latin name, an opening «, a run with spaces in
+    it — becomes a part of its own, its spaces kept, so «سال ۱۲۳۴ خورشیدی»
+    is not shown as «سال۱۲۳۴».
+    """
+    if not gap.strip():
+        return
+    rest = gap
+    if found and not gap[0].isspace():
+        attached = gap.split(maxsplit=1)[0] if gap.split() else ""
+        found[-1] = Token(found[-1].fa, found[-1].spelling, found[-1].after + attached)
+        rest = gap[len(attached) :]
+    if rest.strip():
+        found.append(Token(rest.strip(), None))
 
 
 def _source_line(line: dict[str, Any]) -> list[str]:
@@ -284,7 +286,12 @@ def find(
         size=size,
         track_total_hits=True,
         query={"match": {"heading": {"query": " ".join(words), "operator": "and"}}},
-        sort=["_score", {"order": {"order": "asc", "missing": "_last"}}],
+        # `unmapped_type`, or a corpus from before v17 — which has no `order`
+        # — refuses the whole search instead of finding nothing.
+        sort=[
+            "_score",
+            {"order": {"order": "asc", "missing": "_last", "unmapped_type": "integer"}},
+        ],
         source_includes=[
             "document_id",
             "author",

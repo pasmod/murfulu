@@ -387,7 +387,8 @@ and every word typed must be in the text's heading (`documents.heading`,
 corpus v17 on); equal matches keep the source's order, so «حافظ» lists the
 divan as printed. Every citation on a word's page has «در متن ←», which opens
 the text at that unit with the word underlined and the unit washed in the
-accent. Everything is in the address (`?q=`, `?text=&unit=&word=`, `?start=`
+accent, scrolled so that the word itself is in view — a paragraph of prose
+can be taller than the window. Everything is in the address (`?q=`, `?text=&unit=&word=`, `?start=`
 for a long text's next 200 units, `?view=marked`).
 
 **The source line** is author · work · sections · title, then the corpus
@@ -418,10 +419,11 @@ for the linguist's review. It asks once more, with an optional note, because
 the mark cannot be taken back: it is an append-only record in the feedback
 store (`category: linguistic`, `verdict: wrong`, `target_type: lexicon_entry`,
 the word type's id as target, the text and unit in `context`), owned by karbon
-and exported to it. A marked reading says so in the panel. **The marks are
-reviewed on the screen itself** — the list under the opener, or
-`?view=marked`: the word as written, the reading struck through, the text,
-the note and a way back to the line.
+and exported to it. A marked reading says so in the panel — the panel asks the store
+for every mark on its spelling, however old. **The marks are reviewed on the
+screen itself** — the list under the opener, or `?view=marked`, fifty at a
+time with the total: the word as written, the reading struck through, the
+text, the note and a way back to the line.
 
 **A note is the source's own words** — in a tazkira, the next poet's name —
 shown in small type under «یادداشت سرچشمه», never split into words and never

@@ -43,6 +43,19 @@ def test_a_word_keeps_its_marks_and_its_punctuation():
     assert words[-1].after == "!"
 
 
+def test_a_number_or_a_latin_name_stands_on_its_own_with_its_spaces():
+    """Not glued to the word before it: «سال ۱۲۳۴» stays two parts."""
+    year = texts.tokens("سال ۱۲۳۴ خورشیدی")
+    assert [(t.fa, t.spelling, t.after) for t in year] == [
+        ("سال", "سال", ""),
+        ("۱۲۳۴", None, ""),
+        ("خورشیدی", "خورشیدی", ""),
+    ]
+    assert texts.tokens("ABC DEF و")[0] == texts.Token("ABC DEF", None)
+    comma = texts.tokens("دل،  ۱۲ و")
+    assert (comma[0].after, comma[1].fa) == ("،", "۱۲")
+
+
 def test_the_hamza_of_the_ezafe_stays_on_the_word():
     [house, ours] = texts.tokens("خانهٔ ما")
     assert house.fa == "خانهٔ" and house.spelling == "خانه"
@@ -174,7 +187,9 @@ def test_a_heading_search_needs_every_word_and_keeps_the_source_order():
         "query": "نویسنده کتاب",
         "operator": "and",
     }
-    assert query["sort"][1] == {"order": {"order": "asc", "missing": "_last"}}
+    assert query["sort"][1] == {
+        "order": {"order": "asc", "missing": "_last", "unmapped_type": "integer"}
+    }
     assert found["texts"][0]["section"] == ["باب نخست"]
     assert found["corpus_version"] == "v17"
 
@@ -244,7 +259,7 @@ def test_a_reading_marked_wrong_is_listed_for_review(http: TestClient):
     )
 
     listed = http.get("/texts/marked").json()
-    assert listed["returned"] == 1
+    assert listed["returned"] == 1 and listed["total"] == 1
     [row] = listed["marked"]
     assert (row["spelling_fa"], row["latin"], row["document_id"], row["unit"]) == (
         "دل",
@@ -252,3 +267,31 @@ def test_a_reading_marked_wrong_is_listed_for_review(http: TestClient):
         "fixture:a:1",
         1,
     )
+
+
+def test_the_marks_are_paged_and_can_be_asked_for_one_spelling(http: TestClient):
+    """No mark falls off the list, and an old one still shows in its panel."""
+
+    def mark(target: str) -> None:
+        spelling, _, latin = target.partition(":")
+        http.post(
+            "/feedback",
+            json={
+                "category": "linguistic",
+                "target_type": "lexicon_entry",
+                "target_id": target,
+                "verdict": "wrong",
+                "context": {"spelling_fa": spelling, "latin": latin},
+            },
+        )
+
+    for target in ["دل:Dol", "دلبر:Delbar", "د_ل:x", "ما:mā"]:
+        mark(target)
+    page = http.get("/texts/marked", params={"limit": 2, "offset": 2}).json()
+    assert (page["total"], page["returned"]) == (4, 2)
+    assert [row["latin"] for row in page["marked"]] == ["Delbar", "Dol"]
+    # Only دل's own readings: not دلبر, and an underscore is a letter here.
+    one = http.get("/texts/marked", params={"spelling": "دل"}).json()
+    assert [row["target_id"] for row in one["marked"]] == ["دل:Dol"]
+    odd = http.get("/texts/marked", params={"spelling": "د_ل"}).json()
+    assert [row["target_id"] for row in odd["marked"]] == ["د_ل:x"]

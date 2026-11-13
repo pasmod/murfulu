@@ -109,7 +109,9 @@ export function Texts() {
           />
         </>
       ) : q ? (
-        <Found q={q} />
+        // Keyed on the search, so a page still loading for the last one can
+        // never land in this one's list.
+        <Found key={q} q={q} />
       ) : view === "marked" ? (
         <Marked />
       ) : (
@@ -143,6 +145,7 @@ function Found({ q }: { q: string }) {
   const [found, setFound] = useState<TextFound | null>(null);
   const [more, setMore] = useState<TextFound["texts"]>([]);
   const [error, setError] = useState<ApiError | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const stop = new AbortController();
@@ -203,10 +206,15 @@ function Found({ q }: { q: string }) {
         <button
           type="button"
           className={styles.more}
+          // One page at a time: two presses before the first answer would ask
+          // for the same page twice and skip the next.
+          disabled={loading}
           onClick={() => {
+            setLoading(true);
             findTexts(q, shown.length)
               .then((next) => setMore((now) => [...now, ...next.texts]))
-              .catch(() => undefined);
+              .catch(() => undefined)
+              .finally(() => setLoading(false));
           }}
         >
           بیشتر

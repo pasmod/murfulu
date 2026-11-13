@@ -113,8 +113,9 @@ function WordButton({
   onPress: (open: boolean) => void;
 }) {
   if (!word.s) {
-    // Punctuation that opens a line: part of the text, not a word.
-    return <span className={styles.punctuation}>{word.fa}</span>;
+    // Not a counted word — an opening «, a number, a Latin name: part of the
+    // text, isolated so its direction cannot reorder its neighbours.
+    return <bdi className={styles.punctuation}>{word.fa}</bdi>;
   }
   const readings = known?.readings ?? [];
   const state = readings.length === 0 ? "none" : readings.length === 1 ? "one" : "several";

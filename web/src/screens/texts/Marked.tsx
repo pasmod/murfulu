@@ -16,16 +16,24 @@ import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
 import styles from "./Texts.module.css";
 
+/** Marks per page of the list. */
+const PAGE = 50;
+
 const DAY = new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium" });
 
 export function Marked() {
   const [rows, setRows] = useState<MarkedRow[] | null>(null);
+  const [total, setTotal] = useState(0);
   const [failed, setFailed] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const stop = new AbortController();
-    fetchMarked(stop.signal)
-      .then((found) => setRows(found.marked))
+    fetchMarked({ limit: PAGE }, stop.signal)
+      .then((found) => {
+        setRows(found.marked);
+        setTotal(found.total);
+      })
       .catch((reason: unknown) => {
         if (reason instanceof DOMException && reason.name === "AbortError") return;
         setFailed(true);
@@ -53,7 +61,13 @@ export function Marked() {
       ) : (
         <>
           <p className={styles.note}>
-            <Num value={rows.length} /> علامت، تازه‌ترین نخست.
+            <Num value={total} /> علامت، تازه‌ترین نخست
+            {rows.length < total ? (
+              <>
+                ؛ <Num value={rows.length} /> نشان داده شده
+              </>
+            ) : null}
+            .
           </p>
           <ol className={styles.marks}>
             {rows.map((row) => (
@@ -80,6 +94,22 @@ export function Marked() {
               </li>
             ))}
           </ol>
+          {rows.length < total ? (
+            <button
+              type="button"
+              className={styles.more}
+              disabled={loading}
+              onClick={() => {
+                setLoading(true);
+                fetchMarked({ offset: rows.length, limit: PAGE })
+                  .then((next) => setRows((now) => [...(now ?? []), ...next.marked]))
+                  .catch(() => setFailed(true))
+                  .finally(() => setLoading(false));
+              }}
+            >
+              بیشتر
+            </button>
+          ) : null}
         </>
       )}
     </section>

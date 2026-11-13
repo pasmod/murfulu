@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { ApiError } from "../../api/client";
-import { type Text, WINDOW, headingOf, marked as fetchMarked, readText } from "../../api/texts";
+import { type Text, WINDOW, headingOf, readText } from "../../api/texts";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
@@ -36,6 +36,8 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
   const [text, setText] = useState<Text | null>(null);
   const [error, setError] = useState<ApiError | null>(null);
   const [chosen, setChosen] = useState<{ unit: number } & Chosen>();
+  // Readings marked in this visit. What was marked before, a word's panel
+  // asks for itself, by its spelling.
   const [marks, setMarks] = useState<ReadonlySet<string>>(new Set());
 
   useEffect(() => {
@@ -58,20 +60,11 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
   }, [documentId, from]);
 
   useEffect(() => {
-    // Which readings are already marked. Without the store the text still
-    // reads; only the marks are missing, so a failure here says nothing.
-    const stop = new AbortController();
-    fetchMarked(stop.signal)
-      .then((found) =>
-        setMarks(new Set(found.marked.map((one) => one.target_id ?? "").filter(Boolean))),
-      )
-      .catch(() => undefined);
-    return () => stop.abort();
-  }, []);
-
-  useEffect(() => {
     if (!text || unit === null) return;
-    document.getElementById(`unit-${unit}`)?.scrollIntoView({ block: "center" });
+    // The word itself, not the unit: a paragraph of prose can be taller than
+    // the window, and centring it can leave the word far above the view.
+    const at = document.getElementById(`unit-${unit}`);
+    (at?.querySelector("button[data-sought]") ?? at)?.scrollIntoView({ block: "center" });
   }, [text, unit]);
 
   useEffect(() => {

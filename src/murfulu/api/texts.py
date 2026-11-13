@@ -20,7 +20,7 @@ from typing import Any
 
 from elasticsearch import ApiError, NotFoundError, TransportError
 from fastapi import APIRouter, HTTPException, Query
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from murfulu.api.auth import Caller, Store
 from murfulu.corpus import report
@@ -33,7 +33,9 @@ router = APIRouter(tags=["texts"])
 
 _UNREACHABLE = "the search index is not reachable"
 
-#: How many marked readings one read returns.
+#: How many marked readings one page of the review list holds, and the most
+#: one read may ask for.
+MARKED_PAGE = 50
 MARKED_LIMIT = 500
 
 
@@ -79,23 +81,48 @@ def _marked(row: ExpertFeedback) -> dict[str, Any]:
 
 
 @router.get("/texts/marked")
-def marked(_who: Caller, session: Store) -> dict[str, Any]:
-    """Every reading marked wrong, from this screen or any other, newest first.
+def marked(
+    _who: Caller,
+    session: Store,
+    spelling: str | None = Query(
+        None, max_length=60, description="only the marks on this spelling's readings"
+    ),
+    offset: int = Query(0, ge=0),
+    limit: int = Query(MARKED_PAGE, ge=1, le=MARKED_LIMIT),
+) -> dict[str, Any]:
+    """Readings marked wrong, from this screen or any other, newest first.
 
     Kept apart from ``GET /feedback`` so the list can be read the way the
     linguist reviews it: one row per mark, with the word and where it stood.
+    Paged, with the total, so no mark falls off the end of the list; and
+    asked for one spelling at a time by a word's panel, so a reading marked
+    long ago still shows as marked however many marks came after it.
     """
+    where = [
+        ExpertFeedback.target_type == "lexicon_entry",
+        ExpertFeedback.verdict == "wrong",
+    ]
+    if spelling:
+        # A reading's id is `spelling:latin`; the spelling's marks start so.
+        escaped = spelling.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        where.append(ExpertFeedback.target_id.like(f"{escaped}:%", escape="\\"))
+    total = session.scalar(
+        select(func.count()).select_from(ExpertFeedback).where(*where)
+    )
     statement = (
         select(ExpertFeedback)
-        .where(
-            ExpertFeedback.target_type == "lexicon_entry",
-            ExpertFeedback.verdict == "wrong",
-        )
+        .where(*where)
         .order_by(ExpertFeedback.id.desc())
-        .limit(MARKED_LIMIT)
+        .offset(offset)
+        .limit(limit)
     )
     rows = [_marked(row) for row in session.scalars(statement)]
-    return {"returned": len(rows), "marked": rows}
+    return {
+        "total": total or 0,
+        "offset": offset,
+        "returned": len(rows),
+        "marked": rows,
+    }
 
 
 @router.get("/texts/{document_id}")

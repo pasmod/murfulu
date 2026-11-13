@@ -34,7 +34,7 @@ export interface TextFound {
 export interface TextWord {
   /** As written, harakat and all. */
   fa: string;
-  /** The counted spelling; null for punctuation that opens a line. */
+  /** The counted spelling; null for what is not a counted word (« a number, a Latin name). */
   s: string | null;
   /** Punctuation written straight after it. */
   after?: string;
@@ -138,8 +138,23 @@ export function readText(
   );
 }
 
-export function marked(signal?: AbortSignal): Promise<{ marked: Marked[] }> {
-  return get<{ marked: Marked[] }>("/texts/marked", {}, signal);
+export interface MarkedPage {
+  total: number;
+  offset: number;
+  returned: number;
+  marked: Marked[];
+}
+
+/** One page of the marks, newest first — or every mark on one spelling. */
+export function marked(
+  options: { spelling?: string; offset?: number; limit?: number } = {},
+  signal?: AbortSignal,
+): Promise<MarkedPage> {
+  return get<MarkedPage>(
+    "/texts/marked",
+    { spelling: options.spelling, offset: options.offset, limit: options.limit },
+    signal,
+  );
 }
 
 /** Where a word stood when its reading was marked. */
