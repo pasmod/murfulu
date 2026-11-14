@@ -6,8 +6,8 @@ Settled choices, with the reason. Append; do not rewrite history.
 
 **The design, as set for the task**: wherever the build screen's panel shows
 the corpus figures of a built word («پیکره» under «شواهد»), it shows the
-evidence too. Below the figures: the first texts of the spelling's list from
-`/evidence` (up to three), each with author, work, title and every line
+evidence too. Below the figures: up to three texts of the spelling from
+`/evidence`, each by another author, each with author, work, title and every line
 holding the word, underlined as on the word page, with «در متن ←» to its unit;
 fetched when the field opens, never one request per row as the screen loads.
 Where there are more, a control opens all of them in place, reusing the word
@@ -27,20 +27,24 @@ too, briefly. Built on the branch `build-evidence`, not deployed
   state, because a build screen holds hundreds of rows and the address
   already holds the build. A row that comes to hold another word starts its
   list afresh.
-- *The first three are the list's first three*: the author with the most
-  texts, in the source's order — so often three texts by one author (بنده:
-  three ghazals of the Divan-e Shams). The six citations' one-per-author
-  choice was the alternative; it is another request (`/word`, by a word
-  type's id, not a spelling), and it would show other texts than the list
-  opened under it.
+- *The first three are three voices*: one text from each of the list's
+  first three authors, each the text that opens that author's part of the
+  list (`/evidence?voices=1`) — the six citations' rule, since three poems
+  of one poet can be one rhyme. Fewer authors, fewer texts. A first version
+  showed the list's first three texts, which for بنده were three ghazals of
+  the Divan-e Shams; now it is Molana, Meybodi and Shah Nematollah. Done in
+  the evidence module rather than through `/word`'s citations, which take a
+  word type's id, not a spelling, mark no word and order by relevance.
 - *Ten texts to a page in the panel, and three lines of a text before the
   rest*, against twenty and six on the word page: a panel is a panel.
-- *One button, above the list*, «همهٔ N متن» and, open, «تنها چند متن نخست»:
-  a button that moved as the list opened would drop the reader's focus
-  (the Codex review of 2026-11-14).
-- *The figures and the list can differ by a few texts* (FINDINGS 2026-11-14):
-  the button gives the list's own count — بنده: «همهٔ ۸٬۶۵۶ متن» under
-  «در ۸٬۵۸۲ متن» — and the open list says why in its one sentence.
+- *One button, above the list*, «نشان دادن همهٔ شواهد» and, open, «بستن
+  همهٔ شواهد», the word page's words: a button that moved as the list opened
+  would drop the reader's focus (the Codex review of 2026-11-14).
+- *The button carries no number.* The figures above are the counting's and
+  the list's count can differ by a few texts (FINDINGS 2026-11-14) — بنده:
+  8,656 in the list, «در ۸٬۵۸۲ متن» above — and two numbers side by side
+  read as a contradiction. The open list gives its own count and says why
+  in its one sentence.
 - *The letters of a function word list nothing*: their uses are that word's,
   and the panel already says so instead of a count. *The letters of another
   reading* (level *spelling*) are listed: they are what the figures above

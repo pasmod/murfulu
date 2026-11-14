@@ -1604,8 +1604,9 @@ queue was written, which is the argument for running it by hand again.
       screen's «پیکره» field shows, under «۲ بار، در ۲ متن از ۲ نویسنده», the
       lines themselves (بسمان: its two), and opens the word page's whole list
       in place where there are more (بنده: 8,656 texts, ten to a page, with
-      the author filter). One request when the field opens, of 3 texts; none
-      for a word the corpus does not have. The word page's list became shared
+      the author filter). One request when the field opens, of three texts
+      by three authors (`/evidence?voices=1`, 46 ms for بنده); none for a
+      word the corpus does not have. The word page's list became shared
       (`web/src/evidence/`). 6 component tests, 2 browser tests at both widths
       (one with axe on the open list). Also: index.html is sent `no-cache`
       (`web/nginx.conf`), checked by `tools/check_web_cache.sh` in CI; it

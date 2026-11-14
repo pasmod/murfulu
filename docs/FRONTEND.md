@@ -79,12 +79,13 @@ corpus version is said once above the list and beside every count behind the
 button, not in each row's sentence (DECISIONS 2026-11-13).
 
 **The verses (2026-11-14).** Under the «پیکره» field's figures stand the
-lines they were counted from: when the field opens, the first three texts of
-the spelling's list, each with author — work — title and every line holding
-the word (three, then the rest on a press), the word underlined, each line
-with «در متن ←». Above them, where there are more, one button «همهٔ N متن»
+lines they were counted from: when the field opens, three texts by three
+authors — one voice each, as the six citations — each with author — work —
+title and every line holding the word (three, then the rest on a press), the
+word underlined, each line with «در متن ←». Above them, where there are more,
+one button «نشان دادن همهٔ شواهد», with no number beside the figures' own,
 opens the word page's own list in place — the author filter, ten texts to a
-page — and, open, reads «تنها چند متن نخست». A note says the lines are the spelling's, not one reading's. A word
+page, its count and its sentence — and, open, reads «بستن همهٔ شواهد». A note says the lines are the spelling's, not one reading's. A word
 the corpus does not have, and the letters of a function word, list nothing
 (DECISIONS 2026-11-14).
 
