@@ -408,5 +408,13 @@ def test_the_proposals_export_as_one_list_for_karbon():
         SimpleNamespace(context={**context, "kind": "other"}, target_id="x:y")
     ]
     text = tool.report(tool.gather(rows))
-    assert "| آرد | ārad | 2 | no | Ārd |" in text
+    assert "| آرد | ārad | 2 | Ārd |" in text
     assert "x:y" not in text and "| x |" not in text
+    # a pick of a reading the bank has is the model's, not karbon's
+    picked = SimpleNamespace(
+        context={**context, "latin": "Ārd", "in_bank": True, "before": "دست"},
+        target_id="آرد:Ārd",
+    )
+    assert "Ārd | 1" not in tool.report(tool.gather([picked]))
+    [one] = tool.picks([picked])
+    assert (one["latin"], one["in_bank"], one["before"]) == ("Ārd", True, "دست")

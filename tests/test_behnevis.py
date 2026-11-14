@@ -372,3 +372,34 @@ def test_a_built_reading_is_as_sure_as_its_pattern_family_measured():
     assert word.latin == "baxšam"
     assert word.confidence == pytest.approx(75 / 102)
     assert model.fitted("verb:na") == model.inflected_cap  # never measured
+
+
+def test_the_model_is_read_again_when_its_file_changes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    import os
+
+    from murfulu.behnevis import serve
+
+    loads: list[str] = []
+    monkeypatch.setattr(
+        serve, "_load", lambda model, changed, snapshot: loads.append(model) or changed
+    )
+    model = tmp_path / "behnevis.json"
+    model.write_text("{}")
+    monkeypatch.setenv(serve.PATH_VARIABLE, str(model))
+
+    class _Lexicon:
+        snapshot_id = "lexicon-test"
+
+        def __enter__(self) -> "_Lexicon":
+            return self
+
+        def __exit__(self, *_: object) -> None:
+            return None
+
+    monkeypatch.setattr(serve.Lexicon, "open", staticmethod(lambda: _Lexicon()))
+    first = serve.loaded()
+    os.utime(model, (1, 1))
+    second = serve.loaded()
+    assert first != second  # a new modification time is a new cache key

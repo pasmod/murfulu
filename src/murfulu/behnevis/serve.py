@@ -56,8 +56,11 @@ def path() -> Path | None:
 
 
 @lru_cache(maxsize=2)
-def _load(model: str, snapshot_id: str) -> Transcriber:
-    del snapshot_id  # part of the cache key: a new lexicon builds a new bank
+def _load(model: str, changed: float, snapshot_id: str) -> Transcriber:
+    # `changed` and `snapshot_id` are the cache key: a model file rebuilt in
+    # place (`deploy/server.sh data`) or a new lexicon is read again without
+    # restarting the api.
+    del changed, snapshot_id
     with Lexicon.open() as lexicon:
         readings = list(lexicon.all_readings())
         bank = bank_from(
@@ -79,7 +82,7 @@ def loaded() -> Transcriber | None:
             snapshot_id = lexicon.snapshot_id
     except Exception:  # no lexicon: the screen goes without, as before
         return None
-    return _load(str(model), snapshot_id)
+    return _load(str(model), model.stat().st_mtime, snapshot_id)
 
 
 def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:

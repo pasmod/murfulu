@@ -14,6 +14,10 @@ none of them in git (they are derived from karbon's data, NOTICE):
                                 choice model learns from and is measured on
 ``behnevis-counts-v17.json``    each spelling's count in the corpus, so the
                                 evaluation weighs words as text weighs them
+``behnevis-proposals.jsonl``    read if present: readings picked on the reading
+                                screen, fetched from the server (`deploy/server.sh
+                                proposals`); the picks among the bank's readings
+                                are learned like marked places
 ``behnevis-marked-v17.jsonl``   every marked word of a Persian line, with its
                                 neighbours and author: what the evaluation
                                 hides the signs of and checks the model against
@@ -176,6 +180,32 @@ def main(argv: list[str] | None = None) -> int:
                             )
 
     marked.close()
+
+    # Readings picked on the reading screen among the bank's own: each is a
+    # choice in context, made by a person, and learned like a marked place.
+    # Fetched from the server by `deploy/server.sh proposals`. A typed reading
+    # the bank lacks waits for karbon and teaches nothing here.
+    picked = 0
+    proposals = DATA / "behnevis-proposals.jsonl"
+    if proposals.exists():
+        for line in proposals.open(encoding="utf-8"):
+            one = json.loads(line)
+            spelling = key(one.get("spelling_fa") or "")
+            latin = one.get("latin") or ""
+            if not one.get("in_bank") or not spelling or not latin:
+                continue
+            answered.append(
+                Answered(
+                    spelling,
+                    latin,
+                    key(one["before"]) if one.get("before") else None,
+                    key(one["after"]) if one.get("after") else None,
+                    "reading screen",
+                )
+            )
+            covered.setdefault(spelling, [0, 0])[0] += 1
+            picked += 1
+    print(f"picks from the reading screen learned: {picked}")
     hits = sum(h for h, _ in covered.values())
     misses = sum(m for _, m in covered.values())
     print(

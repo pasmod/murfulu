@@ -2,6 +2,25 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-14 — a pick teaches the model, a typed reading goes to karbon
+
+The project lead's question: is a reading not a matter of context? It is,
+and that splits what the reading screen collects in two.
+
+- *A reading picked among the bank's own* («دل» *Del*, not *Dal*, in this
+  line) is a choice in context; the bank needs nothing. It is learned like a
+  marked place — by spelling and by the words before and after, which the
+  screen now sends with it — at the automatic Behnevis's next build:
+  `deploy/server.sh proposals` fetches them into `data/`, and
+  `tools/build_behnevis.py` adds them to the answers and counts them as
+  covered. Weighted like one marked place each; nothing changes before a
+  build.
+- *A reading typed that the bank lacks* (آرد *ārad*) is a gap in the bank,
+  for karbon only: `tools/export_reading_proposals.py` lists just those, the
+  line as evidence. It teaches the model nothing until the bank has it.
+- *The api reads a rebuilt model without a restart*: the cache is keyed on
+  the file's modification time as well, so `deploy/server.sh data` is enough.
+
 ## 2026-11-14 — fewer red words: measured verb patterns, و by verse, a yellow middle
 
 The project lead, after the first look at the live screen: too many words

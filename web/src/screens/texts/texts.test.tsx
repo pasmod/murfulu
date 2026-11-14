@@ -386,6 +386,8 @@ describe("the reading screen", () => {
           model_latin: "raftand",
           model_confidence: 0.4,
           written: "رفتند",
+          before: "دل",
+          after: null,
         }),
       }),
     ]);

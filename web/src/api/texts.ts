@@ -194,6 +194,12 @@ export interface MarkedWhere {
   heading: string;
   written: string;
   corpus_version: string | null;
+  /**
+   * The counted words before and after it in its line, as spelled: a pick is
+   * a choice in context, and the model learns it with its neighbours.
+   */
+  before?: string | null;
+  after?: string | null;
 }
 
 /** Record that one reading of one spelling is wrong. Append-only. */
@@ -255,6 +261,8 @@ export function proposeReading(
       model_latin: proposed.model.latin,
       model_confidence: proposed.model.confidence,
       written: where.written,
+      before: where.before ?? null,
+      after: where.after ?? null,
       document_id: where.document_id,
       unit: where.unit,
       heading: where.heading,

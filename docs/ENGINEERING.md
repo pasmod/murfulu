@@ -39,6 +39,11 @@ MURFULU_LEXICON_PATH=data/lexicon-20261111.sqlite \
 The model files stay out of git (derived from karbon's data); the report is
 committed.
 
+To learn what readers picked on the reading screen, fetch it first —
+`deploy/server.sh proposals` (into `data/behnevis-proposals.jsonl`) — then
+build, measure, and send the model with `deploy/server.sh data`; the api
+reads the new file at the next text it serves.
+
 **Write the command down here every time it changes.** It was not recorded
 before v6, and rebuilding cost twenty minutes of reading v5's own output to
 work out which flags had produced it — which flags were defaults, how many

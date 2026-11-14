@@ -13,6 +13,7 @@
 #   db        copy the Postgres database fallback → server (pg_dump | pg_restore --clean) and compare
 #   db-back   the same, server → fallback: run it before a rollback if anyone wrote on the server
 #   migrate   alembic upgrade head on the server
+#   proposals  fetch the readings picked or typed on the reading screen into data/ (for build_behnevis)
 #   questions [--apply]  load rules/questions_fa.yaml into the server's store (dry run without --apply)
 #   check     health, served corpus version, a generation, L16 — on the server, not public
 #   counts    ES document counts and Postgres rows, fallback vs server
@@ -264,6 +265,14 @@ EOF
     compare_db
     ;;
   migrate) remote "cd $REMOTE_DIR && $COMPOSE run --rm api alembic upgrade head" ;;
+  proposals)
+    # Readings picked or typed on the reading screen, as JSON lines, into
+    # data/ for the next `tools/build_behnevis.py` (it learns the picks among
+    # the bank's readings). Read-only on the server.
+    remote "cd $REMOTE_DIR && $COMPOSE exec -T api python tools/export_reading_proposals.py --jsonl" \
+      > data/behnevis-proposals.jsonl
+    echo "$(wc -l < data/behnevis-proposals.jsonl) proposals in data/behnevis-proposals.jsonl"
+    ;;
   questions)
     # The linguist's questions from rules/questions_fa.yaml into the server's
     # store: a dry run, or `questions --apply` (tools/load_questions.py).

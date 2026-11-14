@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { ApiError } from "../../api/client";
-import { type Text, WINDOW, headingOf, readText } from "../../api/texts";
+import { type Text, type TextWord, WINDOW, headingOf, readText } from "../../api/texts";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
@@ -219,6 +219,7 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
                       heading: heading.join(" · "),
                       written: shown.fa,
                       corpus_version: text.corpus_version,
+                      ...neighbours(one.lines[open.line]?.words ?? [], open.word),
                     }}
                     marked={marks}
                     onMarked={(id) => setMarks((now) => new Set([...now, id]))}
@@ -254,3 +255,13 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
     </section>
   );
 }
+
+/** The counted words just before and after the word at `at` in its line. */
+function neighbours(words: TextWord[], at: number): { before: string | null; after: string | null } {
+  let before: string | null = null;
+  for (let i = at - 1; i >= 0 && before === null; i--) before = words[i]?.s ?? null;
+  let after: string | null = null;
+  for (let i = at + 1; i < words.length && after === null; i++) after = words[i]?.s ?? null;
+  return { before, after };
+}
+

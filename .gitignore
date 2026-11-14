@@ -69,3 +69,5 @@ data/semantic-*.json
 # automatic Behnevis: derived from karbon's lexicon (NOTICE), rebuilt by tools/build_behnevis.py
 /data/behnevis-v*.json
 /data/behnevis-counts-*.json
+# readings picked on the reading screen, fetched from the server
+/data/behnevis-proposals.jsonl
