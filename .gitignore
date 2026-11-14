@@ -65,3 +65,7 @@ data/semantic-*.json
 # with no leading slash matches at every depth.
 # tests/test_repository.py fails if any source tree is ignored again.
 /build/
+
+# automatic Behnevis: derived from karbon's lexicon (NOTICE), rebuilt by tools/build_behnevis.py
+/data/behnevis-v*.json
+/data/behnevis-counts-*.json

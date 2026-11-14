@@ -1,0 +1,59 @@
+# The Behnevis a function word is read as, for writing running text in Behnevis.
+#
+# The word bank reads these spellings as the content words written the same
+# way — در as *Dar* (door), به as *Beh* (quince), که as *keh* (small) — or not
+# at all (و, ز, بی, همی). In running text they are almost always the function
+# word (rules/function_words.yaml says why each is listed), so the automatic
+# Behnevis (src/murfulu/behnevis) offers the reading below beside the bank's.
+#
+# **Every reading here is this project's proposal, unconfirmed by the
+# linguist** (FOR_THE_LINGUIST L41). Lower case throughout: Behnevis
+# capitalises nouns, and none of these is one.
+#
+# `also` lists a second common reading the context may need: و is *va*, and
+# *o* inside a line of verse; که is *ke*, and *keh* or *ki* in some editions.
+version: 1
+readings:
+  و: {latin: va, also: [o]}
+  که: {latin: ke}
+  چون: {latin: čun}
+  چو: {latin: čo}
+  تا: {latin: tā}
+  اگر: {latin: agar}
+  گر: {latin: gar}
+  یا: {latin: yā}
+  مگر: {latin: magar}
+  هم: {latin: ham}
+  چه: {latin: če}
+  از: {latin: az}
+  ز: {latin: ze}
+  به: {latin: be}
+  در: {latin: dar}
+  بر: {latin: bar}
+  با: {latin: bā}
+  بی: {latin: bi}
+  اندر: {latin: andar}
+  جز: {latin: joz}
+  را: {latin: rā}
+  کز: {latin: kaz}
+  وز: {latin: vaz}
+  زان: {latin: zān}
+  ازین: {latin: azin}
+  مرا: {latin: marā}
+  ترا: {latin: torā}
+  من: {latin: man}
+  تو: {latin: to}
+  او: {latin: u}
+  ما: {latin: mā}
+  وی: {latin: vey}
+  ایشان: {latin: išān}
+  این: {latin: in}
+  آن: {latin: ān}
+  چنین: {latin: čonin}
+  چنان: {latin: čonān}
+  ای: {latin: ey}
+  همی: {latin: hami}
+  نه: {latin: na, also: [ne]}
+  مر: {latin: mar}
+  هر: {latin: har}
+  همه: {latin: hame}
