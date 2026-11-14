@@ -2696,8 +2696,8 @@ inflected form from its parts (*baxš* + *-am*), and on whose rules.
 ## L39. The reading screen's words, and the marks he will find there
 
 Built 2026-11-13 (DECISIONS 2026-11-13); **not blocking**. The screen he asked
-for (classical verse beside its Behnevis, word by word) exists on the branch
-`texts`, for any text — the Golestan's prose as well as a ghazal. Under each
+for (classical verse beside its Behnevis, word by word) is on the site at
+`/texts` since 2026-11-14, for any text — the Golestan's prose as well as a ghazal. Under each
 word stand **all** the bank's readings, alike and in alphabetical order; none
 is proposed, because the letters do not say which one a line needs.
 

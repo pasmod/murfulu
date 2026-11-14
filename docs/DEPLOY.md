@@ -438,3 +438,18 @@ route (`cloudflared tunnel route dns`), and `MURFULU_SITE` in
 to the current address). `deploy` recreates Caddy when its environment
 changes; it never touches the tunnel, so murfulu's own connector,
 `murfulu_cloudflared` (§0), is restarted by hand, and no other.
+
+## 10. The deploy of corpus v17 and the reading screen — run 2026-11-14
+
+Built and checked on the Mac (ENGINEERING, v17; `data/compare-v16-v17.md`) and
+**run on the project lead's word on 2026-11-14, in this order, each step
+clean**. No migration: a wrong reading goes to the existing feedback store.
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `deploy/server.sh deploy` | the code: `/texts`, the units, citations naming their unit. It read v16 meanwhile, which has no units: one unit per line |
+| 2 | `deploy/server.sh data` | `deploy/server.env.example` names v17's three figures, so exactly those travelled |
+| 3 | `deploy/server.sh corpus-mac v17` | 133,142 / 411,709 / 2,949,164 documents on both sides; no alias moved |
+| 4 | `deploy/server.sh release v17 lexicon-20261111` | aliases and server `.env`, api recreated. **The rollback is `release v16 lexicon-20261111`**; v16's indices and figures stay on the server |
+| 5 | `deploy/server.sh questions` | dry run: 12 unchanged, nothing to apply |
+| 6 | `deploy/server.sh check` | all checks passed, corpus v17; inside the api container `/texts` finds Hafez's ghazal 3 (9 couplets) and the Golestan's preface (120 units, couplet and prose) |

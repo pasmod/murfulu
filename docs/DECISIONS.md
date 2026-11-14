@@ -11,6 +11,10 @@ shows them all, equally, and proposes none**: the drafts' placeholder rule put
 bank; the inflection analyser's guesses are not shown. Built on the branch
 `texts`, not deployed (FRONTEND, *The reading screen*).
 
+**Served since 2026-11-14**, with corpus v17, after the project lead's OK to
+deploy (DEPLOY §10); the server's check passed and `/texts` finds and opens
+Hafez's ghazal 3 and the Golestan's preface on the server.
+
 **Decided here, under the working rule:**
 
 - *A wrong reading is a record in the feedback store, not a store of its own.*
@@ -80,6 +84,9 @@ exist otherwise, so a word cannot be counted that no reader can find. The
 `documents` index stores the units unindexed (`enabled: false`) plus `work`,
 `section`, `order` and a `heading` (author, work, sections, title) to find a
 text by.
+
+**Corpus v17 is served since 2026-11-14** (DEPLOY §10); v16's indices stay on
+the server as the rollback.
 
 **A citation is as long as a line of verse, whatever the text is.** A prose
 paragraph can run to thousands of words; a citation from one is the sentence

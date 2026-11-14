@@ -1600,7 +1600,7 @@ queue was written, which is the argument for running it by hand again.
       semantic score *can* speak it remains the better measure.
 
 - [x] **9.15 The reading screen.** DONE 2026-11-13 on the branch `texts`,
-      not deployed. `/texts` opens any text of the corpus by author, work or
+      served since 2026-11-14 with corpus v17. `/texts` opens any text of the corpus by author, work or
       title, or from a citation straight at its line, and shows each word over
       every reading the bank has, none proposed; a press gives the readings,
       the spelling's corpus count and the way into `/bank`, and a reading can

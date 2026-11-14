@@ -193,9 +193,8 @@ env MURFULU_ELASTICSEARCH_URL=http://127.0.0.1:9201 \
   .venv/bin/python tools/measure_bank_gaps.py v17 --top 1000
 ```
 
-Both in `data/compare-v16-v17.md`. **Not released**: the Mac's aliases moved
-to v17 only to look at the reading screen locally; the server still serves
-v16, and moving v17 there waits for the project lead.
+Both in `data/compare-v16-v17.md`. **Released 2026-11-14** on the project
+lead's word: `corpus-mac v17`, then `release v17 lexicon-20261111` (DEPLOY §10).
 
 **The precompute runs first, and this order is not cosmetic.** The ingest
 takes the precompute's affix map, so an ingest run before it has nothing to
