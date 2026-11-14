@@ -9,7 +9,8 @@
  * page rather than assumed.
  *
  * The citations are the only part of the evidence a reader can check for
- * themselves, so they are not behind an expander.
+ * themselves, so they are not behind an expander. They are one line per
+ * author; every text and every line is below them, in `AllEvidence`.
  */
 
 import { useEffect, useState } from "react";
@@ -30,6 +31,7 @@ import {
   wordGroup,
 } from "../../text/lexicon";
 import { persianCentury } from "../../text/numbers";
+import { AllEvidence } from "./AllEvidence";
 import { Dispersion } from "./Dispersion";
 import styles from "./Word.module.css";
 
@@ -257,6 +259,17 @@ export function Word() {
           </ul>
         )}
       </section>
+
+      {/* Every text, below the six voices. The counting's number of texts is
+          passed so the list can say why its own differs, where it does; a
+          function word's reading has no count of its own to compare. */}
+      {word.spelling_fa ? (
+        <AllEvidence
+          spelling={word.spelling_fa}
+          docCount={word.function_word && word.latin ? undefined : word.doc_count}
+          version={word.corpus_version}
+        />
+      ) : null}
     </article>
   );
 }

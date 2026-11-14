@@ -19,12 +19,13 @@ texts than the window is walked with ``search_after``; in corpus v17 none
 has, since the author with the most texts of all, صائب تبریزی, has 9,874.
 
 **The texts are the search index's, the lines are the counting's.** The index
-folds a few letters the counting keeps apart (آ and ا, ۀ and ه) and splits a
-few words differently — a trailing ZWNJ, a superscript alef — so its number of
-texts can differ slightly from the word page's count: رفت is in 10,641 texts
-here and 10,682 counted. Exact agreement would mean reading every text the
-index finds, which for و is the whole corpus. The lines are found by
-:mod:`murfulu.search.evidence_lines` with the counting's own tokeniser.
+folds a few letters the counting keeps apart (آ and ا, ۀ and ه) and keeps a
+trailing ZWNJ the counting strips, so its number of texts can differ slightly
+from the word page's count: رفت is in 10,641 texts here and 10,682 counted,
+and the 41 the index misses all write رفت‌ with the ZWNJ. Exact agreement
+would mean reading every text the index finds, which for و is the whole
+corpus. The lines are found by :mod:`murfulu.search.evidence_lines` with the
+counting's own tokeniser.
 
 **Texts with no author** are one more author in the list, by their count, and
 are chosen with the empty name: stored without an author or with an empty one.

@@ -160,7 +160,9 @@ test.describe("a real word", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: first.spelling_fa }),
     ).toBeVisible();
-    await expect(page.getByRole("region", { name: "شواهد" })).toBeVisible();
+    // `exact`: a name is matched as a substring otherwise, and «همهٔ شواهد»
+    // below the citations holds this one.
+    await expect(page.getByRole("region", { name: "شواهد", exact: true })).toBeVisible();
     await expect(page.getByRole("region", { name: "شاهدمثال‌ها" })).toBeVisible();
 
     const overflow = await page.evaluate(
