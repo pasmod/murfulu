@@ -211,3 +211,27 @@ def against(written: str, reading: str, variants: tuple[str, ...] = ()) -> bool:
             return False  # one spelling of the reading fits the signs
         said = True
     return said
+
+
+def fits(written: str, reading: str, variants: tuple[str, ...] = ()) -> bool | None:
+    """Whether the word's own signs confirm a reading, rule it out, or say nothing.
+
+    True when one of the reading's spellings lines up with the letters and
+    their signs; False when its spellings line up with the letters but not
+    with the signs; None when there is no sign that counts or no spelling
+    lines up at all. :func:`against` answers only the second question, and
+    its False means "nothing can be said" as often as "fits" — which is not
+    enough to treat a reading as confirmed (the review of 2026-11-14).
+    """
+    shape = letters(written)
+    if not any(signs - {SHADDA} for _, signs in shape[:-1]):
+        return None
+    said: bool | None = None
+    for one in (reading, *variants):
+        latin = _latin(one)
+        if not latin or not _lines_up(shape, latin, False):
+            continue
+        if _lines_up(shape, latin, True):
+            return True
+        said = False
+    return said

@@ -59,6 +59,49 @@ and with it the old bundle, after a deploy. `no-cache` still answers 304 when
 nothing changed. The hashed assets keep their year. `tools/check_web_cache.sh`
 asks a running web container for the headers, and CI runs it on the image it
 builds; against the old configuration it fails on all four ways in.
+## 2026-11-14 — automatic Behnevis: a reading and a confidence for every word
+
+**The project lead's choice**: count, with an n-gram model, rather than look
+for rules (the four letters have rules, the short vowels do not; FINDINGS
+2026-11-14), and give every word a **confidence**, so a person checks only
+the words below a threshold. Built in `src/murfulu/behnevis/`; measured by
+`tools/evaluate_behnevis.py v17` (`data/behnevis-eval-v17.md`). No screen
+uses it yet.
+
+**Decided here, under the working rule:**
+
+- *Four sources, in order*: a function word's reading
+  (`rules/function_word_readings.yaml`, proposals for the linguist, L41); the
+  bank's one reading; a choice among the bank's readings, counted from the
+  14,341 places where a Persian line's own signs leave one of them, by
+  spelling and by the word before and after; a guess from the letters, an
+  n-gram over letters with up to three neighbours a side, learned from the
+  bank.
+- *A line with signs on more than 30 % of its words is a quotation* — mostly
+  Arabic, vowelled throughout — and is not learned from (174,770 signed
+  words): its «مِن» is not the pronoun *man*.
+- *Confidence is the probability times the spelling's coverage*, the share of
+  its marked places where any of its candidates fits the signs. بود is
+  marked «بُوَد», *bovad*, again and again, and the bank holds only the noun
+  *Bud*; so بود is not a sure word although it has one reading.
+- *A word's own signs narrow its candidates*; signs that fit none of them send
+  the word to a person.
+- *Two numbers are assumptions*: a function word's reading starts at 0.9, and
+  so does the coverage of a spelling the corpus never marks. The corpus has no
+  unbiased sample to measure them on — its fully vowelled Persian lines are
+  the Quran's and one dialect poet's — so the linguist's timed sample is what
+  replaces them (OPEN_QUESTIONS S47).
+
+**Measured, held out**: among several readings, at confidence 0.8 or more
+(65 % of places) 92 % right, at 0.9 (52 %) 94 %; an unknown word, at 0.8
+(26 %) 88.5 %, at 0.9 (18 %) 91 %. Marked words with their signs hidden come
+out 39 % right overall — pessimistic, because editions mark the hard words.
+**The threshold is the project lead's** (S47).
+
+**The largest fault it shows** is the bank's, not the model's: frequent verb
+forms read as nouns — بود *Bud*, رود *Rud*, شود *Ševed*, برد *Bard* —
+because the bank holds headwords, not inflected forms. Readings for them from
+the inflection analysis (`corpus/inflection.py`) are the next step.
 
 ## 2026-11-14 — every text of a spelling on the word page
 

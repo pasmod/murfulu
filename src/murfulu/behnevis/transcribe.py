@@ -22,7 +22,7 @@ from typing import Any
 
 import yaml
 
-from murfulu.behnevis.choice import ChoiceModel
+from murfulu.behnevis.choice import ChoiceModel, ranked
 from murfulu.behnevis.letters import LetterModel
 from murfulu.corpus.wordtypes import normalise
 from murfulu.search import harakat
@@ -131,16 +131,23 @@ class Transcriber:
             if guessed is None:
                 return Word(written, spelling, None, 0.0, NONE)
             latin, confidence = guessed
+            if use_signs and harakat.fits(written, latin) is False:
+                confidence = 0.0  # the text's own signs rule the guess out
             return Word(
                 written, spelling, latin, confidence, LETTERS, ((latin, confidence),)
             )
 
         coverage = self.coverage(spelling)
         if use_signs and harakat.has_signs(written):
-            fitting = [c for c in candidates if not harakat.against(written, c)]
-            if fitting:
-                # The text itself confirms one of them: no doubt left about coverage.
-                candidates, coverage = fitting, 1.0
+            verdicts = {c: harakat.fits(written, c) for c in candidates}
+            confirmed = [c for c, v in verdicts.items() if v is True]
+            undecided = [c for c, v in verdicts.items() if v is None]
+            if confirmed:
+                # The text itself confirms one of them: no doubt left about
+                # coverage. A reading the signs cannot judge stays a candidate.
+                candidates, coverage = confirmed + undecided, 1.0
+            elif undecided:
+                candidates = undecided
             else:
                 # The text's signs fit none of the bank's readings: a person decides.
                 coverage = 0.0
@@ -148,16 +155,13 @@ class Transcriber:
         probs = self.choice.probabilities(
             spelling, candidates, before, after, function[0] if function else None
         )
-        ranked = tuple(
-            (c, p * coverage)
-            for c, p in sorted(probs.items(), key=lambda kv: (-kv[1], kv[0]))
-        )
-        latin, confidence = ranked[0]
+        order = tuple((c, p * coverage) for c, p in ranked(probs))
+        latin, confidence = order[0]
         if latin in function:
             source = FUNCTION
         else:
             source = BANK if len(candidates) == 1 else CHOICE
-        return Word(written, spelling, latin, confidence, source, ranked)
+        return Word(written, spelling, latin, confidence, source, order)
 
     def line(self, text: str, *, use_signs: bool = True) -> list[Word]:
         """Every counted word of a line, with the words beside it as context."""

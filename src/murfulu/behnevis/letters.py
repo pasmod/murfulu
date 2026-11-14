@@ -17,8 +17,8 @@ one hard letter brings it down.
 
 **What it cannot know.** Behnevis writes nouns with a capital; nothing in the
 letters says which word is a noun, so a guess is lower case. Measured on the
-bank's own words, held out from learning (2026-11-14): about 54 % of words
-come out right as a whole; where the confidence is 0.7 or more, 82 %.
+bank's own words, held out from learning (2026-11-14): about 55 % of words
+come out right as a whole; where the confidence is 0.7 or more, 84 %.
 """
 
 from __future__ import annotations

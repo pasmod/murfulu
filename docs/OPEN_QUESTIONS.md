@@ -5,6 +5,30 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-14 (automatic Behnevis)
+
+### S47. Which confidence does a word need to be taken without a person?
+
+The automatic Behnevis (DECISIONS 2026-11-14) gives every word a confidence;
+the threshold decides how much a person checks. From `data/behnevis-eval-v17.md`:
+
+| threshold | words taken as read | checked by a person | hours for Hafez's ghazals |
+|---:|---:|---:|---:|
+| 0.5 | 69 % | 31 % | 22 |
+| 0.7 | 56 % | 44 % | 31 |
+| 0.8 | 49 % | 51 % | 36 |
+| 0.9 | 31 % | 69 % | 48 |
+
+By hand the ghazals take about 104 hours. The hours assume 600 words an hour
+by hand and 900 checked proposals an hour; neither is measured. Measured:
+where several readings compete, 0.8 gives 92 % right and 0.9 94 %; for an
+unknown word 88.5 % and 91 %. Not measurable from the corpus: how often a single
+bank reading or a function word's reading is right — both start from an
+assumed 0.9, which is why the share drops sharply between 0.8 and 0.9.
+
+**For the project lead**: the threshold. **Ours**: 0.8 to start, and the
+linguist's timed sample of 500 words (L41) to set it from measurement.
+
 ## Opened 2026-11-14 (every text of a spelling)
 
 ### S45. Should the documents carry their counted spellings, so the list and the count agree?

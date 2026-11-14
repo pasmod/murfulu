@@ -7,59 +7,59 @@ Made by `tools/evaluate_behnevis.py`; the model by `tools/build_behnevis.py`.
 | source | share of running words |
 |---|---:|
 | letters | 33.0% |
-| bank | 26.6% |
-| function | 25.6% |
-| choice | 14.7% |
+| function | 26.5% |
+| bank | 24.3% |
+| choice | 16.2% |
 | none | 0.1% |
 
 ## 1. Marked words, poets held out (21,899 words, signs hidden)
 
 | threshold | words at or above | of those right |
 |---:|---:|---:|
-| 0.00 | 100% | 39.9% |
-| 0.50 | 45% | 55.1% |
-| 0.60 | 36% | 59.0% |
-| 0.70 | 29% | 63.2% |
-| 0.80 | 23% | 67.4% |
-| 0.90 | 17% | 70.5% |
-| 0.95 | 10% | 71.9% |
+| 0.00 | 100% | 39.4% |
+| 0.50 | 44% | 54.6% |
+| 0.60 | 35% | 59.0% |
+| 0.70 | 30% | 62.4% |
+| 0.80 | 23% | 66.0% |
+| 0.90 | 17% | 69.2% |
+| 0.95 | 10% | 70.3% |
 
 By source, all confidences:
 
 | source | words | right |
 |---|---:|---:|
-| bank | 3,994 | 41.2% |
-| choice | 3,650 | 61.5% |
-| function | 913 | 43.9% |
-| letters | 13,340 | 33.4% |
+| bank | 3,588 | 38.4% |
+| choice | 4,051 | 59.4% |
+| function | 918 | 43.8% |
+| letters | 13,340 | 33.3% |
 | none | 2 | 0.0% |
 
-## 1b. Several readings: the choice alone, poets held out (2,497)
+## 1b. Several readings: the choice alone, poets held out (2,510)
 
 Places where the text's signs leave one of the bank's readings; the model
 chooses without the signs. Right means it chose that one.
 
 | threshold | places at or above | of those right |
 |---:|---:|---:|
-| 0.00 | 100% | 77.8% |
-| 0.50 | 98% | 79.0% |
-| 0.60 | 84% | 83.4% |
-| 0.70 | 72% | 88.2% |
-| 0.80 | 61% | 90.7% |
-| 0.90 | 48% | 93.0% |
-| 0.95 | 33% | 96.0% |
+| 0.00 | 100% | 81.4% |
+| 0.50 | 94% | 83.0% |
+| 0.60 | 84% | 86.6% |
+| 0.70 | 75% | 90.1% |
+| 0.80 | 65% | 92.2% |
+| 0.90 | 52% | 93.9% |
+| 0.95 | 37% | 96.9% |
 
 ## 2. Unknown words: the letter model on held-out bank words (5,519)
 
 | threshold | words at or above | of those right |
 |---:|---:|---:|
-| 0.00 | 100% | 54.3% |
-| 0.50 | 58% | 72.7% |
-| 0.60 | 47% | 78.4% |
-| 0.70 | 37% | 83.4% |
-| 0.80 | 28% | 87.8% |
-| 0.90 | 20% | 90.9% |
-| 0.95 | 15% | 92.4% |
+| 0.00 | 100% | 55.3% |
+| 0.50 | 56% | 74.1% |
+| 0.60 | 44% | 79.7% |
+| 0.70 | 34% | 84.4% |
+| 0.80 | 26% | 88.5% |
+| 0.90 | 18% | 91.1% |
+| 0.95 | 13% | 93.2% |
 
 ## 3. What a threshold leaves to a person
 
@@ -72,9 +72,9 @@ by hand they take 104 hours.
 
 | threshold | taken as read | checked by a person | hours for Hafez |
 |---:|---:|---:|---:|
-| 0.50 | 70% | 30% | 21 |
-| 0.60 | 63% | 37% | 26 |
-| 0.70 | 57% | 43% | 30 |
-| 0.80 | 50% | 50% | 35 |
-| 0.90 | 33% | 67% | 46 |
-| 0.95 | 15% | 85% | 59 |
+| 0.50 | 69% | 31% | 22 |
+| 0.60 | 61% | 39% | 27 |
+| 0.70 | 56% | 44% | 31 |
+| 0.80 | 49% | 51% | 36 |
+| 0.90 | 31% | 69% | 48 |
+| 0.95 | 13% | 87% | 60 |

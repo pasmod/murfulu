@@ -22,6 +22,23 @@ clean machine with no other setup.
 
 ## Building a corpus version
 
+*Automatic Behnevis (2026-11-14).* After a corpus version is built, its
+Behnevis model is rebuilt beside it, on the Mac's stack (needs the indices
+and the lexicon; about two minutes), and measured offline:
+
+```
+docker run --rm --network murfulu_default \
+  -e MURFULU_ELASTICSEARCH_URL=http://elasticsearch:9200 \
+  -e MURFULU_LEXICON_PATH=/w/data/lexicon-20261111.sqlite -e PYTHONPATH=/w/src \
+  -v "$PWD":/w:ro -v "$PWD/data":/w/data -w /w --entrypoint python \
+  murfulu-api:latest tools/build_behnevis.py v17
+MURFULU_LEXICON_PATH=data/lexicon-20261111.sqlite \
+  .venv/bin/python tools/evaluate_behnevis.py v17 > data/behnevis-eval-v17.md
+```
+
+The model files stay out of git (derived from karbon's data); the report is
+committed.
+
 **Write the command down here every time it changes.** It was not recorded
 before v6, and rebuilding cost twenty minutes of reading v5's own output to
 work out which flags had produced it — which flags were defaults, how many

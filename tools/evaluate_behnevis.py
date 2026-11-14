@@ -27,7 +27,7 @@ import zlib
 from collections import Counter
 from pathlib import Path
 
-from murfulu.behnevis.choice import Answered, ChoiceModel
+from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
 from murfulu.behnevis.letters import LetterModel, latin_key
 from murfulu.behnevis.transcribe import Transcriber, bank_from, key
 from murfulu.lexicon.store import Lexicon
@@ -54,7 +54,12 @@ def main(argv: list[str] | None = None) -> int:
     version = parser.parse_args(argv).version
 
     with Lexicon.open() as lexicon:
-        pairs = [(r.spelling_fa, r.latin) for r in lexicon.all_readings() if r.latin]
+        pairs = [
+            (r.spelling_fa, latin)
+            for r in lexicon.all_readings()
+            for latin in r.all_latin
+            if latin
+        ]
     bank = bank_from(pairs)
     model = Transcriber.load(DATA / f"behnevis-{version}.json", bank)
     marked = [
@@ -83,7 +88,10 @@ def main(argv: list[str] | None = None) -> int:
         )
         if not candidates:
             continue
-        fits = any(not harakat.against(m["written"], c) for c in candidates)
+        verdicts = [harakat.fits(m["written"], c) for c in candidates]
+        if not any(verdicts) and not all(v is False for v in verdicts):
+            continue  # the signs cannot judge these readings
+        fits = any(verdicts)
         covered.setdefault(m["spelling"], [0, 0])[0 if fits else 1] += 1
     fold = Transcriber(
         bank=bank,
@@ -96,7 +104,9 @@ def main(argv: list[str] | None = None) -> int:
         word = fold.word(
             m["written"], m["spelling"], m["before"], m["after"], use_signs=False
         )
-        right = word.latin is not None and not harakat.against(m["written"], word.latin)
+        right = (
+            word.latin is not None and harakat.fits(m["written"], word.latin) is True
+        )
         results.append((word.source, word.confidence, right))
 
     # 1b. the choice alone: answered places of held-out poets -----------------
@@ -113,7 +123,7 @@ def main(argv: list[str] | None = None) -> int:
         probs = fold.choice.probabilities(
             a.spelling, candidates, a.before, a.after, function[0] if function else None
         )
-        best = max(probs.items(), key=lambda kv: (kv[1], kv[0]))
+        best = ranked(probs)[0]
         choice_only.append((best[1], best[0] == a.reading))
 
     # 2. unknown words: letters, one bank word in ten held out ------------------

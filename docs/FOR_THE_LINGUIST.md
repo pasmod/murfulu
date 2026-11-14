@@ -2766,3 +2766,30 @@ A reading counts as fitting when one of its variants fits, so under «دِل»
    the Persian word spelled the same?
 4. Is *Dal* under «دِل» right to stay, because of its variant *Del*?
 5. The wording above.
+
+## L41. The automatic Behnevis: the function words' readings, and a timed sample
+
+Built 2026-11-14 (DECISIONS 2026-11-14); **not blocking**. The program now
+writes any line in Behnevis, word by word, and says for each word how sure it
+is. Three things only he can settle.
+
+**1. The 43 function words.** The bank reads در as *Dar* (door) and که as
+*keh* (small); in running text they are the preposition and the
+conjunction. The program offers our readings beside the bank's
+(`rules/function_word_readings.yaml`), all lower case, among them: و *va* (or
+*o* in verse), که *ke*, از *az*, ز *ze*, به *be*, در *dar*, را *rā*, تو *to*,
+او *u*, این *in*, آن *ān*, همی *hami*, نه *na* (or *ne*). Are these his?
+
+**2. Verb forms the bank reads as nouns.** بود is *Bud*, رود *Rud*, شود
+*Ševed*, برد *Bard* in the bank, and the texts' own signs say *bovad*,
+*ravad*, *šavad*, *barad* again and again. We propose to add the verb
+readings from the stems the bank already has (*bud-*, *rav-*, *šav-*,
+*bar-*) plus the ending. Does he agree that an inflected form may have a
+reading the bank does not list?
+
+**3. A timed sample.** 500 words — a ghazal, a page of the Golestan, a page of
+the Masnavi — written in Behnevis by hand once, and once by checking the
+program's proposals, each timed. It replaces our two assumed speeds and the
+two assumed confidences with measurements, and sets the threshold (S47).
+About two hours.
+

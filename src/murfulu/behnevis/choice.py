@@ -4,7 +4,7 @@ The bank reads ترک three ways — *Tark*, *Tarak*, *tork* — and the letters
 not say which a line needs. But 1.65 % of the corpus's words carry vowel signs
 (the editions'), and where the signs leave exactly one of the readings, the
 corpus has answered the question: «تُرکِ شیرازی» is *tork*. Those answers,
-about 19,000 of them in corpus v17, are what this model counts:
+14,341 of them in corpus v17's Persian lines, are what this model counts:
 
 - how often each reading was the answer for the spelling;
 - how often, **after the same word**, and **before the same word** — a
@@ -18,8 +18,8 @@ proportion to how many answers it rests on. The largest probability is the
 two readings alike come out at 0.5, which is below any useful threshold, so a
 person sees it.
 
-Measured on poets the model never saw (2026-11-14): 79 % right; where the
-confidence is 0.9 or more (about half the cases), 95 %.
+Measured on poets the model never saw (2026-11-14): 81 % right; where the
+confidence is 0.9 or more (about half the cases), 94 %.
 """
 
 from __future__ import annotations
@@ -28,6 +28,11 @@ from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from typing import Any
+
+
+def ranked(probs: dict[str, float]) -> list[tuple[str, float]]:
+    """Readings likeliest first; a tie goes to the alphabetically first."""
+    return sorted(probs.items(), key=lambda kv: (-kv[1], kv[0]))
 
 
 @dataclass(frozen=True)

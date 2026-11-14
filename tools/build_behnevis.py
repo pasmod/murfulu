@@ -62,7 +62,13 @@ def main(argv: list[str] | None = None) -> int:
     version = args.version
 
     with Lexicon.open() as lexicon:
-        pairs = [(r.spelling_fa, r.latin) for r in lexicon.all_readings() if r.latin]
+        # Every spelling a reading has: رخ is *rex*, and *rox* too.
+        pairs = [
+            (r.spelling_fa, latin)
+            for r in lexicon.all_readings()
+            for latin in r.all_latin
+            if latin
+        ]
         snapshot = lexicon.snapshot_id
     bank = bank_from(pairs)
     letters = LetterModel.train(pairs)
@@ -138,16 +144,28 @@ def main(argv: list[str] | None = None) -> int:
                         )
                         if not candidates:
                             continue
-                        fits = [
-                            c for c in candidates if not harakat.against(written, c)
+                        verdicts = [harakat.fits(written, c) for c in candidates]
+                        confirmed = [
+                            c for c, v in zip(candidates, verdicts, strict=True) if v
                         ]
                         tally = covered.setdefault(spelling, [0, 0])
-                        tally[0 if fits else 1] += 1
-                        if len(candidates) >= 2 and len(fits) == 1:
+                        if confirmed:
+                            tally[0] += 1
+                        elif all(v is False for v in verdicts):
+                            tally[1] += 1
+                        # Answered only when the signs confirm one reading and
+                        # rule every other out; one they cannot judge leaves
+                        # the question open.
+                        others_out = all(
+                            v is False
+                            for c, v in zip(candidates, verdicts, strict=True)
+                            if c not in confirmed
+                        )
+                        if len(candidates) >= 2 and len(confirmed) == 1 and others_out:
                             answered.append(
                                 Answered(
                                     spelling,
-                                    fits[0],
+                                    confirmed[0],
                                     before,
                                     after,
                                     source.get("author") or "",

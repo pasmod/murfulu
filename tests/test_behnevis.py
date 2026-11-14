@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from murfulu.behnevis.choice import Answered, ChoiceModel
+from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
 from murfulu.behnevis.letters import LetterModel, align, shape
 from murfulu.behnevis.transcribe import (
     BANK,
@@ -163,3 +163,38 @@ def test_the_model_file_survives_a_round_trip(transcriber: Transcriber, tmp_path
     assert [w.as_dict() for w in again.line("که دست دام ترک بود")] == [
         w.as_dict() for w in transcriber.line("که دست دام ترک بود")
     ]
+
+
+def test_a_guess_the_words_signs_rule_out_goes_to_a_person(transcriber: Transcriber):
+    [plain] = transcriber.line("دام")
+    [marked] = transcriber.line("دُام")  # a damma: the guess dām cannot stand
+    assert plain.latin == marked.latin == "dām"
+    assert plain.confidence > 0 and marked.confidence == 0.0
+
+
+def test_a_reading_variant_is_a_candidate_too():
+    pairs = [("رخ", "rex"), ("رخ", "rox")]
+    model = Transcriber(
+        bank=bank_from(pairs),
+        letters=LetterModel.train(pairs),
+        choice=ChoiceModel(),
+        functions={},
+    )
+    [word] = model.line("رُخ")
+    assert word.latin == "rox"
+
+
+def test_a_reading_the_signs_cannot_judge_is_not_confirmed_by_them():
+    model = Transcriber(
+        bank={"باد": ("qqq",)},  # no letter of باد is spelled q: nothing to judge
+        letters=LetterModel.train(BANK_PAIRS),
+        choice=ChoiceModel(),
+        functions={},
+    )
+    [word] = model.line("بَاد")
+    assert word.latin == "qqq"
+    assert word.confidence == pytest.approx(model.covered_prior)
+
+
+def test_a_tie_goes_to_the_alphabetically_first_reading():
+    assert ranked({"tork": 0.5, "Tark": 0.5})[0][0] == "Tark"
