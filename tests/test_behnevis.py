@@ -253,7 +253,8 @@ def test_poets_that_differ_widen_the_bound():
 
     alike = [(9, 10)] * 20
     unlike = [(10, 10)] * 10 + [(8, 10)] * 10
-    assert cluster_lower_bound(alike) == pytest.approx(0.9)
+    # alike poets: no wider than the answers taken one by one
+    assert cluster_lower_bound(alike) == pytest.approx(lower_bound(180, 200))
     assert cluster_lower_bound(unlike) < 0.9
     # the same 180 of 200, as independent answers, claim more certainty
     assert cluster_lower_bound(unlike, 0.05) < lower_bound(180, 200, 0.05) + 0.02
