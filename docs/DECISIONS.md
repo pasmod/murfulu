@@ -101,6 +101,13 @@ alike and none is proposed, now that the proposal says how sure it is.
 **Unconfirmed**: the words «مطمئن»، «کمابیش»، «نامطمئن»، «در این سطر»،
 «ثبت پیشنهاد» — the linguist's (FOR_THE_LINGUIST L41).
 
+**Served since 2026-11-14**, after the project lead's OK to deploy, with the
+model `data/behnevis-v17.json` on the server and the api given 1.5 GB (it
+uses about 550 MB with the model). The server's check passed; its Hafez
+ghazal 3 comes with levels, and آرد offers *ārad* beside *Ārd*. The first
+text read after a restart waits about 8 seconds while the model loads; every
+one after it, a tenth of a second.
+
 ## 2026-11-14 — automatic Behnevis: a reading and a confidence for every word
 
 **The project lead's choice**: count, with an n-gram model, rather than look
