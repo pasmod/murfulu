@@ -29,6 +29,7 @@ from pathlib import Path
 
 from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
 from murfulu.behnevis.letters import LetterModel, latin_key, shape
+from murfulu.behnevis.stats import lower_bound, needed_without_error
 from murfulu.behnevis.transcribe import Transcriber, bank_from, key
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
@@ -41,6 +42,76 @@ HAFEZ_WORDS = 62_300
 #: Assumed, not measured (the timed sample replaces them): words an expert
 #: writes by hand per hour, and proposals a person checks per hour.
 BY_HAND, CHECKED = 600, 900
+
+
+#: The level of the test: "95 % sure".
+ALPHA = 0.05
+FINE = (0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.93, 0.95, 0.97, 0.99)
+TARGETS = (0.90, 0.95, 0.98, 0.99)
+
+
+def certainty(
+    choice_only: list[tuple[float, bool]],
+    guessed: list[tuple[float, bool]],
+    counts: dict[str, int],
+    confidence_of: dict[str, float],
+    total: int,
+) -> list[str]:
+    """Section 4: exact lower bounds, and the threshold each target needs."""
+    lines = [
+        "",
+        f"## 4. With what certainty (one-sided, exact, alpha = {ALPHA})",
+        "",
+        "The lower bound is the accuracy we are 95 % sure of (Clopper–Pearson,",
+        "`murfulu.behnevis.stats`). A target counts as proven at a threshold when",
+        'the bound lies above it — the hypothesis "accuracy ≤ target" is rejected',
+        "at alpha. Valid for the measured sets, the two below; not for a single",
+        "bank reading or a function word, whose confidence is assumed.",
+    ]
+    for name, rows in (
+        ("Several readings (the choice, poets held out)", choice_only),
+        ("Unknown words (the letters, bank words held out)", guessed),
+    ):
+        lines += [
+            "",
+            f"### {name}",
+            "",
+            "| threshold | places | right | accuracy | 95 % sure of at least |",
+            "|---:|---:|---:|---:|---:|",
+        ]
+        for t in FINE:
+            kept = [right for confidence, right in rows if confidence >= t]
+            n, k = len(kept), sum(kept)
+            if not n:
+                continue
+            bound = lower_bound(k, n, ALPHA)
+            lines.append(f"| {t:.2f} | {n:,} | {k:,} | {k / n:.1%} | {bound:.1%} |")
+        lines += [
+            "",
+            "| target | lowest threshold that proves it | places left above it |",
+            "|---:|---:|---:|",
+        ]
+        for target in TARGETS:
+            found = None
+            for t in FINE:
+                kept = [right for confidence, right in rows if confidence >= t]
+                if kept and lower_bound(sum(kept), len(kept), ALPHA) >= target:
+                    found = (t, len(kept) / len(rows))
+                    break
+            lines.append(
+                f"| {target:.0%} | {found[0]:.2f} | {found[1]:.0%} |"
+                if found
+                else f"| {target:.0%} | not reached | — |"
+            )
+    lines += [
+        "",
+        "**100 % cannot be proven by any test.** With every answer right the bound",
+        "is alpha^(1/n): "
+        f"{needed_without_error(0.99, ALPHA):,} right answers in a row prove 99 %, "
+        f"{needed_without_error(0.999, ALPHA):,} prove 99.9 %.",
+        "A text without a single error needs a person to read every word.",
+    ]
+    return lines
 
 
 def held_out(name: str, every: int) -> bool:
@@ -239,6 +310,7 @@ def main(argv: list[str] | None = None) -> int:
             f"| {t:.2f} | {auto:.0%} | {1 - auto:.0%} | "
             f"{(1 - auto) * HAFEZ_WORDS / CHECKED:.0f} |"
         )
+    lines += certainty(choice_only, guessed, counts, confidence_of, total)
     print("\n".join(lines))
     return 0
 

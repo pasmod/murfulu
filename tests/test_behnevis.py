@@ -236,3 +236,13 @@ def test_an_inflected_form_with_a_half_space_is_held_too():
     [word] = model.line("بی‌کسان")
     assert word.source == "inflected"
     assert word.confidence <= model.inflected_cap
+
+
+def test_the_lower_bound_is_the_exact_clopper_pearson_one():
+    from murfulu.behnevis.stats import lower_bound, needed_without_error
+
+    assert lower_bound(9, 10) == pytest.approx(0.6058, abs=1e-4)  # Beta(0.05; 9, 2)
+    assert lower_bound(300, 300) == pytest.approx(0.05 ** (1 / 300))
+    assert lower_bound(300, 300) < 0.991  # 300 of 300 proves only about 99 %
+    assert lower_bound(0, 10) == 0.0
+    assert needed_without_error(0.99) == 299

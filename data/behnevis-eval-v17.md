@@ -80,3 +80,59 @@ by hand they take 104 hours.
 | 0.80 | 48% | 52% | 36 |
 | 0.90 | 28% | 72% | 50 |
 | 0.95 | 10% | 90% | 62 |
+
+## 4. With what certainty (one-sided, exact, alpha = 0.05)
+
+The lower bound is the accuracy we are 95 % sure of (Clopper–Pearson,
+`murfulu.behnevis.stats`). A target counts as proven at a threshold when
+the bound lies above it — the hypothesis "accuracy ≤ target" is rejected
+at alpha. Valid for the measured sets, the two below; not for a single
+bank reading or a function word, whose confidence is assumed.
+
+### Several readings (the choice, poets held out)
+
+| threshold | places | right | accuracy | 95 % sure of at least |
+|---:|---:|---:|---:|---:|
+| 0.50 | 2,165 | 1,798 | 83.0% | 81.7% |
+| 0.60 | 1,923 | 1,671 | 86.9% | 85.6% |
+| 0.70 | 1,726 | 1,548 | 89.7% | 88.4% |
+| 0.80 | 1,492 | 1,371 | 91.9% | 90.6% |
+| 0.85 | 1,423 | 1,319 | 92.7% | 91.5% |
+| 0.90 | 1,183 | 1,109 | 93.7% | 92.5% |
+| 0.93 | 1,027 | 969 | 94.4% | 93.0% |
+| 0.95 | 851 | 824 | 96.8% | 95.7% |
+| 0.97 | 614 | 599 | 97.6% | 96.3% |
+| 0.99 | 319 | 316 | 99.1% | 97.6% |
+
+| target | lowest threshold that proves it | places left above it |
+|---:|---:|---:|
+| 90% | 0.80 | 64% |
+| 95% | 0.95 | 37% |
+| 98% | not reached | — |
+| 99% | not reached | — |
+
+### Unknown words (the letters, bank words held out)
+
+| threshold | places | right | accuracy | 95 % sure of at least |
+|---:|---:|---:|---:|---:|
+| 0.50 | 3,073 | 2,260 | 73.5% | 72.2% |
+| 0.60 | 2,448 | 1,936 | 79.1% | 77.7% |
+| 0.70 | 1,859 | 1,565 | 84.2% | 82.7% |
+| 0.80 | 1,425 | 1,262 | 88.6% | 87.1% |
+| 0.85 | 1,209 | 1,090 | 90.2% | 88.6% |
+| 0.90 | 980 | 891 | 90.9% | 89.3% |
+| 0.93 | 823 | 760 | 92.3% | 90.6% |
+| 0.95 | 722 | 673 | 93.2% | 91.5% |
+| 0.97 | 596 | 558 | 93.6% | 91.7% |
+| 0.99 | 448 | 424 | 94.6% | 92.5% |
+
+| target | lowest threshold that proves it | places left above it |
+|---:|---:|---:|
+| 90% | 0.93 | 15% |
+| 95% | not reached | — |
+| 98% | not reached | — |
+| 99% | not reached | — |
+
+**100 % cannot be proven by any test.** With every answer right the bound
+is alpha^(1/n): 299 right answers in a row prove 99 %, 2,995 prove 99.9 %.
+A text without a single error needs a person to read every word.
