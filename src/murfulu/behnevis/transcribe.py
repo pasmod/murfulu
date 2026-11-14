@@ -154,7 +154,10 @@ class Transcriber:
                 written, spelling, latin, confidence, source, ((latin, confidence),)
             )
 
-        coverage = self.coverage(spelling)
+        # A function word's marked places are its exceptions — که marked where
+        # it is *koh*, در where it is *dorr* — so its coverage is not learned
+        # from them: its prior is its whole uncertainty (2026-11-14).
+        coverage = 1.0 if function else self.coverage(spelling)
         if use_signs and harakat.has_signs(written):
             verdicts = {c: harakat.fits(written, c) for c in candidates}
             confirmed = [c for c, v in verdicts.items() if v is True]

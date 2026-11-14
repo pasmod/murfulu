@@ -264,3 +264,16 @@ def test_poets_without_a_single_error_do_not_prove_perfection():
     from murfulu.behnevis.stats import cluster_lower_bound
 
     assert cluster_lower_bound([(10, 10)] * 7, 0.001) == pytest.approx(0.001 ** (1 / 7))
+
+
+def test_a_function_word_is_not_doubted_by_its_marked_exceptions():
+    model = Transcriber(
+        bank={"که": ("keh",)},
+        letters=LetterModel.train(BANK_PAIRS),
+        choice=ChoiceModel(),
+        functions={"که": ("ke",)},
+        covered={"که": (1, 9)},  # marked mostly where it is another word
+    )
+    [word] = model.line("که")
+    assert (word.latin, word.confidence) == ("ke", pytest.approx(0.9))
+

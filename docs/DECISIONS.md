@@ -86,7 +86,8 @@ uses it yet.
   *Bud*; so بود is not a sure word although it has one reading.
 - *A function word keeps its prior*: editions mark به where it is *bah*,
   almost never where it is *be*, so its marked places are the exceptions;
-  counted, they made به *bah* in Hafez's «به دست آرد».
+  counted, they made به *bah* in Hafez's «به دست آرد». Nor is its coverage
+  learned from them: که is marked where it is *koh*, در where it is *dorr*.
 - *An inflected form is guessed but held at 0.4*, below every threshold
   offered: the letter model learned from headwords and is sure of بخشم as
   *baxšm*, like چشم *čašm*. The inflection analysis decides which words are
