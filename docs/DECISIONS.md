@@ -46,6 +46,11 @@ exported picks learned one pick; «کنار» before «آب» went from *Kanār*
 (three readings alike) to *Kenār* 66 %, and *Kenār* led elsewhere too
 (52 %). One pick moves a word, but not yet out of red.
 
+**Served since 2026-11-14**, after the project lead's OK, together with the
+search suggestions; the server's check passed, the api sends `known` for
+«کنار» in ghazal 3 and answers the window's saved readings (none yet), and
+the served page carries the new panel.
+
 ## 2026-11-14 — every search box suggests while typing
 
 The project lead asked for it in one line: *the search fields all should
