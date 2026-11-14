@@ -70,3 +70,11 @@ jobs:
 
       - name: Build the web image
         run: docker build -t murfulu-web ./web
+
+      - name: Check what the web image lets a browser keep
+        run: |
+          trap 'docker stop web-cache >/dev/null 2>&1 || true' EXIT
+          docker run -d --rm --name web-cache --add-host api:127.0.0.1 \
+            -p 127.0.0.1:8099:80 murfulu-web
+          sleep 2
+          tools/check_web_cache.sh http://127.0.0.1:8099
