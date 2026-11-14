@@ -56,6 +56,13 @@ support auto suggest*. Settled:
 Not done: the query builder's own boxes (a pattern's letters, counts and
 centuries) are fragments of a query, not searches, and suggest nothing.
 
+**Served since 2026-11-14**, after the project lead's OK: public `main`
+`85e3c98`, deployed from its own worktree; the server's check passed, and on
+the server `/suggest/words` and `/suggest/texts` answered in 30 to 90ms (the
+first word request after the restart took 4.3 s, building the bank's list
+once), and the served bundle carries the combobox. Not viewed logged in,
+because of the site password.
+
 ## 2026-11-14 — a pick teaches the model, a typed reading goes to karbon
 
 The project lead's question: is a reading not a matter of context? It is,
