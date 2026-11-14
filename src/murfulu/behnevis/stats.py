@@ -94,4 +94,10 @@ def cluster_lower_bound(
             total += n
         shares.append(right / total if total else 0.0)
     shares.sort()
-    return shares[min(len(shares) - 1, int(alpha * draws))]
+    drawn = shares[min(len(shares) - 1, int(alpha * draws))]
+    # Never more certain than the same answers taken one by one: clustering
+    # only widens a bound. This also stops a sample without a single error
+    # from "proving" 100 % (the review of 2026-11-14).
+    right = sum(k for k, _ in groups)
+    total = sum(n for _, n in groups)
+    return min(drawn, lower_bound(right, total, alpha))

@@ -257,3 +257,10 @@ def test_poets_that_differ_widen_the_bound():
     assert cluster_lower_bound(unlike) < 0.9
     # the same 180 of 200, as independent answers, claim more certainty
     assert cluster_lower_bound(unlike, 0.05) < lower_bound(180, 200, 0.05) + 0.02
+
+
+def test_poets_without_a_single_error_do_not_prove_perfection():
+    from murfulu.behnevis.stats import cluster_lower_bound
+
+    assert cluster_lower_bound([(10, 10)] * 7, 0.001) < 1.0
+
