@@ -18,9 +18,9 @@ Made by `tools/evaluate_behnevis.py`; the model by `tools/build_behnevis.py`.
 | threshold | words at or above | of those right |
 |---:|---:|---:|
 | 0.00 | 100% | 40.7% |
-| 0.50 | 42% | 54.0% |
-| 0.60 | 34% | 57.6% |
-| 0.70 | 30% | 60.0% |
+| 0.50 | 44% | 54.2% |
+| 0.60 | 35% | 57.8% |
+| 0.70 | 31% | 60.2% |
 | 0.80 | 25% | 61.9% |
 | 0.90 | 20% | 63.5% |
 | 0.95 | 9% | 70.4% |

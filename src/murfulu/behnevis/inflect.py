@@ -15,7 +15,7 @@ threshold. A stem that ends in *ow* — رو *row*, شو *šow*, بو *bow* — 
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 from murfulu.corpus.inflection import Analyser, Analysis
 from murfulu.corpus.wordtypes import normalise
@@ -196,3 +196,36 @@ class Inflector:
                 joined = _join(stem, ending)
             out += [prefix + one if prefix else one for one in joined]
         return out
+
+    def measure(
+        self,
+        marked: Iterable[dict[str, str]],
+        known: Callable[[str], bool],
+    ) -> dict[str, tuple[int, int]]:
+        """Per pattern family: how often its one built reading fits the signs.
+
+        ``marked`` are marked words (``written``, ``spelling``) as
+        ``tools/build_behnevis.py`` writes them; a spelling ``known`` already
+        reads (the bank, a function word) is passed over. Shared by the build
+        and the held-out evaluation, so both measure the same thing.
+        """
+        from murfulu.search import harakat
+
+        fitted: dict[str, list[int]] = {}
+        for m in marked:
+            if known(m["spelling"]):
+                continue
+            forms = {normalise(m["written"]).strip(ZWNJ), m["spelling"]}
+            built: dict[str, str] = {}
+            for form in sorted(forms):
+                for latin, kind in self.analyses(form):
+                    built.setdefault(latin, kind)
+            if len(built) != 1:
+                continue
+            ((latin, kind),) = built.items()
+            verdict = harakat.fits(m["written"], latin)
+            if verdict is not None:
+                tally = fitted.setdefault(kind, [0, 0])
+                tally[0] += verdict
+                tally[1] += 1
+        return {k: (v[0], v[1]) for k, v in fitted.items()}

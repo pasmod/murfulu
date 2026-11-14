@@ -240,6 +240,11 @@ def main(argv: list[str] | None = None) -> int:
         covered={k: (v[0], v[1]) for k, v in covered.items()},
         inflection=inflection,
         inflector=inflector,
+        # Measured on the training poets only, as the build measures it on all.
+        inflected_fit=inflector.measure(
+            (m for m in marked if not held_out(m["author"], 5)),
+            lambda spelling: bool(bank.get(spelling) or model.functions.get(spelling)),
+        ),
     )
     results = []
     for m in test:

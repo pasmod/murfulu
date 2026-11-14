@@ -41,7 +41,6 @@ from murfulu.behnevis.transcribe import (
     load_function_readings,
 )
 from murfulu.corpus.inflection import Analyser, held_from
-from murfulu.corpus.wordtypes import normalise
 from murfulu.lexicon.store import Lexicon
 from murfulu.search import harakat
 from murfulu.search.indices import connect
@@ -186,25 +185,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     # How often a pattern family's one built reading fits the signs, over the
     # marked words that neither the bank nor the function list reads.
-    fitted: dict[str, list[int]] = {}
     with (DATA / f"behnevis-marked-{version}.jsonl").open(encoding="utf-8") as lines:
-        for line in lines:
-            m = json.loads(line)
-            if bank.get(m["spelling"]) or functions.get(m["spelling"]):
-                continue
-            forms = {normalise(m["written"]).strip("\u200c"), m["spelling"]}
-            built: dict[str, str] = {}
-            for form in sorted(forms):
-                for latin, kind in inflector.analyses(form):
-                    built.setdefault(latin, kind)
-            if len(built) != 1:
-                continue
-            ((latin, kind),) = built.items()
-            verdict = harakat.fits(m["written"], latin)
-            if verdict is not None:
-                tally = fitted.setdefault(kind, [0, 0])
-                tally[0] += verdict
-                tally[1] += 1
+        fitted = inflector.measure(
+            (json.loads(line) for line in lines),
+            lambda spelling: bool(bank.get(spelling) or functions.get(spelling)),
+        )
     print(
         "inflected, one built reading, fits the signs:",
         {k: f"{v[0]}/{v[1]}" for k, v in sorted(fitted.items())},
@@ -215,7 +200,7 @@ def main(argv: list[str] | None = None) -> int:
         choice=ChoiceModel.train(answered),
         functions=functions,
         covered={k: (v[0], v[1]) for k, v in covered.items()},
-        inflected_fit={k: (v[0], v[1]) for k, v in fitted.items()},
+        inflected_fit=fitted,
     )
     transcriber.save(
         DATA / f"behnevis-{version}.json",
