@@ -198,3 +198,25 @@ def test_a_reading_the_signs_cannot_judge_is_not_confirmed_by_them():
 
 def test_a_tie_goes_to_the_alphabetically_first_reading():
     assert ranked({"tork": 0.5, "Tark": 0.5})[0][0] == "Tark"
+
+
+def test_a_function_word_keeps_its_prior_whatever_its_marked_places_say():
+    model = ChoiceModel.train([Answered("به", "bah")] * 9)
+    probs = model.probabilities("به", ["be", "bah"], function_reading="be")
+    assert probs["be"] == pytest.approx(0.9)
+
+
+def test_an_inflected_form_is_guessed_but_held_below_the_threshold():
+    from murfulu.corpus.inflection import Analyser, Held
+
+    pairs = [("بخش", "baxš"), ("چشم", "čašm"), ("خشم", "xašm"), ("پشم", "pašm")]
+    model = Transcriber(
+        bank=bank_from(pairs),
+        letters=LetterModel.train(pairs),
+        choice=ChoiceModel(),
+        functions={},
+        inflection=Analyser(Held.of([], [], ["بخش"])),
+    )
+    [word] = model.line("بخشم")
+    assert word.source == "inflected"
+    assert word.confidence <= model.inflected_cap

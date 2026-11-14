@@ -14,10 +14,10 @@ the threshold decides how much a person checks. From `data/behnevis-eval-v17.md`
 
 | threshold | words taken as read | checked by a person | hours for Hafez's ghazals |
 |---:|---:|---:|---:|
-| 0.5 | 69 % | 31 % | 22 |
-| 0.7 | 56 % | 44 % | 31 |
-| 0.8 | 49 % | 51 % | 36 |
-| 0.9 | 31 % | 69 % | 48 |
+| 0.5 | 62 % | 38 % | 26 |
+| 0.7 | 52 % | 48 % | 33 |
+| 0.8 | 48 % | 52 % | 36 |
+| 0.9 | 28 % | 72 % | 50 |
 
 By hand the ghazals take about 104 hours. The hours assume 600 words an hour
 by hand and 900 checked proposals an hour; neither is measured. Measured:
@@ -25,6 +25,7 @@ where several readings compete, 0.8 gives 92 % right and 0.9 94 %; for an
 unknown word 88.5 % and 91 %. Not measurable from the corpus: how often a single
 bank reading or a function word's reading is right — both start from an
 assumed 0.9, which is why the share drops sharply between 0.8 and 0.9.
+Inflected forms are held at 0.4 until they have readings of their own.
 
 **For the project lead**: the threshold. **Ours**: 0.8 to start, and the
 linguist's timed sample of 500 words (L41) to set it from measurement.

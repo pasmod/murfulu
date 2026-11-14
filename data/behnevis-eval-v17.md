@@ -6,48 +6,50 @@ Made by `tools/evaluate_behnevis.py`; the model by `tools/build_behnevis.py`.
 
 | source | share of running words |
 |---|---:|
-| letters | 33.0% |
-| function | 26.5% |
+| function | 28.8% |
 | bank | 24.3% |
-| choice | 16.2% |
+| letters | 22.5% |
+| choice | 13.9% |
+| inflected | 10.6% |
 | none | 0.1% |
 
 ## 1. Marked words, poets held out (21,899 words, signs hidden)
 
 | threshold | words at or above | of those right |
 |---:|---:|---:|
-| 0.00 | 100% | 39.4% |
-| 0.50 | 44% | 54.6% |
-| 0.60 | 35% | 58.9% |
-| 0.70 | 30% | 62.4% |
-| 0.80 | 23% | 66.0% |
-| 0.90 | 17% | 69.2% |
-| 0.95 | 10% | 70.3% |
+| 0.00 | 100% | 39.3% |
+| 0.50 | 39% | 56.1% |
+| 0.60 | 31% | 60.5% |
+| 0.70 | 27% | 63.6% |
+| 0.80 | 22% | 66.6% |
+| 0.90 | 16% | 70.5% |
+| 0.95 | 9% | 71.6% |
 
 By source, all confidences:
 
 | source | words | right |
 |---|---:|---:|
 | bank | 3,588 | 38.4% |
-| choice | 4,051 | 59.4% |
-| function | 918 | 43.8% |
-| letters | 13,340 | 33.3% |
+| choice | 3,930 | 60.1% |
+| function | 1,039 | 42.1% |
+| inflected | 2,442 | 38.9% |
+| letters | 10,898 | 32.0% |
 | none | 2 | 0.0% |
 
-## 1b. Several readings: the choice alone, poets held out (2,510)
+## 1b. Several readings: the choice alone, poets held out (2,318)
 
 Places where the text's signs leave one of the bank's readings; the model
 chooses without the signs. Right means it chose that one.
 
 | threshold | places at or above | of those right |
 |---:|---:|---:|
-| 0.00 | 100% | 81.4% |
-| 0.50 | 94% | 83.0% |
-| 0.60 | 84% | 86.6% |
-| 0.70 | 75% | 90.1% |
-| 0.80 | 65% | 92.2% |
-| 0.90 | 52% | 93.9% |
-| 0.95 | 37% | 96.9% |
+| 0.00 | 100% | 81.2% |
+| 0.50 | 93% | 83.0% |
+| 0.60 | 83% | 86.9% |
+| 0.70 | 74% | 89.7% |
+| 0.80 | 64% | 91.9% |
+| 0.90 | 51% | 93.7% |
+| 0.95 | 37% | 96.8% |
 
 ## 2. Unknown words: the letter model on held-out bank words (5,519)
 
@@ -72,9 +74,9 @@ by hand they take 104 hours.
 
 | threshold | taken as read | checked by a person | hours for Hafez |
 |---:|---:|---:|---:|
-| 0.50 | 69% | 31% | 22 |
-| 0.60 | 61% | 39% | 27 |
-| 0.70 | 56% | 44% | 31 |
-| 0.80 | 49% | 51% | 36 |
-| 0.90 | 31% | 69% | 48 |
-| 0.95 | 13% | 87% | 60 |
+| 0.50 | 62% | 38% | 26 |
+| 0.60 | 56% | 44% | 30 |
+| 0.70 | 52% | 48% | 33 |
+| 0.80 | 48% | 52% | 36 |
+| 0.90 | 28% | 72% | 50 |
+| 0.95 | 10% | 90% | 62 |

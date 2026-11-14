@@ -84,6 +84,15 @@ uses it yet.
   its marked places where any of its candidates fits the signs. بود is
   marked «بُوَد», *bovad*, again and again, and the bank holds only the noun
   *Bud*; so بود is not a sure word although it has one reading.
+- *A function word keeps its prior*: editions mark به where it is *bah*,
+  almost never where it is *be*, so its marked places are the exceptions;
+  counted, they made به *bah* in Hafez's «به دست آرد».
+- *An inflected form is guessed but held at 0.4*, below every threshold
+  offered: the letter model learned from headwords and is sure of بخشم as
+  *baxšm*, like چشم *čašm*. The inflection analysis decides which words are
+  inflected, and it over-reads (شیرازی, بخارا), so some sure words wait for a
+  person too — until the bank's stems give inflected forms readings of
+  their own.
 - *A word's own signs narrow its candidates*; signs that fit none of them send
   the word to a person.
 - *The sign check reads Behnevis's mark for ع and ء* (*tabˈ*): without it, a
@@ -97,7 +106,7 @@ uses it yet.
   replaces them (OPEN_QUESTIONS S47).
 
 **Measured, held out**: among several readings, at confidence 0.8 or more
-(65 % of places) 92 % right, at 0.9 (52 %) 94 %; an unknown word, at 0.8
+(64 % of places) 92 % right, at 0.9 (51 %) 94 %; an unknown word, at 0.8
 (26 %) 88.5 %, at 0.9 (18 %) 91 %. Marked words with their signs hidden come
 out 39 % right overall — pessimistic, because editions mark the hard words.
 **The threshold is the project lead's** (S47).

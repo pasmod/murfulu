@@ -94,13 +94,15 @@ class ChoiceModel:
         if len(unique) == 1:
             return {unique[0]: 1.0}
         if function_reading in unique:
+            # A function word keeps its prior: editions mark به where it is
+            # *bah*, almost never where it is *be*, so its marked places are
+            # the exceptions, and counting them made به *bah* (2026-11-14).
             rest = (1 - self.function_prior) / (len(unique) - 1)
-            prior = {
+            return {
                 c: self.function_prior if c == function_reading else rest
                 for c in unique
             }
-        else:
-            prior = {c: 1 / len(unique) for c in unique}
+        prior = {c: 1 / len(unique) for c in unique}
 
         seen = self.alone.get(spelling, Counter())
         total = sum(seen[c] for c in unique)

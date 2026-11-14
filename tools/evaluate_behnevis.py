@@ -30,6 +30,7 @@ from pathlib import Path
 from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
 from murfulu.behnevis.letters import LetterModel, latin_key
 from murfulu.behnevis.transcribe import Transcriber, bank_from, key
+from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
 from murfulu.search import harakat
 
@@ -54,6 +55,7 @@ def main(argv: list[str] | None = None) -> int:
     version = parser.parse_args(argv).version
 
     with Lexicon.open() as lexicon:
+        inflection = Analyser(held_from(lexicon))
         pairs = [
             (r.spelling_fa, latin)
             for r in lexicon.all_readings()
@@ -61,7 +63,7 @@ def main(argv: list[str] | None = None) -> int:
             if latin
         ]
     bank = bank_from(pairs)
-    model = Transcriber.load(DATA / f"behnevis-{version}.json", bank)
+    model = Transcriber.load(DATA / f"behnevis-{version}.json", bank, inflection)
     marked = [
         json.loads(line)
         for line in (DATA / f"behnevis-marked-{version}.jsonl").open(encoding="utf-8")
@@ -98,6 +100,7 @@ def main(argv: list[str] | None = None) -> int:
         letters=model.letters,
         choice=ChoiceModel.train(train_answered),
         covered={k: (v[0], v[1]) for k, v in covered.items()},
+        inflection=inflection,
     )
     results = []
     for m in test:
@@ -112,7 +115,9 @@ def main(argv: list[str] | None = None) -> int:
     # 1b. the choice alone: answered places of held-out poets -----------------
     choice_only = []
     for a in answered:
-        if not held_out(a.author, 5):
+        # A function word's marked places are its exceptions (به marked where
+        # it is *bah*), and the model keeps its prior for it: not measured here.
+        if not held_out(a.author, 5) or a.spelling in model.functions:
             continue
         candidates = list(
             dict.fromkeys(
