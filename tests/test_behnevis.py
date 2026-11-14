@@ -220,3 +220,19 @@ def test_an_inflected_form_is_guessed_but_held_below_the_threshold():
     [word] = model.line("بخشم")
     assert word.source == "inflected"
     assert word.confidence <= model.inflected_cap
+
+
+def test_an_inflected_form_with_a_half_space_is_held_too():
+    from murfulu.corpus.inflection import Analyser, Held
+
+    pairs = [("بی‌کس", "bikas"), ("کسان", "Kasān"), ("بیکس", "bikas")]
+    model = Transcriber(
+        bank={},
+        letters=LetterModel.train(pairs),
+        choice=ChoiceModel(),
+        functions={},
+        inflection=Analyser(Held.of(["بی‌کس"], [], [])),
+    )
+    [word] = model.line("بی‌کسان")
+    assert word.source == "inflected"
+    assert word.confidence <= model.inflected_cap

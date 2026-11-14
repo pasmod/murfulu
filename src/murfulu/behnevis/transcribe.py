@@ -142,7 +142,11 @@ class Transcriber:
                 return Word(written, spelling, None, 0.0, NONE)
             latin, confidence = guessed
             source = LETTERS
-            if self.inflection is not None and self.inflection.best(spelling):
+            # The analyser keeps half-spaces (بی‌کسان); the key drops them.
+            forms = {normalise(written).strip(ZWNJ), spelling}
+            if self.inflection is not None and any(
+                self.inflection.best(form) for form in forms
+            ):
                 source, confidence = INFLECTED, min(confidence, self.inflected_cap)
             if use_signs and harakat.fits(written, latin) is False:
                 confidence = 0.0  # the text's own signs rule the guess out
