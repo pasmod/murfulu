@@ -27,6 +27,10 @@ spellings are 10.2 % of all words, the 300 most frequent 15.1 %, the 1,000
 most frequent 21.6 %: a reading decided once for each, as for the function
 words, takes away more than half of the red (FOR_THE_LINGUIST L42).
 
+**Served since 2026-11-14**, after the project lead's OK; the server's check
+passed. On the server, Hafez's ghazal 3 now has 91 sure words, 22 mid
+(before: 7) and 46 unsure (before: 50); its و inside a verse half is *o*.
+
 ## 2026-11-14 — the verses under a built word's corpus figures, and index.html asked again on every visit
 
 **The design, as set for the task**: wherever the build screen's panel shows

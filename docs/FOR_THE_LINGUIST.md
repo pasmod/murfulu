@@ -2799,3 +2799,26 @@ unconfirmed: the levels «مطمئن»، «کمابیش»، «نامطمئن»; 
 است»; «یا خوانش درست را بنویسید»; «ثبت پیشنهاد». What he picks or types there
 is gathered for karbon and changes nothing in the bank.
 
+## L42. A reading for each of the most frequent words still marked unsure
+
+Opened 2026-11-14 (DECISIONS 2026-11-14, *fewer red words*); **not
+blocking**, but the largest lever there is. 36.8 % of the corpus's running
+words are still marked unsure on the reading screen, and they are
+concentrated: the 300 most frequent spellings among them are 15.1 % of all
+words, the 1,000 most frequent 21.6 %. Among the first: است, بود, سر, خود,
+کرد, کند, روی, شود, جهان, خویش, الله, گل.
+
+The project lead hands him the 300 as a list: each with the bank's readings,
+the readings built from its stems, the letter model's guess, and a proposal
+(ours for the first 70, the program's for the rest). **What he writes as the
+right reading becomes the word's default**, as for the function words (L41):
+offered first, at 0.9, and the others still offered beside it. A second
+common reading goes in its own column.
+
+### The question
+
+1. The default reading of each of the 300, where ours is wrong.
+2. For spellings where no single reading dominates (باد *bād* or *Bād*, کی
+   *key* or *ki*), whether a default helps at all, or the word should stay
+   unsure.
+
