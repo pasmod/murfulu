@@ -35,6 +35,10 @@ words where none fits are mostly Arabic quotations (مِن is not *man*),
 classical forms (بُوَد, *bovad*) and readings the bank lacks (رَه, کُه, مُهر):
 FOR_THE_LINGUIST L40, UPSTREAM B10.
 
+**Served since 2026-11-14**, after the project lead's OK to deploy; the
+server's check passed and its Hafez ghazal 3 carries pale readings for
+«تُرکِ» (*Tarak*, *Tark*), «تُرکان» and «دُر».
+
 ## 2026-11-13 — the reading screen: direction A, every reading equal, a wrong reading goes to the feedback store
 
 **The project lead chose direction A** of three drafts (each word over its
