@@ -34,7 +34,9 @@ services:
     mem_limit: 3g
 
   api:
-    mem_limit: 1g
+    # 1.5g since 2026-11-14: the automatic Behnevis model adds about 370 MB
+    # to the 460 MB the api used (measured on the Mac), one worker.
+    mem_limit: 1536m
 
   web:
     mem_limit: 128m
