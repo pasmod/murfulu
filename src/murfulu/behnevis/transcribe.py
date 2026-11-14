@@ -176,11 +176,21 @@ class Transcriber:
                 # picks move the rule's reading, as they move any function
                 # word's (the review of 2026-11-14).
                 probs = self.choice.probabilities(
-                    spelling, [said, other], before, after, function_reading=said
+                    spelling,
+                    [said, other],
+                    before,
+                    after,
+                    function_reading=said,
+                    function_prior=self.conjunction_confidence,
                 )
-                order = tuple(ranked(probs))
+                picked: tuple[tuple[str, float | None], ...] = tuple(ranked(probs))
                 return Word(
-                    written, spelling, order[0][0], order[0][1], FUNCTION, order
+                    written,
+                    spelling,
+                    picked[0][0],
+                    probs[picked[0][0]],
+                    FUNCTION,
+                    picked,
                 )
             sure = self.conjunction_confidence
             return Word(

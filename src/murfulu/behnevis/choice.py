@@ -106,8 +106,13 @@ class ChoiceModel:
         before: str | None = None,
         after: str | None = None,
         function_reading: str | None = None,
+        function_prior: float | None = None,
     ) -> dict[str, float]:
-        """Each candidate's probability for this spelling between these neighbours."""
+        """Each candidate's probability for this spelling between these neighbours.
+
+        ``function_prior`` overrides the model's for one call: the verse rule
+        for و starts at its own, lower confidence.
+        """
         unique = list(dict.fromkeys(candidates))
         if not unique:
             return {}
@@ -118,11 +123,9 @@ class ChoiceModel:
             # they mark به where it is *bah*, almost never where it is *be*,
             # so its marked places are the exceptions, and counting them made
             # به *bah* (2026-11-14). People's picks still move it, below.
-            rest = (1 - self.function_prior) / (len(unique) - 1)
-            probs = {
-                c: self.function_prior if c == function_reading else rest
-                for c in unique
-            }
+            start = self.function_prior if function_prior is None else function_prior
+            rest = (1 - start) / (len(unique) - 1)
+            probs = {c: start if c == function_reading else rest for c in unique}
         else:
             prior = {c: 1 / len(unique) for c in unique}
             seen = self.alone.get(spelling, Counter())

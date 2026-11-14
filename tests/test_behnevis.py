@@ -467,3 +467,15 @@ def test_picks_move_the_verse_rule_for_va_too():
     )
     word = model.line("نگشود و نگشاید", verse=True)[1]
     assert word.latin == "va"
+
+
+def test_one_pick_does_not_lift_the_va_rule_to_sure():
+    pairs = [("نگشود", "nagošud"), ("نگشاید", "nagošāyad"), ("رفت", "raft")]
+    model = Transcriber(
+        bank=bank_from(pairs),
+        letters=LetterModel.train(pairs),
+        choice=ChoiceModel.train([Answered("و", "o", by_person=True)]),
+        functions={"و": ("va", "o")},
+    )
+    word = model.line("رفت و رفت", verse=True)[1]
+    assert word.latin == "o" and word.confidence < 0.9
