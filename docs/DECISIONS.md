@@ -2,6 +2,70 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-14 — every text of a spelling on the word page
+
+**The design, as set for the task**: the six citations stay one line per
+author — many hits in one poem are often a rhyme. Below them a control «همهٔ شواهد» with the total opens, on
+the same page, a paged list of every text holding the spelling, each with
+author, work, title and every line holding it, the word marked, each line
+linked to its unit on the reading screen as the citations are. A filter by
+author, authors listed with their counts, most first. A stable, documented
+order. It must work for و, که, از, را (100,000+ texts) with no timeout and
+page past Elasticsearch's 10,000-hit window. Its counts agree with the word's
+or the page says why in one sentence. The lines are evidence for the
+spelling, not for one reading, and the page says so. No new visual language.
+Built on the branch `word-evidence`, not deployed (`GET /evidence`,
+`search/evidence.py`, `search/evidence_lines.py`, `screens/word/AllEvidence.tsx`;
+FRONTEND, *Every text of a spelling*).
+
+**Decided here, under the working rule:**
+
+- *The order*: authors by how many of the list's texts are theirs, ties by
+  name (code point order); within an author `documents.order` — Ganjoor's
+  poem id, the order the reading screen lists an author's texts in — then the
+  document id. Twenty texts to a page, paged by number.
+- *Paged per author, never past the window.* One terms aggregation gives every
+  author's count, so which author the n-th text belongs to, and how far into
+  their texts, is arithmetic; a page asks each author it covers for a slice
+  with `from`/`size`. An author with more texts than the window is walked
+  with `search_after` — none in v17, where the author with the most texts of
+  all has 9,874, and **each deep page of such an author walks from the start
+  again** (a cost, not a fault; OPEN_QUESTIONS S46).
+- *The list's counts are the index's, and differ from the counting's by a few
+  texts* (FINDINGS 2026-11-14): the six citations already come from the
+  same `match_phrase`, so the two find the same texts — the citations skip a
+  text with no line the counting credits, where the list keeps it, marked.
+  Exact agreement with the counting would need every text read on each
+  request, or a field holding each text's counted spellings (S45). The page
+  says why in one sentence where the two differ.
+- *Every line is the counting's*: found with `wordtypes.tokenise`, so a line
+  shown is a line counted. A text the index found only through a letter it
+  folds — امد for آمد — is shown with those lines and the sentence «این متن
+  واژه را تنها با املایی نزدیک دارد که شمارش جدا می‌شمارد.»; a
+  text with no line the counting credits at all says so and shows none.
+  Dropping them would leave the author counts disagreeing with the list.
+- *Counted in texts and authors*, not poems and poets (FRONTEND, 2026-11-13),
+  though the design said poems.
+- *The lines are counted only for a list of at most 1,000 texts*, and once per
+  list (`count_lines`), not on every page: counting reads every text, 0.55 s
+  at 1,000 and the whole corpus for و. Above that the card says the lines of so
+  long a list are not counted; every text still gives its own count.
+- *The word is marked as the reading screen marks it* (an underline in the
+  accent, in a `<mark>`): the six citations mark nothing, and they stay as
+  they are.
+- *A text shows six of its lines and the rest on a press*; all are in the
+  answer (the heaviest page measured, Ferdowsi's texts for و, is 162 KB).
+- *A stored line with a line break in it is two lines*, as `text_fa` has it
+  (the Codex review of 2026-11-14).
+- *The total shows before the list is opened*: the card asks for the counts
+  alone (`size=0`) when the page loads.
+- *A select, not chips*, for the authors: a common word is in 237 authors'
+  texts.
+- *The dispersion chart was not made a filter*: it has bars for centuries
+  only, no author bars, and the design allowed only that.
+- *Texts with no author* are one more entry, «بی‌نام», chosen with
+  `unnamed=1` (none in v17).
+
 ## 2026-11-14 — a reading the word's own harakat rule out is shown paler
 
 Was OPEN_QUESTIONS S44. **The project lead chose the middle way of three**

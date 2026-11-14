@@ -1599,6 +1599,28 @@ queue was written, which is the argument for running it by hand again.
       the vectors have nothing. It is a stand-in, not a rival: wherever the
       semantic score *can* speak it remains the better measure.
 
+- [x] **9.16 Every text of a spelling on the word page.** DONE 2026-11-14 on
+      the branch `word-evidence`, not deployed. Under the six citations a card
+      «همهٔ شواهد» gives the totals and opens every text holding the spelling,
+      twenty to a page, each with every line holding it, the word marked and
+      each line opening the reading screen at its unit; a select narrows it to
+      one author. `GET /evidence` (DECISIONS 2026-11-14, FRONTEND *Every text
+      of a spelling*). 23 API tests (two against a real cluster, on an index
+      of their own), 12 component tests, 3 browser tests at both widths.
+      **Measured** on the Mac (API run locally, the stack's Elasticsearch
+      through a forward), median of seven, warm:
+
+      | spelling | texts | counts | first page | last page | one author |
+      |---|---|---|---|---|---|
+      | و | 101,972 | 3 ms | 4 ms | 19 ms | 2 ms |
+      | از | 105,047 | 3 ms | 5 ms | 7 ms | 2 ms |
+      | رفتند | 1,143 | 2 ms | 16 ms | 11 ms | 133 ms (with its lines) |
+      | می‌رفت | 399 | 248 ms (with its 585 lines) | 8 ms | 36 ms | 105 ms |
+      | روشنا | 21 | 14 ms | 31 ms | 8 ms | 7 ms |
+
+      Counting the lines is the only slow part, and only up to 1,000 texts:
+      0.55 s for بخود at exactly 1,000. A page is 7–37 KB; the heaviest seen,
+      Ferdowsi's texts for و, 162 KB. The last page of و is page 5,099.
 - [x] **9.15 The reading screen.** DONE 2026-11-13 on the branch `texts`,
       served since 2026-11-14 with corpus v17. `/texts` opens any text of the corpus by author, work or
       title, or from a citation straight at its line, and shows each word over

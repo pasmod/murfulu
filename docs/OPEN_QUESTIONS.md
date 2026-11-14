@@ -5,6 +5,28 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-14 (every text of a spelling)
+
+### S45. Should the documents carry their counted spellings, so the list and the count agree?
+
+The word page's full list and its six citations find texts with the search
+index, which folds آ/ا, ۀ/ه, ى/ی and keeps a trailing ZWNJ; the word's
+figures are the counting's. They differ by a few texts a word (FINDINGS
+2026-11-14: رفت 10,641 against 10,682) and the page says so. A `spellings`
+keyword field on `documents`, written at ingest from `wordtypes.tokenise`,
+would make both exact — the list, the per-author counts and the citations —
+and a `term` query on it is cheaper than `match_phrase`. It needs a mapping
+change and a corpus rebuild. **For the project lead**: with the next rebuild,
+or not at all?
+
+### S46. An author with more than 10,000 texts is paged by walking from the start
+
+`GET /evidence` pages each author with `from`/`size` and walks with
+`search_after` past Elasticsearch's 10,000 window — from the author's first
+text on every request, so reading such an author to the end costs the square
+of its length. No author in v17 has more than 9,874 texts, so nothing walks
+today. A cursor carried in the address would fix it if a corpus ever needs it.
+
 ## Opened 2026-11-13 (corpus v17, the texts' units)
 
 ### S41. Rebuild the semantic vectors and suspect claims on v17's text?

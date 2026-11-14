@@ -5,6 +5,40 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-14 (session 31) — the search index and the counting disagree on a few texts per word
+
+Building the word page's full list of evidence (DECISIONS 2026-11-14) put the
+texts the search index finds for a spelling (`match_phrase` on `text_fa`, the
+query behind the six citations) beside the word's `doc_count`, which the
+counting (`wordtypes.tokenise`) produced. Measured on v17:
+
+| spelling | index | counted | index texts with no counted line |
+|---|---|---|---|
+| و | 101,972 | 101,973 | — |
+| رفت | 10,641 | 10,682 | 0 |
+| آمد | 18,985 | 18,966 | 23 |
+| خانه | 12,528 | 12,455 | 120 |
+| علی | 6,235 | 6,362 | 81 |
+| آن | 63,928 | 63,447 | 534 |
+
+**Two causes, pulling opposite ways.** The index folds letters the counting
+keeps apart — آ and ا, ۀ and ه, ى and ی (Lucene's Arabic and Persian
+normalisation) — so it also finds texts that write امد, خانۀ, على or an
+Arabic اَنْ: Hafez 2116 for آن, Saeb 53641 for خانه, Nezami 9212 for آمد. And
+it keeps a trailing ZWNJ inside the token, which the counting strips: **all 41
+texts the index misses for رفت write رفت‌**, and 41 is exactly the
+difference. So the index's count is neither a superset nor a subset.
+
+**What it means.** The six citations have always come from the index, and so
+does the new list; the word's figures come from the counting. Where the two
+differ the list says why. A text the index finds only through a folded letter
+is evidence for a neighbouring spelling, shown as such. Exact agreement would
+take a keyword field holding each text's counted spellings, filled at ingest
+(OPEN_QUESTIONS S45). The ZWNJ also means a citation can never be found for a
+text whose only occurrence is written with one.
+
+---
+
 ## 2026-11-14 (session 30) — the text's own harakat against the bank's readings
 
 **What we looked at.** Every counted word of corpus v17 written with a vowel

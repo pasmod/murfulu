@@ -24,7 +24,11 @@ Everything known about one word.
 - statistics: total, distinct documents, distinct authors, first and last date
 - **dispersion chart** — occurrences by century and by author. This is what
   separates "a real word" from "one poet's rhyme"
-- citations: the actual lines, with author and poem, clickable through
+- citations: the actual lines, with author and poem, clickable through — six,
+  one per author, so a rhyme repeated in one poem does not fill the list
+- **every text of the spelling** («همهٔ شواهد», 2026-11-14), under the six:
+  every text the corpus holds it in, each with every line holding it, paged
+  and filtered by author — see *Every text of a spelling* below
 - word family: other words sharing the stem
 - **what can be built from this** → link into the Build screen
 
@@ -439,3 +443,36 @@ numbered, because it was never counted.
 **Unconfirmed**: the control's wording, «؟», the kind labels (بیت، مصراع، نثر،
 یادداشت سرچشمه) and the sentences of the legend and the panel are ours until
 the linguist rules (FOR_THE_LINGUIST L39).
+
+## Every text of a spelling (the word page, 2026-11-14)
+
+**All of the evidence, under the six voices.** The six citations stay one line
+per author. Below them a card «همهٔ شواهد» says, with the corpus version, how
+many texts and named authors hold the spelling — and how many lines, for a
+list of at most 1,000 texts — that
+the lines are evidence for the spelling and not for one of its readings, and
+opens on a press («نشان دادن همهٔ شواهد») to every text, twenty to a page:
+author — work — title — century (n lines), then every line holding the
+spelling, the word underlined in the accent as the reading screen marks it,
+each line with the citations' «در متن ←». A text with more than six such lines
+shows six and the rest on a press. A select chooses one author, most texts
+first, each with their count. Everything is in the address: `?all=1`,
+`author=`, `unnamed=1` (texts with no author), `page=` from 1.
+
+**Order**: authors by how many of the texts are theirs, ties by name; within
+an author Ganjoor's own order (`documents.order`, the order the reading screen
+lists them in). The same on every reload, and paged by number.
+
+**Two counts, one sentence.** The list is the search index's and the word's
+figures are the counting's; they differ by a few texts (FINDINGS 2026-11-14),
+and where they do the list says so once: «این فهرست … متن دارد و شمارش بالا …،
+چون جست‌وجوی متن‌ها چند حرف را که شمارش جدا می‌شمارد یکی می‌گیرد، مانند آ و ا
+یا ۀ و ه، و چند واژه را جور دیگری از هم جدا می‌کند.» A text the index found
+only through such a letter says «این متن واژه را تنها با املایی نزدیک دارد که
+شمارش جدا می‌شمارد.» and marks the word as written there; its «در متن ←» names that spelling, so
+the reading screen marks it too.
+
+**A line count beside a Persian numeral is in brackets**, «(۱ سطر)», never
+after a middle dot: «۱ · سطر» reads as ten lines, the dot being a Persian zero.
+
+**Unconfirmed**: the sentences are ours, in the reading screen's tone.
