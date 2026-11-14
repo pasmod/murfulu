@@ -89,6 +89,10 @@ def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
     neighbours. A note's lines carry no words and are passed over.
     """
     for unit in units:
+        # Verse or prose decides how و is read; a unit of unknown kind says nothing.
+        verse = {"couplet": True, "half": True, "prose": False}.get(
+            unit.get("kind") or ""
+        )
         for line in unit.get("lines") or []:
             words = [w for w in line.get("words") or [] if w.get("s")]
             keys = [key(w["s"]) for w in words]
@@ -98,6 +102,8 @@ def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
                     keys[i],
                     keys[i - 1] if i else None,
                     keys[i + 1] if i + 1 < len(words) else None,
+                    verse=verse,
+                    first=i == 0,
                 )
                 if read.latin is None:
                     continue

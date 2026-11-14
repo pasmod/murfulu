@@ -186,6 +186,7 @@
 
 .level[data-level="mid"] {
   color: var(--level-mid);
+  background: var(--level-mid-wash);
 }
 
 .level[data-level="unsure"] {

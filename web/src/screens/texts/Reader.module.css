@@ -242,7 +242,9 @@
 .word[data-level="mid"] .auto,
 .auto[data-level="mid"] {
   color: var(--level-mid);
+  background: var(--level-mid-wash);
   border-block-end: 2px dotted var(--level-mid);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 .word[data-level="unsure"] .auto,

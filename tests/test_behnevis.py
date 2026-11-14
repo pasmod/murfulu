@@ -335,3 +335,40 @@ def test_every_reading_of_a_headword_is_inflected():
     analyser = Analyser(Held.of(["رخ"]))
     inflector = Inflector.from_readings([rokh], analyser)
     assert {"rexhā", "roxhā"} <= set(inflector.readings("رخها"))
+
+
+def test_va_is_o_inside_a_verse_half_and_va_at_its_start_and_in_prose():
+    pairs = [("نگشود", "nagošud"), ("نگشاید", "nagošāyad")]
+    model = Transcriber(
+        bank=bank_from(pairs),
+        letters=LetterModel.train(pairs),
+        choice=ChoiceModel(),
+        functions={"و": ("va", "o")},
+    )
+    inside = model.line("نگشود و نگشاید", verse=True)[1]
+    assert (inside.latin, inside.source) == ("o", "function")
+    assert inside.confidence == pytest.approx(0.8)  # mid: a rule of thumb
+    assert model.line("و نگشاید", verse=True)[0].latin == "va"
+    assert model.line("نگشود و نگشاید", verse=False)[1].latin == "va"
+    # without knowing verse from prose, و is the function word as before
+    assert model.line("نگشود و نگشاید")[1].confidence == pytest.approx(0.9)
+
+
+def test_a_built_reading_is_as_sure_as_its_pattern_family_measured():
+    from murfulu.behnevis.inflect import Inflector
+    from murfulu.corpus.inflection import Analyser, Held
+
+    analyser = Analyser(Held.of([], [], ["بخش"]))
+    model = Transcriber(
+        bank={},
+        letters=LetterModel.train([("بخش", "baxš"), ("چشم", "čašm")]),
+        choice=ChoiceModel(),
+        functions={},
+        inflection=analyser,
+        inflector=Inflector(analyser, {}, {}, {"بخش": ("baxš",)}),
+        inflected_fit={"verb:bare": (74, 100)},
+    )
+    [word] = model.line("بخشم")
+    assert word.latin == "baxšam"
+    assert word.confidence == pytest.approx(75 / 102)
+    assert model.fitted("verb:na") == model.inflected_cap  # never measured

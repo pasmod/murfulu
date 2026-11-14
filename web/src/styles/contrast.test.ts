@@ -87,6 +87,10 @@ describe("the evidence colours", () => {
     expect(measured(front!, back!)).toBeGreaterThanOrEqual(BODY);
   });
 
+  it("keeps a mid reading legible on its yellow wash", () => {
+    expect(measured("--evidence-spelling", "--level-mid-wash")).toBeGreaterThanOrEqual(BODY);
+  });
+
   it("never leaves colour as the only difference", () => {
     // WCAG 1.4.1. Each level is written out in Persian beside its colour —
     // `Evidence` renders the wording, not a coloured dot — so a reader who

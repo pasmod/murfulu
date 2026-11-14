@@ -85,6 +85,18 @@ def _join(base: str, ending: str) -> list[str]:
     return [base + "y" + ending]
 
 
+def family(pattern_id: str) -> str:
+    """The family a pattern's reliability is measured for.
+
+    A verb by its prefix — none, می, ن, نمی, ب — and every nominal ending
+    together, because the corpus marks too few of each to measure it alone.
+    """
+    parts = pattern_id.split(":")
+    if parts[0] == "verb":
+        return "verb:" + parts[1].replace("-joined", "")
+    return "noun"
+
+
 def _frozen(table: dict[str, list[str]]) -> dict[str, tuple[str, ...]]:
     return {k: tuple(v) for k, v in table.items()}
 
@@ -140,11 +152,18 @@ class Inflector:
 
     def readings(self, spelling: str) -> list[str]:
         """Every reading the splits of a spelling give, without repeats."""
-        found: list[str] = []
+        return [latin for latin, _ in self.analyses(spelling)]
+
+    def analyses(self, spelling: str) -> list[tuple[str, str]]:
+        """Each reading with the family of the pattern that built it."""
+        found: list[tuple[str, str]] = []
+        seen: set[str] = set()
         for analysis in self.analyser.readings(spelling):
+            kind = family(analysis.pattern.id)
             for latin in self._of(analysis):
-                if latin not in found:
-                    found.append(latin)
+                if latin not in seen:
+                    seen.add(latin)
+                    found.append((latin, kind))
         return found
 
     def _of(self, analysis: Analysis) -> list[str]:

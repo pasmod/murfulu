@@ -32,6 +32,7 @@ from pathlib import Path
 from elasticsearch.helpers import scan
 
 from murfulu.behnevis.choice import Answered, ChoiceModel
+from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.letters import LetterModel
 from murfulu.behnevis.transcribe import (
     Transcriber,
@@ -39,6 +40,8 @@ from murfulu.behnevis.transcribe import (
     key,
     load_function_readings,
 )
+from murfulu.corpus.inflection import Analyser, held_from
+from murfulu.corpus.wordtypes import normalise
 from murfulu.lexicon.store import Lexicon
 from murfulu.search import harakat
 from murfulu.search.indices import connect
@@ -63,13 +66,12 @@ def main(argv: list[str] | None = None) -> int:
 
     with Lexicon.open() as lexicon:
         # Every spelling a reading has: رخ is *rex*, and *rox* too.
+        readings = list(lexicon.all_readings())
         pairs = [
-            (r.spelling_fa, latin)
-            for r in lexicon.all_readings()
-            for latin in r.all_latin
-            if latin
+            (r.spelling_fa, latin) for r in readings for latin in r.all_latin if latin
         ]
         snapshot = lexicon.snapshot_id
+        inflector = Inflector.from_readings(readings, Analyser(held_from(lexicon)))
     bank = bank_from(pairs)
     letters = LetterModel.train(pairs)
     functions = load_function_readings()
@@ -182,12 +184,38 @@ def main(argv: list[str] | None = None) -> int:
         f"candidate: {hits:,}, fit none: {misses:,}; signed words left out as "
         f"quotations: {quoted:,}"
     )
+    # How often a pattern family's one built reading fits the signs, over the
+    # marked words that neither the bank nor the function list reads.
+    fitted: dict[str, list[int]] = {}
+    with (DATA / f"behnevis-marked-{version}.jsonl").open(encoding="utf-8") as lines:
+        for line in lines:
+            m = json.loads(line)
+            if bank.get(m["spelling"]) or functions.get(m["spelling"]):
+                continue
+            forms = {normalise(m["written"]).strip("\u200c"), m["spelling"]}
+            built: dict[str, str] = {}
+            for form in sorted(forms):
+                for latin, kind in inflector.analyses(form):
+                    built.setdefault(latin, kind)
+            if len(built) != 1:
+                continue
+            ((latin, kind),) = built.items()
+            verdict = harakat.fits(m["written"], latin)
+            if verdict is not None:
+                tally = fitted.setdefault(kind, [0, 0])
+                tally[0] += verdict
+                tally[1] += 1
+    print(
+        "inflected, one built reading, fits the signs:",
+        {k: f"{v[0]}/{v[1]}" for k, v in sorted(fitted.items())},
+    )
     transcriber = Transcriber(
         bank=bank,
         letters=letters,
         choice=ChoiceModel.train(answered),
         functions=functions,
         covered={k: (v[0], v[1]) for k, v in covered.items()},
+        inflected_fit={k: (v[0], v[1]) for k, v in fitted.items()},
     )
     transcriber.save(
         DATA / f"behnevis-{version}.json",

@@ -119,6 +119,9 @@
      also drawn differently (a line, dots, a dashed box), never colour alone. */
   --level-sure: var(--evidence-reading);
   --level-mid: var(--evidence-spelling);
+  /* Behind a mid reading, so the middle level is seen at a glance; the
+     amber text stays readable on it (the project lead, 2026-11-14). */
+  --level-mid-wash: #fbefb8;
   --level-unsure: #a3332a;
 
   --focus: #b8500f;

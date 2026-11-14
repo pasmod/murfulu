@@ -117,12 +117,29 @@ class Transcriber:
     #: reading of its own.
     inflection: Analyser | None = None
     inflected_cap: float = 0.4
+    #: Per pattern family (``inflect.family``): (fits, total) of the corpus's
+    #: marked inflected words whose one built reading the signs judged. A
+    #: built reading's confidence is its family's share, smoothed and divided
+    #: among the word's other built readings; a family never marked keeps
+    #: ``inflected_cap``. Measured on marked words — the hard ones — so low.
+    inflected_fit: dict[str, tuple[int, int]] = field(default_factory=dict)
     #: Builds readings of inflected forms from the bank's stems, offered as
     #: alternatives (:mod:`.inflect`). Without it only the bank and the
     #: letter model's next-best guesses are offered.
     inflector: Inflector | None = None
     #: How many alternatives a word offers at most.
     offered: int = 5
+    #: How sure the verse rule for و is: *o* inside a verse half, *va* at its
+    #: start and in prose. A rule of thumb, not measured, so mid at most.
+    conjunction_confidence: float = 0.8
+
+    def fitted(self, kind: str) -> float:
+        """The measured share of a pattern family's built readings that fit."""
+        found = self.inflected_fit.get(kind)
+        if not found:
+            return self.inflected_cap
+        fits, total = found
+        return (fits + 1) / (total + 2)
 
     def coverage(self, spelling: str) -> float:
         """How likely the right reading is among this spelling's candidates."""
@@ -139,6 +156,8 @@ class Transcriber:
         after: str | None,
         *,
         use_signs: bool = True,
+        verse: bool | None = None,
+        first: bool = False,
     ) -> Word:
         """Read one word between its neighbours, all three keyed by :func:`key`.
 
@@ -146,6 +165,21 @@ class Transcriber:
         how the model is measured against the signs it would otherwise use.
         """
         function = self.functions.get(spelling, ())
+        if spelling == "و" and verse is not None and {"va", "o"} <= set(function):
+            # In verse و is mostly the short *o* bound to the word before it
+            # («نگشود و نگشاید»); at the start of a verse half, and in prose,
+            # *va*. Mid at most: a rule of thumb (the project lead, 2026-11-14).
+            said = "o" if verse and not first else "va"
+            other = "va" if said == "o" else "o"
+            sure = self.conjunction_confidence
+            return Word(
+                written,
+                spelling,
+                said,
+                sure,
+                FUNCTION,
+                ((said, sure), (other, 1 - sure)),
+            )
         candidates = list(dict.fromkeys((*function, *self.bank.get(spelling, ()))))
         # The analyser keeps half-spaces (بی‌کسان); the key drops them.
         forms = {normalise(written).strip(ZWNJ), spelling}
@@ -154,20 +188,22 @@ class Transcriber:
             guessed = self.letters.guess(spelling)
             if guessed is None and not built:
                 return Word(written, spelling, None, 0.0, NONE)
-            latin, confidence = guessed or (built[0], 0.0)
+            latin, confidence = guessed or (built[0][0], 0.0)
             source = LETTERS
             if self.inflection is not None and any(
                 self.inflection.best(form) for form in forms
             ):
                 source, confidence = INFLECTED, min(confidence, self.inflected_cap)
                 # A reading built from the bank's stems beats a letter guess:
-                # بخشم is *baxšam*, not *baxšm*. Unmeasured, so still held.
+                # بخشم is *baxšam*, not *baxšm*; it is as sure as its pattern
+                # family has measured, shared among the word's built readings.
                 if built:
-                    latin = built[0]
+                    latin, kind = built[0]
+                    confidence = self.fitted(kind) / len(built)
             if use_signs and harakat.fits(written, latin) is False:
                 confidence = 0.0  # the text's own signs rule the guess out
             offered: list[tuple[str, float | None]] = [(latin, confidence)]
-            offered += [(b, None) for b in built]
+            offered += [(b, None) for b, _ in built]
             guessed_too = self._guessed(spelling, written, use_signs)
             if source == INFLECTED:
                 # The letter model was measured on headwords; on an inflected
@@ -211,20 +247,24 @@ class Transcriber:
             source = BANK if len(candidates) == 1 else CHOICE
         # The bank's readings first, then what the stems build (رود *ravad*
         # beside the bank's *Rud*): alternatives to pick, not to propose.
-        order += [(b, None) for b in built]
+        order += [(b, None) for b, _ in built]
         return Word(written, spelling, latin, confidence, source, self._unique(order))
 
-    def _built(self, forms: set[str], written: str, use_signs: bool) -> list[str]:
-        """Readings the bank's stems build for this spelling, the signs allowing."""
+    def _built(
+        self, forms: set[str], written: str, use_signs: bool
+    ) -> list[tuple[str, str]]:
+        """Readings the stems build, with their pattern family, the signs allowing."""
         if self.inflector is None:
             return []
-        found: list[str] = []
+        found: list[tuple[str, str]] = []
+        seen: set[str] = set()
         for form in sorted(forms):
-            for latin in self.inflector.readings(form):
+            for latin, kind in self.inflector.analyses(form):
                 if use_signs and harakat.fits(written, latin) is False:
                     continue
-                if latin not in found:
-                    found.append(latin)
+                if latin not in seen:
+                    seen.add(latin)
+                    found.append((latin, kind))
         return found
 
     def _guessed(
@@ -249,7 +289,9 @@ class Transcriber:
                 out.append((latin, p))
         return tuple(out[: self.offered])
 
-    def line(self, text: str, *, use_signs: bool = True) -> list[Word]:
+    def line(
+        self, text: str, *, use_signs: bool = True, verse: bool | None = None
+    ) -> list[Word]:
         """Every counted word of a line, with the words beside it as context."""
         counted = [(t.fa, key(t.spelling)) for t in tokens(text) if t.spelling]
         return [
@@ -259,6 +301,8 @@ class Transcriber:
                 counted[i - 1][1] if i else None,
                 counted[i + 1][1] if i + 1 < len(counted) else None,
                 use_signs=use_signs,
+                verse=verse,
+                first=i == 0,
             )
             for i, (written, spelling) in enumerate(counted)
         ]
@@ -274,6 +318,9 @@ class Transcriber:
                     "covered_prior": self.covered_prior,
                     "covered_strength": self.covered_strength,
                     "covered": {k: list(v) for k, v in self.covered.items()},
+                    "inflected_fit": {
+                        k: list(v) for k, v in self.inflected_fit.items()
+                    },
                     "letters": self.letters.to_dict(),
                     "choice": self.choice.to_dict(),
                 },
@@ -299,6 +346,9 @@ class Transcriber:
             covered={k: (v[0], v[1]) for k, v in raw["covered"].items()},
             covered_prior=raw["covered_prior"],
             covered_strength=raw["covered_strength"],
+            inflected_fit={
+                k: (v[0], v[1]) for k, v in raw.get("inflected_fit", {}).items()
+            },
         )
 
 

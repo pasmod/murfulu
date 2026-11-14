@@ -2,6 +2,31 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-14 — fewer red words: measured verb patterns, و by verse, a yellow middle
+
+The project lead, after the first look at the live screen: too many words
+red, the middle level not visible, and «نگشود و نگشاید» read with *va*.
+
+- *A built reading is as sure as its pattern family measured*: over the
+  corpus's marked words with one built reading, a verb without prefix fits
+  the signs 1,070 times in 1,448 (74 %, so *mid*), with می 38 in 51, with
+  ب 153 in 281, with ن 77 in 164, a nominal ending 2,401 in 6,754 (35 %).
+  Smoothed, shared among a word's built readings, stored with the model
+  (`inflected_fit`). Marked words are the hard ones, so these are low; «نگشود»
+  is marked «نَگْشود», the older *nagšud*, against the built *nagošud*.
+- *و inside a verse half is *o*; at its start and in prose *va*.* A rule of
+  thumb, not measured: 0.8, so mid (yellow), never green.
+- *The middle level has a yellow wash* behind its amber text
+  (`--level-mid-wash`, 4.5:1 checked), so it is seen at a glance.
+
+**Where the red is** (corpus v17, each spelling read without neighbours):
+36.8 % of running words — letter guesses for words the bank lacks 13.7 %,
+choices among the bank's readings 9.0 %, inflected forms 8.2 %, a single
+bank reading the corpus contradicts 5.8 %. The 100 most frequent red
+spellings are 10.2 % of all words, the 300 most frequent 15.1 %, the 1,000
+most frequent 21.6 %: a reading decided once for each, as for the function
+words, takes away more than half of the red (FOR_THE_LINGUIST L42).
+
 ## 2026-11-14 — the verses under a built word's corpus figures, and index.html asked again on every visit
 
 **The design, as set for the task**: wherever the build screen's panel shows
