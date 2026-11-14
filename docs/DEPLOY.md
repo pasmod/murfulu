@@ -468,3 +468,22 @@ corpus change, so the rollback is `deploy` from `874f7be`.
 | 4 | the served bundle | the web container's assets carry «همهٔ شواهد» |
 
 The page itself was not viewed logged in on the server.
+
+## 12. The deploy of the verses on the build screen and the start page's cache header — run 2026-11-14
+
+The build screen's «پیکره» panel now quotes three voices and opens every text
+in place (DECISIONS 2026-11-14), and nginx sends index.html with
+`Cache-Control: no-cache`. Code only, on the project lead's word the same day;
+the rollback is `deploy` from `7c71839`. Run from a separate worktree on
+`510080a`, because the main checkout held other work in progress; the host
+files were copied there, and a dry run of the copy showed only this change's
+files differing on the server.
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy |
+| 2 | `deploy/server.sh check` | all checks passed, corpus v17, the site answers 401 logged out |
+| 3 | `/evidence?voices=1` inside the api container | بسمان: 2 texts, two authors (61 ms); بنده: 8,656 texts, one text per author (206 ms) |
+| 4 | the web container | `/` answers `Cache-Control: no-cache`; the served bundle carries «نشان دادن همهٔ شواهد» |
+
+The page itself was not viewed logged in on the server.
