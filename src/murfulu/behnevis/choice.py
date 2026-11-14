@@ -45,6 +45,9 @@ class Answered:
     after: str | None = None
     #: Where it came from, for holding out whole poets when measuring.
     author: str = ""
+    #: A person chose it on the reading screen, rather than an edition's signs
+    #: leaving it. Counted apart: it may move even a function word.
+    by_person: bool = False
 
 
 @dataclass
@@ -62,21 +65,38 @@ class ChoiceModel:
     alone: dict[str, Counter[str]] = field(default_factory=dict)
     before: dict[str, Counter[str]] = field(default_factory=dict)
     after: dict[str, Counter[str]] = field(default_factory=dict)
+    #: The same three, for readings people picked on the reading screen.
+    #: Editions mark a function word where it is the exception, so their
+    #: marks never move its prior; a person's pick does (the review of
+    #: 2026-11-14): به picked as *Beh* between the same words often enough
+    #: becomes *Beh* there.
+    person_alone: dict[str, Counter[str]] = field(default_factory=dict)
+    person_before: dict[str, Counter[str]] = field(default_factory=dict)
+    person_after: dict[str, Counter[str]] = field(default_factory=dict)
 
     @classmethod
     def train(cls, answered: Iterable[Answered], **settings: Any) -> ChoiceModel:
         """Count the answers."""
-        alone: dict[str, Counter[str]] = defaultdict(Counter)
-        before: dict[str, Counter[str]] = defaultdict(Counter)
-        after: dict[str, Counter[str]] = defaultdict(Counter)
+        tables: dict[bool, tuple[dict[str, Counter[str]], ...]] = {
+            flag: (defaultdict(Counter), defaultdict(Counter), defaultdict(Counter))
+            for flag in (False, True)
+        }
         for one in answered:
+            alone, before, after = tables[one.by_person]
             alone[one.spelling][one.reading] += 1
             if one.before:
                 before[f"{one.before} {one.spelling}"][one.reading] += 1
             if one.after:
                 after[f"{one.spelling} {one.after}"][one.reading] += 1
+        corpus, people = tables[False], tables[True]
         return cls(
-            alone=dict(alone), before=dict(before), after=dict(after), **settings
+            alone=dict(corpus[0]),
+            before=dict(corpus[1]),
+            after=dict(corpus[2]),
+            person_alone=dict(people[0]),
+            person_before=dict(people[1]),
+            person_after=dict(people[2]),
+            **settings,
         )
 
     def probabilities(
@@ -94,35 +114,81 @@ class ChoiceModel:
         if len(unique) == 1:
             return {unique[0]: 1.0}
         if function_reading in unique:
-            # A function word keeps its prior: editions mark به where it is
-            # *bah*, almost never where it is *be*, so its marked places are
-            # the exceptions, and counting them made به *bah* (2026-11-14).
+            # A function word keeps its prior against the editions' marks:
+            # they mark به where it is *bah*, almost never where it is *be*,
+            # so its marked places are the exceptions, and counting them made
+            # به *bah* (2026-11-14). People's picks still move it, below.
             rest = (1 - self.function_prior) / (len(unique) - 1)
-            return {
+            probs = {
                 c: self.function_prior if c == function_reading else rest
                 for c in unique
             }
-        prior = {c: 1 / len(unique) for c in unique}
+        else:
+            prior = {c: 1 / len(unique) for c in unique}
+            seen = self.alone.get(spelling, Counter())
+            total = sum(seen[c] for c in unique)
+            probs = {
+                c: (seen[c] + self.prior_strength * prior[c])
+                / (total + self.prior_strength)
+                for c in unique
+            }
+            probs = self._near(
+                probs,
+                unique,
+                self.before,
+                self.after,
+                spelling,
+                before,
+                after,
+                self.min_context,
+            )
+        probs = self._near(
+            probs,
+            unique,
+            self.person_before,
+            self.person_after,
+            spelling,
+            before,
+            after,
+            1,
+            self.person_alone,
+        )
+        norm = sum(probs.values())
+        return {c: p / norm for c, p in probs.items()}
 
-        seen = self.alone.get(spelling, Counter())
-        total = sum(seen[c] for c in unique)
-        probs = {
-            c: (seen[c] + self.prior_strength * prior[c])
-            / (total + self.prior_strength)
-            for c in unique
-        }
-        for table, key in (
-            (self.before, f"{before} {spelling}" if before else None),
-            (self.after, f"{spelling} {after}" if after else None),
-        ):
+    @staticmethod
+    def _near(
+        probs: dict[str, float],
+        unique: list[str],
+        before_table: dict[str, Counter[str]],
+        after_table: dict[str, Counter[str]],
+        spelling: str,
+        before: str | None,
+        after: str | None,
+        needed: int,
+        alone_table: dict[str, Counter[str]] | None = None,
+    ) -> dict[str, float]:
+        """Move the probabilities towards what these tables counted.
+
+        Each table weighs in proportion to how many answers it holds for the
+        candidates (n / (n + 2)), and only from ``needed`` answers on. People's
+        picks pass their own table for the spelling alone as well.
+        """
+        steps: list[tuple[dict[str, Counter[str]], str | None]] = []
+        if alone_table is not None:
+            steps.append((alone_table, spelling))
+        steps += [
+            (before_table, f"{before} {spelling}" if before else None),
+            (after_table, f"{spelling} {after}" if after else None),
+        ]
+        for table, key in steps:
             near = table.get(key) if key else None
             n = sum(near[c] for c in unique) if near else 0
-            if not near or n < self.min_context:
+            if not near or n < needed:
                 continue
             weight = n / (n + 2)
             probs = {c: (1 - weight) * probs[c] + weight * near[c] / n for c in unique}
-        norm = sum(probs.values())
-        return {c: p / norm for c, p in probs.items()}
+        return probs
 
     def to_dict(self) -> dict[str, Any]:
         """A plain form for JSON."""
@@ -133,6 +199,9 @@ class ChoiceModel:
             "alone": {k: dict(v) for k, v in self.alone.items()},
             "before": {k: dict(v) for k, v in self.before.items()},
             "after": {k: dict(v) for k, v in self.after.items()},
+            "person_alone": {k: dict(v) for k, v in self.person_alone.items()},
+            "person_before": {k: dict(v) for k, v in self.person_before.items()},
+            "person_after": {k: dict(v) for k, v in self.person_after.items()},
         }
 
     @classmethod
@@ -145,4 +214,13 @@ class ChoiceModel:
             alone={k: Counter(v) for k, v in raw["alone"].items()},
             before={k: Counter(v) for k, v in raw["before"].items()},
             after={k: Counter(v) for k, v in raw["after"].items()},
+            person_alone={
+                k: Counter(v) for k, v in raw.get("person_alone", {}).items()
+            },
+            person_before={
+                k: Counter(v) for k, v in raw.get("person_before", {}).items()
+            },
+            person_after={
+                k: Counter(v) for k, v in raw.get("person_after", {}).items()
+            },
         )

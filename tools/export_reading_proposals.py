@@ -101,6 +101,7 @@ def picks(rows: list[Any]) -> list[dict[str, Any]]:
                     "before",
                     "after",
                     "written",
+                    "heading",
                 )
             }
             | {"document_id": context.get("document_id")}

@@ -403,3 +403,54 @@ def test_the_model_is_read_again_when_its_file_changes(
     os.utime(model, (1, 1))
     second = serve.loaded()
     assert first != second  # a new modification time is a new cache key
+
+
+def test_a_persons_picks_move_even_a_function_word():
+    marks_only = ChoiceModel.train([Answered("به", "Beh", before="از")] * 20)
+    assert marks_only.probabilities(
+        "به", ["be", "Beh"], before="از", function_reading="be"
+    )["be"] == pytest.approx(0.9)
+    picked = ChoiceModel.train(
+        [Answered("به", "Beh", before="از", by_person=True)] * 20
+    )
+    probs = picked.probabilities(
+        "به", ["be", "Beh"], before="از", function_reading="be"
+    )
+    assert probs["Beh"] > probs["be"]
+    again = ChoiceModel.from_dict(picked.to_dict())
+    assert (
+        again.probabilities("به", ["be", "Beh"], before="از", function_reading="be")
+        == probs
+    )
+
+
+def test_picks_are_read_against_the_current_bank_and_keep_their_poet(tmp_path: Path):
+    import json
+
+    from murfulu.behnevis.picks import picks_from
+
+    rows = [
+        {
+            "spelling_fa": "دل",
+            "latin": "Del",
+            "in_bank": False,
+            "before": "ما",
+            "after": None,
+            "heading": "حافظ · غزلیات · غزل ۳",
+        },
+        {
+            "spelling_fa": "آرد",
+            "latin": "ārad",
+            "in_bank": True,
+            "before": None,
+            "after": None,
+            "heading": "سعدی · گلستان",
+        },
+    ]
+    path = tmp_path / "picks.jsonl"
+    path.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
+    found = picks_from(path, {"دل": ("Dal", "Del"), "آرد": ("Ārd",)}, {})
+    # Del is in the bank now, whatever the saved flag says; ārad is not
+    assert [(a.spelling, a.reading, a.author, a.by_person) for a in found] == [
+        ("دل", "Del", "حافظ", True)
+    ]

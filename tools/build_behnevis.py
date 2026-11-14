@@ -38,6 +38,7 @@ from elasticsearch.helpers import scan
 from murfulu.behnevis.choice import Answered, ChoiceModel
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.letters import LetterModel
+from murfulu.behnevis.picks import picks_from
 from murfulu.behnevis.transcribe import (
     Transcriber,
     bank_from,
@@ -185,26 +186,12 @@ def main(argv: list[str] | None = None) -> int:
     # choice in context, made by a person, and learned like a marked place.
     # Fetched from the server by `deploy/server.sh proposals`. A typed reading
     # the bank lacks waits for karbon and teaches nothing here.
-    picked = 0
     proposals = DATA / "behnevis-proposals.jsonl"
-    if proposals.exists():
-        for line in proposals.open(encoding="utf-8"):
-            one = json.loads(line)
-            spelling = key(one.get("spelling_fa") or "")
-            latin = one.get("latin") or ""
-            if not one.get("in_bank") or not spelling or not latin:
-                continue
-            answered.append(
-                Answered(
-                    spelling,
-                    latin,
-                    key(one["before"]) if one.get("before") else None,
-                    key(one["after"]) if one.get("after") else None,
-                    "reading screen",
-                )
-            )
-            covered.setdefault(spelling, [0, 0])[0] += 1
-            picked += 1
+    learned = picks_from(proposals, bank, functions) if proposals.exists() else []
+    for one in learned:
+        answered.append(one)
+        covered.setdefault(one.spelling, [0, 0])[0] += 1
+    picked = len(learned)
     print(f"picks from the reading screen learned: {picked}")
     hits = sum(h for h, _ in covered.values())
     misses = sum(m for _, m in covered.values())

@@ -13,8 +13,12 @@ and that splits what the reading screen collects in two.
   screen now sends with it — at the automatic Behnevis's next build:
   `deploy/server.sh proposals` fetches them into `data/`, and
   `tools/build_behnevis.py` adds them to the answers and counts them as
-  covered. Weighted like one marked place each; nothing changes before a
-  build.
+  covered. Nothing changes before a build. Three rules from the review of
+  2026-11-14: a pick is checked against the bank being built, not the flag
+  saved with it; it keeps the text's poet, so the evaluation holds it out
+  with the poet; and picks are counted apart from the editions' marks, so
+  they move even a function word, whose marks never do (به picked *Beh*
+  after از often enough becomes *Beh* there).
 - *A reading typed that the bank lacks* (آرد *ārad*) is a gap in the bank,
   for karbon only: `tools/export_reading_proposals.py` lists just those, the
   line as evidence. It teaches the model nothing until the bank has it.

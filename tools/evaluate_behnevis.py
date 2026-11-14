@@ -30,6 +30,7 @@ from pathlib import Path
 from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.letters import LetterModel, latin_key, shape
+from murfulu.behnevis.picks import picks_from
 from murfulu.behnevis.stats import (
     cluster_lower_bound,
     lower_bound,
@@ -216,7 +217,10 @@ def main(argv: list[str] | None = None) -> int:
 
     # 1. marked words, one poet in five held out --------------------------------
     test = [m for m in marked if held_out(m["author"], 5)]
-    train_answered = [a for a in answered if not held_out(a.author, 5)]
+    # People's picks on the reading screen, split by poet like the rest.
+    proposals = DATA / "behnevis-proposals.jsonl"
+    people = picks_from(proposals, bank, model.functions) if proposals.exists() else []
+    train_answered = [a for a in [*answered, *people] if not held_out(a.author, 5)]
     covered: dict[str, list[int]] = {}
     for m in marked:
         if held_out(m["author"], 5):
@@ -233,6 +237,9 @@ def main(argv: list[str] | None = None) -> int:
             continue  # the signs cannot judge these readings
         fits = any(verdicts)
         covered.setdefault(m["spelling"], [0, 0])[0 if fits else 1] += 1
+    for a in people:
+        if not held_out(a.author, 5):
+            covered.setdefault(a.spelling, [0, 0])[0] += 1
     fold = Transcriber(
         bank=bank,
         letters=model.letters,
