@@ -168,7 +168,10 @@ const AUTO: Text = {
                 confidence: 0.4,
                 level: "unsure",
                 source: "inflected",
-                candidates: [["raftand", 0.4]],
+                candidates: [
+                  ["raftand", 0.4],
+                  ["roftand", null],
+                ],
               },
             },
           ],
@@ -429,5 +432,15 @@ describe("the reading screen", () => {
     expect(posted[0]).toEqual(
       expect.objectContaining({ context: expect.objectContaining({ latin: "Dil", in_bank: true }) }),
     );
+  });
+
+  it("offers alternatives without an estimate where none was measured", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^رفتند:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    const built = within(here).getByRole("button", { name: "roftand" });
+    expect(built).not.toHaveTextContent("٪");
+    expect(within(here).getByRole("button", { name: /raftand/ })).toHaveTextContent("٪");
   });
 });

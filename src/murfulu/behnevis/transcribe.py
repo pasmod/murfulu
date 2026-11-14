@@ -23,6 +23,7 @@ from typing import Any
 import yaml
 
 from murfulu.behnevis.choice import ChoiceModel, ranked
+from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.letters import LetterModel
 from murfulu.corpus.inflection import Analyser
 from murfulu.corpus.wordtypes import normalise
@@ -57,8 +58,10 @@ class Word:
     latin: str | None
     confidence: float
     source: str
-    #: Every reading considered, with its probability, likeliest first.
-    candidates: tuple[tuple[str, float], ...] = ()
+    #: Every reading considered, likeliest first, with its probability — or
+    #: None for an alternative offered but not measured (an inflected form
+    #: built from the bank's stems).
+    candidates: tuple[tuple[str, float | None], ...] = ()
 
     def as_dict(self) -> dict[str, Any]:
         """The shape a report or the API gives."""
@@ -68,7 +71,9 @@ class Word:
             "latin": self.latin,
             "confidence": round(self.confidence, 3),
             "source": self.source,
-            "candidates": [[c, round(p, 3)] for c, p in self.candidates],
+            "candidates": [
+                [c, None if p is None else round(p, 3)] for c, p in self.candidates
+            ],
         }
 
 
@@ -112,6 +117,12 @@ class Transcriber:
     #: reading of its own.
     inflection: Analyser | None = None
     inflected_cap: float = 0.4
+    #: Builds readings of inflected forms from the bank's stems, offered as
+    #: alternatives (:mod:`.inflect`). Without it only the bank and the
+    #: letter model's next-best guesses are offered.
+    inflector: Inflector | None = None
+    #: How many alternatives a word offers at most.
+    offered: int = 5
 
     def coverage(self, spelling: str) -> float:
         """How likely the right reading is among this spelling's candidates."""
@@ -136,22 +147,36 @@ class Transcriber:
         """
         function = self.functions.get(spelling, ())
         candidates = list(dict.fromkeys((*function, *self.bank.get(spelling, ()))))
+        # The analyser keeps half-spaces (بی‌کسان); the key drops them.
+        forms = {normalise(written).strip(ZWNJ), spelling}
+        built = self._built(forms, written, use_signs)
         if not candidates:
             guessed = self.letters.guess(spelling)
-            if guessed is None:
+            if guessed is None and not built:
                 return Word(written, spelling, None, 0.0, NONE)
-            latin, confidence = guessed
+            latin, confidence = guessed or (built[0], 0.0)
             source = LETTERS
-            # The analyser keeps half-spaces (بی‌کسان); the key drops them.
-            forms = {normalise(written).strip(ZWNJ), spelling}
             if self.inflection is not None and any(
                 self.inflection.best(form) for form in forms
             ):
                 source, confidence = INFLECTED, min(confidence, self.inflected_cap)
+                # A reading built from the bank's stems beats a letter guess:
+                # بخشم is *baxšam*, not *baxšm*. Unmeasured, so still held.
+                if built:
+                    latin = built[0]
             if use_signs and harakat.fits(written, latin) is False:
                 confidence = 0.0  # the text's own signs rule the guess out
+            offered: list[tuple[str, float | None]] = [(latin, confidence)]
+            offered += [(b, None) for b in built]
+            guessed_too = self._guessed(spelling, written, use_signs)
+            if source == INFLECTED:
+                # The letter model was measured on headwords; on an inflected
+                # form its numbers would mislead (*baxšm* 93 %), so its other
+                # guesses are offered without them.
+                guessed_too = [(g, None) for g, _ in guessed_too]
+            offered += guessed_too
             return Word(
-                written, spelling, latin, confidence, source, ((latin, confidence),)
+                written, spelling, latin, confidence, source, self._unique(offered)
             )
 
         # A function word's marked places are its exceptions — که marked where
@@ -175,13 +200,54 @@ class Transcriber:
         probs = self.choice.probabilities(
             spelling, candidates, before, after, function[0] if function else None
         )
-        order = tuple((c, p * coverage) for c, p in ranked(probs))
-        latin, confidence = order[0]
+        order: list[tuple[str, float | None]] = [
+            (c, p * coverage) for c, p in ranked(probs)
+        ]
+        latin, best = order[0]
+        confidence = best or 0.0
         if latin in function:
             source = FUNCTION
         else:
             source = BANK if len(candidates) == 1 else CHOICE
-        return Word(written, spelling, latin, confidence, source, order)
+        # The bank's readings first, then what the stems build (رود *ravad*
+        # beside the bank's *Rud*): alternatives to pick, not to propose.
+        order += [(b, None) for b in built]
+        return Word(written, spelling, latin, confidence, source, self._unique(order))
+
+    def _built(self, forms: set[str], written: str, use_signs: bool) -> list[str]:
+        """Readings the bank's stems build for this spelling, the signs allowing."""
+        if self.inflector is None:
+            return []
+        found: list[str] = []
+        for form in sorted(forms):
+            for latin in self.inflector.readings(form):
+                if use_signs and harakat.fits(written, latin) is False:
+                    continue
+                if latin not in found:
+                    found.append(latin)
+        return found
+
+    def _guessed(
+        self, spelling: str, written: str, use_signs: bool
+    ) -> list[tuple[str, float | None]]:
+        """The letter model's next-best readings, the signs allowing."""
+        return [
+            (latin, p)
+            for latin, p in self.letters.guesses(spelling, k=self.offered)
+            if not (use_signs and harakat.fits(written, latin) is False)
+        ]
+
+    def _unique(
+        self, offered: list[tuple[str, float | None]]
+    ) -> tuple[tuple[str, float | None], ...]:
+        """Each reading once, the first mention kept, at most ``offered``."""
+        seen: set[str] = set()
+        out: list[tuple[str, float | None]] = []
+        for latin, p in offered:
+            if latin not in seen:
+                seen.add(latin)
+                out.append((latin, p))
+        return tuple(out[: self.offered])
 
     def line(self, text: str, *, use_signs: bool = True) -> list[Word]:
         """Every counted word of a line, with the words beside it as context."""

@@ -1,0 +1,155 @@
+"""Readings for inflected forms, built from the bank's stems and headwords.
+
+The bank holds headwords, and verbs with their two stems; the texts write
+بخشم, رود, شیرازی. :mod:`murfulu.corpus.inflection` already says how such a
+spelling splits — a base the bank holds, and a prefix or an ending — and this
+module writes the Behnevis for each split: the base's reading and the
+affix's. بخشم is the present stem بخش *baxš* plus م *-am*: *baxšam*.
+
+These readings are **offered, never measured**: the reading screen shows them
+as alternatives a reader may pick (the project lead, 2026-11-14), and the
+transcriber may propose one for an inflected word, still held below every
+threshold. A stem that ends in *ow* — رو *row*, شو *šow*, بو *bow* — takes
+*av* or *ov* before a vowel (*ravad*, *šavad*, *bovad*); both are offered.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Iterable
+
+from murfulu.corpus.inflection import Analyser, Analysis
+from murfulu.corpus.wordtypes import normalise
+
+ZWNJ = "‌"
+
+#: A verb's prefix, as the patterns spell it, and its Behnevis.
+PREFIX = {"": "", "می": "mi", "ن": "na", "نمی": "nemi", "ب": "be"}
+
+#: An ending, as the patterns spell it, and its Behnevis. Verbal endings
+#: first, then the nominal ones of ``corpus.inflection.NOMINAL``.
+SUFFIX = {
+    "": "",
+    "م": "am",
+    "ی": "i",
+    "د": "ad",
+    "یم": "im",
+    "ید": "id",
+    "ند": "and",
+    "ه": "e",
+    "هام": "eam",
+    "ها": "hā",
+    "های": "hāy",
+    "هایی": "hāyi",
+    "ان": "ān",
+    "ات": "āt",
+    "ین": "in",
+    "ون": "un",
+    "تر": "tar",
+    "تری": "tari",
+    "ترین": "tarin",
+    "ا": "ā",
+    "ت": "at",
+    "ش": "aš",
+    "مان": "emān",
+    "تان": "etān",
+    "شان": "ešān",
+    "ست": "st",
+    "است": "ast",
+}
+
+#: The participle with the copula written on with a half-space: ه‌ام …
+PARTICIPLE = {"ام": "eam", "ای": "ei", "ایم": "eim", "اید": "eid", "اند": "eand"}
+
+VOWELS = set("aāeiou")
+
+
+def _plain(affix: str) -> str:
+    return affix.replace(ZWNJ, "")
+
+
+def _suffix_latin(suffix: str) -> str | None:
+    if suffix.startswith("ه" + ZWNJ):
+        return PARTICIPLE.get(suffix[2:])
+    return SUFFIX.get(_plain(suffix))
+
+
+def _join(base: str, ending: str) -> list[str]:
+    """A base's reading and an ending's, joined as Persian joins them."""
+    if not ending or base[-1:].lower() not in VOWELS and not base.endswith("ow"):
+        return [base + ending]
+    if ending[0] not in VOWELS:
+        return [base + ending]
+    if base.endswith("ow"):
+        return [base[:-2] + "av" + ending, base[:-2] + "ov" + ending]
+    return [base + "y" + ending]
+
+
+def _frozen(table: dict[str, list[str]]) -> dict[str, tuple[str, ...]]:
+    return {k: tuple(v) for k, v in table.items()}
+
+
+class Inflector:
+    """Builds readings of inflected spellings from what the bank holds."""
+
+    def __init__(
+        self,
+        analyser: Analyser,
+        headwords: dict[str, tuple[str, ...]],
+        past_stems: dict[str, tuple[str, ...]],
+        present_stems: dict[str, tuple[str, ...]],
+    ) -> None:
+        self.analyser = analyser
+        self.bases = {
+            "headword": headwords,
+            "past_stem": past_stems,
+            "present_stem": present_stems,
+        }
+
+    @classmethod
+    def from_readings(cls, readings: Iterable[object], analyser: Analyser) -> Inflector:
+        """From the lexicon's readings (anything with the stem attributes)."""
+        heads: dict[str, list[str]] = {}
+        past: dict[str, list[str]] = {}
+        present: dict[str, list[str]] = {}
+        for r in readings:
+            for table, fa, latin in (
+                (heads, getattr(r, "spelling_fa", None), getattr(r, "latin", None)),
+                (
+                    past,
+                    getattr(r, "past_stem_fa", None),
+                    getattr(r, "past_stem_latin", None),
+                ),
+                (
+                    present,
+                    getattr(r, "present_stem_fa", None),
+                    getattr(r, "present_stem_latin", None),
+                ),
+            ):
+                if fa and latin:
+                    known = table.setdefault(normalise(fa), [])
+                    if latin not in known:
+                        known.append(latin)
+        return cls(analyser, _frozen(heads), _frozen(past), _frozen(present))
+
+    def readings(self, spelling: str) -> list[str]:
+        """Every reading the splits of a spelling give, without repeats."""
+        found: list[str] = []
+        for analysis in self.analyser.readings(spelling):
+            for latin in self._of(analysis):
+                if latin not in found:
+                    found.append(latin)
+        return found
+
+    def _of(self, analysis: Analysis) -> list[str]:
+        pattern = analysis.pattern
+        prefix = PREFIX.get(_plain(pattern.prefix))
+        suffix = _suffix_latin(pattern.suffix)
+        if prefix is None or suffix is None:
+            return []
+        bases = self.bases[pattern.base_kind].get(analysis.base, ())
+        out: list[str] = []
+        for base in bases:
+            stem = base if not prefix else base[:1].lower() + base[1:]
+            for joined in _join(stem, suffix):
+                out.append(prefix + joined if prefix else joined)
+        return out

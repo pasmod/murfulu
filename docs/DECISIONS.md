@@ -78,6 +78,14 @@ alike and none is proposed, now that the proposal says how sure it is.
   even change what the screen shows. `GET /texts/marked?kind=proposed` reads
   them back, `tools/export_reading_proposals.py` gathers them into **one list
   per karbon issue**, not one issue a word.
+- *Probable alternatives are offered beside the bank's readings* (the
+  project lead, 2026-11-14): readings built from the bank's stems and an
+  ending (`behnevis/inflect.py`: رود *ravad*, *rovad* beside the bank's
+  *Rud*; آرد *ārad* beside *Ārd*), and the letter model's next-best guesses.
+  The built ones carry no estimate — they are not measured — and on an
+  inflected word neither do the letter guesses, whose numbers were measured on
+  headwords. An inflected word now proposes its built reading (بخشم *baxšam*,
+  not *baxšm*), still held below every threshold.
 - *The shape carries the level as well as the colour* (WCAG 1.4.1): line,
   dots, box. Sure reuses the confirming green and mid the amber of the
   evidence colours; unsure is a new red, `--level-unsure`, held to the text

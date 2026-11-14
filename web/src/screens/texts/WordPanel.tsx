@@ -316,7 +316,8 @@ function Here({
       </p>
       <p className={styles.note}>
         این خوانش را برنامه پیشنهاد می‌کند و درصد، برآورد آن از درستی است. اگر خوانش
-        درست چیز دیگری است، آن را برگزینید یا بنویسید.
+        درست چیز دیگری است، آن را برگزینید یا بنویسید؛ خوانش‌های بی‌درصد را برنامه از
+        ستاک‌های بانک واژه یا از حروف ساخته و نسنجیده است.
       </p>
       {state === "done" ? (
         <p className={styles.proposed} role="status">
@@ -339,7 +340,7 @@ function Here({
                 }}
               >
                 <Latin>{latin}</Latin>
-                <span className={styles.share}>{percent(share)}</span>
+                {share === null ? null : <span className={styles.share}>{percent(share)}</span>}
               </button>
             ))}
           </div>

@@ -141,18 +141,49 @@ class LetterModel:
         out: list[str] = []
         confidence = 1.0
         for i in range(len(letters)):
-            counts: Counter[str] | None = None
-            for w in range(self.width, -1, -1):
-                found = self.tables[w].get(_around(letters, i, w))
-                if found and (sum(found.values()) >= self.min_count or w == 0):
-                    counts = found
-                    break
+            counts = self._counts(letters, i)
             if not counts:
                 return None
             piece, n = counts.most_common(1)[0]
             out.append(piece)
             confidence *= n / sum(counts.values())
         return "".join(out), confidence
+
+    def guesses(
+        self, spelling: str, k: int = 4, beam: int = 16
+    ) -> list[tuple[str, float]]:
+        """The ``k`` likeliest readings, each with its probability, best first.
+
+        A beam search over the same counts as :meth:`guess`: each letter's
+        four likeliest pieces, the ``beam`` likeliest words kept at each step.
+        The first is always :meth:`guess`'s answer.
+        """
+        letters = shape(spelling)
+        if not letters or any(letter not in SPELLED for letter in letters):
+            return []
+        paths: list[tuple[str, float]] = [("", 1.0)]
+        for i in range(len(letters)):
+            counts = self._counts(letters, i)
+            if not counts:
+                return []
+            total = sum(counts.values())
+            options = counts.most_common(4)
+            paths = sorted(
+                ((s + piece, p * n / total) for s, p in paths for piece, n in options),
+                key=lambda one: -one[1],
+            )[:beam]
+        merged: dict[str, float] = {}
+        for s, p in paths:
+            merged[s] = merged.get(s, 0.0) + p
+        return sorted(merged.items(), key=lambda one: (-one[1], one[0]))[:k]
+
+    def _counts(self, letters: tuple[str, ...], i: int) -> Counter[str] | None:
+        """The counts for letter ``i`` from the widest surroundings seen enough."""
+        for w in range(self.width, -1, -1):
+            found = self.tables[w].get(_around(letters, i, w))
+            if found and (sum(found.values()) >= self.min_count or w == 0):
+                return found
+        return None
 
     def to_dict(self) -> dict[str, Any]:
         """A plain form for JSON."""

@@ -60,8 +60,12 @@ export interface AutoReading {
   level: Level;
   /** Where it came from: the bank, a choice among its readings, a guess from the letters… */
   source: string;
-  /** Readings to pick from, likeliest first, each with its estimate. */
-  candidates: [string, number][];
+  /**
+   * Readings to pick from, likeliest first, each with its estimate — or null
+   * for an alternative offered without one (built from the bank's stems, or
+   * a letter guess on an inflected form).
+   */
+  candidates: [string, number | null][];
 }
 
 export type LinePosition =

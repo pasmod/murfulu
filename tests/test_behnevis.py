@@ -277,3 +277,36 @@ def test_a_function_word_is_not_doubted_by_its_marked_exceptions():
     [word] = model.line("که")
     assert (word.latin, word.confidence) == ("ke", pytest.approx(0.9))
 
+
+def test_alternatives_come_from_the_stems_and_the_next_best_guesses():
+    from murfulu.behnevis.inflect import Inflector
+    from murfulu.corpus.inflection import Analyser, Held
+
+    pairs = [("بخش", "baxš"), ("چشم", "čašm"), ("خشم", "xašm"), ("رود", "Rud")]
+    analyser = Analyser(Held.of(["رود"], [], ["بخش", "رو"]))
+    inflector = Inflector(
+        analyser, {"رود": ("Rud",)}, {}, {"بخش": ("baxš",), "رو": ("row",)}
+    )
+    model = Transcriber(
+        bank=bank_from(pairs),
+        letters=LetterModel.train(pairs),
+        choice=ChoiceModel(),
+        functions={},
+        inflection=analyser,
+        inflector=inflector,
+    )
+    [baxsam] = model.line("بخشم")
+    assert baxsam.latin == "baxšam" and baxsam.confidence <= model.inflected_cap
+    # the letter model's guesses follow, without a number that would mislead
+    assert all(p is None for _, p in baxsam.candidates[1:])
+    [rud] = model.line("رود")
+    assert rud.latin == "Rud"
+    assert [c for c, _ in rud.candidates] == ["Rud", "ravad", "rovad"]
+    assert dict(rud.candidates)["ravad"] is None
+
+
+def test_the_letter_model_offers_its_next_best_guesses():
+    model = LetterModel.train(BANK_PAIRS)
+    best = model.guesses("دام", k=3)
+    assert best[0][0] == (model.guess("دام") or ("",))[0]
+    assert len({latin for latin, _ in best}) == len(best)

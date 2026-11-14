@@ -18,6 +18,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.transcribe import Transcriber, bank_from, key
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
@@ -33,7 +34,7 @@ PATH_VARIABLE = "MURFULU_BEHNEVIS_PATH"
 SURE, MID = 0.9, 0.7
 
 #: How many readings a word's panel offers to pick from.
-OFFERED = 4
+OFFERED = 5
 
 
 def level(confidence: float) -> str:
@@ -58,14 +59,14 @@ def path() -> Path | None:
 def _load(model: str, snapshot_id: str) -> Transcriber:
     del snapshot_id  # part of the cache key: a new lexicon builds a new bank
     with Lexicon.open() as lexicon:
+        readings = list(lexicon.all_readings())
         bank = bank_from(
-            (r.spelling_fa, latin)
-            for r in lexicon.all_readings()
-            for latin in r.all_latin
-            if latin
+            (r.spelling_fa, latin) for r in readings for latin in r.all_latin if latin
         )
         inflection = Analyser(held_from(lexicon))
-    return Transcriber.load(Path(model), bank, inflection)
+    transcriber = Transcriber.load(Path(model), bank, inflection)
+    transcriber.inflector = Inflector.from_readings(readings, inflection)
+    return transcriber
 
 
 def loaded() -> Transcriber | None:
@@ -105,7 +106,9 @@ def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
                     "confidence": round(read.confidence, 3),
                     "level": level(read.confidence),
                     "source": read.source,
+                    # An alternative built from the stems carries no estimate.
                     "candidates": [
-                        [latin, round(p, 3)] for latin, p in read.candidates[:OFFERED]
+                        [latin, None if p is None else round(p, 3)]
+                        for latin, p in read.candidates[:OFFERED]
                     ],
                 }
