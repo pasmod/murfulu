@@ -453,3 +453,18 @@ clean**. No migration: a wrong reading goes to the existing feedback store.
 | 4 | `deploy/server.sh release v17 lexicon-20261111` | aliases and server `.env`, api recreated. **The rollback is `release v16 lexicon-20261111`**; v16's indices and figures stay on the server |
 | 5 | `deploy/server.sh questions` | dry run: 12 unchanged, nothing to apply |
 | 6 | `deploy/server.sh check` | all checks passed, corpus v17; inside the api container `/texts` finds Hafez's ghazal 3 (9 couplets) and the Golestan's preface (120 units, couplet and prose) |
+
+## 11. The deploy of the full evidence list — run 2026-11-14
+
+The word page's «همهٔ شواهد» (`/evidence`, DECISIONS 2026-11-14) went out on
+the project lead's word the same day. Code only: no migration, no data, no
+corpus change, so the rollback is `deploy` from `874f7be`.
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy |
+| 2 | `deploy/server.sh check` | all checks passed, corpus v17, the site answers 401 logged out |
+| 3 | `/evidence` inside the api container | رفتند 1,143 texts (436 ms, first request), و 101,972 texts (101 ms), روشنا 21 texts and 22 lines (223 ms), رفتند narrowed to one author 58 texts and 61 lines (1.0 s, lines counted) |
+| 4 | the served bundle | the web container's assets carry «همهٔ شواهد» |
+
+The page itself was not viewed logged in on the server.
