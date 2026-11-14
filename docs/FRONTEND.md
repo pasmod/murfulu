@@ -350,6 +350,39 @@ build in than to retrofit.
   shorter.
 - **The small print is 13px and 15px**, not 12px and 14px.
 
+## Every search box suggests (2026-11-14)
+
+Asked for by the project lead: *the search fields all should support auto
+suggest*. Seven boxes do — the word search, build, compound, take apart, the
+meanings, the word bank and the reading screen — and all of them through one
+component, `suggest/Suggest.tsx`, so they behave alike:
+
+- **The ARIA combobox with a list.** The box keeps the focus; ↓ and ↑ move
+  through the suggestions and wrap at the ends; Enter takes the marked one;
+  Escape closes the list (and, once shut, is the search box's own *clear*).
+  **Enter with nothing marked submits what was typed**, exactly as before:
+  a suggestion is never taken unasked — so typing on, or moving the caret
+  with ← →, unmarks it, and an input method's Enter is left to the method.
+- **Asked for after a 150ms pause**, and an older request is aborted when the
+  letters move on, so an answer for «د» never lands under «دلب».
+- **Only typing opens the list.** A value written in from the address, the
+  query builder or an example button does not; nor does leaving the box and
+  coming back.
+- **Taking a suggestion does what the screen's search does with it**: the
+  bank asks for that word alone (`exact`), in the whole bank; build, compound
+  and take apart run at once; the word search finishes only the last term,
+  and only while the caret is at the end, and runs; the reading screen lists
+  a group's texts or opens a text.
+- **What is suggested** comes from `/suggest/words` (the bank, in the script
+  typed: a Persian spelling with its readings, or a Latin reading with its
+  spellings; build and compound only offer words the rules build from) and
+  `/suggest/texts` (authors, works and sections whose own name holds every
+  word typed, then single texts). The meanings box filters the 42 meanings the
+  screen already has, and replaced the browser's `datalist`.
+- **On a phone** the list is as wide as the box, scrolls inside itself, and
+  each suggestion is a 44px touch target; pressing one keeps the focus in the
+  box, so the keyboard stays up. `tests/suggest.spec.ts` checks it at 375px.
+
 ## Open
 
 Settled: **Persian digits (۱۲۳)** throughout. **All seven screens** are built,

@@ -24,11 +24,16 @@ import {
   bankPage,
 } from "../../api/bank";
 import { SCREENS } from "../../shell/screens";
+import { Suggest } from "../../suggest/Suggest";
+import { wordSource } from "../../suggest/sources";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import styles from "./Bank.module.css";
 
 const SCREEN = SCREENS.find((one) => one.path === "/bank")!;
+
+/** What the box suggests: any word of the bank, in either script. */
+const WORDS = wordSource();
 
 /** Words per page: enough to scan, few enough to read on a phone. */
 const PAGE_SIZE = 50;
@@ -294,12 +299,22 @@ export function Bank(): React.ReactElement {
 
       <form className={styles.search} onSubmit={search} role="search">
         <label htmlFor="bank-query">جست‌وجو در بانک واژه</label>
-        <input
+        {/* A suggestion is a word of the bank, so taking it asks for that
+            word itself — not every word holding its letters — and in the
+            whole bank, because the suggestions come from all of it and a
+            group could hide the very word that was picked. */}
+        <Suggest
           id="bank-query"
           className={styles.query}
           type="search"
           value={typed}
-          onChange={(event) => setTyped(event.target.value)}
+          onChange={setTyped}
+          source={WORDS}
+          listLabel="واژه‌های بانک"
+          onPick={(one) => {
+            setTyped(one.word.value);
+            choose({ q: one.word.value, page: 1, exact: "1", group: "" });
+          }}
           placeholder={SCREEN.invitation}
           maxLength={60}
         />

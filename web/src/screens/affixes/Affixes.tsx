@@ -25,19 +25,21 @@
  * the one readable thing about a rule whose affix is nothing.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
   affixes as fetchAffixes,
   type AffixEntry,
   type Affixes as Data,
+  type Meaning,
 } from "../../api/affixes";
 import { ApiError } from "../../api/client";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
 import { SCREENS } from "../../shell/screens";
+import { type Suggestion, Suggest } from "../../suggest/Suggest";
 import styles from "./Affixes.module.css";
 import { MeaningCard } from "./MeaningCard";
 
@@ -48,6 +50,11 @@ const SCREEN = SCREENS.find((one) => one.path === "/affixes")!;
  * Everything else in the pack builds without an affix.
  */
 const AFFIXING = new Set(["suffix", "prefix", "infix"]);
+
+/** Meanings offered under the box at once. There are 42 in all. */
+const SUGGESTED = 8;
+
+type MeaningItem = Suggestion;
 
 function isAffix(rule: AffixEntry): boolean {
   return AFFIXING.has(rule.kind);
@@ -86,6 +93,46 @@ export function Affixes() {
     [data],
   );
 
+  /** The meanings whose name starts with the letters, then those holding them. */
+  const meanings = useCallback(
+    (text: string): MeaningItem[] => {
+      const wanted = text.trim().toLowerCase();
+      const name = (meaning: Meaning) => meaning.gloss_fa ?? meaning.tag;
+      const rank = (meaning: Meaning) => {
+        if (name(meaning).startsWith(wanted)) return 0;
+        if (name(meaning).includes(wanted)) return 1;
+        if (meaning.tag.toLowerCase().includes(wanted)) return 2;
+        return meaning.affixes.some((one) => one.affix.includes(wanted)) ? 3 : null;
+      };
+      return (data?.meanings ?? [])
+        .map((meaning) => ({ meaning, at: rank(meaning) }))
+        .filter((one): one is { meaning: Meaning; at: number } => one.at !== null)
+        .sort((a, b) => a.at - b.at)
+        .slice(0, SUGGESTED)
+        .map(({ meaning }) => ({
+          key: meaning.tag,
+          text: name(meaning),
+          view: (
+            <>
+              <span className={styles.offerName}>{name(meaning)}</span>
+              <span className={styles.offerAffixes}>
+                {meaning.affixes.slice(0, 3).map((one, at) => (
+                  <span key={one.rule_id}>
+                    {at > 0 ? "، " : null}
+                    <Latin affix>{one.affix}</Latin>
+                  </span>
+                ))}
+              </span>
+              <span className={styles.offerCount}>
+                <Num value={meaning.affixes.length} /> وند
+              </span>
+            </>
+          ),
+        }));
+    },
+    [data],
+  );
+
   const shown = useMemo(() => {
     if (!data) return [];
     const wanted = filter.trim();
@@ -105,9 +152,14 @@ export function Affixes() {
    * vocabulary it accepts is a closed set of 42 words transcribed from the
    * source grammar — a reader who types «مکان» gets nothing and learns
    * nothing. Reported by the project lead on 2026-08-18. So the set is on the
-   * screen: the richest handful as buttons, and every one of the 42 in a
-   * `datalist`, which is the browser's own suggestion list and needs no
-   * component. Both are read off the API; no meaning is written here.
+   * screen: the richest handful as buttons, and every one of the 42 offered
+   * under the box while typing. Both are read off the API; no meaning is
+   * written here.
+   *
+   * The list under the box was the browser's own `datalist` until 2026-11-14,
+   * when every search box came to suggest the same way: a `datalist` cannot
+   * be moved through with the keys the other boxes answer to, shows nothing
+   * on some phones, and could not say how many affixes a meaning holds.
    */
   const suggested = useMemo(() => {
     const all = [...(data?.meanings ?? [])];
@@ -133,22 +185,19 @@ export function Affixes() {
           <label className={styles.filterLabel} htmlFor="meaning">
             میان معناها بگردید
           </label>
-          <input
+          <Suggest
             id="meaning"
             className={styles.filter}
+            boxClassName={styles.filterBox}
             type="search"
             dir="auto"
-            autoComplete="off"
-            list="meanings"
             placeholder="جا"
             value={filter}
-            onChange={(event) => setFilter(event.target.value)}
+            onChange={setFilter}
+            source={meanings}
+            listLabel="معناها"
+            onPick={(one) => setFilter(one.text)}
           />
-          <datalist id="meanings">
-            {(data.meanings ?? []).map((meaning) => (
-              <option key={meaning.tag} value={meaning.gloss_fa ?? meaning.tag} />
-            ))}
-          </datalist>
 
           {/* The buttons carry how many affixes each meaning holds: a reader
               choosing between «جا» and «ابزار» is choosing between 6 and 1,

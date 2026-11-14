@@ -8,8 +8,13 @@
 
 import { useState } from "react";
 
+import { Suggest } from "../../suggest/Suggest";
+import { wordSource } from "../../suggest/sources";
 import { Num } from "../../text/Num";
 import styles from "./WordInput.module.css";
+
+/** Only words the rules build from: a loanword here would build nothing. */
+const BUILDS = wordSource({ builds: true });
 
 export interface WordInputProps {
   value: string;
@@ -38,15 +43,20 @@ export function WordInput({ value, depth, depths, busy, onBuild }: WordInputProp
       </label>
 
       <div className={styles.row}>
-        <input
+        <Suggest
           id="word"
           name="word"
           className={styles.input}
           dir="auto"
-          autoComplete="off"
           placeholder="رفتن"
           value={draft}
-          onChange={(event) => setDraft(event.target.value)}
+          onChange={setDraft}
+          source={BUILDS}
+          listLabel="واژه‌هایی که از آنها می‌توان ساخت"
+          onPick={(one) => {
+            setDraft(one.word.value);
+            onBuild(one.word.value, depth);
+          }}
         />
         <button className={styles.submit} type="submit" disabled={busy}>
           {busy ? "در حال ساخت" : "بساز"}

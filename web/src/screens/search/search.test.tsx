@@ -77,7 +77,7 @@ describe("running a search", () => {
 
   it("puts what was typed into the address", async () => {
     renderApp("/");
-    await userEvent.type(screen.getByRole("searchbox"), "*nā");
+    await userEvent.type(screen.getByRole("combobox", { name: "جست‌وجوی واژه" }), "*nā");
     await userEvent.click(screen.getByRole("button", { name: "جست‌وجو" }));
     await waitFor(() => expect(fetch).toHaveBeenCalled());
   });

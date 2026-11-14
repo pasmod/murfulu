@@ -25,10 +25,18 @@ import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { LEXICON } from "../../text/lexicon";
 import { SCREENS } from "../../shell/screens";
+import { Suggest } from "../../suggest/Suggest";
+import { wordSource } from "../../suggest/sources";
 import { Account } from "./Account";
 import styles from "./Explain.module.css";
 
 const SCREEN = SCREENS.find((one) => one.path === "/explain")!;
+
+/**
+ * Any word of the bank: a word is taken apart to see what it is made of, and
+ * that is as much a question about a word that builds nothing.
+ */
+const WORDS = wordSource();
 
 /**
  * Whether the reader typed Persian script rather than the Behnevis.
@@ -105,14 +113,19 @@ export function Explain() {
           واژه‌ای به بهنویس بنویسید
         </label>
         <div className={styles.row}>
-          <input
+          <Suggest
             id="analyse"
             className={styles.input}
             dir="auto"
-            autoComplete="off"
             placeholder="Ravandegi"
             value={draft}
-            onChange={(event) => setDraft(event.target.value)}
+            onChange={setDraft}
+            source={WORDS}
+            listLabel="واژه‌های بانک"
+            onPick={(one) => {
+              setDraft(one.word.value);
+              run(one.word.value);
+            }}
           />
           <button className={styles.submit} type="submit">
             بشکاف

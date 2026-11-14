@@ -28,10 +28,15 @@ import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { notFound, wordGroup } from "../../text/lexicon";
 import { SCREENS } from "../../shell/screens";
+import { Suggest } from "../../suggest/Suggest";
+import { wordSource } from "../../suggest/sources";
 import { Pairings } from "./Pairings";
 import styles from "./Compound.module.css";
 
 const SCREEN = SCREENS.find((one) => one.path === "/compound")!;
+
+/** Only words the rules build from: a compound needs a word that takes part. */
+const BUILDS = wordSource({ builds: true });
 
 /** Nouns that make compounds. Checked against the API, never guessed. */
 const EXAMPLES = ["دل", "آب", "سر", "دست", "کار"];
@@ -121,14 +126,19 @@ export function Compound() {
           واژه‌ای بنویسید
         </label>
         <div className={styles.row}>
-          <input
+          <Suggest
             id="compound-word"
             className={styles.input}
             dir="auto"
-            autoComplete="off"
             placeholder="دل"
             value={draft}
-            onChange={(event) => setDraft(event.target.value)}
+            onChange={setDraft}
+            source={BUILDS}
+            listLabel="واژه‌هایی که با آنها می‌توان ترکیب ساخت"
+            onPick={(one) => {
+              setDraft(one.word.value);
+              run(one.word.value);
+            }}
           />
           <button className={styles.submit} type="submit">
             بترکیب

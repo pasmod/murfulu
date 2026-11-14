@@ -2,6 +2,60 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-14 — every search box suggests while typing
+
+The project lead asked for it in one line: *the search fields all should
+support auto suggest*. Settled:
+
+- **One component for all seven boxes** (`web/src/suggest/Suggest.tsx`), the
+  WAI-ARIA combobox with a list, rather than seven variations or the browser's
+  `datalist`: a `datalist` cannot be walked with the keys the other boxes take,
+  shows nothing on some phones, and cannot say how many texts or affixes a
+  suggestion holds. FRONTEND.md has what it does.
+- **Two small routes, not a change to the search routes**: `/suggest/words`
+  and `/suggest/texts`, at most ten answers each (the boxes ask for eight).
+  `/texts/suggest` would have been read as a text named *suggest* by
+  `/texts/{document_id}`.
+- **A word is suggested in the script typed**, one suggestion per spelling
+  (Persian) or per reading (Latin), so دل is one line with *Del، dall، Dol*,
+  not three. **Stems are not suggested**: the bank search finds a word by its
+  stem, but a stem is not a word to pick. Latin is compared without its marks,
+  so *kar* reaches *kār*.
+- **Prefix first, then the words holding the letters**, from an index built
+  once per snapshot (1.1 s, on top of the bank's own list) — 10 to 30ms an
+  answer on the 57,944 readings of the current lexicon.
+- **A group of texts is offered only when its own name holds every word
+  typed**, the last as a prefix: «حافظ غز» offers *حافظ · غزلیات* (495 texts)
+  and never *حافظ* alone. One Elasticsearch request answers both the groups
+  (aggregations over author → work → section) and the single texts, 10 to 70ms
+  on corpus v17.
+- **Build and compound only offer words the rules build from**: a loanword
+  there would build nothing and look like a fault.
+
+- **The word search offers only a word's first reading** (`primary=true`):
+  `/search` matches a Latin word against the first reading alone, so *Kenār*,
+  کنار's second, would find nothing there. Build, compound and take apart
+  look a word up through every reading and are offered all of them. That the
+  search screen cannot find a second reading at all is older than this and
+  is left as it was (OPEN_QUESTIONS).
+- **Reviewed by Codex before it went anywhere**; its eight findings were all
+  real and are fixed, each with a test: a suggestion marked before more
+  letters were typed could still be taken by Enter; an input method's Enter
+  took a suggestion; ← and → left a suggestion marked; the word search
+  finished its last term while the reader was editing an earlier one, and
+  read a single quote as no quote; *Kenār* above; the text suggestions asked
+  the index in folded letters, so «سؤال» found nothing (ؤ is folded here, not
+  there); and a heading too long for a search was cut mid-word, so the text
+  picked was not in its own list. A second pass over the fixes found three
+  more, also fixed: a caret moved back into the line could still complete the
+  last term with ↓ and Enter; an apostrophe inside double quotes was read as
+  an open quote; and the sixteen bank spellings with an Arabic yeh (مسکينی)
+  were offered to the word search as written, where the index holds them
+  folded (مسکینی) and found nothing.
+
+Not done: the query builder's own boxes (a pattern's letters, counts and
+centuries) are fragments of a query, not searches, and suggest nothing.
+
 ## 2026-11-14 — a pick teaches the model, a typed reading goes to karbon
 
 The project lead's question: is a reading not a matter of context? It is,

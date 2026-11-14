@@ -27,9 +27,40 @@
 
 import { useEffect, useState } from "react";
 
+import { type Source, type Suggestion, Suggest } from "../../suggest/Suggest";
+import { textSource, wordSource } from "../../suggest/sources";
 import { Builder } from "./Builder";
 import { Reference } from "./Reference";
 import styles from "./QueryBox.module.css";
+import { complete, typing, wanted } from "./typing";
+
+/** A suggestion for the box: what it shows, and the whole query it makes. */
+interface TermItem extends Suggestion {
+  query: string;
+}
+
+/**
+ * Only first readings: the search matches a Latin word against a reading's
+ * first form, so *Kenār*, کنار's second reading, would find nothing here.
+ */
+const WORDS = wordSource({ primary: true });
+const AUTHORS = textSource(["author"]);
+
+/** What the last term can be finished with. */
+const TERMS: Source<TermItem> = async (text, signal) => {
+  const at = typing(text);
+  const want = at ? wanted(at.term) : null;
+  if (!at || !want) return [];
+  if (want.kind === "author") {
+    const found = await AUTHORS(want.text, signal);
+    return found.map((one) => ({
+      ...one,
+      query: complete(at, "author", one.found.query),
+    }));
+  }
+  const found = await WORDS(want.text, signal);
+  return found.map((one) => ({ ...one, query: complete(at, "word", one.word.value) }));
+};
 
 export interface QueryBoxProps {
   value: string;
@@ -80,17 +111,26 @@ export function QueryBox({ value, onSearch, busy = false }: QueryBoxProps) {
       </div>
 
       <div className={styles.row}>
-        <input
+        {/* The last term is the one suggested for: a word of the bank, or
+            an author after `author:`. Taking one runs the search, as Enter
+            on what was typed would. */}
+        <Suggest
           id="query"
           name="query"
           className={styles.input}
           type="search"
           dir="auto"
-          autoComplete="off"
           spellCheck={false}
           placeholder="*نا"
           value={draft}
-          onChange={(event) => setDraft(event.target.value)}
+          onChange={setDraft}
+          source={TERMS}
+          atEndOnly
+          listLabel="واژه‌ها و نویسندگان"
+          onPick={(one) => {
+            setDraft(one.query);
+            onSearch(one.query);
+          }}
         />
         <button className={styles.submit} type="submit" disabled={busy}>
           {busy ? "در حال جست‌وجو" : "جست‌وجو"}

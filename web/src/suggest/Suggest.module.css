@@ -1,0 +1,103 @@
+/*
+ * The suggesting box and its list.
+ *
+ * The wrapper takes the place in the screen's row that the box used to: it is
+ * the flex item now, so it carries `flex: 1` and the `min-width: 0` that keeps
+ * a box from pushing a phone's row sideways (controls.module.css says why).
+ * The box inside fills it. A screen that sets the box's width on its own
+ * passes `boxClassName` instead.
+ */
+
+.box {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Under the box, as wide as the box, above whatever follows. It scrolls inside
+   itself rather than running past the bottom of a phone's screen.
+
+   Above the feedback button too (40), which floats at the bottom corner of a
+   phone's screen and sat over the third suggestion in the first screenshots;
+   below the feedback panel (45), which is opened on purpose. */
+.list {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(100% + var(--space-1));
+  z-index: 42;
+  max-block-size: min(22rem, 50vh);
+  margin: 0;
+  padding: var(--space-1) 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  background-color: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-raised);
+}
+
+.list[hidden] {
+  display: none;
+}
+
+/* A full touch target each. The marked one takes the accent's wash, the same
+   ground a chosen chip has, and an edge on its start side, so it is not told
+   by colour alone. */
+.option {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-4);
+  border-inline-start: 3px solid transparent;
+  cursor: pointer;
+  line-height: var(--leading-tight);
+}
+
+.option[aria-selected="true"] {
+  background-color: var(--accent-wash);
+  border-inline-start-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+/* ---- what a suggestion holds -------------------------------------------- */
+
+.main {
+  font-weight: var(--weight-medium);
+}
+
+.aside {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+/* What kind of thing it is — نویسنده، کتاب، متن — at the line's far end. */
+.kind {
+  margin-inline-start: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* A text's heading can run to a paragraph (a section of the Valadnameh is
+   ninety words); two lines say which text it is. It gives way to the kind
+   beside it, so «متن» stays on the heading's line on a phone instead of
+   taking a line of its own under each suggestion. */
+.clamp {
+  display: -webkit-box;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}

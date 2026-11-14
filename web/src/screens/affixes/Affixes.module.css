@@ -16,6 +16,29 @@
   composes: fieldLead from "../../styles/controls.module.css";
 }
 
+/* The box alone on its line, not a flex item in a row. */
+.filterBox {
+  flex: none;
+}
+
+/* A meaning offered under the box: its name, a few of its affixes, and how
+   many it holds — the figure the buttons below carry too. */
+.offerName {
+  font-weight: var(--weight-medium);
+}
+
+.offerAffixes {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.offerCount {
+  margin-inline-start: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
 /* The meanings offered as buttons. The same shape the build and compound
    screens use for their example words, and for the same reason: a box whose
    vocabulary is a closed set has to show some of it. */

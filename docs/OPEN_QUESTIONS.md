@@ -5,6 +5,20 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-14 (search suggestions)
+
+### Should the search screen find a word by its second reading?
+
+Typing *Kenār* into the word search finds nothing, though the lexicon lists it
+as کنار's second reading (*Kanār* is the first): an exact Latin term is
+matched against `latin` and never against `latin_variants`, which the index
+already holds. The lexicon's own lookup, used by build, compound and take
+apart, settled the same question the other way on 2026-08-15 (7,106 second
+readings had been unreachable). Left as it was by the suggestions work, which
+offers the word search first readings only; matching both fields while
+keeping case would let it offer all of them. Unnumbered so as not to collide
+with the list being numbered elsewhere at the same time.
+
 ## Opened 2026-11-14 (automatic Behnevis)
 
 ### S47. Which confidence does a word need to be taken without a person?

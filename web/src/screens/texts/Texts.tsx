@@ -20,6 +20,9 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ApiError } from "../../api/client";
 import { type TextFound, findTexts, headingOf } from "../../api/texts";
 import { SCREENS } from "../../shell/screens";
+import { Suggest } from "../../suggest/Suggest";
+import { MOST, searchFor } from "../../suggest/searchFor";
+import { textSource } from "../../suggest/sources";
 import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
 import { Marked } from "./Marked";
@@ -27,6 +30,9 @@ import { Reader } from "./Reader";
 import styles from "./Texts.module.css";
 
 const SCREEN = SCREENS.find((one) => one.path === "/texts")!;
+
+/** What the box suggests: authors, works, sections and texts. */
+const TEXTS = textSource();
 
 /** Ready to press, so an empty screen is never a dead end. */
 const EXAMPLES = ["حافظ غزل ۳", "گلستان دیباچه"];
@@ -66,16 +72,27 @@ export function Texts() {
       <form className={styles.open} onSubmit={open} role="search">
         <label htmlFor="text-query">متنی را باز کنید</label>
         <div className={styles.row}>
-          <input
+          {/* An author, a work or a section lists its texts, as if typed in
+              full; a single text opens, with its heading as the search, so
+              «back to the results» leads to a list that holds it. */}
+          <Suggest
             id="text-query"
             className={styles.input}
             type="search"
             dir="auto"
-            autoComplete="off"
             value={typed}
-            onChange={(event) => setTyped(event.target.value)}
+            onChange={setTyped}
+            source={TEXTS}
+            listLabel="نویسندگان، کتاب‌ها و متن‌ها"
+            onPick={({ found }) => {
+              const asked = searchFor(found);
+              setTyped(asked);
+              setParams(
+                found.document_id ? { q: asked, text: found.document_id } : { q: asked },
+              );
+            }}
             placeholder="نویسنده، کتاب یا عنوان"
-            maxLength={120}
+            maxLength={MOST}
           />
           <button type="submit" className={styles.go}>
             باز کن

@@ -344,7 +344,7 @@ describe("the reading screen", () => {
       "/texts?text=fixture%3Aa%3A1&unit=0&word=%D8%AF%D9%84",
     );
 
-    await userEvent.type(screen.getByRole("searchbox", { name: "متنی را باز کنید" }), "کتاب");
+    await userEvent.type(screen.getByRole("combobox", { name: "متنی را باز کنید" }), "کتاب");
     await userEvent.click(screen.getByRole("button", { name: "باز کن" }));
     expect(
       await screen.findByRole("link", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" }),
