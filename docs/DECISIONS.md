@@ -86,6 +86,10 @@ uses it yet.
   *Bud*; so بود is not a sure word although it has one reading.
 - *A word's own signs narrow its candidates*; signs that fit none of them send
   the word to a person.
+- *The sign check reads Behnevis's mark for ع and ء* (*tabˈ*): without it, a
+  reading with the mark could not be judged and kept its confidence against
+  the text's signs (the review of 2026-11-14). The reading screen's pale
+  readings use the same check, so a few more of them can now be judged.
 - *Two numbers are assumptions*: a function word's reading starts at 0.9, and
   so does the coverage of a spelling the corpus never marks. The corpus has no
   unbiased sample to measure them on — its fully vowelled Persian lines are

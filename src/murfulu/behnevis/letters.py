@@ -32,15 +32,9 @@ from typing import Any
 from murfulu.corpus.wordtypes import normalise
 from murfulu.search.harakat import _UNWRITTEN, _VOWELS, LETTERS
 
-#: What a letter may stand for, as :mod:`murfulu.search.harakat` has it, with
-#: the mark Behnevis writes for ع and ء (*tabˈ*, *masˈul*). The reading screen
-#: does not need it: a mark is never a vowel.
-SPELLED: dict[str, tuple[str, ...]] = {
-    **LETTERS,
-    "ع": (*LETTERS["ع"], "ˈ"),
-    "ء": (*LETTERS["ء"], "ˈ"),
-    "ئ": (*LETTERS["ئ"], "ˈ"),
-}
+#: What a letter may stand for: :mod:`murfulu.search.harakat`'s table, which
+#: also knows the mark Behnevis writes for ع and ء (*tabˈ*, *masˈul*).
+SPELLED: dict[str, tuple[str, ...]] = LETTERS
 
 #: Left and right of a word, so the first and last letters have surroundings.
 EDGE = "#"

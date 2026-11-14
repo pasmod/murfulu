@@ -93,6 +93,8 @@ def test_the_reading_screen_carries_the_ids_the_signs_rule_out():
         ("تُرکِ", "Tark", False),
         ("دلِ", "Dal", None),  # only the ezafe: no sign that counts
         ("دِل", "qal", None),  # no spelling of the reading lines up
+        ("طِبع", "tabˈ", False),  # the mark for ain is read, not skipped
+        ("طَبع", "tabˈ", True),
     ],
 )
 def test_fits_tells_confirmed_from_ruled_out_from_undecided(

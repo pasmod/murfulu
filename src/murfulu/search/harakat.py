@@ -60,7 +60,7 @@ ZWNJ = "‌"
 #: نو, and silent in خواب; ی is *y*, *i*, *ey*, and *iy* in زیادی.
 LETTERS: dict[str, tuple[str, ...]] = {
     "ا": ("ā", "a", "e", "o", ""),
-    "آ": ("ā",),
+    "آ": ("ā", "ˈā"),  # Behnevis marks a hamza before it: *maˈāl*
     "ب": ("b",),
     "پ": ("p",),
     "ت": ("t",),
@@ -80,7 +80,7 @@ LETTERS: dict[str, tuple[str, ...]] = {
     "ض": ("z",),
     "ط": ("t",),
     "ظ": ("z",),
-    "ع": ("", "a", "e", "o"),
+    "ع": ("", "a", "e", "o", "ˈ"),  # ˈ, the mark Behnevis writes: *tabˈ*
     "غ": ("q",),
     "ف": ("f",),
     "ق": ("q",),
@@ -92,8 +92,8 @@ LETTERS: dict[str, tuple[str, ...]] = {
     "و": ("v", "u", "o", "ow", "uv", "ov", "w", ""),
     "ه": ("h", "e", "a", ""),
     "ی": ("y", "i", "ey", "iy", "e", "ā", "ay", ""),
-    "ئ": ("y", "", "e"),
-    "ء": ("", "y"),
+    "ئ": ("y", "", "e", "ˈ"),
+    "ء": ("", "y", "ˈ"),
 }
 
 #: Short vowels the script leaves unwritten, which may follow any letter.
