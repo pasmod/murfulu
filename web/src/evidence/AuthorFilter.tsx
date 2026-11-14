@@ -6,9 +6,9 @@
  * and a row of two hundred chips is not a filter anyone can use on a phone.
  */
 
-import type { Evidence } from "../../api/evidence";
-import { persianNumber } from "../../text/numbers";
-import styles from "./AllEvidence.module.css";
+import type { Evidence } from "../api/evidence";
+import { persianNumber } from "../text/numbers";
+import styles from "./Evidence.module.css";
 
 /** The value for "every author", and for "the texts with no author". */
 export const EVERY = "";

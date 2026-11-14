@@ -79,3 +79,85 @@ test.describe("every text of a spelling", () => {
     await expect(sources).toContainText(second);
   });
 });
+
+test.describe("the verses under a built word's figures", () => {
+  test("open with the corpus field and lead to the line", async ({ page }) => {
+    const answer = await page.request.get(`/api/generate?word=${encodeURIComponent("بس")}&depth=2`);
+    test.skip(!answer.ok(), "no lexicon or corpus here");
+    const lines = await page.request.get(
+      `/api/evidence?spelling=${encodeURIComponent("بسمان")}&size=1&count_lines=0`,
+    );
+    test.skip(!lines.ok() || (await lines.json()).texts.length === 0, "no corpus with بسمان");
+
+    await page.goto(`/build?word=${encodeURIComponent("بس")}&depth=2`);
+    // The innermost item holding the word: a word class's item holds its rows.
+    const row = page
+      .getByRole("listitem")
+      .filter({ has: page.getByText("Basmān", { exact: true }) })
+      .last();
+    // The row sits in one reading's folded word class; open them until it shows.
+    const groups = page.getByRole("button", { name: /کارنام/ });
+    await expect(groups.first()).toBeVisible();
+    for (let at = 0; at < (await groups.count()); at += 1) {
+      await groups.nth(at).click();
+      if (await row.isVisible()) break;
+    }
+    await row.getByRole("button", { name: "شواهد" }).click();
+    await row.getByRole("button", { name: /^پیکره/ }).click();
+    await expect(row.locator("mark").first()).toHaveText("بسمان");
+    expect(
+      await page.evaluate(() => document.body.scrollWidth - document.body.clientWidth),
+    ).toBeLessThanOrEqual(1);
+
+    await row.getByRole("link", { name: "در متن ←" }).first().click();
+    await expect(page).toHaveURL(/\/texts\?text=.*&unit=\d+&word=/);
+    await expect(page.getByText(/همان سطرِ شاهدمثالِ «بسمان»/)).toBeVisible();
+    await expect(page.locator("button[data-sought]").first()).toBeInViewport();
+  });
+
+  test("opens the whole list in the panel, thumb-sized and with no violations", async ({
+    page,
+  }) => {
+    const answer = await page.request.get(
+      `/api/generate?word=${encodeURIComponent("بستن")}&depth=1`,
+    );
+    test.skip(!answer.ok(), "no lexicon or corpus here");
+    await page.goto(`/build?word=${encodeURIComponent("بستن")}&depth=1`);
+    const row = page
+      .getByRole("listitem")
+      .filter({ has: page.getByText("Bande", { exact: true }) })
+      .last();
+    const groups = page.getByRole("button", { name: /کارنام/ });
+    await expect(groups.first()).toBeVisible();
+    for (let at = 0; at < (await groups.count()); at += 1) {
+      await groups.nth(at).click();
+      if (await row.isVisible()) break;
+    }
+    test.skip(!(await row.isVisible()), "no row بنده here");
+    await row.getByRole("button", { name: "شواهد" }).click();
+    await row.getByRole("button", { name: /^پیکره/ }).click();
+    const more = row.getByRole("button", { name: /^همهٔ .* متن$/ });
+    await more.click();
+    // The same button, renamed: the reader's focus stays on it.
+    await expect(row.getByRole("button", { name: "تنها چند متن نخست" })).toBeFocused();
+    await expect(row.getByRole("combobox", { name: "نویسنده" })).toBeVisible();
+    await expect(row.locator("ol > li").nth(9)).toBeVisible();
+
+    expect(
+      await page.evaluate(() => document.body.scrollWidth - document.body.clientWidth),
+    ).toBeLessThanOrEqual(1);
+    const panel = row
+      .locator("[id]")
+      .filter({ has: page.locator("ol") })
+      .first();
+    for (const control of await panel.locator("button, select").all()) {
+      const box = await control.boundingBox();
+      expect(box!.height, await control.textContent()).toBeGreaterThanOrEqual(44);
+    }
+    const result = await new AxeBuilder({ page })
+      .include("main")
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(result.violations.map((one) => `${one.id}: ${one.nodes[0]?.target}`)).toEqual([]);
+  });
+});

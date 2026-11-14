@@ -8,21 +8,31 @@
  * already here, nothing is fetched.
  */
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Link } from "react-router-dom";
 
-import type { EvidenceLine, EvidenceText as Text } from "../../api/evidence";
-import { Num } from "../../text/Num";
-import { persianCentury } from "../../text/numbers";
-import styles from "./AllEvidence.module.css";
+import type { EvidenceLine, EvidenceText as Text } from "../api/evidence";
+import { Num } from "../text/Num";
+import { persianCentury } from "../text/numbers";
+import styles from "./Evidence.module.css";
 
 /** Lines shown before the rest are asked for. */
 const AT_A_GLANCE = 6;
 
-export function EvidenceText({ text, spelling }: { text: Text; spelling: string }) {
+export function EvidenceText({
+  text,
+  spelling,
+  glance = AT_A_GLANCE,
+}: {
+  text: Text;
+  spelling: string;
+  /** Lines shown before the rest are asked for. */
+  glance?: number;
+}) {
   const [whole, setWhole] = useState(false);
-  const lines = whole ? text.lines : text.lines.slice(0, AT_A_GLANCE);
-  const listId = `lines-${text.document_id}`;
+  const lines = whole ? text.lines : text.lines.slice(0, glance);
+  // Not the document id: one text can stand in two open panels at once.
+  const listId = useId();
   return (
     <li className={styles.text}>
       <p className={styles.source}>
@@ -53,7 +63,7 @@ export function EvidenceText({ text, spelling }: { text: Text; spelling: string 
           ))}
         </ul>
       ) : null}
-      {text.lines.length > AT_A_GLANCE ? (
+      {text.lines.length > glance ? (
         <button
           type="button"
           className={styles.more}

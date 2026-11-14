@@ -29,6 +29,7 @@ import { Latin } from "../../text/Latin";
 import { Mixed } from "../../text/Mixed";
 import { Num } from "../../text/Num";
 import { persianNumber, persianPercent } from "../../text/numbers";
+import { CorpusLines } from "./CorpusLines";
 import { Evidence } from "./Evidence";
 import styles from "./Signals.module.css";
 
@@ -104,6 +105,8 @@ function CorpusDetail({ form }: { form: BuiltForm }) {
           )}
         </p>
       ) : null}
+      {/* The lines the figures were counted from, fetched when this opens. */}
+      <CorpusLines form={form} />
     </>
   );
 }

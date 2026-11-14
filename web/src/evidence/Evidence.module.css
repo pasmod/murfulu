@@ -1,0 +1,157 @@
+/*
+ * Every text of a spelling, as a list: shared by the word page and the build
+ * screen's corpus panel. Nothing here is a new look. The small print, the
+ * source line, the size of a line and its «در متن ←» are the word page's
+ * citations', written out with the same tokens because a shared component
+ * cannot compose from one screen's stylesheet; the controls are the shared
+ * ones; the marked word is the reading screen's — an underline in the accent,
+ * not a highlighter's ground.
+ */
+
+.note {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  max-inline-size: var(--measure);
+}
+
+.trouble {
+  composes: trouble from "../styles/page.module.css";
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--line);
+}
+
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.filterLabel {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+/* Two hundred authors' names: the box takes the room there is, never more
+   than the page has. */
+.select {
+  composes: field from "../styles/controls.module.css";
+  flex: 1 1 14rem;
+  max-inline-size: 28rem;
+}
+
+.count {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.texts {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One text: rows parted by a hairline and by space, as inside every card. */
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-block-end: 1px solid var(--line);
+}
+
+.text:first-child {
+  padding-block-start: 0;
+}
+
+.text:last-child {
+  border-block-end: none;
+}
+
+/* The word page's citation source line. */
+.source {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+.lineCount {
+  white-space: nowrap;
+}
+
+.near {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  max-inline-size: var(--measure);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A line and its way into the text: side by side where there is room, the
+   link under the line on a phone. The edge is the six citations' edge,
+   written out rather than composed: their row is a column and this one is
+   not, and two classes of equal weight would be settled by load order. */
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-4);
+  padding-inline-start: var(--space-4);
+  border-inline-start: 2px solid var(--line);
+}
+
+/* The size of the word page's citation lines. */
+.verse {
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  color: var(--ink);
+  flex: 1 1 18rem;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The word, marked the way the reading screen marks the word a citation led
+   to. A <mark>, so it is said as well as seen; the browser's yellow is not
+   this app's. */
+.word {
+  background: none;
+  color: inherit;
+  border-block-end: 2px solid var(--accent);
+}
+
+/* The citations' «در متن ←»: a touch target's height, the small print. */
+.inText {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  font-size: var(--text-sm);
+}
+
+.more {
+  composes: secondary from "../styles/controls.module.css";
+  align-self: flex-start;
+}
+
+.pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.page {
+  composes: secondary from "../styles/controls.module.css";
+}
