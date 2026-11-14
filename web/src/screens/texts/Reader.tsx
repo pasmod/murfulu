@@ -202,8 +202,11 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
               found={unit === one.index ? word : null}
               onChoose={(next) => setChosen(next ? { unit: one.index, ...next } : undefined)}
               panel={
-                shown && shown.s ? (
+                shown && shown.s && open ? (
                   <WordPanel
+                    // One panel per word occurrence: a pick made for one word
+                    // must never be sent for the next (the review of 2026-11-14).
+                    key={`${one.index}:${open.line}:${open.word}`}
                     id={panelId}
                     spelling={shown.s}
                     known={text.words[shown.s]}

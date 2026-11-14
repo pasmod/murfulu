@@ -126,6 +126,15 @@ const EARLIER: Marked = { ...MARKED, id: 3, target_id: "دل:Del", latin: "Del",
 const AUTO: Text = {
   ...TEXT,
   document_id: "fixture:b:1",
+  words: {
+    ...TEXT.words,
+    دل: {
+      ...TEXT.words["دل"]!,
+      readings: TEXT.words["دل"]!.readings.map((one) =>
+        one.latin === "Del" ? { ...one, latin_variants: ["Dil"] } : one,
+      ),
+    },
+  },
   behnevis: { sure: 0.9, mid: 0.7 },
   units: [
     {
@@ -147,6 +156,7 @@ const AUTO: Text = {
                 candidates: [
                   ["Del", 0.96],
                   ["Dal", 0.03],
+                  ["Dil", 0.01],
                 ],
               },
             },
@@ -393,6 +403,31 @@ describe("the reading screen", () => {
         target_id: "دل:Dal",
         context: expect.objectContaining({ in_bank: true }),
       }),
+    );
+  });
+
+  it("starts a fresh form for each word, so a pick never travels", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
+    let here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    await userEvent.click(within(here).getByRole("button", { name: /Dal/ }));
+    await userEvent.click(within(text).getByRole("button", { name: /^رفتند:/ }));
+    here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    expect(within(here).getByRole("button", { name: "ثبت پیشنهاد" })).toBeDisabled();
+    expect(posted).toEqual([]);
+  });
+
+  it("counts a variant as the bank's own reading", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    await userEvent.click(within(here).getByRole("button", { name: /Dil/ }));
+    await userEvent.click(within(here).getByRole("button", { name: "ثبت پیشنهاد" }));
+    await within(here).findByText(/ثبت شد/);
+    expect(posted[0]).toEqual(
+      expect.objectContaining({ context: expect.objectContaining({ latin: "Dil", in_bank: true }) }),
     );
   });
 });

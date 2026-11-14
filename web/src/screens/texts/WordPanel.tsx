@@ -288,12 +288,19 @@ function Here({
   const [picked, setPicked] = useState<string>("");
   const [typed, setTyped] = useState<string>("");
   const [state, setState] = useState<Proposing>("idle");
+  // What was sent, so the confirmation names it whatever is typed meanwhile.
+  const [sent, setSent] = useState<string>("");
   const chosen = typed.trim() || picked;
-  const inBank = readings.some((one) => one.latin === chosen);
+  const busy = state === "sending";
+  // A variant is the bank's too: رخ is *rex*, and *rox* as well.
+  const inBank = readings.some(
+    (one) => one.latin === chosen || one.latin_variants.includes(chosen),
+  );
 
   function send() {
     if (!chosen) return;
     setState("sending");
+    setSent(chosen);
     proposeReading(spelling, { latin: chosen, in_bank: inBank, model: auto }, where)
       .then(() => setState("done"))
       .catch(() => setState("failed"));
@@ -313,7 +320,7 @@ function Here({
       </p>
       {state === "done" ? (
         <p className={styles.proposed} role="status">
-          پیشنهاد «<Latin>{chosen}</Latin>» ثبت شد. برای فهرست کاربن جمع می‌شود و بانک
+          پیشنهاد «<Latin>{sent}</Latin>» ثبت شد. برای فهرست کاربن جمع می‌شود و بانک
           واژه را تغییر نمی‌دهد.
         </p>
       ) : (
@@ -324,6 +331,7 @@ function Here({
                 key={latin}
                 type="button"
                 className={styles.choice}
+                disabled={busy}
                 aria-pressed={!typed.trim() && picked === latin}
                 onClick={() => {
                   setPicked(latin);
@@ -342,13 +350,14 @@ function Here({
               dir="ltr"
               lang="fa-Latn"
               value={typed}
+              disabled={busy}
               onChange={(event) => setTyped(event.target.value)}
             />
           </label>
           <button
             type="button"
             className={styles.propose}
-            disabled={!chosen || state === "sending"}
+            disabled={!chosen || busy}
             onClick={send}
           >
             ثبت پیشنهاد
