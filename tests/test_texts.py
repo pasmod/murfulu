@@ -14,6 +14,7 @@ from sqlalchemy import create_engine
 
 from murfulu.api import texts as route
 from murfulu.api.app import app
+from murfulu.behnevis.transcribe import Transcriber
 from murfulu.corpus.wordtypes import tokenise
 from murfulu.db.models import Base
 from murfulu.search import texts
@@ -295,3 +296,117 @@ def test_the_marks_are_paged_and_can_be_asked_for_one_spelling(http: TestClient)
     assert [row["target_id"] for row in one["marked"]] == ["دل:Dol"]
     odd = http.get("/texts/marked", params={"spelling": "د_ل"}).json()
     assert [row["target_id"] for row in odd["marked"]] == ["د_ل:x"]
+
+
+# -- the automatic Behnevis on the screen (direction A, 2026-11-14) ------------
+
+
+def _toy_transcriber() -> Transcriber:
+    from murfulu.behnevis.choice import Answered, ChoiceModel
+    from murfulu.behnevis.letters import LetterModel
+    from murfulu.behnevis.transcribe import bank_from
+
+    pairs = [
+        ("دل", "Dal"),
+        ("دل", "Del"),
+        ("دست", "Dast"),
+        ("کار", "Kār"),
+        ("آرام", "ārām"),
+    ]
+    return Transcriber(
+        bank=bank_from(pairs),
+        letters=LetterModel.train(pairs),
+        choice=ChoiceModel.train([Answered("دل", "Del")] * 30),
+        functions={"ما": ("mā",)},
+        covered={"دل": (30, 0)},  # marked often, and always one of its readings
+    )
+
+
+def test_each_word_gets_one_reading_and_a_level():
+    from murfulu.behnevis import serve
+
+    units, _, _ = texts.lay_out(STORED)
+    serve.annotate(units, _toy_transcriber())
+    first = units[1]["lines"][0]["words"]  # «دلِ ما آرام»
+    del_, ma, aram = (w["auto"] for w in first)
+    assert (del_["latin"], del_["level"]) == ("Del", "sure")
+    assert ma["latin"] == "mā" and ma["level"] == "sure"
+    assert [c[0] for c in del_["candidates"]] == ["Del", "Dal"]
+    assert aram["source"] == "bank"
+    assert serve.level(0.95) == "sure" and serve.level(0.8) == "mid"
+    assert serve.level(0.2) == "unsure"
+    assert "auto" not in str(units[0])  # the note: never split, never read
+
+
+def test_a_text_carries_its_levels_when_the_model_is_on(
+    http: TestClient, monkeypatch: pytest.MonkeyPatch
+):
+    from murfulu.behnevis import serve
+
+    off = http.get("/texts/fixture:a:1").json()
+    assert off["behnevis"] is None
+    assert "auto" not in str(off["units"])
+
+    monkeypatch.setattr(serve, "loaded", _toy_transcriber)
+    on = http.get("/texts/fixture:a:1").json()
+    assert on["behnevis"] == {"sure": serve.SURE, "mid": serve.MID}
+    assert on["units"][1]["lines"][0]["words"][0]["auto"]["latin"] == "Del"
+
+
+def test_a_proposed_reading_is_listed_apart_from_the_marks(http: TestClient):
+    proposal = {
+        "category": "linguistic",
+        "target_type": "lexicon_entry",
+        "target_id": "آرد:ārad",
+        "verdict": "good",
+        "note": None,
+        "context": {
+            "screen": "texts",
+            "kind": "reading_here",
+            "spelling_fa": "آرد",
+            "latin": "ārad",
+            "in_bank": False,
+            "model_latin": "Ārd",
+            "model_confidence": 0.06,
+            "written": "آرد",
+            "document_id": "fixture:a:1",
+            "unit": 1,
+            "heading": "نویسنده · کتاب · عنوان",
+        },
+        "corpus_version": "v17",
+    }
+    written = http.post("/feedback", json=proposal)
+    assert written.status_code == 201, written.text
+    assert written.json()["owner"] == "karbon"
+    assert http.get("/texts/marked").json()["total"] == 0
+    [row] = http.get("/texts/marked", params={"kind": "proposed"}).json()["marked"]
+    assert (row["latin"], row["in_bank"], row["model_latin"]) == ("ārad", False, "Ārd")
+    assert http.get("/texts/marked", params={"kind": "other"}).status_code == 422
+
+
+def test_the_proposals_export_as_one_list_for_karbon():
+    import importlib.util
+    from types import SimpleNamespace
+
+    spec = importlib.util.spec_from_file_location(
+        "export_reading_proposals",
+        Path(__file__).resolve().parents[1] / "tools" / "export_reading_proposals.py",
+    )
+    tool = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+    spec.loader.exec_module(tool)  # type: ignore[union-attr]
+    context = {
+        "screen": "texts",
+        "kind": "reading_here",
+        "spelling_fa": "آرد",
+        "latin": "ārad",
+        "in_bank": False,
+        "model_latin": "Ārd",
+        "heading": "حافظ · غزل ۳",
+        "written": "آرد",
+    }
+    rows = [SimpleNamespace(context=context, target_id="آرد:ārad")] * 2 + [
+        SimpleNamespace(context={**context, "kind": "other"}, target_id="x:y")
+    ]
+    text = tool.report(tool.gather(rows))
+    assert "| آرد | ārad | 2 | no | Ārd |" in text
+    assert "x:y" not in text and "| x |" not in text

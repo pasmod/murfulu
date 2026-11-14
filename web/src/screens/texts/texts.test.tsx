@@ -122,11 +122,58 @@ let posted: unknown[] = [];
 /** Marked before this visit: Del, on دل — the panel asks for it by spelling. */
 const EARLIER: Marked = { ...MARKED, id: 3, target_id: "دل:Del", latin: "Del", note: null };
 
+/** The same text with the automatic Behnevis on (direction A, 2026-11-14). */
+const AUTO: Text = {
+  ...TEXT,
+  document_id: "fixture:b:1",
+  behnevis: { sure: 0.9, mid: 0.7 },
+  units: [
+    {
+      index: 0,
+      number: 1,
+      kind: "couplet",
+      lines: [
+        {
+          position: "first",
+          words: [
+            {
+              fa: "دلِ",
+              s: "دل",
+              auto: {
+                latin: "Del",
+                confidence: 0.96,
+                level: "sure",
+                source: "choice",
+                candidates: [
+                  ["Del", 0.96],
+                  ["Dal", 0.03],
+                ],
+              },
+            },
+            {
+              fa: "رفتند",
+              s: "رفتند",
+              auto: {
+                latin: "raftand",
+                confidence: 0.4,
+                level: "unsure",
+                source: "inflected",
+                candidates: [["raftand", 0.4]],
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 function answer(url: string): unknown {
   if (url.includes("/texts/marked") && url.includes("spelling=")) {
     return { total: 1, offset: 0, returned: 1, marked: [EARLIER] };
   }
   if (url.includes("/texts/marked")) return { total: 1, offset: 0, returned: 1, marked: [MARKED] };
+  if (url.includes("fixture%3Ab%3A1") || url.includes("fixture:b:1")) return AUTO;
   if (url.includes("/texts/")) return TEXT;
   return FOUND;
 }
@@ -289,5 +336,63 @@ describe("the reading screen", () => {
     expect(
       await screen.findByRole("link", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" }),
     ).toBeInTheDocument();
+  });
+
+  it("shows one reading under each word, drawn by how sure the model is", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    const sure = within(text).getByRole("button", { name: /^دلِ: Del، مطمئن/ });
+    expect(sure).toHaveAttribute("data-level", "sure");
+    expect(within(sure).queryByText("Dal")).not.toBeInTheDocument();
+    const unsure = within(text).getByRole("button", { name: /^رفتند: raftand، نامطمئن/ });
+    expect(unsure).toHaveAttribute("data-level", "unsure");
+    expect(within(text).getByText(/نامطمئن: کمتر از/)).toBeInTheDocument();
+  });
+
+  it("collects a typed reading as a proposal for karbon, and changes nothing", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^رفتند:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    const send = within(here).getByRole("button", { name: "ثبت پیشنهاد" });
+    expect(send).toBeDisabled();
+    await userEvent.type(within(here).getByRole("textbox"), "raftand");
+    await userEvent.clear(within(here).getByRole("textbox"));
+    await userEvent.type(within(here).getByRole("textbox"), "raftaand");
+    await userEvent.click(send);
+    expect(await within(here).findByText(/ثبت شد/)).toBeInTheDocument();
+    expect(posted).toEqual([
+      expect.objectContaining({
+        target_type: "lexicon_entry",
+        target_id: "رفتند:raftaand",
+        verdict: "good",
+        context: expect.objectContaining({
+          kind: "reading_here",
+          latin: "raftaand",
+          in_bank: false,
+          model_latin: "raftand",
+          model_confidence: 0.4,
+          written: "رفتند",
+        }),
+      }),
+    ]);
+  });
+
+  it("lets a reader pick one of the offered readings instead", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    const dal = within(here).getByRole("button", { name: /Dal/ });
+    await userEvent.click(dal);
+    expect(dal).toHaveAttribute("aria-pressed", "true");
+    await userEvent.click(within(here).getByRole("button", { name: "ثبت پیشنهاد" }));
+    await within(here).findByText(/ثبت شد/);
+    expect(posted[0]).toEqual(
+      expect.objectContaining({
+        target_id: "دل:Dal",
+        context: expect.objectContaining({ in_bank: true }),
+      }),
+    );
   });
 });

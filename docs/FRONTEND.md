@@ -415,6 +415,15 @@ another, the same size, in alphabetical order, with a dotted rule under them;
 the panel says the bank reads it *n* ways and that which one this line needs
 is not said. The drafts' placeholder rule had put *dall* under دل.
 
+**One reading per word, coloured by how sure it is** (since 2026-11-14,
+direction A, when `MURFULU_BEHNEVIS_PATH` names a model): the word's `auto`
+reading under it, a green line (sure), amber dots (mid) or a red dashed box
+(unsure); the legend shows the three with their edges, which come from the
+API. The panel opens with «در این سطر»: the reading, its estimate, the
+readings to pick (`aria-pressed`) and a field to type one, then «ثبت پیشنهاد»
+— a proposal for karbon through the feedback store, which changes nothing on
+the screen. `levels.ts` names the levels.
+
 **A reading the word's own harakat rule out is paler** (since 2026-11-14, the
 project lead's choice): under «تُرکِ», *Tarak* and *Tark* in `--ink-faint`,
 *tork* as before. The API names them (`against` on the word); the legend

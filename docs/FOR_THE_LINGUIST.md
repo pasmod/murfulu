@@ -2793,3 +2793,9 @@ program's proposals, each timed. It replaces our two assumed speeds and the
 two assumed confidences with measurements, and sets the threshold (S47).
 About two hours.
 
+**4. The words on the reading screen** (direction A, 2026-11-14), ours and
+unconfirmed: the levels «مطمئن»، «کمابیش»، «نامطمئن»; the panel's «در این
+سطر» with «این خوانش را برنامه پیشنهاد می‌کند و درصد، برآورد آن از درستی
+است»; «یا خوانش درست را بنویسید»; «ثبت پیشنهاد». What he picks or types there
+is gathered for karbon and changes nothing in the bank.
+

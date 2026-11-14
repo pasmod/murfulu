@@ -80,7 +80,7 @@ describe("the evidence colours", () => {
    * held to the text ratio.
    */
   it.each(
-    ["--evidence-reading", "--evidence-spelling"].flatMap((front) =>
+    ["--evidence-reading", "--evidence-spelling", "--level-unsure"].flatMap((front) =>
       GROUNDS.map((back) => [front, back]),
     ),
   )("%s on %s reaches 4.5:1", (front, back) => {

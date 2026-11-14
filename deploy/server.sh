@@ -249,7 +249,7 @@ EOF
     server_es -f -X POST 'localhost:9200/_aliases' -H 'content-type: application/json' \
       -d "{\"actions\":[${actions%,}]}"; echo
     remote "cd $REMOTE_DIR && sed -i -E \
-      -e 's#^(MURFULU_(PRODUCTIVITY|CORPUS_REPORT|TYPICALITY)_PATH=/data/[a-z_]+-)v[0-9]+\.json#\1$version.json#' \
+      -e 's#^(MURFULU_(PRODUCTIVITY|CORPUS_REPORT|TYPICALITY|BEHNEVIS)_PATH=/data/[a-z_]+-)v[0-9]+\.json#\1$version.json#' \
       ${lexicon:+-e 's#^MURFULU_LEXICON_PATH=.*#MURFULU_LEXICON_PATH=/data/$lexicon.sqlite#'} .env &&
       grep -E '^MURFULU_[A-Z_]+_PATH=' .env && $COMPOSE up -d --wait api"
     server_es 'localhost:9200/_cat/aliases?h=alias,index'

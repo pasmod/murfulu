@@ -113,6 +113,14 @@
   --evidence-spelling: #8a5a12;
   --evidence-none: var(--ink-faint);
 
+  /* How sure the automatic Behnevis is of a word's reading (the reading
+     screen, 2026-11-14): sure reuses the confirming green, mid the amber,
+     and unsure is the one red — a reading a person should look at. Each is
+     also drawn differently (a line, dots, a dashed box), never colour alone. */
+  --level-sure: var(--evidence-reading);
+  --level-mid: var(--evidence-spelling);
+  --level-unsure: #a3332a;
+
   --focus: #b8500f;
 
   /* ---- surface --------------------------------------------------------- */

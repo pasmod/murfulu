@@ -150,6 +150,93 @@
   color: var(--ink);
 }
 
+/* The model's reading for this line, and the way to propose another
+   (direction A, 2026-11-14). */
+.here {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--accent-wash);
+  border-radius: var(--radius-md);
+}
+
+.hereHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  color: var(--ink);
+}
+
+.hereLatin {
+  font-size: var(--text-lg);
+}
+
+.level {
+  font-size: var(--text-xs);
+  padding: 0 var(--space-2);
+  border-radius: 99px;
+  background: var(--paper);
+}
+
+.level[data-level="sure"] {
+  color: var(--level-sure);
+}
+
+.level[data-level="mid"] {
+  color: var(--level-mid);
+}
+
+.level[data-level="unsure"] {
+  color: var(--level-unsure);
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.choice {
+  composes: secondary from "../../styles/controls.module.css";
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.choice[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--paper);
+}
+
+.share {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+.typeLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--ink-soft);
+}
+
+.typeField {
+  composes: field from "../../styles/controls.module.css";
+  max-width: 16rem;
+}
+
+.propose {
+  composes: primary from "../../styles/controls.module.css";
+  align-self: flex-start;
+}
+
+.proposed {
+  color: var(--level-sure);
+}
+
 .askActions {
   display: flex;
   flex-wrap: wrap;

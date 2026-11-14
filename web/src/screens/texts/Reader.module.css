@@ -220,6 +220,38 @@
   color: var(--ink-faint);
 }
 
+/* The automatic Behnevis's one reading, by level (direction A, 2026-11-14):
+   a solid line, dots, or a dashed box — the shape says it without colour. */
+.auto {
+  padding: 0 var(--space-1) 1px;
+}
+
+/* The legend's samples carry the level themselves, outside a word. */
+.levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+.word[data-level="sure"] .auto,
+.auto[data-level="sure"] {
+  color: var(--level-sure);
+  border-block-end: 2px solid var(--level-sure);
+}
+
+.word[data-level="mid"] .auto,
+.auto[data-level="mid"] {
+  color: var(--level-mid);
+  border-block-end: 2px dotted var(--level-mid);
+}
+
+.word[data-level="unsure"] .auto,
+.auto[data-level="unsure"] {
+  color: var(--level-unsure);
+  border: 1px dashed var(--level-unsure);
+  border-radius: var(--radius-sm);
+}
+
 /* Several readings are told apart by a mark, never by one being larger. */
 .word[data-state="several"] .latins {
   padding-block-end: 1px;

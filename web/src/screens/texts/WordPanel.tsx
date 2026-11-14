@@ -16,20 +16,29 @@
  * review, through the feedback store. The wording is unconfirmed
  * (FOR_THE_LINGUIST L39). A mark cannot be taken back — the store is
  * append-only — so it asks once more before it is written.
+ *
+ * **Where the automatic Behnevis is on** (direction A, 2026-11-14) the panel
+ * opens with the model's reading for this line, how sure it is, the readings
+ * to pick from and a field to type one. What is picked or typed is a proposal
+ * for karbon, gathered by `tools/export_reading_proposals.py`; it changes
+ * neither the bank nor the screen.
  */
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
+  type AutoReading,
   type MarkedWhere,
   type Reading,
   type WordKnown,
   marked as fetchMarked,
   markWrong,
+  proposeReading,
 } from "../../api/texts";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
+import { LEVEL_FA, percent } from "./levels";
 import styles from "./WordPanel.module.css";
 
 export interface WordPanelProps {
@@ -39,6 +48,8 @@ export interface WordPanelProps {
   known: WordKnown | undefined;
   /** Ids of the readings this word's own harakat rule out. */
   against: ReadonlySet<string>;
+  /** The automatic Behnevis's reading here, when it is on. */
+  auto?: AutoReading;
   corpusVersion: string | null;
   where: MarkedWhere;
   /** Ids of readings marked wrong in this visit; earlier marks are asked for. */
@@ -52,6 +63,7 @@ export function WordPanel({
   spelling,
   known,
   against,
+  auto,
   corpusVersion,
   where,
   marked,
@@ -86,6 +98,10 @@ export function WordPanel({
           بستن
         </button>
       </header>
+
+      {auto ? (
+        <Here spelling={spelling} auto={auto} readings={readings} where={where} />
+      ) : null}
 
       {readings.length === 0 ? (
         <p className={styles.none}>
@@ -251,3 +267,100 @@ function ReadingRow({
     </li>
   );
 }
+
+type Proposing = "idle" | "sending" | "done" | "failed";
+
+/**
+ * The model's reading for this line, and a way to say which is right here:
+ * pick one of the offered readings, or type one.
+ */
+function Here({
+  spelling,
+  auto,
+  readings,
+  where,
+}: {
+  spelling: string;
+  auto: AutoReading;
+  readings: Reading[];
+  where: MarkedWhere;
+}) {
+  const [picked, setPicked] = useState<string>("");
+  const [typed, setTyped] = useState<string>("");
+  const [state, setState] = useState<Proposing>("idle");
+  const chosen = typed.trim() || picked;
+  const inBank = readings.some((one) => one.latin === chosen);
+
+  function send() {
+    if (!chosen) return;
+    setState("sending");
+    proposeReading(spelling, { latin: chosen, in_bank: inBank, model: auto }, where)
+      .then(() => setState("done"))
+      .catch(() => setState("failed"));
+  }
+
+  return (
+    <section className={styles.here} aria-label="خوانش در این سطر">
+      <p className={styles.hereHead}>
+        در این سطر: <Latin className={styles.hereLatin}>{auto.latin}</Latin>
+        <span className={styles.level} data-level={auto.level}>
+          {LEVEL_FA[auto.level]} · {percent(auto.confidence)}
+        </span>
+      </p>
+      <p className={styles.note}>
+        این خوانش را برنامه پیشنهاد می‌کند و درصد، برآورد آن از درستی است. اگر خوانش
+        درست چیز دیگری است، آن را برگزینید یا بنویسید.
+      </p>
+      {state === "done" ? (
+        <p className={styles.proposed} role="status">
+          پیشنهاد «<Latin>{chosen}</Latin>» ثبت شد. برای فهرست کاربن جمع می‌شود و بانک
+          واژه را تغییر نمی‌دهد.
+        </p>
+      ) : (
+        <>
+          <div className={styles.choices} role="group" aria-label="خوانش‌ها">
+            {auto.candidates.map(([latin, share]) => (
+              <button
+                key={latin}
+                type="button"
+                className={styles.choice}
+                aria-pressed={!typed.trim() && picked === latin}
+                onClick={() => {
+                  setPicked(latin);
+                  setTyped("");
+                }}
+              >
+                <Latin>{latin}</Latin>
+                <span className={styles.share}>{percent(share)}</span>
+              </button>
+            ))}
+          </div>
+          <label className={styles.typeLabel}>
+            یا خوانش درست را بنویسید
+            <input
+              className={styles.typeField}
+              dir="ltr"
+              lang="fa-Latn"
+              value={typed}
+              onChange={(event) => setTyped(event.target.value)}
+            />
+          </label>
+          <button
+            type="button"
+            className={styles.propose}
+            disabled={!chosen || state === "sending"}
+            onClick={send}
+          >
+            ثبت پیشنهاد
+          </button>
+          {state === "failed" ? (
+            <p className={styles.failed} role="status">
+              ثبت نشد. کمی بعد دوباره بیازمایید.
+            </p>
+          ) : null}
+        </>
+      )}
+    </section>
+  );
+}
+

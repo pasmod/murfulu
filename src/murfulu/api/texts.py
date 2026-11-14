@@ -2,6 +2,7 @@
 
     GET /texts?q=حافظ غزل ۳            texts whose heading holds every word
     GET /texts/marked                  readings marked wrong, newest first
+    GET /texts/marked?kind=proposed    readings picked or typed for a word in a line
     GET /texts/{document_id}?start=0   one text, word by word, with readings
 
 Thin, like every route: the work is :mod:`murfulu.search.texts`.
@@ -12,6 +13,11 @@ own: ``POST /feedback`` with ``category: linguistic``, ``verdict: wrong``,
 target. That is what the store is for — a judgement of karbon's data, recorded
 append-only, owned by karbon and exported to it, never fixed here. This route
 only reads those records back for review.
+
+**A reading picked or typed for a word in a line** goes the same way, with
+``verdict: good``: "this reading is right here". The reading need not be in
+the bank — that is what makes it a proposal for karbon (2026-11-14,
+direction A). The model's reading and confidence go in ``context``.
 """
 
 from __future__ import annotations
@@ -23,6 +29,7 @@ from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import func, select
 
 from murfulu.api.auth import Caller, Store
+from murfulu.behnevis import serve as behnevis
 from murfulu.corpus import report
 from murfulu.db.models.review import ExpertFeedback
 from murfulu.lexicon import bank
@@ -74,6 +81,11 @@ def _marked(row: ExpertFeedback) -> dict[str, Any]:
         "document_id": context.get("document_id"),
         "unit": context.get("unit"),
         "heading": context.get("heading"),
+        # A proposal also says what the model had read there, and whether the
+        # proposed reading is in the bank at all.
+        "model_latin": context.get("model_latin"),
+        "model_confidence": context.get("model_confidence"),
+        "in_bank": context.get("in_bank"),
         "note": row.note,
         "corpus_version": row.corpus_version,
         "created_at": row.created_at.isoformat() if row.created_at else None,
@@ -86,6 +98,11 @@ def marked(
     session: Store,
     spelling: str | None = Query(
         None, max_length=60, description="only the marks on this spelling's readings"
+    ),
+    kind: str = Query(
+        "wrong",
+        pattern="^(wrong|proposed)$",
+        description="readings marked wrong, or readings proposed for a word in a line",
     ),
     offset: int = Query(0, ge=0),
     limit: int = Query(MARKED_PAGE, ge=1, le=MARKED_LIMIT),
@@ -100,7 +117,7 @@ def marked(
     """
     where = [
         ExpertFeedback.target_type == "lexicon_entry",
-        ExpertFeedback.verdict == "wrong",
+        ExpertFeedback.verdict == ("wrong" if kind == "wrong" else "good"),
     ]
     if spelling:
         # A reading's id is `spelling:latin`; the spelling's marks start so.
@@ -141,4 +158,11 @@ def read(
     # What the source is called, for the source line: a fact about the
     # source, read the way the corpus screen reads it.
     found["source_name_fa"] = report.NAME_FA_BY_SOURCE.get(found.get("source_id") or "")
+    # The model's reading of each word, when a model is configured.
+    transcriber = behnevis.loaded()
+    if transcriber is not None:
+        behnevis.annotate(found["units"], transcriber)
+        found["behnevis"] = {"sure": behnevis.SURE, "mid": behnevis.MID}
+    else:
+        found["behnevis"] = None
     return found

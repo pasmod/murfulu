@@ -59,6 +59,37 @@ and with it the old bundle, after a deploy. `no-cache` still answers 304 when
 nothing changed. The hashed assets keep their year. `tools/check_web_cache.sh`
 asks a running web container for the headers, and CI runs it on the image it
 builds; against the old configuration it fails on all four ways in.
+## 2026-11-14 — the reading screen shows one reading per word, coloured by how sure it is
+
+**The project lead chose direction A** of three drafts: under each word the
+model's one reading (the automatic Behnevis, DECISIONS below), drawn by its
+level — **sure** (0.9 or more: a green line), **mid** (0.7 to 0.9: amber
+dots), **unsure** (below 0.7: a red dashed box). A press opens the panel with
+the reading, its estimate, the readings to pick from and a field to type
+one. **This replaces the decision of 2026-11-13** that every reading shows
+alike and none is proposed, now that the proposal says how sure it is.
+
+**Decided here, under the working rule:**
+
+- *What is picked or typed is a proposal for karbon, never data here*: a
+  record in the feedback store (`verdict: good` on a `lexicon_entry`, "this
+  reading is right here", the model's reading and estimate in `context`),
+  owned by karbon. The bank and the model do not change; a proposal does not
+  even change what the screen shows. `GET /texts/marked?kind=proposed` reads
+  them back, `tools/export_reading_proposals.py` gathers them into **one list
+  per karbon issue**, not one issue a word.
+- *The shape carries the level as well as the colour* (WCAG 1.4.1): line,
+  dots, box. Sure reuses the confirming green and mid the amber of the
+  evidence colours; unsure is a new red, `--level-unsure`, held to the text
+  contrast ratio.
+- *The levels' edges come from the API* (`behnevis.sure`, `behnevis.mid`), so
+  moving them (OPEN_QUESTIONS S47) is one change.
+- *Without a configured model* (`MURFULU_BEHNEVIS_PATH`) the screen is what it
+  was: every reading alike.
+
+**Unconfirmed**: the words «مطمئن»، «کمابیش»، «نامطمئن»، «در این سطر»،
+«ثبت پیشنهاد» — the linguist's (FOR_THE_LINGUIST L41).
+
 ## 2026-11-14 — automatic Behnevis: a reading and a confidence for every word
 
 **The project lead's choice**: count, with an n-gram model, rather than look

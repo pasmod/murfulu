@@ -43,6 +43,25 @@ export interface TextWord {
    * on a word written with signs that rule one out (since 2026-11-14).
    */
   against?: string[];
+  /**
+   * The automatic Behnevis's reading of this word here, when a model is
+   * configured (direction A, 2026-11-14): one reading, how sure, its level,
+   * and the readings a reader may pick instead.
+   */
+  auto?: AutoReading;
+}
+
+export type Level = "sure" | "mid" | "unsure";
+
+export interface AutoReading {
+  latin: string;
+  /** 0–1: the model's estimate that this reading is right here. */
+  confidence: number;
+  level: Level;
+  /** Where it came from: the bank, a choice among its readings, a guess from the letters… */
+  source: string;
+  /** Readings to pick from, likeliest first, each with its estimate. */
+  candidates: [string, number][];
 }
 
 export type LinePosition =
@@ -103,6 +122,8 @@ export interface Text extends TextHeading {
   limit: number;
   units: TextUnit[];
   words: Record<string, WordKnown>;
+  /** The levels' lower edges when the automatic Behnevis is on; null when it is off. */
+  behnevis?: { sure: number; mid: number } | null;
 }
 
 /** One reading marked wrong, as the review list shows it. */
@@ -188,6 +209,47 @@ export function markWrong(
       screen: "texts",
       spelling_fa: spelling,
       latin: reading.latin,
+      written: where.written,
+      document_id: where.document_id,
+      unit: where.unit,
+      heading: where.heading,
+    },
+    corpus_version: where.corpus_version,
+  });
+}
+
+/** What the model had read where a reader proposes another reading. */
+export interface Proposed {
+  latin: string;
+  /** Whether the proposed reading is one of the bank's for this spelling. */
+  in_bank: boolean;
+  model: AutoReading;
+}
+
+/**
+ * Record that a reading is right for a word in this line — picked among the
+ * readings or typed. A proposal for karbon, append-only; it changes nothing
+ * here (direction A, 2026-11-14).
+ */
+export function proposeReading(
+  spelling: string,
+  proposed: Proposed,
+  where: MarkedWhere,
+): Promise<FeedbackOut> {
+  return leave({
+    category: "linguistic",
+    target_type: "lexicon_entry",
+    target_id: `${spelling}:${proposed.latin}`,
+    verdict: "good",
+    note: null,
+    context: {
+      screen: "texts",
+      kind: "reading_here",
+      spelling_fa: spelling,
+      latin: proposed.latin,
+      in_bank: proposed.in_bank,
+      model_latin: proposed.model.latin,
+      model_confidence: proposed.model.confidence,
       written: where.written,
       document_id: where.document_id,
       unit: where.unit,

@@ -82,6 +82,7 @@ services:
       MURFULU_CORPUS_REPORT_PATH: ${MURFULU_CORPUS_REPORT_PATH}
       MURFULU_SEMANTIC_PATH: ${MURFULU_SEMANTIC_PATH}
       MURFULU_TYPICALITY_PATH: ${MURFULU_TYPICALITY_PATH}
+      MURFULU_BEHNEVIS_PATH: ${MURFULU_BEHNEVIS_PATH:-}
     volumes:
       # The lexicon and the measured artefacts. Read-only: we never write to
       # the snapshot, and a server that could would be able to disagree with

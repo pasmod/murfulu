@@ -11,10 +11,11 @@
 
 import type React from "react";
 
-import type { TextUnit, TextWord, WordKnown } from "../../api/texts";
+import type { AutoReading, TextUnit, TextWord, WordKnown } from "../../api/texts";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { KIND } from "./kinds";
+import { LEVEL_FA, percent } from "./levels";
 import styles from "./Reader.module.css";
 
 export interface Chosen {
@@ -117,6 +118,18 @@ function WordButton({
     // text, isolated so its direction cannot reorder its neighbours.
     return <bdi className={styles.punctuation}>{word.fa}</bdi>;
   }
+  if (word.auto) {
+    return (
+      <AutoWord
+        word={word}
+        auto={word.auto}
+        open={open}
+        sought={sought}
+        panelId={panelId}
+        onPress={onPress}
+      />
+    );
+  }
   const readings = known?.readings ?? [];
   const against = new Set(word.against ?? []);
   const state = readings.length === 0 ? "none" : readings.length === 1 ? "one" : "several";
@@ -165,3 +178,47 @@ function WordButton({
     </button>
   );
 }
+
+/**
+ * A word with the automatic Behnevis's one reading under it, drawn by its
+ * level: a line (sure), dots (mid) or a dashed box (unsure) — never colour
+ * alone. A press opens the panel, where another reading can be picked or
+ * typed (direction A, 2026-11-14).
+ */
+function AutoWord({
+  word,
+  auto,
+  open,
+  sought,
+  panelId,
+  onPress,
+}: {
+  word: TextWord;
+  auto: AutoReading;
+  open: boolean;
+  sought: boolean;
+  panelId: string;
+  onPress: (open: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={styles.word}
+      data-level={auto.level}
+      data-sought={sought || undefined}
+      aria-expanded={open}
+      aria-controls={open ? panelId : undefined}
+      aria-label={`${word.fa}: ${auto.latin}، ${LEVEL_FA[auto.level]} (${percent(auto.confidence)})`}
+      onClick={() => onPress(open)}
+    >
+      <span className={styles.fa}>
+        {word.fa}
+        {word.after ? <span className={styles.after}>{word.after}</span> : null}
+      </span>
+      <span className={styles.latins}>
+        <Latin className={`${styles.latin} ${styles.auto}`}>{auto.latin}</Latin>
+      </span>
+    </button>
+  );
+}
+

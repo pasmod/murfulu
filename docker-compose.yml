@@ -73,6 +73,7 @@ services:
       # nobody worked out — the figure is a cosine that never leaves the
       # middle, so alone it reads far better than it is.
       MURFULU_TYPICALITY_PATH: ${MURFULU_TYPICALITY_PATH}
+      MURFULU_BEHNEVIS_PATH: ${MURFULU_BEHNEVIS_PATH:-}
     volumes:
       # The lexicon snapshot is read-only. We never write to it.
       - ./data:/data:ro

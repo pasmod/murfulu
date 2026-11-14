@@ -16,6 +16,7 @@ import { type Text, WINDOW, headingOf, readText } from "../../api/texts";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
+import { percent } from "./levels";
 import { UnitView, type Chosen } from "./UnitView";
 import { WordPanel } from "./WordPanel";
 import styles from "./Reader.module.css";
@@ -127,27 +128,57 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
         </span>
       </p>
 
-      <div className={styles.legend}>
-        <p>
-          زیر هر واژه، خوانش‌هایش در بانک واژه
-          {text.lexicon_snapshot_id ? (
-            <>
-              ، نسخهٔ <Latin>{text.lexicon_snapshot_id.split(":")[0] ?? ""}</Latin>
-            </>
-          ) : null}
-          . روی واژه بزنید تا خوانش‌ها، شمارش در پیکره و پیوندش به بانک واژه را ببینید.
-        </p>
-        <p>
-          چند خوانش: همه آمده‌اند و هیچ‌کدام پیشنهاد نشده. <span className={styles.unread}>؟</span>{" "}
-          بانک واژه این املا را نمی‌خواند.
-        </p>
-        {anyRuledOut ? (
+      {text.behnevis ? (
+        <div className={styles.legend}>
           <p>
-            <Latin className={`${styles.latin} ${styles.ruledOut}`}>Tarak</Latin> کم‌رنگ: اعرابِ
-            خودِ متن با این خوانش نمی‌خواند؛ برای نمونه «تُرک» با ضمه.
+            زیر هر واژه، خوانشی که برنامه برای همین سطر پیشنهاد می‌کند، و این‌که چقدر به آن
+            مطمئن است. روی واژه بزنید تا خوانش‌های دیگر را ببینید و خوانش درست را برگزینید
+            یا بنویسید.
           </p>
-        ) : null}
-      </div>
+          <p className={styles.levels}>
+            <span>
+              <span className={styles.auto} data-level="sure">
+                <Latin>agar</Latin>
+              </span>{" "}
+              مطمئن: {percent(text.behnevis.sure)} یا بیشتر
+            </span>
+            <span>
+              <span className={styles.auto} data-level="mid">
+                <Latin>Bode</Latin>
+              </span>{" "}
+              کمابیش: {percent(text.behnevis.mid)} تا {percent(text.behnevis.sure)}
+            </span>
+            <span>
+              <span className={styles.auto} data-level="unsure">
+                <Latin>Ārd</Latin>
+              </span>{" "}
+              نامطمئن: کمتر از {percent(text.behnevis.mid)}
+            </span>
+          </p>
+        </div>
+      ) : (
+        <div className={styles.legend}>
+          <p>
+            زیر هر واژه، خوانش‌هایش در بانک واژه
+            {text.lexicon_snapshot_id ? (
+              <>
+                ، نسخهٔ <Latin>{text.lexicon_snapshot_id.split(":")[0] ?? ""}</Latin>
+              </>
+            ) : null}
+            . روی واژه بزنید تا خوانش‌ها، شمارش در پیکره و پیوندش به بانک واژه را ببینید.
+          </p>
+          <p>
+            چند خوانش: همه آمده‌اند و هیچ‌کدام پیشنهاد نشده. <span className={styles.unread}>؟</span>{" "}
+            بانک واژه این املا را نمی‌خواند.
+          </p>
+          {anyRuledOut ? (
+            <p>
+              <Latin className={`${styles.latin} ${styles.ruledOut}`}>Tarak</Latin> کم‌رنگ: اعرابِ
+              خودِ متن با این خوانش نمی‌خواند؛ برای نمونه «تُرک» با ضمه.
+            </p>
+          ) : null}
+        </div>
+      )}
 
       {text.units_total > text.limit ? (
         <p className={styles.window}>
@@ -177,6 +208,7 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
                     spelling={shown.s}
                     known={text.words[shown.s]}
                     against={new Set(shown.against ?? [])}
+                    auto={shown.auto}
                     corpusVersion={text.corpus_version}
                     where={{
                       document_id: text.document_id,
