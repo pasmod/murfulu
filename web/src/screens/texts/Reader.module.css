@@ -214,6 +214,12 @@
   color: var(--ink-soft);
 }
 
+/* A reading the word's own harakat rule out: paler, never gone, because an
+   edition's signs are sometimes wrong (the project lead, 2026-11-14). */
+.ruledOut {
+  color: var(--ink-faint);
+}
+
 /* Several readings are told apart by a mark, never by one being larger. */
 .word[data-state="several"] .latins {
   padding-block-end: 1px;

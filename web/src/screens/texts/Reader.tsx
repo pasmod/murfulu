@@ -91,6 +91,10 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
 
   const heading = headingOf(text);
   const last = Math.min(text.units_total, text.start + text.limit);
+  // The legend says what a pale reading means only where there is one.
+  const anyRuledOut = text.units.some((one) =>
+    one.lines.some((line) => line.words?.some((word) => (word.against?.length ?? 0) > 0)),
+  );
   return (
     <section className={styles.card} aria-label={heading.join(" · ")}>
       <p className={styles.source}>
@@ -137,6 +141,12 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
           چند خوانش: همه آمده‌اند و هیچ‌کدام پیشنهاد نشده. <span className={styles.unread}>؟</span>{" "}
           بانک واژه این املا را نمی‌خواند.
         </p>
+        {anyRuledOut ? (
+          <p>
+            <Latin className={`${styles.latin} ${styles.ruledOut}`}>Tarak</Latin> کم‌رنگ: اعرابِ
+            خودِ متن با این خوانش نمی‌خواند؛ برای نمونه «تُرک» با ضمه.
+          </p>
+        ) : null}
       </div>
 
       {text.units_total > text.limit ? (
@@ -166,6 +176,7 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
                     id={panelId}
                     spelling={shown.s}
                     known={text.words[shown.s]}
+                    against={new Set(shown.against ?? [])}
                     corpusVersion={text.corpus_version}
                     where={{
                       document_id: text.document_id,

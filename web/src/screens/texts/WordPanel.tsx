@@ -37,6 +37,8 @@ export interface WordPanelProps {
   /** The counted spelling. */
   spelling: string;
   known: WordKnown | undefined;
+  /** Ids of the readings this word's own harakat rule out. */
+  against: ReadonlySet<string>;
   corpusVersion: string | null;
   where: MarkedWhere;
   /** Ids of readings marked wrong in this visit; earlier marks are asked for. */
@@ -49,6 +51,7 @@ export function WordPanel({
   id,
   spelling,
   known,
+  against,
   corpusVersion,
   where,
   marked,
@@ -56,6 +59,7 @@ export function WordPanel({
   onClose,
 }: WordPanelProps) {
   const readings = known?.readings ?? [];
+  const anyRuledOut = readings.some((one) => against.has(one.id));
   const bank = `/bank?q=${encodeURIComponent(spelling)}`;
   const [before, setBefore] = useState<ReadonlySet<string>>(new Set());
 
@@ -95,8 +99,13 @@ export function WordPanel({
           {readings.length > 1 ? (
             <p className={styles.note}>
               بانک واژه این املا را به <Num value={readings.length} /> گونه می‌خواند. همه به ترتیب
-              الفبا آمده‌اند؛ اینکه در این سطر کدام درست است، گفته نمی‌شود.
+              الفبا آمده‌اند؛ اینکه در این سطر کدام درست است، گفته نمی‌شود
+              {anyRuledOut
+                ? "، جز اینکه اعرابِ خودِ متن با خوانش‌های کم‌رنگ نمی‌خواند."
+                : "."}
             </p>
+          ) : anyRuledOut ? (
+            <p className={styles.note}>اعرابِ خودِ متن با این خوانش نمی‌خواند.</p>
           ) : null}
           <ul className={styles.readings}>
             {readings.map((reading) => (
@@ -104,6 +113,7 @@ export function WordPanel({
                 key={reading.id}
                 spelling={spelling}
                 reading={reading}
+                ruledOut={against.has(reading.id)}
                 where={where}
                 marked={marked.has(reading.id) || before.has(reading.id)}
                 onMarked={onMarked}
@@ -147,11 +157,13 @@ function ReadingRow({
   spelling,
   reading,
   where,
+  ruledOut,
   marked,
   onMarked,
 }: {
   spelling: string;
   reading: Reading;
+  ruledOut: boolean;
   where: MarkedWhere;
   marked: boolean;
   onMarked: (readingId: string) => void;
@@ -170,9 +182,10 @@ function ReadingRow({
   }
 
   return (
-    <li className={styles.reading}>
+    <li className={styles.reading} data-ruled-out={ruledOut || undefined}>
       <p className={styles.readingHead}>
         <Latin className={styles.latin}>{reading.latin}</Latin>
+        {ruledOut ? <span className={styles.ruledOut}>اعرابِ متن با آن نمی‌خواند</span> : null}
         {reading.latin_variants.length > 0 ? (
           <span className={styles.variants}>
             نیز{" "}

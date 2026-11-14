@@ -38,6 +38,11 @@ export interface TextWord {
   s: string | null;
   /** Punctuation written straight after it. */
   after?: string;
+  /**
+   * Ids of the readings this word's own harakat rule out, shown paler; only
+   * on a word written with signs that rule one out (since 2026-11-14).
+   */
+  against?: string[];
 }
 
 export type LinePosition =

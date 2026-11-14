@@ -48,7 +48,21 @@ const TEXT: Text = {
       kind: "prose",
       lines: [{ position: "prose", words: [{ fa: "«", s: null }, { fa: "دل", s: "دل", after: "»" }] }],
     },
-    { index: 3, number: 3, kind: "half", lines: [{ position: "free", words: [{ fa: "ما", s: "ما" }] }] },
+    {
+      index: 3,
+      number: 3,
+      kind: "half",
+      lines: [
+        {
+          position: "free",
+          words: [
+            { fa: "ما", s: "ما" },
+            // A kasra on the first letter: Dal and dall are ruled out.
+            { fa: "دِل", s: "دل", against: ["دل:Dal", "دل:dall"] },
+          ],
+        },
+      ],
+    },
   ],
   words: {
     دل: {
@@ -162,6 +176,25 @@ describe("the reading screen", () => {
       "Del",
     ]);
     expect(within(text).queryByText(/پیشنهاد شده$/)).not.toBeInTheDocument();
+  });
+
+  it("shows the readings the word's own harakat rule out paler, and says why", async () => {
+    const text = await openText();
+    const word = within(text).getByRole("button", { name: /^دِل:/ });
+    expect(word).toHaveAccessibleName("دِل: Del؛ اعراب متن با Dal، dall نمی‌خواند");
+    const pale = within(word)
+      .getAllByText(/^(Dal|dall|Del)$/)
+      .filter((one) => one.className.includes("ruledOut"))
+      .map((one) => one.textContent);
+    expect(pale).toEqual(["Dal", "dall"]);
+    // The same spelling without signs keeps every reading alike.
+    const plain = within(text).getAllByRole("button", { name: /^دلِ:/ })[0]!;
+    expect(plain.querySelector("[class*=ruledOut]")).toBeNull();
+    expect(within(text).getByText(/اعرابِ\s+خودِ متن با این خوانش نمی‌خواند/)).toBeInTheDocument();
+
+    await userEvent.click(word);
+    const panel = within(text).getByRole("region", { name: "خوانش‌های دِل" });
+    expect(within(panel).getAllByText("اعرابِ متن با آن نمی‌خواند")).toHaveLength(2);
   });
 
   it("shows «؟» for a word the bank does not read, and never says it is not a word", async () => {

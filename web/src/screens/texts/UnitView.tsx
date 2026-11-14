@@ -118,11 +118,21 @@ function WordButton({
     return <bdi className={styles.punctuation}>{word.fa}</bdi>;
   }
   const readings = known?.readings ?? [];
+  const against = new Set(word.against ?? []);
   const state = readings.length === 0 ? "none" : readings.length === 1 ? "one" : "several";
+  const fitting = readings.filter((one) => !against.has(one.id));
+  const ruledOut = readings.filter((one) => against.has(one.id));
   const said =
     readings.length === 0
       ? "خوانشی در بانک واژه نیست"
-      : readings.map((one) => one.latin).join("، ");
+      : [
+          fitting.map((one) => one.latin).join("، "),
+          ruledOut.length > 0
+            ? `اعراب متن با ${ruledOut.map((one) => one.latin).join("، ")} نمی‌خواند`
+            : "",
+        ]
+          .filter(Boolean)
+          .join("؛ ");
   return (
     <button
       type="button"
@@ -143,7 +153,10 @@ function WordButton({
           <span className={styles.unread}>؟</span>
         ) : (
           readings.map((one) => (
-            <Latin key={one.id} className={styles.latin}>
+            <Latin
+              key={one.id}
+              className={against.has(one.id) ? `${styles.latin} ${styles.ruledOut}` : styles.latin}
+            >
               {one.latin}
             </Latin>
           ))

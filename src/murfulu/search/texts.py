@@ -22,6 +22,11 @@ come in alphabetical order and none is marked as the one meant — **which
 reading a line needs is not something the letters say**, and the placeholder
 rule the drafts used put *dall* under دل. A spelling with no reading comes
 back with an empty list, never with a guess.
+
+**Say which readings the word's own harakat rule out** (since 2026-11-14, the
+project lead's choice): a word written with signs carries the ids of the
+readings they contradict, and the screen shows those paler. They stay: an
+edition's harakat are sometimes wrong. How a sign is read: :mod:`.harakat`.
 """
 
 from __future__ import annotations
@@ -35,6 +40,7 @@ from typing import Any
 from elasticsearch import Elasticsearch
 
 from murfulu.corpus.wordtypes import _FOLD, _MARKS, _WORD
+from murfulu.search import harakat
 
 DOCUMENTS = "documents"
 WORD_TYPES = "word_types"
@@ -205,6 +211,29 @@ def lay_out(
     return shown, spellings, len(units)
 
 
+def rule_out(units: list[dict[str, Any]], words: dict[str, dict[str, Any]]) -> None:
+    """Give each word written with signs the ids of the readings they rule out.
+
+    Sets ``against`` on the word's dict, and only where there is one: most
+    words carry no signs, and a long text has thousands of words.
+    """
+    for unit in units:
+        for line in unit.get("lines") or []:
+            for word in line.get("words") or []:
+                readings = words.get(word.get("s") or "", {}).get("readings") or []
+                if not readings or not harakat.has_signs(word["fa"]):
+                    continue
+                ruled = [
+                    one["id"]
+                    for one in readings
+                    if harakat.against(
+                        word["fa"], one["latin"], tuple(one.get("latin_variants") or ())
+                    )
+                ]
+                if ruled:
+                    word["against"] = ruled
+
+
 def _reading(source: dict[str, Any], labels: dict[str, str]) -> dict[str, Any]:
     return {
         "id": source.get("id"),
@@ -336,6 +365,7 @@ def read(
     source = dict(client.get(index=index, id=document_id)["_source"])
     units, spellings, total = lay_out(source, start, limit)
     words, snapshot = look_up(client, spellings, labels)
+    rule_out(units, words)
     return {
         "document_id": source.get("document_id", document_id),
         "source_id": source.get("source_id"),
