@@ -92,8 +92,10 @@ def main(argv: list[str] | None = None) -> int:
         spelled[source["spelling_fa"]] = max(
             spelled.get(source["spelling_fa"], 0), source["total_count"] or 0
         )
+    # Keyed by the spelling as the corpus writes it, half-spaces and all: the
+    # evaluation reads each as written, so the inflection analysis sees it.
     for spelling, n in spelled.items():
-        counts[key(spelling)] += n
+        counts[spelling] += n
 
     answered: list[Answered] = []
     covered: dict[str, list[int]] = {}

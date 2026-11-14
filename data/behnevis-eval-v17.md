@@ -8,9 +8,9 @@ Made by `tools/evaluate_behnevis.py`; the model by `tools/build_behnevis.py`.
 |---|---:|
 | function | 28.8% |
 | bank | 24.3% |
-| letters | 22.5% |
+| letters | 22.4% |
 | choice | 13.9% |
-| inflected | 10.6% |
+| inflected | 10.7% |
 | none | 0.1% |
 
 ## 1. Marked words, poets held out (21,899 words, signs hidden)

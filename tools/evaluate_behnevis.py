@@ -148,10 +148,11 @@ def main(argv: list[str] | None = None) -> int:
     total = sum(counts.values())
     confidence_of: dict[str, float] = {}
     for spelling in counts:
-        confidence_of[spelling] = model.word(spelling, spelling, None, None).confidence
+        word = model.word(spelling, key(spelling), None, None)
+        confidence_of[spelling] = word.confidence
     source_share: Counter[str] = Counter()
     for spelling, n in counts.items():
-        source_share[model.word(spelling, spelling, None, None).source] += n
+        source_share[model.word(spelling, key(spelling), None, None).source] += n
 
     def curve(rows: list[tuple[float, bool]], t: float) -> tuple[float, float]:
         kept = [right for confidence, right in rows if confidence >= t]
