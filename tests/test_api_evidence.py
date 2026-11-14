@@ -97,3 +97,27 @@ def test_an_unreachable_index_is_a_503(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(route, "_client", lambda: _Down())
     response = TestClient(app).get("/evidence", params={"spelling": "دل"})
     assert response.status_code == 503
+
+
+def test_voices_give_one_text_an_author(http: TestClient):
+    body = http.get(
+        "/evidence",
+        params={"spelling": "دل", "size": 3, "voices": True, "count_lines": False},
+    ).json()
+    assert [one["author"] for one in body["texts"]] == ["الف", None, "ب"]
+    assert body["total"] == 5
+
+
+def test_voices_are_of_the_whole_list_whatever_else_is_asked(http: TestClient):
+    body = http.get(
+        "/evidence",
+        params={"spelling": "دل", "size": 2, "voices": True, "author": "ب", "page": 3},
+    ).json()
+    assert [one["author"] for one in body["texts"]] == ["الف", None]
+    assert body["author"] is None and body["unnamed"] is False
+    assert body["matching"] == body["total"] == 5
+    assert body["lines"] == 6
+    nothing = http.get(
+        "/evidence", params={"spelling": "دل", "size": 0, "voices": True}
+    ).json()
+    assert nothing["texts"] == []

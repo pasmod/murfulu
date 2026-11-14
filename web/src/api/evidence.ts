@@ -78,6 +78,11 @@ export interface EvidenceRequest {
   size?: number;
   /** Count the lines of the whole list. Costly for a long one, so asked once. */
   countLines?: boolean;
+  /**
+   * A preview, not a page: one text from each of the first `size` authors,
+   * one voice each as the six citations are.
+   */
+  voices?: boolean;
 }
 
 /** Texts per page. */
@@ -93,6 +98,7 @@ export function evidence(request: EvidenceRequest, signal?: AbortSignal): Promis
       page: request.page,
       size: request.size ?? EVIDENCE_PAGE,
       count_lines: request.countLines ? 1 : 0,
+      voices: request.voices ? 1 : undefined,
     },
     signal,
   );

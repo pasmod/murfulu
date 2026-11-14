@@ -172,6 +172,9 @@ def evidence(
         description="texts per page; 0 for the counts alone",
     ),
     count_lines: bool = Query(True, description="count the list's lines"),
+    voices: bool = Query(
+        False, description="one text from each of the first `size` authors instead"
+    ),
 ) -> dict[str, Any]:
     """Every text holding a spelling, a page at a time, with every line in each.
 
@@ -186,19 +189,30 @@ def evidence(
     folds together with this one) or ``none``. An author of null is the texts
     with no author, chosen with ``unnamed``.
 
+    With ``voices``, ``texts`` is a preview rather than a page: one text from
+    each of the first ``size`` authors in the list's order, the six citations'
+    one-voice-each rule (``page``, ``author`` and ``unnamed`` are then not
+    used, and the counts are the whole list's).
+
     The lines are evidence for the spelling, never for one reading of it.
     """
+    if voices:
+        # A preview is of the whole list: no author is chosen, in the counts
+        # or in what the answer says was asked.
+        author, unnamed = None, False
     chosen = "" if unnamed else author
     try:
         client = _client()
         found = all_evidence.summary(client, spelling)
-        texts = (
-            all_evidence.page(
+        if voices:
+            texts = all_evidence.voices(client, spelling, found, count=size)
+        elif size:
+            texts = all_evidence.page(
                 client, spelling, found, author=chosen, number=page, size=size
             )
-            if size
-            else []
-        )
+        else:
+            texts = []
+
         lines = (
             all_evidence.line_count(
                 client, spelling, found.texts(chosen), author=chosen

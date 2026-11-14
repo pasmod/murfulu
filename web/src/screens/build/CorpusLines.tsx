@@ -3,12 +3,16 @@
  *
  * «۲ بار، در ۲ متن از ۲ نویسنده» is a claim; the two lines are what a reader
  * can check it against, so they stand under the figures (the project lead's
- * wish, 2026-11-14). The first three texts of the spelling's list come when
- * the panel opens — never one request per row as the screen loads — each with
- * every line holding the word, marked, and the way to its unit on the reading
- * screen. Where there are more, a press opens the whole list in place: the
- * word page's list (`evidence/EvidenceList.tsx`), with its author filter and
- * its pages, ten texts to a page so the panel stays a panel on a phone.
+ * wish, 2026-11-14). Three texts by three authors come when the panel opens —
+ * one voice each, the six citations' rule, because three poems of one poet
+ * can be one rhyme — and never one request per row as the screen loads; each
+ * with every line holding the word, marked, and the way to its unit on the
+ * reading screen. Where there are more, a press opens the whole list in
+ * place: the word page's list (`evidence/EvidenceList.tsx`), with its author
+ * filter and its pages, ten texts to a page so the panel stays a panel on a
+ * phone. The button carries no number: the figures above are the counting's
+ * and the list's own count can differ by a few; the open list gives its
+ * count and says why.
  *
  * **Nothing is listed where nothing is counted.** A word the corpus does not
  * have keeps its sentence and asks for nothing; the letters of a function
@@ -25,12 +29,11 @@ import { EvidenceList } from "../../evidence/EvidenceList";
 import { EvidenceText } from "../../evidence/EvidenceText";
 import { chosenOf, useEvidence, type Choice } from "../../evidence/useEvidence";
 import { UNNAMED } from "../../evidence/AuthorFilter";
-import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
 import list from "../../evidence/Evidence.module.css";
 import styles from "./CorpusLines.module.css";
 
-/** Texts shown when the panel opens. */
+/** Texts shown when the panel opens, each by another author. */
 const FIRST = 3;
 /** Texts to a page once the whole list is open. */
 const PAGE = 10;
@@ -70,7 +73,7 @@ function Lines({
   useEffect(() => {
     const stop = new AbortController();
     setFailed(false);
-    fetchEvidence({ spelling, size: FIRST, countLines: false }, stop.signal)
+    fetchEvidence({ spelling, size: FIRST, countLines: false, voices: true }, stop.signal)
       .then(setFirst)
       .catch(() => {
         if (!stop.signal.aborted) setFailed(true);
@@ -92,13 +95,7 @@ function Lines({
       aria-controls={listId}
       onClick={() => setWhole(!whole)}
     >
-      {whole ? (
-        "تنها چند متن نخست"
-      ) : (
-        <>
-          همهٔ <Num value={first.total} /> متن
-        </>
-      )}
+      {whole ? "بستن همهٔ شواهد" : "نشان دادن همهٔ شواهد"}
     </button>
   ) : null;
 

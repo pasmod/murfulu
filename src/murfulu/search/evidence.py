@@ -242,6 +242,35 @@ def page(
     return texts
 
 
+def voices(
+    client: Elasticsearch,
+    spelling: str,
+    found: Summary,
+    *,
+    count: int,
+    index: str = INDEX,
+) -> list[Text]:
+    """One text from each of the list's first ``count`` authors.
+
+    The six citations' rule — thirty hits in one author's work can be a rhyme,
+    one each in thirty authors is a word — kept for a short preview of the
+    list: its first authors, most texts first, each giving the text that
+    opens their part of the list. Fewer authors give fewer texts.
+    """
+    texts: list[Text] = []
+    for name, _ in found.authors[:count]:
+        hits = _walk(
+            client,
+            index,
+            _matching(spelling, name),
+            offset=0,
+            size=1,
+            window=WINDOW,
+        )
+        texts.extend(text_of(hit["_source"], spelling) for hit in hits)
+    return texts
+
+
 def _every(
     client: Elasticsearch, index: str, query: dict[str, Any]
 ) -> Iterator[dict[str, Any]]:

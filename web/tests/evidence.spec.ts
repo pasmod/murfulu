@@ -136,10 +136,10 @@ test.describe("the verses under a built word's figures", () => {
     test.skip(!(await row.isVisible()), "no row بنده here");
     await row.getByRole("button", { name: "شواهد" }).click();
     await row.getByRole("button", { name: /^پیکره/ }).click();
-    const more = row.getByRole("button", { name: /^همهٔ .* متن$/ });
+    const more = row.getByRole("button", { name: "نشان دادن همهٔ شواهد" });
     await more.click();
     // The same button, renamed: the reader's focus stays on it.
-    await expect(row.getByRole("button", { name: "تنها چند متن نخست" })).toBeFocused();
+    await expect(row.getByRole("button", { name: "بستن همهٔ شواهد" })).toBeFocused();
     await expect(row.getByRole("combobox", { name: "نویسنده" })).toBeVisible();
     await expect(row.locator("ol > li").nth(9)).toBeVisible();
 

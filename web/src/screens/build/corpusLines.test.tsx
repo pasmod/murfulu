@@ -60,42 +60,54 @@ function text(n: number, author: string): EvidenceText {
   };
 }
 
-/** A list of `total` texts, by two authors. */
-function answer(params: URLSearchParams, total: number): Evidence {
+/** Who wrote text n: one text by ب, every fifth by پ, the rest by الف. */
+function authorOf(n: number): string {
+  if (n === 0) return "ب";
+  return n % 5 === 0 ? "پ" : "الف";
+}
+
+/** A list of `total` texts, its authors most texts first, as `/evidence` answers. */
+function answer(params: URLSearchParams, total: number, by = authorOf): Evidence {
   const page = Number(params.get("page") ?? "0");
   const size = Number(params.get("size") ?? "20");
   const author = params.get("author");
-  const all = Array.from({ length: total }, (_, n) => text(n, n === 0 ? "ب" : "الف")).filter(
-    (one) => !author || one.author === author,
-  );
+  const every = Array.from({ length: total }, (_, n) => text(n, by(n)));
+  const counts = new Map<string, number>();
+  for (const one of every) counts.set(one.author!, (counts.get(one.author!) ?? 0) + 1);
+  const authors = [...counts]
+    .map(([name, texts]) => ({ author: name, texts }))
+    .sort((a, b) => b.texts - a.texts || a.author.localeCompare(b.author));
+  const listed = authors.flatMap((one) => every.filter((t) => t.author === one.author));
+  const all = listed.filter((one) => !author || one.author === author);
+  const texts =
+    params.get("voices") === "1"
+      ? authors.slice(0, size).map((one) => listed.find((t) => t.author === one.author)!)
+      : all.slice(page * size, page * size + size);
   return {
     spelling: params.get("spelling") ?? "",
     corpus_version: "v1",
     total,
-    authors: [
-      { author: "الف", texts: total - 1 },
-      { author: "ب", texts: 1 },
-    ],
+    authors,
     author,
     unnamed: false,
     matching: all.length,
     lines: params.get("count_lines") === "1" ? all.length : null,
     page,
     size,
-    texts: all.slice(page * size, page * size + size),
+    texts,
   };
 }
 
 let asked: URLSearchParams[] = [];
 
-function serve(total: number) {
+function serve(total: number, by = authorOf) {
   asked = [];
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url: string) => {
       const address = new URL(url, "http://localhost");
       asked.push(address.searchParams);
-      const body = answer(address.searchParams, total);
+      const body = answer(address.searchParams, total, by);
       return { ok: true, status: 200, statusText: "", json: async () => body } as Response;
     }),
   );
@@ -118,22 +130,29 @@ describe("the verses under a built word's figures", () => {
     expect(links).toHaveLength(2);
     expect(links[0]).toHaveAttribute(
       "href",
-      `/texts?text=fixture%3A0&unit=0&word=${encodeURIComponent("بسمان")}`,
+      // الف and ب tie on one text each, so الف comes first, by name.
+      `/texts?text=fixture%3A1&unit=1&word=${encodeURIComponent("بسمان")}`,
     );
     expect(document.querySelector("mark")).toHaveTextContent("بسمان");
     expect(asked).toHaveLength(1);
     expect(asked[0]!.get("size")).toBe("3");
+    expect(asked[0]!.get("voices")).toBe("1");
     expect(asked[0]!.get("count_lines")).toBe("0");
     // Two texts are all there is: nothing more to open.
-    expect(screen.queryByRole("button", { name: /^همهٔ/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "نشان دادن همهٔ شواهد" })).not.toBeInTheDocument();
   });
 
   it("opens the whole list in place, with its authors and its pages", async () => {
     serve(25);
     renderWithRouter(<Signals form={built(found("reading", 25))} corpusVersion="v1" />);
     await openCorpus();
+    // One text by each of three authors, never three by the one with most.
     expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(3);
-    const more = screen.getByRole("button", { name: "همهٔ ۲۵ متن" });
+    expect(
+      screen.getAllByText(/ — دیوان — /).map((one) => one.textContent?.split(" — ")[0]),
+    ).toEqual(["الف", "پ", "ب"]);
+    // No number on the button: the figures above are the counting's.
+    const more = screen.getByRole("button", { name: "نشان دادن همهٔ شواهد" });
     expect(more).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(more);
 
@@ -142,7 +161,7 @@ describe("the verses under a built word's figures", () => {
       within(filter)
         .getAllByRole("option")
         .map((one) => one.textContent),
-    ).toEqual(["همهٔ نویسندگان (۲۵ متن)", "الف (۲۴)", "ب (۱)"]);
+    ).toEqual(["همهٔ نویسندگان (۲۵ متن)", "الف (۲۰)", "پ (۴)", "ب (۱)"]);
     // Ten to a page in a panel.
     expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(10);
     await userEvent.click(screen.getByRole("button", { name: "صفحهٔ پسین" }));
@@ -152,7 +171,7 @@ describe("the verses under a built word's figures", () => {
     expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(1);
     expect(asked.some((one) => one.get("author") === "ب")).toBe(true);
 
-    await userEvent.click(screen.getByRole("button", { name: "تنها چند متن نخست" }));
+    await userEvent.click(screen.getByRole("button", { name: "بستن همهٔ شواهد" }));
     expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(3);
   });
 
@@ -179,7 +198,7 @@ describe("the verses under a built word's figures", () => {
     serve(25);
     renderWithRouter(<Signals form={built(found("reading", 25))} corpusVersion="v1" />);
     await openCorpus();
-    const more = await screen.findByRole("button", { name: "همهٔ ۲۵ متن" });
+    const more = await screen.findByRole("button", { name: "نشان دادن همهٔ شواهد" });
     await userEvent.click(more);
     expect(more).toHaveFocus();
     expect(more).toHaveAttribute("aria-expanded", "true");
@@ -194,7 +213,7 @@ describe("the verses under a built word's figures", () => {
       <Signals form={built(found("reading", 25))} corpusVersion="v1" />,
     );
     await openCorpus();
-    await userEvent.click(await screen.findByRole("button", { name: "همهٔ ۲۵ متن" }));
+    await userEvent.click(await screen.findByRole("button", { name: "نشان دادن همهٔ شواهد" }));
     await userEvent.selectOptions(await screen.findByRole("combobox", { name: "نویسنده" }), "ب");
     rerender(
       <MemoryRouter>
@@ -204,5 +223,25 @@ describe("the verses under a built word's figures", () => {
     expect(await screen.findByText(/شاهد املای «بستگاه»/)).toBeInTheDocument();
     expect(screen.queryByRole("combobox", { name: "نویسنده" })).not.toBeInTheDocument();
     expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(3);
+  });
+
+  it("shows what voices there are, and the open list says why its count is not the figures'", async () => {
+    // Six texts, all by one author; the counting found five.
+    serve(6, () => "الف");
+    renderWithRouter(<Signals form={built(found("reading", 5))} corpusVersion="v1" />);
+    await openCorpus();
+    expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(1);
+    const more = screen.getByRole("button", { name: "نشان دادن همهٔ شواهد" });
+    // The button says no number; the figures above say five.
+    expect(more.textContent).not.toMatch(/[۰-۹]/);
+    await userEvent.click(more);
+    expect(
+      await screen.findByText((_text, node) =>
+        Boolean(
+          node?.matches("p") &&
+          /این فهرست ۶ متن دارد و شمارش بالا ۵، چون/.test(node.textContent ?? ""),
+        ),
+      ),
+    ).toBeInTheDocument();
   });
 });

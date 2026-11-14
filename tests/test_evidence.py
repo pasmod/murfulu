@@ -12,7 +12,14 @@ import pytest
 
 from murfulu.corpus.wordtypes import tokenise
 from murfulu.search import evidence
-from murfulu.search.evidence import Summary, line_count, page, slices, summary
+from murfulu.search.evidence import (
+    Summary,
+    line_count,
+    page,
+    slices,
+    summary,
+    voices,
+)
 from murfulu.search.evidence_lines import loosen, parts, text_of
 
 
@@ -250,3 +257,14 @@ def test_the_lines_are_counted_for_a_short_list_and_not_for_a_long_one(
     assert line_count(client, "دل", 3, author="الف") == 4  # type: ignore[arg-type]
     monkeypatch.setattr(evidence, "LINE_COUNT_LIMIT", 4)
     assert line_count(client, "دل", 5) is None  # type: ignore[arg-type]
+
+
+def test_a_preview_takes_one_text_from_each_of_the_first_authors():
+    """One voice each, as the six citations: الف has three texts and gives one."""
+    client = _Elasticsearch(TEXTS)
+    found = summary(client, "دل")  # type: ignore[arg-type]
+    shown = voices(client, "دل", found, count=2)  # type: ignore[arg-type]
+    assert [one.document_id for one in shown] == ["t:a:10", "t:-:1"]
+    every = voices(client, "دل", found, count=5)  # type: ignore[arg-type]
+    # Three authors, so three texts however many are asked for.
+    assert [one.author for one in every] == ["الف", None, "ب"]
