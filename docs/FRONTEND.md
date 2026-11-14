@@ -78,6 +78,16 @@ names and thresholds are **unconfirmed** until the linguist rules (L36). The
 corpus version is said once above the list and beside every count behind the
 button, not in each row's sentence (DECISIONS 2026-11-13).
 
+**The verses (2026-11-14).** Under the «پیکره» field's figures stand the
+lines they were counted from: when the field opens, the first three texts of
+the spelling's list, each with author — work — title and every line holding
+the word (three, then the rest on a press), the word underlined, each line
+with «در متن ←». Above them, where there are more, one button «همهٔ N متن»
+opens the word page's own list in place — the author filter, ten texts to a
+page — and, open, reads «تنها چند متن نخست». A note says the lines are the spelling's, not one reading's. A word
+the corpus does not have, and the letters of a function word, list nothing
+(DECISIONS 2026-11-14).
+
 One row per word. Where more than one rule chain produced the same form, the
 paths are nested under it — that is information, not noise.
 

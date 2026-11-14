@@ -2,6 +2,60 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-14 — the verses under a built word's corpus figures, and index.html asked again on every visit
+
+**The design, as set for the task**: wherever the build screen's panel shows
+the corpus figures of a built word («پیکره» under «شواهد»), it shows the
+evidence too. Below the figures: the first texts of the spelling's list from
+`/evidence` (up to three), each with author, work, title and every line
+holding the word, underlined as on the word page, with «در متن ←» to its unit;
+fetched when the field opens, never one request per row as the screen loads.
+Where there are more, a control opens all of them in place, reusing the word
+page's list with its author filter and pages, compact on a 390 px phone. A
+word the corpus does not have keeps its sentence and lists nothing. The note
+that the lines are evidence for the spelling, not one reading, appears here
+too, briefly. Built on the branch `build-evidence`, not deployed
+(`screens/build/CorpusLines.tsx`; FRONTEND §3, *The verses*).
+
+**Decided here, under the working rule:**
+
+- *The list is shared, not copied.* The word page's fetching became a hook
+  (`evidence/useEvidence.ts`) and its body a component
+  (`evidence/EvidenceList.tsx`), beside the text entry and the author filter,
+  in `web/src/evidence/` because two screens use them. The word page keeps
+  its choice in the address, as before; the panel keeps it in the row's own
+  state, because a build screen holds hundreds of rows and the address
+  already holds the build. A row that comes to hold another word starts its
+  list afresh.
+- *The first three are the list's first three*: the author with the most
+  texts, in the source's order — so often three texts by one author (بنده:
+  three ghazals of the Divan-e Shams). The six citations' one-per-author
+  choice was the alternative; it is another request (`/word`, by a word
+  type's id, not a spelling), and it would show other texts than the list
+  opened under it.
+- *Ten texts to a page in the panel, and three lines of a text before the
+  rest*, against twenty and six on the word page: a panel is a panel.
+- *One button, above the list*, «همهٔ N متن» and, open, «تنها چند متن نخست»:
+  a button that moved as the list opened would drop the reader's focus
+  (the Codex review of 2026-11-14).
+- *The figures and the list can differ by a few texts* (FINDINGS 2026-11-14):
+  the button gives the list's own count — بنده: «همهٔ ۸٬۶۵۶ متن» under
+  «در ۸٬۵۸۲ متن» — and the open list says why in its one sentence.
+- *The letters of a function word list nothing*: their uses are that word's,
+  and the panel already says so instead of a count. *The letters of another
+  reading* (level *spelling*) are listed: they are what the figures above
+  counted, and the note says the lines are the spelling's.
+- *A text's line list takes its id from `useId`*, no longer from the document
+  id: one text can stand in two open panels at once.
+
+**index.html is sent with `Cache-Control: no-cache`** (`web/nginx.conf`), by
+every way a reader reaches it — `/`, an app path through the fallback, its own
+name — and nothing else is: without it a browser could keep the old start page,
+and with it the old bundle, after a deploy. `no-cache` still answers 304 when
+nothing changed. The hashed assets keep their year. `tools/check_web_cache.sh`
+asks a running web container for the headers, and CI runs it on the image it
+builds; against the old configuration it fails on all four ways in.
+
 ## 2026-11-14 — every text of a spelling on the word page
 
 **The design, as set for the task**: the six citations stay one line per

@@ -1599,6 +1599,17 @@ queue was written, which is the argument for running it by hand again.
       the vectors have nothing. It is a stand-in, not a rival: wherever the
       semantic score *can* speak it remains the better measure.
 
+- [x] **9.17 The verses behind a built word's corpus figures.** DONE
+      2026-11-14 on the branch `build-evidence`, not deployed. The build
+      screen's «پیکره» field shows, under «۲ بار، در ۲ متن از ۲ نویسنده», the
+      lines themselves (بسمان: its two), and opens the word page's whole list
+      in place where there are more (بنده: 8,656 texts, ten to a page, with
+      the author filter). One request when the field opens, of 3 texts; none
+      for a word the corpus does not have. The word page's list became shared
+      (`web/src/evidence/`). 6 component tests, 2 browser tests at both widths
+      (one with axe on the open list). Also: index.html is sent `no-cache`
+      (`web/nginx.conf`), checked by `tools/check_web_cache.sh` in CI; it
+      takes effect when the web image is rebuilt.
 - [x] **9.16 Every text of a spelling on the word page.** DONE 2026-11-14 on
       the branch `word-evidence`, not deployed. Under the six citations a card
       «همهٔ شواهد» gives the totals and opens every text holding the spelling,
