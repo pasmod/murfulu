@@ -2,6 +2,50 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-14 — a pick is plain to see: one or the other, and under its word
+
+The project lead, once picks taught the model: make it clearer when a
+reading is picked; picking and typing must not both be possible; test that
+it really works.
+
+- *Pick or type, never both.* The offered readings are radio buttons; the
+  picked one is filled in the accent colour with a check mark, and a second
+  press keeps it. Typing clears the pick, picking clears what was typed.
+- *The panel says what will be saved before it is.* One line names the
+  reading, whether it was picked or typed, and its fate: one the bank or the
+  function-word list holds teaches the model at the next build; any other
+  goes on the list for karbon. The button names the reading too.
+- *A saved reading stands under its word*, in place of the model's, with a
+  check mark on an accent wash, and stays after a reload: the screen asks
+  `/texts/marked?kind=proposed&document_id=…`, and a proposal now names its
+  line and word (an older one is found by spelling and neighbours).
+- *A function word's own reading counts as held* (و *o*, *va*): the model
+  already learned such picks, but the list for karbon asked for them. Found
+  while testing; the api now sends each word's held readings (`known`).
+- *From the review of 2026-11-14*: the readings are native radio buttons
+  drawn as buttons (one tab stop, arrow keys move the pick); saves are kept
+  per text, so one that completes after the reader moved on never shows on
+  another text, and a save made while the list was still loading stays; the
+  list is asked for the window's units only, page by page; a saved place is
+  trusted only where the word there is still the one saved, an older save
+  without one only where its context is unique; each place keeps its
+  newest save by the store's id, however late an answer arrives; and the
+  export passes only the newest save for each word in a line on — the same
+  word between the same neighbours, at the same place — to the model and to
+  karbon alike, so a corrected pick is not learned too (a save from before
+  places were sent is never taken as replaced: it cannot say which of two
+  like words it was for, and the server held none). A long typed reading
+  wraps inside the panel at phone width.
+
+**Tested end to end on 2026-11-14**, on a database of its own beside the
+Mac's (the stored proposals untouched), in the app's browser: in Hafez's
+ghazal 3, «کنار» picked as *Kenār* and «رکن‌آباد» typed as *Roknābād*; both
+stood under their words with a check mark, and again after a reload. The
+export put only *Roknābād* on the list for karbon. A build with the
+exported picks learned one pick; «کنار» before «آب» went from *Kanār* 30 %
+(three readings alike) to *Kenār* 66 %, and *Kenār* led elsewhere too
+(52 %). One pick moves a word, but not yet out of red.
+
 ## 2026-11-14 — every search box suggests while typing
 
 The project lead asked for it in one line: *the search fields all should
@@ -62,6 +106,7 @@ the server `/suggest/words` and `/suggest/texts` answered in 30 to 90ms (the
 first word request after the restart took 4.3 s, building the bank's list
 once), and the served bundle carries the combobox. Not viewed logged in,
 because of the site password.
+
 
 ## 2026-11-14 — a pick teaches the model, a typed reading goes to karbon
 

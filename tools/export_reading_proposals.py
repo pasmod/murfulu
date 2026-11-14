@@ -18,6 +18,12 @@ needs nothing; the automatic Behnevis learns it at its next build
 bank lacks is a gap in the bank, and only those go on karbon's list, the line
 they were seen in as the evidence.
 
+**The newest save for a word in a line counts.** The reading screen lets a
+reader save again where they changed their mind, and shows the newest; the
+store keeps every record (it is append-only), and this export passes only the
+newest one for each place on, to the model and to karbon alike (the review of
+2026-11-14).
+
 Read-only on the database.
 """
 
@@ -70,9 +76,13 @@ def gather(
 
 
 def current_bank() -> Callable[[str, str], bool | None] | None:
-    """Whether the current bank holds a reading, or None without a lexicon."""
+    """Whether the current bank holds a reading, or None without a lexicon.
+
+    A function word's own reading counts as held (و *o*, به *be*): the model
+    learns a pick of it, and karbon is not asked for it.
+    """
     try:
-        from murfulu.behnevis.transcribe import bank_from, key
+        from murfulu.behnevis.transcribe import bank_from, key, load_function_readings
         from murfulu.lexicon.store import Lexicon
 
         with Lexicon.open() as lexicon:
@@ -84,7 +94,13 @@ def current_bank() -> Callable[[str, str], bool | None] | None:
             )
     except Exception:  # no lexicon here: the saved flag decides
         return None
-    return lambda spelling, latin: latin in bank.get(key(spelling), ())
+    functions = load_function_readings()
+
+    def held(spelling: str, latin: str) -> bool:
+        k = key(spelling)
+        return latin in bank.get(k, ()) or latin in functions.get(k, ())
+
+    return held
 
 
 def report(found: dict[str, dict[str, dict[str, Any]]]) -> str:
@@ -109,6 +125,49 @@ def report(found: dict[str, dict[str, dict[str, Any]]]) -> str:
                 f"| {e['written'] or ''} | {e['place'] or ''} |"
             )
     return "\n".join(lines) + "\n"
+
+
+def _context(context: dict[str, Any]) -> tuple[Any, ...]:
+    """The word a proposal was for: its text, unit, spelling, form and neighbours."""
+    return (
+        context.get("document_id"),
+        context.get("unit"),
+        context.get("spelling_fa"),
+        context.get("written"),
+        context.get("before"),
+        context.get("after"),
+    )
+
+
+def _position(context: dict[str, Any]) -> tuple[Any, ...] | None:
+    """Its line and place in the line, sent since 2026-11-14."""
+    line, word = context.get("line"), context.get("word")
+    return None if line is None or word is None else (line, word)
+
+
+def latest(rows: list[Any]) -> list[Any]:
+    """Only the newest proposal for each word in a line, in the order given.
+
+    ``rows`` come oldest first. A later save replaces an earlier one only for
+    the same word — same text, unit, spelling, form and neighbours — at the
+    same position, so a word a corpus revision moved under old coordinates is
+    not taken for the one saved there. A save from before positions were sent
+    cannot say which of two like words it was for, and this export cannot see
+    the text, so a positioned save never replaces it (the review of
+    2026-11-14; the server held no such save when positions came in). A
+    proposal that names no text is kept as it is: nothing says it was replaced.
+    """
+    newest: dict[tuple[Any, ...], int] = {}
+    for at, row in enumerate(rows):
+        context = row.context or {}
+        if context.get("document_id"):
+            newest[(_context(context), _position(context))] = at
+    kept = set(newest.values())
+    return [
+        row
+        for at, row in enumerate(rows)
+        if not (row.context or {}).get("document_id") or at in kept
+    ]
 
 
 def picks(rows: list[Any]) -> list[dict[str, Any]]:
@@ -154,6 +213,7 @@ def main(argv: list[str] | None = None) -> int:
                 .order_by(ExpertFeedback.id)
             )
         )
+        rows = latest(rows)
         if args.jsonl:
             for one in picks(rows):
                 sys.stdout.write(json.dumps(one, ensure_ascii=False) + "\n")

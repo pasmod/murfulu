@@ -80,6 +80,13 @@ def _marked(row: ExpertFeedback) -> dict[str, Any]:
         "written": context.get("written"),
         "document_id": context.get("document_id"),
         "unit": context.get("unit"),
+        # Where in the unit, so the reading screen can show a saved pick under
+        # its word: the line and the word's place in it (sent since
+        # 2026-11-14), and the neighbours for the proposals saved before that.
+        "line": context.get("line"),
+        "word": context.get("word"),
+        "before": context.get("before"),
+        "after": context.get("after"),
         "heading": context.get("heading"),
         # A proposal also says what the model had read there, and whether the
         # proposed reading is in the bank at all.
@@ -104,6 +111,11 @@ def marked(
         pattern="^(wrong|proposed)$",
         description="readings marked wrong, or readings proposed for a word in a line",
     ),
+    document_id: str | None = Query(
+        None, max_length=200, description="only what was marked or proposed here"
+    ),
+    unit_from: int | None = Query(None, ge=0, description="only from this unit on"),
+    unit_to: int | None = Query(None, ge=0, description="only up to this unit"),
     offset: int = Query(0, ge=0),
     limit: int = Query(MARKED_PAGE, ge=1, le=MARKED_LIMIT),
 ) -> dict[str, Any]:
@@ -113,7 +125,8 @@ def marked(
     linguist reviews it: one row per mark, with the word and where it stood.
     Paged, with the total, so no mark falls off the end of the list; and
     asked for one spelling at a time by a word's panel, so a reading marked
-    long ago still shows as marked however many marks came after it.
+    long ago still shows as marked however many marks came after it; or for
+    one text, so the reading screen shows the readings saved in it.
     """
     where = [
         ExpertFeedback.target_type == "lexicon_entry",
@@ -123,6 +136,14 @@ def marked(
         # A reading's id is `spelling:latin`; the spelling's marks start so.
         escaped = spelling.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
         where.append(ExpertFeedback.target_id.like(f"{escaped}:%", escape="\\"))
+    if document_id:
+        # The reading screen asks for what was saved in the text it shows.
+        where.append(ExpertFeedback.context["document_id"].as_string() == document_id)
+    # The units of the window the reading screen shows.
+    if unit_from is not None:
+        where.append(ExpertFeedback.context["unit"].as_integer() >= unit_from)
+    if unit_to is not None:
+        where.append(ExpertFeedback.context["unit"].as_integer() <= unit_to)
     total = session.scalar(
         select(func.count()).select_from(ExpertFeedback).where(*where)
     )

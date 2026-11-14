@@ -120,4 +120,15 @@ def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
                         [latin, None if p is None else round(p, 3)]
                         for latin, p in read.candidates[:OFFERED]
                     ],
+                    # The readings the bank or the function-word list holds: a
+                    # pick of one teaches the model; any other is for karbon.
+                    "known": [
+                        latin
+                        for latin in dict.fromkeys(
+                            (
+                                *transcriber.functions.get(keys[i], ()),
+                                *transcriber.bank.get(keys[i], ()),
+                            )
+                        )
+                    ],
                 }

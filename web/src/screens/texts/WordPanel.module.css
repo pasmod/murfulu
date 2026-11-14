@@ -197,19 +197,94 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choices > legend {
+  float: inline-start;
+  inline-size: 100%;
+  padding: 0;
 }
 
 .choice {
   composes: secondary from "../../styles/controls.module.css";
   display: inline-flex;
   gap: var(--space-2);
+  position: relative;
   align-items: baseline;
+  cursor: pointer;
 }
 
-.choice[aria-pressed="true"] {
+/* The radio itself is hidden; its label is the button. Focus still shows. */
+.radio {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+.choice:has(.radio:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* The picked reading: filled, with a check mark — plain at a glance
+   (the project lead, 2026-11-14). */
+.choice[data-checked],
+.choice[data-checked]:hover:not(:disabled) {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--paper);
+  background: var(--accent);
+  font-weight: 600;
+}
+
+.choice[data-checked] .share {
+  color: inherit;
+}
+
+.tick {
+  font-weight: 700;
+}
+
+.step {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* What will be saved, in one line, before the button. */
+.summary {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  color: var(--ink);
   background: var(--paper);
+  border-inline-start: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.summary[data-empty] {
+  color: var(--ink-soft);
+  border-inline-start-color: var(--line-strong);
+}
+
+/* A typed reading can be long: let it wrap here, where the Latin elsewhere
+   keeps to one line, so the panel never widens the page. */
+.here [data-latin] {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.summaryLatin {
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.savedNote {
+  margin: 0;
+  color: var(--accent-strong);
 }
 
 .share {
@@ -232,10 +307,35 @@
 .propose {
   composes: primary from "../../styles/controls.module.css";
   align-self: flex-start;
+  /* It names the reading, which can be long: wrap, never widen the page. */
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .proposed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--level-sure);
+  border-radius: var(--radius-md);
+}
+
+.proposed p {
+  margin: 0;
+}
+
+.proposedHead {
+  font-weight: 700;
   color: var(--level-sure);
+}
+
+.again {
+  composes: secondary from "../../styles/controls.module.css";
+  align-self: flex-start;
 }
 
 .askActions {

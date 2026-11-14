@@ -15,7 +15,7 @@ import type { AutoReading, TextUnit, TextWord, WordKnown } from "../../api/texts
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { KIND } from "./kinds";
-import { LEVEL_FA, percent } from "./levels";
+import { LEVEL_FA, type Saved, percent } from "./levels";
 import styles from "./Reader.module.css";
 
 export interface Chosen {
@@ -27,6 +27,8 @@ export interface UnitViewProps {
   unit: TextUnit;
   words: Record<string, WordKnown>;
   chosen: Chosen | null;
+  /** Readings saved for words of the window, by `unit:line:word`. */
+  saved?: ReadonlyMap<string, Saved>;
   onChoose: (chosen: Chosen | null) => void;
   /** The id of the panel a chosen word opens, for `aria-controls`. */
   panelId: string;
@@ -40,6 +42,7 @@ export function UnitView({
   unit,
   words,
   chosen,
+  saved,
   onChoose,
   panelId,
   found,
@@ -82,6 +85,7 @@ export function UnitView({
                   word={word}
                   known={word.s ? words[word.s] : undefined}
                   open={chosen?.line === lineIndex && chosen.word === wordIndex}
+                  mine={saved?.get(`${unit.index}:${lineIndex}:${wordIndex}`)}
                   sought={found !== null && word.s === found}
                   panelId={panelId}
                   onPress={(open) =>
@@ -102,6 +106,7 @@ function WordButton({
   word,
   known,
   open,
+  mine,
   sought,
   panelId,
   onPress,
@@ -109,6 +114,7 @@ function WordButton({
   word: TextWord;
   known: WordKnown | undefined;
   open: boolean;
+  mine: Saved | undefined;
   sought: boolean;
   panelId: string;
   onPress: (open: boolean) => void;
@@ -123,6 +129,7 @@ function WordButton({
       <AutoWord
         word={word}
         auto={word.auto}
+        mine={mine}
         open={open}
         sought={sought}
         panelId={panelId}
@@ -183,11 +190,14 @@ function WordButton({
  * A word with the automatic Behnevis's one reading under it, drawn by its
  * level: a line (sure), dots (mid) or a dashed box (unsure) — never colour
  * alone. A press opens the panel, where another reading can be picked or
- * typed (direction A, 2026-11-14).
+ * typed (direction A, 2026-11-14). A reading saved for this word stands in
+ * its place, with a check mark and its own colour, so a reader sees what is
+ * done (the project lead, 2026-11-14).
  */
 function AutoWord({
   word,
   auto,
+  mine,
   open,
   sought,
   panelId,
@@ -195,6 +205,7 @@ function AutoWord({
 }: {
   word: TextWord;
   auto: AutoReading;
+  mine: Saved | undefined;
   open: boolean;
   sought: boolean;
   panelId: string;
@@ -204,11 +215,15 @@ function AutoWord({
     <button
       type="button"
       className={styles.word}
-      data-level={auto.level}
+      data-level={mine ? "mine" : auto.level}
       data-sought={sought || undefined}
       aria-expanded={open}
       aria-controls={open ? panelId : undefined}
-      aria-label={`${word.fa}: ${auto.latin}، ${LEVEL_FA[auto.level]} (${percent(auto.confidence)})`}
+      aria-label={
+        mine
+          ? `${word.fa}: ${mine.latin}، ثبت‌شده`
+          : `${word.fa}: ${auto.latin}، ${LEVEL_FA[auto.level]} (${percent(auto.confidence)})`
+      }
       onClick={() => onPress(open)}
     >
       <span className={styles.fa}>
@@ -216,7 +231,16 @@ function AutoWord({
         {word.after ? <span className={styles.after}>{word.after}</span> : null}
       </span>
       <span className={styles.latins}>
-        <Latin className={`${styles.latin} ${styles.auto}`}>{auto.latin}</Latin>
+        {mine ? (
+          <span className={`${styles.latin} ${styles.auto}`}>
+            <span className={styles.tick} aria-hidden="true">
+              ✓
+            </span>
+            <Latin>{mine.latin}</Latin>
+          </span>
+        ) : (
+          <Latin className={`${styles.latin} ${styles.auto}`}>{auto.latin}</Latin>
+        )}
       </span>
     </button>
   );

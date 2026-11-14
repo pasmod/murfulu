@@ -17,3 +17,12 @@ export const LEVEL_FA: Record<Level, string> = {
 export function percent(share: number): string {
   return `${Math.round(share * 100).toLocaleString("fa-IR")}٪`;
 }
+
+/** A reading saved for one word in one line, from this visit or before. */
+export interface Saved {
+  latin: string;
+  /** Held by the bank or the function-word list: the model learns it. */
+  inBank: boolean;
+  /** The store's id for it: the larger, the newer. */
+  id: number;
+}

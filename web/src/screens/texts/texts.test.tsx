@@ -16,6 +16,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Marked, Text, TextFound } from "../../api/texts";
 import { renderApp } from "../../test/render";
+import { newest, placeSaved } from "./Reader";
 
 const TEXT: Text = {
   document_id: "fixture:a:1",
@@ -172,6 +173,28 @@ const AUTO: Text = {
                   ["raftand", 0.4],
                   ["roftand", null],
                 ],
+                known: [],
+              },
+            },
+          ],
+        },
+        {
+          position: "second",
+          words: [
+            {
+              fa: "و",
+              s: "و",
+              auto: {
+                latin: "o",
+                confidence: 0.8,
+                level: "mid",
+                source: "function",
+                candidates: [
+                  ["o", 0.8],
+                  ["va", 0.2],
+                ],
+                // The function-word list holds both: the bank has neither.
+                known: ["va", "o"],
               },
             },
           ],
@@ -181,7 +204,13 @@ const AUTO: Text = {
   ],
 };
 
+/** Readings saved for this text before the visit, newest first. */
+let saved: Marked[] = [];
+
 function answer(url: string): unknown {
+  if (url.includes("/texts/marked") && url.includes("kind=proposed")) {
+    return { total: saved.length, offset: 0, returned: saved.length, marked: saved };
+  }
   if (url.includes("/texts/marked") && url.includes("spelling=")) {
     return { total: 1, offset: 0, returned: 1, marked: [EARLIER] };
   }
@@ -193,6 +222,7 @@ function answer(url: string): unknown {
 
 beforeEach(() => {
   posted = [];
+  saved = [];
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url: string, init?: RequestInit) => {
@@ -367,7 +397,7 @@ describe("the reading screen", () => {
     const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
     await userEvent.click(within(text).getByRole("button", { name: /^رفتند:/ }));
     const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
-    const send = within(here).getByRole("button", { name: "ثبت پیشنهاد" });
+    const send = within(here).getByRole("button", { name: /^ثبت/ });
     expect(send).toBeDisabled();
     await userEvent.type(within(here).getByRole("textbox"), "raftand");
     await userEvent.clear(within(here).getByRole("textbox"));
@@ -398,10 +428,10 @@ describe("the reading screen", () => {
     const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
     await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
     const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
-    const dal = within(here).getByRole("button", { name: /Dal/ });
+    const dal = within(here).getByRole("radio", { name: /Dal/ });
     await userEvent.click(dal);
-    expect(dal).toHaveAttribute("aria-pressed", "true");
-    await userEvent.click(within(here).getByRole("button", { name: "ثبت پیشنهاد" }));
+    expect(dal).toBeChecked();
+    await userEvent.click(within(here).getByRole("button", { name: "ثبت «Dal»" }));
     await within(here).findByText(/ثبت شد/);
     expect(posted[0]).toEqual(
       expect.objectContaining({
@@ -416,10 +446,10 @@ describe("the reading screen", () => {
     const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
     await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
     let here = within(text).getByRole("region", { name: "خوانش در این سطر" });
-    await userEvent.click(within(here).getByRole("button", { name: /Dal/ }));
+    await userEvent.click(within(here).getByRole("radio", { name: /Dal/ }));
     await userEvent.click(within(text).getByRole("button", { name: /^رفتند:/ }));
     here = within(text).getByRole("region", { name: "خوانش در این سطر" });
-    expect(within(here).getByRole("button", { name: "ثبت پیشنهاد" })).toBeDisabled();
+    expect(within(here).getByRole("button", { name: "ثبت" })).toBeDisabled();
     expect(posted).toEqual([]);
   });
 
@@ -428,8 +458,8 @@ describe("the reading screen", () => {
     const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
     await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
     const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
-    await userEvent.click(within(here).getByRole("button", { name: /Dil/ }));
-    await userEvent.click(within(here).getByRole("button", { name: "ثبت پیشنهاد" }));
+    await userEvent.click(within(here).getByRole("radio", { name: /Dil/ }));
+    await userEvent.click(within(here).getByRole("button", { name: "ثبت «Dil»" }));
     await within(here).findByText(/ثبت شد/);
     expect(posted[0]).toEqual(
       expect.objectContaining({ context: expect.objectContaining({ latin: "Dil", in_bank: true }) }),
@@ -441,8 +471,182 @@ describe("the reading screen", () => {
     const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
     await userEvent.click(within(text).getByRole("button", { name: /^رفتند:/ }));
     const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
-    const built = within(here).getByRole("button", { name: "roftand" });
+    const built = within(here).getByRole("radio", { name: "roftand" }).closest("label");
     expect(built).not.toHaveTextContent("٪");
-    expect(within(here).getByRole("button", { name: /raftand/ })).toHaveTextContent("٪");
+    const measured = within(here).getByRole("radio", { name: /raftand/ }).closest("label");
+    expect(measured).toHaveTextContent("٪");
+  });
+
+  it("lets a reader pick or type, never both, and says which will be saved", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    const dal = within(here).getByRole("radio", { name: /Dal/ });
+    const field = within(here).getByRole("textbox");
+    await userEvent.click(dal);
+    expect(within(here).getByText(/ثبت می‌شود/)).toHaveTextContent(/Dal.*برگزیده/);
+    // Typing clears the pick …
+    await userEvent.type(field, "Dol");
+    expect(dal).not.toBeChecked();
+    expect(within(here).queryAllByRole("radio", { checked: true })).toHaveLength(0);
+    expect(within(here).getByText(/ثبت می‌شود/)).toHaveTextContent(/Dol.*نوشته‌شده/);
+    // … and picking clears what was typed.
+    await userEvent.click(within(here).getByRole("radio", { name: /Del/ }));
+    expect(field).toHaveValue("");
+    expect(within(here).getByRole("button", { name: "ثبت «Del»" })).toBeEnabled();
+    expect(posted).toEqual([]);
+  });
+
+  it("shows a saved reading under its word, with a check mark", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    await userEvent.click(within(here).getByRole("radio", { name: /Dal/ }));
+    await userEvent.click(within(here).getByRole("button", { name: "ثبت «Dal»" }));
+    expect(await within(here).findByText(/برنامه این خوانش را می‌شناسد/)).toBeInTheDocument();
+    const word = within(text).getByRole("button", { name: "دلِ: Dal، ثبت‌شده" });
+    expect(word).toHaveAttribute("data-level", "mine");
+    expect(word).toHaveTextContent("✓");
+    expect(posted[0]).toEqual(
+      expect.objectContaining({
+        context: expect.objectContaining({ unit: 0, line: 0, word: 0, before: null, after: "رفتند" }),
+      }),
+    );
+  });
+
+  it("shows readings saved before the visit under their words", async () => {
+    const row: Marked = {
+      ...MARKED,
+      id: 20,
+      target_id: "دل:Dal",
+      latin: "Dal",
+      written: "دلِ",
+      unit: 0,
+      line: 0,
+      word: 0,
+      in_bank: true,
+    };
+    // An older proposal names no place: found by spelling and neighbours.
+    const older: Marked = {
+      ...MARKED,
+      id: 19,
+      target_id: "رفتند:raftaand",
+      spelling_fa: "رفتند",
+      latin: "raftaand",
+      written: "رفتند",
+      unit: 0,
+      before: "دل",
+      after: null,
+      in_bank: false,
+    };
+    saved = [row, older, { ...row, id: 18, latin: "Del" }];
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    // The newest wins.
+    expect(await within(text).findByRole("button", { name: "دلِ: Dal، ثبت‌شده" })).toBeInTheDocument();
+    expect(within(text).getByRole("button", { name: "رفتند: raftaand، ثبت‌شده" })).toBeInTheDocument();
+    await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    expect(within(here).getByText(/پیش‌تر برای این سطر ثبت شده/)).toHaveTextContent("Dal");
+  });
+
+  it("learns a function word's own reading rather than sending it to karbon", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^و:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    await userEvent.click(within(here).getByRole("radio", { name: /va/ }));
+    expect(within(here).getByText(/ثبت می‌شود/)).toHaveTextContent(/می‌شناسد/);
+    await userEvent.click(within(here).getByRole("button", { name: "ثبت «va»" }));
+    await within(here).findByText(/ثبت شد/);
+    expect(posted[0]).toEqual(
+      expect.objectContaining({ context: expect.objectContaining({ latin: "va", in_bank: true }) }),
+    );
+  });
+
+  it("moves the pick with the arrow keys, as radio buttons do", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    await userEvent.click(within(here).getByRole("radio", { name: /Del/ }));
+    await userEvent.keyboard("{ArrowDown}");
+    expect(within(here).getByRole("radio", { name: /Dal/ })).toBeChecked();
+    expect(within(here).getByRole("button", { name: "ثبت «Dal»" })).toBeEnabled();
+  });
+});
+
+describe("where a saved reading belongs", () => {
+  const row: Marked = {
+    ...MARKED,
+    spelling_fa: "دل",
+    latin: "Dal",
+    written: "دلِ",
+    unit: 0,
+    line: 0,
+    word: 1,
+    before: "ما",
+    after: "ما",
+    in_bank: true,
+  };
+  const moved: Text = {
+    ...AUTO,
+    units: [
+      {
+        index: 0,
+        number: 1,
+        kind: "couplet",
+        lines: [
+          {
+            position: "first",
+            // A revision put another دلِ where the saved one stood.
+            words: [
+              { fa: "ما", s: "ما" },
+              { fa: "دلِ", s: "دل" },
+              { fa: "ما", s: "ما" },
+              { fa: "دلِ", s: "دل" },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  it("trusts the saved place only where the word there is the one saved", () => {
+    expect([...placeSaved(moved, [row]).keys()]).toEqual(["0:0:1"]);
+    const elsewhere = { ...row, before: "رفت" };
+    expect([...placeSaved(moved, [elsewhere]).keys()]).toEqual([]);
+    // Saved at 1 between ما and the line's end: that word is now at 3.
+    const stale = { ...row, after: null };
+    expect([...placeSaved(moved, [stale]).keys()]).toEqual(["0:0:3"]);
+  });
+
+  it("leaves an old save without a place unshown where its context repeats", () => {
+    const twice: Text = {
+      ...moved,
+      units: [
+        {
+          index: 0,
+          number: 1,
+          kind: "couplet",
+          lines: [
+            { position: "first", words: [{ fa: "ما", s: "ما" }, { fa: "دلِ", s: "دل" }] },
+            { position: "second", words: [{ fa: "ما", s: "ما" }, { fa: "دلِ", s: "دل" }] },
+          ],
+        },
+      ],
+    };
+    const old = { ...row, line: null, word: null, after: null };
+    expect(placeSaved(twice, [old]).size).toBe(0);
+    expect([...placeSaved(twice, [{ ...old, line: 1, word: 1 }]).keys()]).toEqual(["0:1:1"]);
+  });
+
+  it("keeps the newest save at a place, however late an answer arrives", () => {
+    const later = new Map([["0:0:0", { latin: "Dal", inBank: true, id: 9 }]]);
+    const earlier = new Map([["0:0:0", { latin: "Del", inBank: true, id: 8 }]]);
+    expect(newest(later, earlier).get("0:0:0")?.latin).toBe("Dal");
+    expect(newest(earlier, later).get("0:0:0")?.latin).toBe("Dal");
   });
 });

@@ -351,6 +351,9 @@ def test_a_text_carries_its_levels_when_the_model_is_on(
     on = http.get("/texts/fixture:a:1").json()
     assert on["behnevis"] == {"sure": serve.SURE, "mid": serve.MID}
     assert on["units"][1]["lines"][0]["words"][0]["auto"]["latin"] == "Del"
+    # The readings a pick of which the model learns: the bank's, here.
+    auto = on["units"][1]["lines"][0]["words"][0]["auto"]
+    assert sorted(auto["known"]) == ["Dal", "Del"]
 
 
 def test_a_proposed_reading_is_listed_apart_from_the_marks(http: TestClient):
@@ -371,16 +374,45 @@ def test_a_proposed_reading_is_listed_apart_from_the_marks(http: TestClient):
             "written": "آرد",
             "document_id": "fixture:a:1",
             "unit": 1,
+            "line": 0,
+            "word": 2,
+            "before": "از",
+            "after": None,
             "heading": "نویسنده · کتاب · عنوان",
         },
         "corpus_version": "v17",
     }
+    elsewhere = {
+        **proposal,
+        "context": {**proposal["context"], "document_id": "fixture:b:1"},
+    }
+    assert http.post("/feedback", json=elsewhere).status_code == 201
     written = http.post("/feedback", json=proposal)
     assert written.status_code == 201, written.text
     assert written.json()["owner"] == "karbon"
     assert http.get("/texts/marked").json()["total"] == 0
-    [row] = http.get("/texts/marked", params={"kind": "proposed"}).json()["marked"]
+    assert http.get("/texts/marked", params={"kind": "proposed"}).json()["total"] == 2
+    # The reading screen asks for what was saved in the text it shows.
+    [row] = http.get(
+        "/texts/marked", params={"kind": "proposed", "document_id": "fixture:a:1"}
+    ).json()["marked"]
     assert (row["latin"], row["in_bank"], row["model_latin"]) == ("ārad", False, "Ārd")
+    assert (row["unit"], row["line"], row["word"]) == (1, 0, 2)
+    assert (row["before"], row["after"]) == ("از", None)
+    # … and only for the units of the window it shows.
+    window = {"kind": "proposed", "document_id": "fixture:a:1"}
+    assert (
+        http.get(
+            "/texts/marked", params={**window, "unit_from": 0, "unit_to": 1}
+        ).json()["total"]
+        == 1
+    )
+    assert (
+        http.get(
+            "/texts/marked", params={**window, "unit_from": 2, "unit_to": 9}
+        ).json()["total"]
+        == 0
+    )
     assert http.get("/texts/marked", params={"kind": "other"}).status_code == 422
 
 
@@ -421,3 +453,86 @@ def test_the_proposals_export_as_one_list_for_karbon():
     assert "ārad" not in added
     [one] = tool.picks([picked])
     assert (one["latin"], one["in_bank"], one["before"]) == ("Ārd", True, "دست")
+
+
+def test_the_export_counts_a_function_words_own_reading_as_held(
+    lexicon_snapshot: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """و picked as *o* is learned by the model; karbon is not asked for it."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "export_reading_proposals",
+        Path(__file__).resolve().parents[1] / "tools" / "export_reading_proposals.py",
+    )
+    tool = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+    spec.loader.exec_module(tool)  # type: ignore[union-attr]
+    monkeypatch.setenv("MURFULU_LEXICON_PATH", str(lexicon_snapshot))
+    held = tool.current_bank()
+    assert held is not None
+    assert held("و", "o") and held("و", "va") and held("به", "be")
+    assert not held("و", "vo")
+
+
+def test_only_the_newest_save_for_a_place_is_exported():
+    """A reader who saves again at the same word changed their mind."""
+    import importlib.util
+    from types import SimpleNamespace
+
+    spec = importlib.util.spec_from_file_location(
+        "export_reading_proposals",
+        Path(__file__).resolve().parents[1] / "tools" / "export_reading_proposals.py",
+    )
+    tool = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+    spec.loader.exec_module(tool)  # type: ignore[union-attr]
+    here = {
+        "screen": "texts",
+        "kind": "reading_here",
+        "spelling_fa": "دل",
+        "document_id": "fixture:a:1",
+        "unit": 0,
+        "line": 0,
+        "word": 1,
+        "in_bank": True,
+    }
+    rows = [
+        SimpleNamespace(context={**here, "latin": "Dal"}, target_id="دل:Dal"),
+        SimpleNamespace(
+            context={**here, "word": 3, "latin": "Dal"}, target_id="دل:Dal"
+        ),
+        SimpleNamespace(context={**here, "latin": "Del"}, target_id="دل:Del"),
+        SimpleNamespace(context={"kind": "reading_here"}, target_id="x:y"),
+    ]
+    kept = tool.latest(rows)
+    assert [(r.context.get("word"), r.context.get("latin")) for r in kept] == [
+        (3, "Dal"),
+        (1, "Del"),
+        (None, None),
+    ]
+    assert [p["latin"] for p in tool.picks(kept)] == ["Dal", "Del"]
+    # A save from before positions were sent cannot say which of two like
+    # words it was for: a positioned save never replaces it.
+    legacy = {k: v for k, v in here.items() if k not in ("line", "word")}
+    corrected = [
+        SimpleNamespace(context={**legacy, "latin": "Dal"}, target_id="دل:Dal"),
+        SimpleNamespace(context={**here, "latin": "Del"}, target_id="دل:Del"),
+        SimpleNamespace(context={**legacy, "latin": "Dil"}, target_id="دل:Dil"),
+    ]
+    assert [r.context["latin"] for r in tool.latest(corrected)] == ["Del", "Dil"]
+    # Another word under the same coordinates is not a correction.
+    moved = [
+        SimpleNamespace(context={**here, "latin": "Dal"}, target_id="دل:Dal"),
+        SimpleNamespace(
+            context={**here, "spelling_fa": "گل", "latin": "Gol"}, target_id="گل:Gol"
+        ),
+    ]
+    assert [r.context["latin"] for r in tool.latest(moved)] == ["Dal", "Gol"]
+    # An old save whose context two places share stays: it is not clear which.
+    twice = [
+        SimpleNamespace(context={**legacy, "latin": "Dal"}, target_id="دل:Dal"),
+        SimpleNamespace(context={**here, "latin": "Del"}, target_id="دل:Del"),
+        SimpleNamespace(
+            context={**here, "line": 1, "latin": "Del"}, target_id="دل:Del"
+        ),
+    ]
+    assert len(tool.latest(twice)) == 3

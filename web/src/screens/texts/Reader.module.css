@@ -254,6 +254,35 @@
   border-radius: var(--radius-sm);
 }
 
+/* A reading saved for this word stands in the model's place: a check mark,
+   the accent colour and a solid line, so a reader sees what is done. */
+.word[data-level="mine"] .auto,
+.auto[data-level="mine"] {
+  display: inline-flex;
+  gap: 2px;
+  align-items: baseline;
+  font-weight: 600;
+  color: var(--accent-strong);
+  background: var(--accent-wash);
+  border-block-end: 2px solid var(--accent);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.tick {
+  font-weight: 700;
+}
+
+/* A saved reading may be typed and long: it wraps rather than widen the page. */
+.word[data-level="mine"] .auto {
+  flex-wrap: wrap;
+  max-inline-size: 100%;
+}
+
+.word[data-level="mine"] [data-latin] {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 /* Several readings are told apart by a mark, never by one being larger. */
 .word[data-state="several"] .latins {
   padding-block-end: 1px;

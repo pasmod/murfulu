@@ -453,9 +453,12 @@ direction A, when `MURFULU_BEHNEVIS_PATH` names a model): the word's `auto`
 reading under it, a green line (sure), amber dots (mid) or a red dashed box
 (unsure); the legend shows the three with their edges, which come from the
 API. The panel opens with «در این سطر»: the reading, its estimate, the
-readings to pick (`aria-pressed`) and a field to type one, then «ثبت پیشنهاد»
-— a proposal for karbon through the feedback store, which changes nothing on
-the screen. `levels.ts` names the levels.
+readings to pick (native radio buttons drawn as buttons: one tab stop, arrow
+keys move the pick; the picked one filled with a check mark) and a field to type one — each clears the other — then a line
+saying what will be saved and what becomes of it, and «ثبت «…»». A saved
+reading stands under its word with a check mark on an accent wash
+(`data-level="mine"`), asked for again on every visit (DECISIONS 2026-11-14,
+*a pick is plain to see*). `levels.ts` names the levels.
 
 **A reading the word's own harakat rule out is paler** (since 2026-11-14, the
 project lead's choice): under «تُرکِ», *Tarak* and *Tark* in `--ink-faint`,

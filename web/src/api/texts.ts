@@ -66,6 +66,11 @@ export interface AutoReading {
    * a letter guess on an inflected form).
    */
   candidates: [string, number | null][];
+  /**
+   * The readings the bank or the function-word list holds: a pick of one
+   * teaches the model; any other reading is a proposal for karbon.
+   */
+  known?: string[];
 }
 
 export type LinePosition =
@@ -139,6 +144,12 @@ export interface Marked {
   written: string | null;
   document_id: string | null;
   unit: number | null;
+  /** A proposal's line in its unit and place in the line (sent since 2026-11-14). */
+  line?: number | null;
+  word?: number | null;
+  before?: string | null;
+  after?: string | null;
+  in_bank?: boolean | null;
   heading: string | null;
   note: string | null;
   corpus_version: string | null;
@@ -177,12 +188,29 @@ export interface MarkedPage {
 
 /** One page of the marks, newest first — or every mark on one spelling. */
 export function marked(
-  options: { spelling?: string; offset?: number; limit?: number } = {},
+  options: {
+    spelling?: string;
+    kind?: "wrong" | "proposed";
+    document_id?: string;
+    /** Only the units from … to, as the text's window holds them. */
+    unit_from?: number;
+    unit_to?: number;
+    offset?: number;
+    limit?: number;
+  } = {},
   signal?: AbortSignal,
 ): Promise<MarkedPage> {
   return get<MarkedPage>(
     "/texts/marked",
-    { spelling: options.spelling, offset: options.offset, limit: options.limit },
+    {
+      spelling: options.spelling,
+      kind: options.kind,
+      document_id: options.document_id,
+      unit_from: options.unit_from,
+      unit_to: options.unit_to,
+      offset: options.offset,
+      limit: options.limit,
+    },
     signal,
   );
 }
@@ -200,6 +228,9 @@ export interface MarkedWhere {
    */
   before?: string | null;
   after?: string | null;
+  /** The line in the unit and the word's place in it, to show a saved pick there. */
+  line?: number;
+  word?: number;
 }
 
 /** Record that one reading of one spelling is wrong. Append-only. */
@@ -265,6 +296,8 @@ export function proposeReading(
       after: where.after ?? null,
       document_id: where.document_id,
       unit: where.unit,
+      line: where.line ?? null,
+      word: where.word ?? null,
       heading: where.heading,
     },
     corpus_version: where.corpus_version,

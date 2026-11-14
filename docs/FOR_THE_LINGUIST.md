@@ -2796,8 +2796,10 @@ About two hours.
 **4. The words on the reading screen** (direction A, 2026-11-14), ours and
 unconfirmed: the levels «مطمئن»، «کمابیش»، «نامطمئن»; the panel's «در این
 سطر» with «این خوانش را برنامه پیشنهاد می‌کند و درصد، برآورد آن از درستی
-است»; «یا خوانش درست را بنویسید»; «ثبت پیشنهاد». What he picks or types there
-is gathered for karbon and changes nothing in the bank.
+است»; «یکی را برگزینید»؛ «یا، اگر در میان نیست، بنویسید»؛ «ثبت می‌شود: …»
+with the two sentences on what becomes of it; «ثبت‌شده». A pick among the
+bank's readings teaches the model; a reading the bank lacks is gathered for
+karbon; nothing changes in the bank.
 
 ## L42. A reading for each of the most frequent words still marked unsure
 
