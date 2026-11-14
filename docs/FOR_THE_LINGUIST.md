@@ -2727,3 +2727,42 @@ unconfirmed:
    or «بیتِ بند»?
 4. How does he want to go through the marks: on this list in the app, or
    exported to him with the line beside each?
+
+## L40. Words whose own harakat fit none of the bank's readings
+
+Measured 2026-11-14 (DECISIONS 2026-11-14); **not blocking**. On the reading
+screen a reading the word's own vowel signs rule out is now paler: under
+«تُرکِ», *Tarak* and *Tark* go pale and *tork* stays. Where the signs fit
+**none** of the bank's readings, every reading of the word is pale. That
+happens 42,868 times in corpus v17; the 150 most frequent are in
+`data/harakat-v17.md`, each with how often, in how many texts, the bank's
+readings and one text to look at.
+
+They are of three kinds, and only he can say which a word is:
+
+| kind | examples (the text's spelling — the bank's readings) |
+|---|---|
+| a reading the bank lacks | رَه — *Roh*; کُه — *ke*, *keh*; مُهر — *Mehr*; دُر — *Dar*, *dar*; سِر — *Sar*, *Sor*; مَلِک — *Melk*, *Molk*; خَیْر — *Xir*; قَوْم — *Qum*; اَهْل — *Ohl* |
+| a classical form | بُوَد — *Bud* (the line reads *bovad*); بُدی — *Badi*; بُرد — *Bard* |
+| a word that is not Persian | مِن — *Man*, *man* (9,584 times, in Arabic quotations); اِلَّا — *alā*; عَلی — *oli*; هُم — *ham* |
+
+An edition's wrong sign is a fourth possibility; none was seen in the cases
+read by hand.
+
+**What we did meanwhile** — ours, unconfirmed: the screen's words. Beside a
+pale reading in the panel, «اعرابِ متن با آن نمی‌خواند»; in the legend,
+«کم‌رنگ: اعرابِ خودِ متن با این خوانش نمی‌خواند؛ برای نمونه «تُرک» با ضمه.»
+A reading counts as fitting when one of its variants fits, so under «دِل»
+*Dal* stays, because the bank gives it the variant *Del*.
+
+### The question
+
+1. Which of the listed readings should the bank have — *rah* for ره, *kuh*
+   or *koh* for که, *mohr* for مهر, *xeyr*, *qowm*, *ahl*? (UPSTREAM B10
+   carries them to karbon once he says so.)
+2. Should a classical form like *bovad* be a reading of بود, or stay outside
+   the bank?
+3. Arabic words: should the screen say a word is Arabic instead of showing
+   the Persian word spelled the same?
+4. Is *Dal* under «دِل» right to stay, because of its variant *Del*?
+5. The wording above.

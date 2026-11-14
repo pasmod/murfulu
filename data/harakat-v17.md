@@ -9,8 +9,8 @@ shows it paler. The last letter's signs are not read (the ezafe).
 | words | 25,532,059 | 100.00% |
 | with signs | 420,478 | 1.65% |
 | with signs and a reading | 96,254 | 0.38% |
-| some readings pale | 26,466 | 0.10% |
-| no reading fits | 42,906 | 0.17% |
+| some readings pale | 26,474 | 0.10% |
+| no reading fits | 42,868 | 0.17% |
 
 ## No reading fits: the 150 most frequent
 

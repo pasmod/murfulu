@@ -2,6 +2,39 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-14 — a reading the word's own harakat rule out is shown paler
+
+Was OPEN_QUESTIONS S44. **The project lead chose the middle way of three**
+(keep every reading alike, show the contradicted ones paler, or hide them):
+under «تُرکِ» *tork* stays as it was and *Tarak* and *Tark* go pale, in the
+line and in the panel, which says why. Hiding was refused because an
+edition's harakat are sometimes wrong; alike, because the reader then sees
+readings the text itself rules out.
+
+**Decided here, under the working rule** (`search/harakat.py`):
+
+- *A sign says which vowel follows its letter*: fatha *a* or *ā* (and the
+  diphthongs *ow*, *ey*), kasra *e* or *i*, damma *o* or *u*, sukun none. The
+  written word is lined up with the reading letter by letter; a reading is
+  against the signs when it lines up without them and not with them.
+- *Every doubt says nothing*: a reading that cannot be lined up at all, a
+  letter the table does not know, a shadda (Behnevis writes most doubled
+  letters single), a tanwin — none of them greys anything.
+- *The last letter's signs are not read*: a kasra there is the ezafe.
+- *A reading fits when one of its variants fits*: under «دِل» *Dal* stays,
+  because the bank gives it the variant *Del*.
+- *The API carries the ids*: a word written with signs that rule a reading
+  out has `against`, the ids of those readings; most words have none.
+
+**How often**: corpus v17 counts 25,532,059 words; 420,478 carry a vowel sign on a letter
+other than the last (1.65 %), 96,254 of those have a reading in the bank, on
+26,474 some readings are shown paler (0.10 % of the words) and on 42,868 none
+fits (0.17 %) — `tools/measure_harakat.py v17`, in `data/harakat-v17.md`. A sample of 80 cases from 3,000 random texts
+was read by hand: every pale reading was one the signs truly contradict. The
+words where none fits are mostly Arabic quotations (مِن is not *man*),
+classical forms (بُوَد, *bovad*) and readings the bank lacks (رَه, کُه, مُهر):
+FOR_THE_LINGUIST L40, UPSTREAM B10.
+
 ## 2026-11-13 — the reading screen: direction A, every reading equal, a wrong reading goes to the feedback store
 
 **The project lead chose direction A** of three drafts (each word over its

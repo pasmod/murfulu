@@ -400,6 +400,13 @@ another, the same size, in alphabetical order, with a dotted rule under them;
 the panel says the bank reads it *n* ways and that which one this line needs
 is not said. The drafts' placeholder rule had put *dall* under دل.
 
+**A reading the word's own harakat rule out is paler** (since 2026-11-14, the
+project lead's choice): under «تُرکِ», *Tarak* and *Tark* in `--ink-faint`,
+*tork* as before. The API names them (`against` on the word); the legend
+explains pale readings only on a page that has one, the button's label names
+them, and the panel says «اعرابِ متن با آن نمی‌خواند» beside each. Never
+hidden: an edition's signs are sometimes wrong. The rule: `search/harakat.py`.
+
 **«؟» for a word the bank does not read, never "not a word".** The panel says
 the bank has no reading for the spelling and links to the bank's search for
 it. The inflection analyser's guesses are not shown: they are wrong too often

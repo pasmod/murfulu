@@ -967,3 +967,17 @@ a conjugated verb and a noun with its clitic (بخشم، می‌رود، دلش)
 the reading screen shows «؟» for them and does not guess (the project lead's
 brief of 2026-11-13: the inflection analyser's guesses are wrong too often —
 جنت as جن + ت).
+
+### B10. Readings the text's own vowel signs ask for, which the bank does not have
+
+Measured 2026-11-14 on corpus v17 and `lexicon-20261111` (karbon 1.3.2),
+`tools/measure_harakat.py v17`; the 150 most frequent cases are in
+`data/harakat-v17.md`. In 42,868 running words, the word's own harakat fit
+none of the bank's readings of its spelling. Some are Arabic quotations and
+classical forms; others are everyday readings missing from the bank: ره has
+only *Roh* (the text writes رَه, *rah*), مهر only *Mehr* (مُهر, *mohr*), خیر
+only *Xir* (خَیْر), قوم only *Qum* (قَوْم), اهل only *Ohl* (اَهْل).
+
+**Waiting for the linguist** (FOR_THE_LINGUIST L40) before it goes to the
+karbon maintainer: which of these the bank should hold is his to say.
+

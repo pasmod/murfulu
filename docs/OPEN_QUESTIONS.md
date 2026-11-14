@@ -19,6 +19,9 @@ released, or carry forward and rebuild with the next text change?
 
 ### S44. Should the reading screen use the text's own vowel signs?
 
+*Answered 2026-11-14 by the project lead: the readings they rule out are shown
+paler, not hidden (DECISIONS 2026-11-14). The question as it stood:*
+
 Many Ganjoor lines carry harakat (تُرکِ، دلِ، بَخشَم). Where a sign rules out
 some of the bank's readings — a damma on ت leaves *tork* of *Tarak, Tark,
 tork* — the screen could say so, or grey out the others. It does not: every

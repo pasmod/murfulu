@@ -5,6 +5,32 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-14 (session 30) — the text's own harakat against the bank's readings
+
+**What we looked at.** Every counted word of corpus v17 written with a vowel
+sign, against every reading the bank (`lexicon-20261111`) gives its spelling,
+lined up letter by letter (`search/harakat.py`, `tools/measure_harakat.py`).
+
+**What we found.** corpus v17 counts 25,532,059 words; 420,478 carry a vowel sign on a letter
+other than the last (1.65 %), 96,254 of those have a reading in the bank, on
+26,474 some readings are shown paler (0.10 % of the words) and on 42,868 none
+fits (0.17 %) — `tools/measure_harakat.py v17`, in `data/harakat-v17.md`. Where some readings go pale, the signs pick the
+expected one: «کُن» *kon* over *Kan*, *Ken*; «بِه» *be*, *beh* over *bah*;
+«مُلک» *Molk* over *Melk*. Where none fits, three things are mixed: Arabic
+words in Persian texts (مِن 9,584 times, اِلَّا, عَلی, هُم), classical forms
+the bank does not hold (بُوَد *bovad*, بُدی, بُرد) and everyday readings it
+lacks (رَه *rah*, کُه, مُهر *mohr*, دُر *dorr*, خَیْر, قَوْم, اَهْل).
+
+**Limits.** Only 1.65 % of the words carry a sign, unevenly by edition, so
+this says little about unsigned text. The rule leans towards saying nothing;
+its misses are not counted. The sample read by hand was 80 cases.
+
+**What it means.** The reading screen can use the signs without proposing a
+reading of its own. The list of words where none fits is the linguist's
+(L40): it finds readings missing from the bank that no frequency count shows.
+
+---
+
 ## 2026-11-13 (session 29) — Ganjoor's positions from Ganjoor's code, texts with units, corpus v17
 
 The reading screen (FRONTEND, *Reading a text*) needed a text's structure, and
