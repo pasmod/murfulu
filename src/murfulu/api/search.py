@@ -18,6 +18,7 @@ from typing import Any
 from elasticsearch import ApiError, NotFoundError, TransportError
 from fastapi import APIRouter, HTTPException, Query
 
+from murfulu.search import evidence as all_evidence
 from murfulu.search.citations import find as find_citations
 from murfulu.search.facets import aggregations
 from murfulu.search.facets import read as read_facets
@@ -155,6 +156,74 @@ def word(
         "word": source,
         "readings": siblings,
         "citations": quoted,
+    }
+
+
+@router.get("/evidence")
+def evidence(
+    spelling: str = Query(..., min_length=1, description="a spelling as counted"),
+    author: str | None = Query(None, min_length=1, description="one author's texts"),
+    unnamed: bool = Query(False, description="only the texts with no author"),
+    page: int = Query(0, ge=0, description="which page, from 0"),
+    size: int = Query(
+        all_evidence.PAGE_SIZE,
+        ge=0,
+        le=all_evidence.MAX_PAGE_SIZE,
+        description="texts per page; 0 for the counts alone",
+    ),
+    count_lines: bool = Query(True, description="count the list's lines"),
+) -> dict[str, Any]:
+    """Every text holding a spelling, a page at a time, with every line in each.
+
+    The six citations of ``/word`` are one line per author; this is all of the
+    evidence. Authors come by how many texts are theirs, most first, and each
+    author's texts in the source's order, so a page is the same on every
+    reload. ``total`` and ``authors`` are always the whole list's;
+    ``matching`` and ``lines`` are the list being paged — one author's, when
+    one is chosen. ``lines`` is null when not asked for, and for a list too
+    long to read through (:data:`murfulu.search.evidence.LINE_COUNT_LIMIT`).
+    A text's ``held`` is ``counted``, ``near`` (only in a spelling the index
+    folds together with this one) or ``none``. An author of null is the texts
+    with no author, chosen with ``unnamed``.
+
+    The lines are evidence for the spelling, never for one reading of it.
+    """
+    chosen = "" if unnamed else author
+    try:
+        client = _client()
+        found = all_evidence.summary(client, spelling)
+        texts = (
+            all_evidence.page(
+                client, spelling, found, author=chosen, number=page, size=size
+            )
+            if size
+            else []
+        )
+        lines = (
+            all_evidence.line_count(
+                client, spelling, found.texts(chosen), author=chosen
+            )
+            if count_lines
+            else None
+        )
+    except NotFoundError:
+        raise HTTPException(503, "index 'documents' has not been built") from None
+    except (ApiError, TransportError, OSError) as unreachable:
+        raise HTTPException(503, f"{_UNREACHABLE}: {unreachable}") from None
+    return {
+        "spelling": spelling,
+        "corpus_version": found.corpus_version,
+        "total": found.total,
+        "authors": [
+            {"author": name or None, "texts": count} for name, count in found.authors
+        ],
+        "author": None if unnamed else author,
+        "unnamed": unnamed,
+        "matching": found.texts(chosen),
+        "lines": lines,
+        "page": page,
+        "size": size,
+        "texts": [one.as_dict() for one in texts],
     }
 
 

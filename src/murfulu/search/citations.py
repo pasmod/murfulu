@@ -30,7 +30,7 @@ corpus v17 has no units, and its citation names none.
 from __future__ import annotations
 
 import re
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from typing import Any
 
@@ -89,26 +89,32 @@ class Citation:
         }
 
 
-def _holds(text: str, wanted: str) -> bool:
-    return wanted in tokenise(text)
+def _same(spelling: str) -> str:
+    return spelling
 
 
-def excerpt(line: str, spelling: str) -> str:
+def _holds(text: str, wanted: str, fold: Callable[[str], str] = _same) -> bool:
+    return any(fold(one) == wanted for one in tokenise(text))
+
+
+def excerpt(line: str, spelling: str, *, fold: Callable[[str], str] = _same) -> str:
     """The part of a line worth quoting: all of a short one, a sentence of prose.
 
     A sentence still longer than :data:`MAX_WORDS` is cut to the words around
-    the first occurrence, with «…» where it was cut.
+    the first occurrence, with «…» where it was cut. ``fold`` is applied to the
+    spelling and to every word before they are compared, for a line that holds
+    the word only in a near spelling (:mod:`murfulu.search.evidence`).
     """
     if len(line.split()) <= MAX_WORDS:
         return line
-    wanted = normalise(spelling)
+    wanted = fold(normalise(spelling))
     sentence = next(
-        (one for one in _SENTENCE_END.split(line) if _holds(one, wanted)), line
+        (one for one in _SENTENCE_END.split(line) if _holds(one, wanted, fold)), line
     )
     words = sentence.split()
     if len(words) <= MAX_WORDS:
         return sentence
-    at = next((i for i, word in enumerate(words) if _holds(word, wanted)), 0)
+    at = next((i for i, word in enumerate(words) if _holds(word, wanted, fold)), 0)
     start = max(0, at - CONTEXT_WORDS)
     end = min(len(words), at + CONTEXT_WORDS + 1)
     cut = " ".join(words[start:end])
@@ -119,7 +125,7 @@ def excerpt(line: str, spelling: str) -> str:
     )
 
 
-def _lines(source: dict[str, Any]) -> Iterator[tuple[int | None, str | None, str]]:
+def lines(source: dict[str, Any]) -> Iterator[tuple[int | None, str | None, str]]:
     """Every counted line of a stored text, with its unit and the unit's kind."""
     units = source.get("units") or []
     if units:
@@ -138,7 +144,7 @@ def locate(
 ) -> tuple[int | None, str | None, str] | None:
     """The first line of a text containing this word: its unit, kind and words."""
     wanted = normalise(spelling)
-    for unit, kind, line in _lines(source):
+    for unit, kind, line in lines(source):
         stripped = line.strip()
         if stripped and _holds(stripped, wanted):
             return unit, kind, stripped

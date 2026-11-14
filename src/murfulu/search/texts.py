@@ -92,8 +92,8 @@ class Token:
         return shown
 
 
-def tokens(line: str) -> list[Token]:
-    """A line's words as written, each with the spelling the corpus counted.
+def spans(line: str) -> tuple[str, list[tuple[int, int, str]]]:
+    """A line in NFC, and where each counted word stands in it, with its spelling.
 
     ``wordtypes.tokenise`` normalises first and then finds the words, so the
     surface a word came from is lost. Here the normalised text keeps a map back
@@ -111,8 +111,7 @@ def tokens(line: str) -> list[Token]:
         origin.append(index)
     plain = "".join(folded)
 
-    found: list[Token] = []
-    written_to = 0
+    found: list[tuple[int, int, str]] = []
     for match in _WORD.finditer(plain):
         word = match.group()
         spelling = word.strip(ZWNJ)
@@ -125,6 +124,20 @@ def tokens(line: str) -> list[Token]:
             unicodedata.combining(text[end]) or _MARKS.match(text[end])
         ):
             end += 1
+        found.append((start, end, spelling))
+    return text, found
+
+
+def tokens(line: str) -> list[Token]:
+    """A line's words as written, each with the spelling the corpus counted.
+
+    The words are :func:`spans`; what stands between them is placed by
+    :func:`_between`.
+    """
+    text, words = spans(line)
+    found: list[Token] = []
+    written_to = 0
+    for start, end, spelling in words:
         _between(found, text[written_to:start])
         found.append(Token(text[start:end], spelling))
         written_to = end
