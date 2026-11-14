@@ -16,7 +16,9 @@ straight after its letter:
 - fatha: *a* or *ā* (or the diphthongs *ow*, *ey*, which a fatha writes too);
 - kasra: *e* or *i*;
 - damma: *o* or *u*;
-- sukun: no vowel.
+- sukun: no unwritten vowel. A vowel the next letter writes is allowed: in
+  «سَرْآمد» the آ after the sukun is *sarāmad*'s *ā* (the review of
+  2026-11-14).
 
 A reading is **against** the signs when it can be lined up with the letters
 but not with the letters and their signs. When it cannot be lined up at all —
@@ -137,11 +139,12 @@ def has_signs(written: str) -> bool:
 def _fits_sign(signs: frozenset[str], latin: str, at: int) -> bool:
     """Whether what follows position ``at`` is what the signs ask for."""
     following = latin[at:]
-    for sign, allowed in _AFTER.items():
-        if sign in signs and not following.startswith(allowed):
-            return False
-    # A sukun: no vowel straight after (the end of the word is none).
-    return not (SUKUN in signs and following[:1] in _VOWELS)
+    # A sukun is read where the alignment inserts a vowel (`_lines_up`): a
+    # vowel the next letter writes does not contradict it.
+    return all(
+        sign not in signs or following.startswith(allowed)
+        for sign, allowed in _AFTER.items()
+    )
 
 
 @lru_cache(maxsize=65_536)
@@ -177,7 +180,9 @@ def _lines_up(
                 ):
                     continue
                 nexts = [k]
-                if k < len(latin) and latin[k] in _UNWRITTEN:
+                # A sukun: no vowel the script leaves unwritten after its letter.
+                silent = with_signs and i != last and SUKUN in signs
+                if not silent and k < len(latin) and latin[k] in _UNWRITTEN:
                     nexts.append(k + 1)
                 for n in nexts:
                     if (i + 1, n) not in reached:

@@ -20,6 +20,8 @@ from murfulu.search import harakat, texts
         ("خواب", "Xāb"),  # no sign: nothing to say
         ("دلِ", "Dal"),  # only the last letter's sign: the ezafe
         ("زیادی", "Ziyādi"),
+        ("سَرْآمد", "sarāmad"),  # a sukun, then a vowel the next letter writes
+        ("مهرْافزا", "mehrāfzā"),
     ],
 )
 def test_a_reading_the_signs_allow_is_not_against(written: str, reading: str):
