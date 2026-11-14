@@ -274,6 +274,8 @@ def main(argv: list[str] | None = None) -> int:
                 (*model.functions.get(a.spelling, ()), *bank.get(a.spelling, ()))
             )
         )
+        if len(candidates) < 2:
+            continue  # a pick of a word with one reading is no choice to measure
         function = model.functions.get(a.spelling, ())
         probs = fold.choice.probabilities(
             a.spelling, candidates, a.before, a.after, function[0] if function else None

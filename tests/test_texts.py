@@ -416,5 +416,8 @@ def test_the_proposals_export_as_one_list_for_karbon():
         target_id="آرد:Ārd",
     )
     assert "Ārd | 1" not in tool.report(tool.gather([picked]))
+    # the current bank decides over the saved flag: ārad added since is no gap
+    added = tool.report(tool.gather(rows, lambda spelling, latin: latin == "ārad"))
+    assert "ārad" not in added
     [one] = tool.picks([picked])
     assert (one["latin"], one["in_bank"], one["before"]) == ("Ārd", True, "دست")

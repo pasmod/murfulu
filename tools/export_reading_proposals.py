@@ -27,6 +27,7 @@ import argparse
 import json
 import sys
 from collections import defaultdict
+from collections.abc import Callable
 from typing import Any
 
 from sqlalchemy import select
@@ -35,17 +36,25 @@ from murfulu.db.models.review import ExpertFeedback
 from murfulu.db.session import session_scope
 
 
-def gather(rows: list[ExpertFeedback]) -> dict[str, dict[str, dict[str, Any]]]:
-    """Spelling → proposed reading → how often, in the bank, the model, one place."""
+def gather(
+    rows: list[Any], in_bank: Callable[[str, str], bool | None] | None = None
+) -> dict[str, dict[str, dict[str, Any]]]:
+    """Spelling → proposed reading → how often, the model, one place.
+
+    ``in_bank`` asks the current bank whether it has a reading; without it the
+    flag saved with the proposal decides, which goes stale when karbon adds a
+    reading (the review of 2026-11-14).
+    """
     found: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
     for row in rows:
         context = row.context or {}
         if context.get("screen") != "texts" or context.get("kind") != "reading_here":
             continue
-        if context.get("in_bank") is True:
-            continue  # a pick in context: the model's, not karbon's
         spelling = context.get("spelling_fa") or (row.target_id or "").partition(":")[0]
         latin = context.get("latin") or (row.target_id or "").partition(":")[2]
+        now = in_bank(spelling, latin) if in_bank is not None else None
+        if (context.get("in_bank") is True) if now is None else now:
+            continue  # the bank has it: a pick in context, the model's, not karbon's
         entry = found[spelling].setdefault(
             latin,
             {
@@ -58,6 +67,24 @@ def gather(rows: list[ExpertFeedback]) -> dict[str, dict[str, dict[str, Any]]]:
         )
         entry["times"] += 1
     return found
+
+
+def current_bank() -> Callable[[str, str], bool | None] | None:
+    """Whether the current bank holds a reading, or None without a lexicon."""
+    try:
+        from murfulu.behnevis.transcribe import bank_from, key
+        from murfulu.lexicon.store import Lexicon
+
+        with Lexicon.open() as lexicon:
+            bank = bank_from(
+                (r.spelling_fa, latin)
+                for r in lexicon.all_readings()
+                for latin in r.all_latin
+                if latin
+            )
+    except Exception:  # no lexicon here: the saved flag decides
+        return None
+    return lambda spelling, latin: latin in bank.get(key(spelling), ())
 
 
 def report(found: dict[str, dict[str, dict[str, Any]]]) -> str:
@@ -131,7 +158,7 @@ def main(argv: list[str] | None = None) -> int:
             for one in picks(rows):
                 sys.stdout.write(json.dumps(one, ensure_ascii=False) + "\n")
         else:
-            sys.stdout.write(report(gather(rows)))
+            sys.stdout.write(report(gather(rows, current_bank())))
     return 0
 
 
