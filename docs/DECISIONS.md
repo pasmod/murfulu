@@ -25,6 +25,11 @@ and that splits what the reading screen collects in two.
 - *The api reads a rebuilt model without a restart*: the cache is keyed on
   the file's modification time as well, so `deploy/server.sh data` is enough.
 
+**Served since 2026-11-14**, after the project lead's OK; the server's check
+passed, and `deploy/server.sh proposals` ran (no picks saved yet). The model
+on the server is unchanged until the next build, so Hafez's ghazal 3 still
+reads 91 sure, 22 mid and 46 unsure.
+
 ## 2026-11-14 — fewer red words: measured verb patterns, و by verse, a yellow middle
 
 The project lead, after the first look at the live screen: too many words
