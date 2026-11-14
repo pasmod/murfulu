@@ -159,9 +159,16 @@ class Inflector:
         for base in bases:
             stem = base if not prefix else base[:1].lower() + base[1:]
             ending = suffix
-            if stem[-1:].lower() in VOWELS and plain.startswith("ی"):
+            glide = (
+                stem[-1:].lower() in VOWELS
+                and not analysis.base.endswith("ی")
+                and plain.startswith("ی")
+            )
+            if glide:
                 # After a vowel the written ی is the glide: گویم is گو + y + م,
                 # *guyam*, not the plural *guyim* (the review of 2026-11-14).
+                # A stem written with its own ی (زی *zi*) carries the glide
+                # already: زییم is *ziyim*, the ending's ی its own.
                 rest = SUFFIX.get(plain[1:])
                 if rest is None:
                     continue

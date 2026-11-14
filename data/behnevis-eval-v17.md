@@ -32,7 +32,7 @@ By source, all confidences:
 | bank | 3,588 | 38.4% |
 | choice | 3,930 | 60.1% |
 | function | 1,039 | 42.1% |
-| inflected | 2,478 | 51.6% |
+| inflected | 2,478 | 51.7% |
 | letters | 10,862 | 31.9% |
 | none | 2 | 0.0% |
 

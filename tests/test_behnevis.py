@@ -321,6 +321,8 @@ def test_after_a_vowel_the_written_ye_is_the_glide():
     assert "guyam" in inflector.readings("گویم")
     assert "guyim" not in inflector.readings("گویم")
     assert "guyad" in inflector.readings("گوید")
+    with_ye = Inflector(Analyser(Held.of([], [], ["زی"])), {}, {}, {"زی": ("zi",)})
+    assert with_ye.readings("زییم") == ["ziyim"]
 
 
 def test_every_reading_of_a_headword_is_inflected():
