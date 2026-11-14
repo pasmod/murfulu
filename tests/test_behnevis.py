@@ -454,3 +454,16 @@ def test_picks_are_read_against_the_current_bank_and_keep_their_poet(tmp_path: P
     assert [(a.spelling, a.reading, a.author, a.by_person) for a in found] == [
         ("دل", "Del", "حافظ", True)
     ]
+
+
+def test_picks_move_the_verse_rule_for_va_too():
+    pairs = [("نگشود", "nagošud"), ("نگشاید", "nagošāyad")]
+    picks = [Answered("و", "va", before="نگشود", after="نگشاید", by_person=True)] * 10
+    model = Transcriber(
+        bank=bank_from(pairs),
+        letters=LetterModel.train(pairs),
+        choice=ChoiceModel.train(picks),
+        functions={"و": ("va", "o")},
+    )
+    word = model.line("نگشود و نگشاید", verse=True)[1]
+    assert word.latin == "va"

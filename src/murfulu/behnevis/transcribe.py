@@ -171,6 +171,17 @@ class Transcriber:
             # *va*. Mid at most: a rule of thumb (the project lead, 2026-11-14).
             said = "o" if verse and not first else "va"
             other = "va" if said == "o" else "o"
+            if self.choice.person_alone.get(spelling):
+                # People have picked و's reading on the reading screen: their
+                # picks move the rule's reading, as they move any function
+                # word's (the review of 2026-11-14).
+                probs = self.choice.probabilities(
+                    spelling, [said, other], before, after, function_reading=said
+                )
+                order = tuple(ranked(probs))
+                return Word(
+                    written, spelling, order[0][0], order[0][1], FUNCTION, order
+                )
             sure = self.conjunction_confidence
             return Word(
                 written,
