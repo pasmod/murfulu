@@ -28,6 +28,7 @@ from collections import Counter
 from pathlib import Path
 
 from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
+from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.letters import LetterModel, latin_key, shape
 from murfulu.behnevis.stats import (
     cluster_lower_bound,
@@ -188,6 +189,8 @@ def main(argv: list[str] | None = None) -> int:
 
     with Lexicon.open() as lexicon:
         inflection = Analyser(held_from(lexicon))
+        lexicon_readings = list(lexicon.all_readings())
+        inflector = Inflector.from_readings(lexicon_readings, inflection)
         pairs = [
             (r.spelling_fa, latin)
             for r in lexicon.all_readings()
@@ -196,6 +199,9 @@ def main(argv: list[str] | None = None) -> int:
         ]
     bank = bank_from(pairs)
     model = Transcriber.load(DATA / f"behnevis-{version}.json", bank, inflection)
+    # The same inflector the server attaches (serve._load), so this measures
+    # what the screen shows.
+    model.inflector = inflector
     marked = [
         json.loads(line)
         for line in (DATA / f"behnevis-marked-{version}.jsonl").open(encoding="utf-8")
@@ -233,6 +239,7 @@ def main(argv: list[str] | None = None) -> int:
         choice=ChoiceModel.train(train_answered),
         covered={k: (v[0], v[1]) for k, v in covered.items()},
         inflection=inflection,
+        inflector=inflector,
     )
     results = []
     for m in test:

@@ -37,6 +37,7 @@ SUFFIX = {
     "ند": "and",
     "ه": "e",
     "هام": "eam",
+    "هاست": "east",
     "ها": "hā",
     "های": "hāy",
     "هایی": "hāyi",
@@ -112,8 +113,14 @@ class Inflector:
         past: dict[str, list[str]] = {}
         present: dict[str, list[str]] = {}
         for r in readings:
+            # Every reading of a headword: رخ is *rex*, and *rox* too.
+            spelling = getattr(r, "spelling_fa", None)
+            for latin_one in getattr(r, "all_latin", ()) or ():
+                if spelling and latin_one:
+                    known = heads.setdefault(normalise(spelling), [])
+                    if latin_one not in known:
+                        known.append(latin_one)
             for table, fa, latin in (
-                (heads, getattr(r, "spelling_fa", None), getattr(r, "latin", None)),
                 (
                     past,
                     getattr(r, "past_stem_fa", None),
@@ -147,9 +154,19 @@ class Inflector:
         if prefix is None or suffix is None:
             return []
         bases = self.bases[pattern.base_kind].get(analysis.base, ())
+        plain = _plain(pattern.suffix)
         out: list[str] = []
         for base in bases:
             stem = base if not prefix else base[:1].lower() + base[1:]
-            for joined in _join(stem, suffix):
-                out.append(prefix + joined if prefix else joined)
+            ending = suffix
+            if stem[-1:].lower() in VOWELS and plain.startswith("ی"):
+                # After a vowel the written ی is the glide: گویم is گو + y + م,
+                # *guyam*, not the plural *guyim* (the review of 2026-11-14).
+                rest = SUFFIX.get(plain[1:])
+                if rest is None:
+                    continue
+                joined = [stem + "y" + rest]
+            else:
+                joined = _join(stem, ending)
+            out += [prefix + one if prefix else one for one in joined]
         return out

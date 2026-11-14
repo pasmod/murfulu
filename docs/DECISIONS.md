@@ -85,7 +85,10 @@ alike and none is proposed, now that the proposal says how sure it is.
   The built ones carry no estimate — they are not measured — and on an
   inflected word neither do the letter guesses, whose numbers were measured on
   headwords. An inflected word now proposes its built reading (بخشم *baxšam*,
-  not *baxšm*), still held below every threshold.
+  not *baxšm*), still held below every threshold. With it, marked inflected
+  words come out right 52 % of the time instead of 39 % (signs hidden, the
+  pessimistic measure). After a vowel the written ی is the glide: گویم is
+  *guyam*.
 - *The shape carries the level as well as the colour* (WCAG 1.4.1): line,
   dots, box. Sure reuses the confirming green and mid the amber of the
   evidence colours; unsure is a new red, `--level-unsure`, held to the text

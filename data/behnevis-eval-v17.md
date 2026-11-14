@@ -17,7 +17,7 @@ Made by `tools/evaluate_behnevis.py`; the model by `tools/build_behnevis.py`.
 
 | threshold | words at or above | of those right |
 |---:|---:|---:|
-| 0.00 | 100% | 39.3% |
+| 0.00 | 100% | 40.7% |
 | 0.50 | 42% | 54.0% |
 | 0.60 | 34% | 57.6% |
 | 0.70 | 30% | 60.0% |
@@ -32,7 +32,7 @@ By source, all confidences:
 | bank | 3,588 | 38.4% |
 | choice | 3,930 | 60.1% |
 | function | 1,039 | 42.1% |
-| inflected | 2,478 | 39.1% |
+| inflected | 2,478 | 51.6% |
 | letters | 10,862 | 31.9% |
 | none | 2 | 0.0% |
 

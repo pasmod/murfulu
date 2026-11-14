@@ -310,3 +310,26 @@ def test_the_letter_model_offers_its_next_best_guesses():
     best = model.guesses("دام", k=3)
     assert best[0][0] == (model.guess("دام") or ("",))[0]
     assert len({latin for latin, _ in best}) == len(best)
+
+
+def test_after_a_vowel_the_written_ye_is_the_glide():
+    from murfulu.behnevis.inflect import Inflector
+    from murfulu.corpus.inflection import Analyser, Held
+
+    analyser = Analyser(Held.of([], [], ["گو"]))
+    inflector = Inflector(analyser, {}, {}, {"گو": ("gu",)})
+    assert "guyam" in inflector.readings("گویم")
+    assert "guyim" not in inflector.readings("گویم")
+    assert "guyad" in inflector.readings("گوید")
+
+
+def test_every_reading_of_a_headword_is_inflected():
+    from types import SimpleNamespace
+
+    from murfulu.behnevis.inflect import Inflector
+    from murfulu.corpus.inflection import Analyser, Held
+
+    rokh = SimpleNamespace(spelling_fa="رخ", latin="rex", all_latin=("rex", "rox"))
+    analyser = Analyser(Held.of(["رخ"]))
+    inflector = Inflector.from_readings([rokh], analyser)
+    assert {"rexhā", "roxhā"} <= set(inflector.readings("رخها"))
