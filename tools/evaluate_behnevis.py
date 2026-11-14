@@ -28,7 +28,7 @@ from collections import Counter
 from pathlib import Path
 
 from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
-from murfulu.behnevis.letters import LetterModel, latin_key
+from murfulu.behnevis.letters import LetterModel, latin_key, shape
 from murfulu.behnevis.transcribe import Transcriber, bank_from, key
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
@@ -132,11 +132,15 @@ def main(argv: list[str] | None = None) -> int:
         choice_only.append((best[1], best[0] == a.reading))
 
     # 2. unknown words: letters, one bank word in ten held out ------------------
-    seen_pairs = [(s, r) for s, r in pairs if not held_out(key(s), 10)]
+    # Split by the letters the model sees, so از دست and ازدست fall together.
+    def model_input(spelling: str) -> str:
+        return "".join(shape(spelling))
+
+    seen_pairs = [(s, r) for s, r in pairs if not held_out(model_input(s), 10)]
     test_pairs: dict[str, set[str]] = {}
     for s, r in pairs:
-        if held_out(key(s), 10):
-            test_pairs.setdefault(key(s), set()).add(latin_key(r))
+        if held_out(model_input(s), 10):
+            test_pairs.setdefault(model_input(s), set()).add(latin_key(r))
     letters = LetterModel.train(seen_pairs)
     guessed = []
     for spelling, readings in test_pairs.items():

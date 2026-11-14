@@ -107,7 +107,7 @@ uses it yet.
 
 **Measured, held out**: among several readings, at confidence 0.8 or more
 (64 % of places) 92 % right, at 0.9 (51 %) 94 %; an unknown word, at 0.8
-(26 %) 88.5 %, at 0.9 (18 %) 91 %. Marked words with their signs hidden come
+(26 %) 88.6 %, at 0.9 (18 %) 91 %. Marked words with their signs hidden come
 out 39 % right overall — pessimistic, because editions mark the hard words.
 **The threshold is the project lead's** (S47).
 

@@ -51,16 +51,16 @@ chooses without the signs. Right means it chose that one.
 | 0.90 | 51% | 93.7% |
 | 0.95 | 37% | 96.8% |
 
-## 2. Unknown words: the letter model on held-out bank words (5,519)
+## 2. Unknown words: the letter model on held-out bank words (5,507)
 
 | threshold | words at or above | of those right |
 |---:|---:|---:|
-| 0.00 | 100% | 55.3% |
-| 0.50 | 56% | 74.1% |
-| 0.60 | 44% | 79.7% |
-| 0.70 | 34% | 84.4% |
-| 0.80 | 26% | 88.5% |
-| 0.90 | 18% | 91.1% |
+| 0.00 | 100% | 55.1% |
+| 0.50 | 56% | 73.5% |
+| 0.60 | 44% | 79.1% |
+| 0.70 | 34% | 84.2% |
+| 0.80 | 26% | 88.6% |
+| 0.90 | 18% | 90.9% |
 | 0.95 | 13% | 93.2% |
 
 ## 3. What a threshold leaves to a person
