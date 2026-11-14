@@ -154,9 +154,9 @@ def certainty(
         f"{_bound(guessed, threshold, alpha, False):.1%} right.",
         "",
         "**100 % cannot be proven by any test.** With every answer right the bound",
-        "is alpha^(1/n): "
-        f"{needed_without_error(0.99, ALPHA):,} right answers in a row prove 99 %, "
-        f"{needed_without_error(0.999, ALPHA):,} prove 99.9 %.",
+        f"is alpha^(1/n); at {sure:.1%} certainty "
+        f"{needed_without_error(0.99, alpha):,} right answers in a row prove 99 %, "
+        f"{needed_without_error(0.999, alpha):,} prove 99.9 %.",
         "A text without a single error needs a person to read every word.",
     ]
     return lines

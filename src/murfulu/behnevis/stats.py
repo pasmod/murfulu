@@ -100,4 +100,8 @@ def cluster_lower_bound(
     # from "proving" 100 % (the review of 2026-11-14).
     right = sum(k for k, _ in groups)
     total = sum(n for _, n in groups)
+    if right == total:
+        # Every poet without an error: the poets, not the words, are what was
+        # sampled, so only they count — seven perfect poets prove little.
+        return float(alpha ** (1 / m))
     return min(drawn, lower_bound(right, total, alpha))

@@ -150,5 +150,5 @@ Tested once, so no correction for searching is needed.
 - Unknown words: at least 81.4% right.
 
 **100 % cannot be proven by any test.** With every answer right the bound
-is alpha^(1/n): 299 right answers in a row prove 99 %, 2,995 prove 99.9 %.
+is alpha^(1/n); at 99.9% certainty 688 right answers in a row prove 99 %, 6,905 prove 99.9 %.
 A text without a single error needs a person to read every word.

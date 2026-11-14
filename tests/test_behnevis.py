@@ -263,5 +263,4 @@ def test_poets_that_differ_widen_the_bound():
 def test_poets_without_a_single_error_do_not_prove_perfection():
     from murfulu.behnevis.stats import cluster_lower_bound
 
-    assert cluster_lower_bound([(10, 10)] * 7, 0.001) < 1.0
-
+    assert cluster_lower_bound([(10, 10)] * 7, 0.001) == pytest.approx(0.001 ** (1 / 7))

@@ -36,7 +36,8 @@ thresholds: among several readings *accuracy ≥ 90 %* from threshold 0.90
 words 90 % from 0.95 (13 %). **A threshold set beforehand needs no
 correction**: at 0.7, 99.9 % sure, several readings are at least 85.7 % right
 and unknown words at least 81.4 %. **100 % cannot be proven by any test**:
-with every answer right, 299 in a row prove 99 %, 2,995 prove 99.9 %.
+with every answer right, 299 in a row prove 99 % at 95 % certainty, 688 at
+99.9 %.
 
 **For the project lead**: the threshold. **Ours**: 0.8 to start, and the
 linguist's timed sample of 500 words (L41) to set it from measurement.
