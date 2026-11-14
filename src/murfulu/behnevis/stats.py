@@ -61,3 +61,37 @@ def lower_bound(k: int, n: int, alpha: float = 0.05) -> float:
 def needed_without_error(target: float, alpha: float = 0.05) -> int:
     """How many right answers in a row prove ``target`` at level ``alpha``."""
     return math.ceil(math.log(alpha) / math.log(target))
+
+
+def cluster_lower_bound(
+    groups: list[tuple[int, int]],
+    alpha: float = 0.05,
+    draws: int = 20_000,
+    seed: int = 7,
+) -> float:
+    """A lower bound when right answers come in groups that hang together.
+
+    Each group is (right, total) for one unit that was sampled as a whole —
+    a poet, whose words share a style and an edition. The poets are drawn
+    again with replacement ``draws`` times (a cluster bootstrap) and the
+    accuracy's ``alpha`` quantile returned. Wider than :func:`lower_bound`
+    when the poets differ, as it should be: treating 1,500 words of 33 poets as
+    1,500 independent answers overstates the certainty (the review of
+    2026-11-14). Approximate with few groups; the seed makes it repeatable.
+    """
+    import random
+
+    if not groups:
+        return 0.0
+    rng = random.Random(seed)
+    m = len(groups)
+    shares = []
+    for _ in range(draws):
+        right = total = 0
+        for _ in range(m):
+            k, n = groups[rng.randrange(m)]
+            right += k
+            total += n
+        shares.append(right / total if total else 0.0)
+    shares.sort()
+    return shares[min(len(shares) - 1, int(alpha * draws))]

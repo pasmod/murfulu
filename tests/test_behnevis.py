@@ -246,3 +246,14 @@ def test_the_lower_bound_is_the_exact_clopper_pearson_one():
     assert lower_bound(300, 300) < 0.991  # 300 of 300 proves only about 99 %
     assert lower_bound(0, 10) == 0.0
     assert needed_without_error(0.99) == 299
+
+
+def test_poets_that_differ_widen_the_bound():
+    from murfulu.behnevis.stats import cluster_lower_bound, lower_bound
+
+    alike = [(9, 10)] * 20
+    unlike = [(10, 10)] * 10 + [(8, 10)] * 10
+    assert cluster_lower_bound(alike) == pytest.approx(0.9)
+    assert cluster_lower_bound(unlike) < 0.9
+    # the same 180 of 200, as independent answers, claim more certainty
+    assert cluster_lower_bound(unlike, 0.05) < lower_bound(180, 200, 0.05) + 0.02

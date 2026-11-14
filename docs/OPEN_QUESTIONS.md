@@ -27,12 +27,16 @@ bank reading or a function word's reading is right — both start from an
 assumed 0.9, which is why the share drops sharply between 0.8 and 0.9.
 Inflected forms are held at 0.4 until they have readings of their own.
 
-**Tested** (one-sided, exact Clopper–Pearson, alpha 0.05; section 4 of the
-report): among several readings, *accuracy ≥ 90 %* is proven from threshold
-0.80 (64 % of the places left above it) and *≥ 95 %* from 0.95 (37 %);
-98 % and 99 % are proven at no threshold. For unknown words, 90 % is proven
-from 0.93 (15 %), 95 % at none. **100 % cannot be proven by any test**: with
-every answer right, 299 in a row prove 99 %, 2,995 prove 99.9 %.
+**Tested** (section 4 of the report). The choice was measured on whole poets
+held out, so its bound comes from drawing the poets again (cluster
+bootstrap); unknown words were held out one by one (exact Clopper–Pearson).
+Proven at alpha 0.05 with the Bonferroni correction for searching ten
+thresholds: among several readings *accuracy ≥ 90 %* from threshold 0.90
+(51 % of the places left above it), *≥ 95 %* from 0.99 (14 %); for unknown
+words 90 % from 0.95 (13 %). **A threshold set beforehand needs no
+correction**: at 0.7, 99.9 % sure, several readings are at least 85.7 % right
+and unknown words at least 81.4 %. **100 % cannot be proven by any test**:
+with every answer right, 299 in a row prove 99 %, 2,995 prove 99.9 %.
 
 **For the project lead**: the threshold. **Ours**: 0.8 to start, and the
 linguist's timed sample of 500 words (L41) to set it from measurement.

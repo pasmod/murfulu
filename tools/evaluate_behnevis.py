@@ -29,7 +29,11 @@ from pathlib import Path
 
 from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
 from murfulu.behnevis.letters import LetterModel, latin_key, shape
-from murfulu.behnevis.stats import lower_bound, needed_without_error
+from murfulu.behnevis.stats import (
+    cluster_lower_bound,
+    lower_bound,
+    needed_without_error,
+)
 from murfulu.behnevis.transcribe import Transcriber, bank_from, key
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
@@ -49,61 +53,105 @@ ALPHA = 0.05
 FINE = (0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.93, 0.95, 0.97, 0.99)
 TARGETS = (0.90, 0.95, 0.98, 0.99)
 
+#: (confidence, right, the unit it was sampled with: a poet, or the word itself)
+Row = tuple[float, bool, str]
+
+
+def _groups(rows: list[Row], t: float) -> list[tuple[int, int]]:
+    """Right and total per sampled unit, for the rows at or above ``t``."""
+    found: dict[str, list[int]] = {}
+    for confidence, right, unit in rows:
+        if confidence >= t:
+            tally = found.setdefault(unit, [0, 0])
+            tally[0] += right
+            tally[1] += 1
+    return [(k, n) for k, n in found.values()]
+
+
+def _bound(rows: list[Row], t: float, alpha: float, clustered: bool) -> float:
+    groups = _groups(rows, t)
+    if clustered:
+        return cluster_lower_bound(groups, alpha, draws=max(20_000, int(40 / alpha)))
+    return lower_bound(sum(k for k, _ in groups), sum(n for _, n in groups), alpha)
+
 
 def certainty(
-    choice_only: list[tuple[float, bool]],
-    guessed: list[tuple[float, bool]],
-    counts: dict[str, int],
-    confidence_of: dict[str, float],
-    total: int,
+    choice_only: list[Row], guessed: list[Row], threshold: float, sure: float
 ) -> list[str]:
-    """Section 4: exact lower bounds, and the threshold each target needs."""
+    """Section 4: lower bounds, the threshold each target needs, and one claim."""
+    simultaneous = ALPHA / len(FINE)
     lines = [
         "",
-        f"## 4. With what certainty (one-sided, exact, alpha = {ALPHA})",
+        "## 4. With what certainty",
         "",
-        "The lower bound is the accuracy we are 95 % sure of (Clopper–Pearson,",
-        "`murfulu.behnevis.stats`). A target counts as proven at a threshold when",
-        'the bound lies above it — the hypothesis "accuracy ≤ target" is rejected',
-        "at alpha. Valid for the measured sets, the two below; not for a single",
-        "bank reading or a function word, whose confidence is assumed.",
+        "A lower bound is the accuracy we are sure of at the stated level. Two",
+        "corrections keep it honest (the review of 2026-11-14):",
+        "",
+        "- **Poets, not words.** The choice was measured on whole poets held out;",
+        "  a poet's words hang together, so its bound comes from drawing the poets",
+        "  again (a cluster bootstrap), not from the words as independent answers.",
+        "  Unknown words were held out one by one, so theirs is the exact",
+        "  Clopper–Pearson bound.",
+        "- **Ten thresholds searched.** A target is proven only where the bound at",
+        f"  alpha / {len(FINE)} = {simultaneous:.3f} (Bonferroni) lies above it,",
+        "  so the search among thresholds cannot flatter the result.",
+        "",
+        "Valid for these two measured sets; not for a single bank reading or a",
+        "function word, whose confidence is assumed.",
     ]
-    for name, rows in (
-        ("Several readings (the choice, poets held out)", choice_only),
-        ("Unknown words (the letters, bank words held out)", guessed),
+    for name, rows, clustered in (
+        ("Several readings (the choice, poets held out)", choice_only, True),
+        ("Unknown words (the letters, bank words held out)", guessed, False),
     ):
         lines += [
             "",
             f"### {name}",
             "",
-            "| threshold | places | right | accuracy | 95 % sure of at least |",
-            "|---:|---:|---:|---:|---:|",
+            "| threshold | places | units | accuracy "
+            "| 95 % sure of | 95 % sure, all ten |",
+            "|---:|---:|---:|---:|---:|---:|",
         ]
         for t in FINE:
-            kept = [right for confidence, right in rows if confidence >= t]
-            n, k = len(kept), sum(kept)
+            groups = _groups(rows, t)
+            n = sum(n for _, n in groups)
             if not n:
                 continue
-            bound = lower_bound(k, n, ALPHA)
-            lines.append(f"| {t:.2f} | {n:,} | {k:,} | {k / n:.1%} | {bound:.1%} |")
+            k = sum(k for k, _ in groups)
+            one = _bound(rows, t, ALPHA, clustered)
+            every = _bound(rows, t, simultaneous, clustered)
+            lines.append(
+                f"| {t:.2f} | {n:,} | {len(groups):,} | {k / n:.1%} | {one:.1%} "
+                f"| {every:.1%} |"
+            )
         lines += [
             "",
-            "| target | lowest threshold that proves it | places left above it |",
+            "| target | lowest threshold that proves it (all ten) | places left |",
             "|---:|---:|---:|",
         ]
         for target in TARGETS:
             found = None
             for t in FINE:
-                kept = [right for confidence, right in rows if confidence >= t]
-                if kept and lower_bound(sum(kept), len(kept), ALPHA) >= target:
-                    found = (t, len(kept) / len(rows))
+                n = sum(n for _, n in _groups(rows, t))
+                if n and _bound(rows, t, simultaneous, clustered) >= target:
+                    found = (t, n / len(rows))
                     break
             lines.append(
                 f"| {target:.0%} | {found[0]:.2f} | {found[1]:.0%} |"
                 if found
                 else f"| {target:.0%} | not reached | — |"
             )
+    alpha = 1 - sure
     lines += [
+        "",
+        f"### One threshold set beforehand: {threshold:.2f}, {sure:.1%} sure",
+        "",
+        "Tested once, so no correction for searching is needed.",
+        "",
+        f"- Several readings: at least "
+        f"{_bound(choice_only, threshold, alpha, True):.1%}"
+        " right.",
+        f"- Unknown words: at least "
+        f"{_bound(guessed, threshold, alpha, False):.1%} right.",
         "",
         "**100 % cannot be proven by any test.** With every answer right the bound",
         "is alpha^(1/n): "
@@ -123,7 +171,20 @@ def main(argv: list[str] | None = None) -> int:
     """Run the three measurements and print the report."""
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("version", help="corpus version, e.g. v17")
-    version = parser.parse_args(argv).version
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        default=0.7,
+        help="the threshold to test once (default 0.7)",
+    )
+    parser.add_argument(
+        "--sure",
+        type=float,
+        default=0.999,
+        help="how sure the claim at it must be (default 0.999)",
+    )
+    args = parser.parse_args(argv)
+    version = args.version
 
     with Lexicon.open() as lexicon:
         inflection = Analyser(held_from(lexicon))
@@ -184,7 +245,7 @@ def main(argv: list[str] | None = None) -> int:
         results.append((word.source, word.confidence, right))
 
     # 1b. the choice alone: answered places of held-out poets -----------------
-    choice_only = []
+    choice_only: list[Row] = []
     for a in answered:
         # A function word's marked places are its exceptions (به marked where
         # it is *bah*), and the model keeps its prior for it: not measured here.
@@ -200,7 +261,7 @@ def main(argv: list[str] | None = None) -> int:
             a.spelling, candidates, a.before, a.after, function[0] if function else None
         )
         best = ranked(probs)[0]
-        choice_only.append((best[1], best[0] == a.reading))
+        choice_only.append((best[1], best[0] == a.reading, a.author))
 
     # 2. unknown words: letters, one bank word in ten held out ------------------
     # Split by the letters the model sees, so از دست and ازدست fall together.
@@ -213,11 +274,11 @@ def main(argv: list[str] | None = None) -> int:
         if held_out(model_input(s), 10):
             test_pairs.setdefault(model_input(s), set()).add(latin_key(r))
     letters = LetterModel.train(seen_pairs)
-    guessed = []
+    guessed: list[Row] = []
     for spelling, readings in test_pairs.items():
         g = letters.guess(spelling)
         if g:
-            guessed.append((g[1], latin_key(g[0]) in readings))
+            guessed.append((g[1], latin_key(g[0]) in readings, spelling))
 
     # 3. the corpus: how much each threshold leaves to a person -----------------
     total = sum(counts.values())
@@ -229,8 +290,8 @@ def main(argv: list[str] | None = None) -> int:
     for spelling, n in counts.items():
         source_share[model.word(spelling, key(spelling), None, None).source] += n
 
-    def curve(rows: list[tuple[float, bool]], t: float) -> tuple[float, float]:
-        kept = [right for confidence, right in rows if confidence >= t]
+    def curve(rows: list[Row], t: float) -> tuple[float, float]:
+        kept = [right for confidence, right, _ in rows if confidence >= t]
         return len(kept) / max(1, len(rows)), sum(kept) / max(1, len(kept))
 
     lines = [f"# Automatic Behnevis, corpus {version}: what each threshold costs", ""]
@@ -251,7 +312,7 @@ def main(argv: list[str] | None = None) -> int:
         "| threshold | words at or above | of those right |",
         "|---:|---:|---:|",
     ]
-    rows = [(c, r) for _, c, r in results]
+    rows: list[Row] = [(c, r, "") for _, c, r in results]
     for t in (0.0, *THRESHOLDS):
         share, rate = curve(rows, t)
         lines.append(f"| {t:.2f} | {share:.0%} | {rate:.1%} |")
@@ -310,7 +371,7 @@ def main(argv: list[str] | None = None) -> int:
             f"| {t:.2f} | {auto:.0%} | {1 - auto:.0%} | "
             f"{(1 - auto) * HAFEZ_WORDS / CHECKED:.0f} |"
         )
-    lines += certainty(choice_only, guessed, counts, confidence_of, total)
+    lines += certainty(choice_only, guessed, args.threshold, args.sure)
     print("\n".join(lines))
     return 0
 

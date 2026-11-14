@@ -81,57 +81,73 @@ by hand they take 104 hours.
 | 0.90 | 28% | 72% | 50 |
 | 0.95 | 10% | 90% | 62 |
 
-## 4. With what certainty (one-sided, exact, alpha = 0.05)
+## 4. With what certainty
 
-The lower bound is the accuracy we are 95 % sure of (Clopper–Pearson,
-`murfulu.behnevis.stats`). A target counts as proven at a threshold when
-the bound lies above it — the hypothesis "accuracy ≤ target" is rejected
-at alpha. Valid for the measured sets, the two below; not for a single
-bank reading or a function word, whose confidence is assumed.
+A lower bound is the accuracy we are sure of at the stated level. Two
+corrections keep it honest (the review of 2026-11-14):
+
+- **Poets, not words.** The choice was measured on whole poets held out;
+  a poet's words hang together, so its bound comes from drawing the poets
+  again (a cluster bootstrap), not from the words as independent answers.
+  Unknown words were held out one by one, so theirs is the exact
+  Clopper–Pearson bound.
+- **Ten thresholds searched.** A target is proven only where the bound at
+  alpha / 10 = 0.005 (Bonferroni) lies above it,
+  so the search among thresholds cannot flatter the result.
+
+Valid for these two measured sets; not for a single bank reading or a
+function word, whose confidence is assumed.
 
 ### Several readings (the choice, poets held out)
 
-| threshold | places | right | accuracy | 95 % sure of at least |
-|---:|---:|---:|---:|---:|
-| 0.50 | 2,165 | 1,798 | 83.0% | 81.7% |
-| 0.60 | 1,923 | 1,671 | 86.9% | 85.6% |
-| 0.70 | 1,726 | 1,548 | 89.7% | 88.4% |
-| 0.80 | 1,492 | 1,371 | 91.9% | 90.6% |
-| 0.85 | 1,423 | 1,319 | 92.7% | 91.5% |
-| 0.90 | 1,183 | 1,109 | 93.7% | 92.5% |
-| 0.93 | 1,027 | 969 | 94.4% | 93.0% |
-| 0.95 | 851 | 824 | 96.8% | 95.7% |
-| 0.97 | 614 | 599 | 97.6% | 96.3% |
-| 0.99 | 319 | 316 | 99.1% | 97.6% |
+| threshold | places | units | accuracy | 95 % sure of | 95 % sure, all ten |
+|---:|---:|---:|---:|---:|---:|
+| 0.50 | 2,165 | 37 | 83.0% | 81.0% | 79.5% |
+| 0.60 | 1,923 | 35 | 86.9% | 85.2% | 83.8% |
+| 0.70 | 1,726 | 34 | 89.7% | 88.0% | 86.7% |
+| 0.80 | 1,492 | 33 | 91.9% | 89.8% | 88.2% |
+| 0.85 | 1,423 | 32 | 92.7% | 91.1% | 89.9% |
+| 0.90 | 1,183 | 32 | 93.7% | 92.7% | 91.9% |
+| 0.93 | 1,027 | 31 | 94.4% | 93.3% | 92.5% |
+| 0.95 | 851 | 26 | 96.8% | 95.3% | 94.3% |
+| 0.97 | 614 | 25 | 97.6% | 95.8% | 94.5% |
+| 0.99 | 319 | 21 | 99.1% | 97.7% | 96.5% |
 
-| target | lowest threshold that proves it | places left above it |
+| target | lowest threshold that proves it (all ten) | places left |
 |---:|---:|---:|
-| 90% | 0.80 | 64% |
-| 95% | 0.95 | 37% |
+| 90% | 0.90 | 51% |
+| 95% | 0.99 | 14% |
 | 98% | not reached | — |
 | 99% | not reached | — |
 
 ### Unknown words (the letters, bank words held out)
 
-| threshold | places | right | accuracy | 95 % sure of at least |
-|---:|---:|---:|---:|---:|
-| 0.50 | 3,073 | 2,260 | 73.5% | 72.2% |
-| 0.60 | 2,448 | 1,936 | 79.1% | 77.7% |
-| 0.70 | 1,859 | 1,565 | 84.2% | 82.7% |
-| 0.80 | 1,425 | 1,262 | 88.6% | 87.1% |
-| 0.85 | 1,209 | 1,090 | 90.2% | 88.6% |
-| 0.90 | 980 | 891 | 90.9% | 89.3% |
-| 0.93 | 823 | 760 | 92.3% | 90.6% |
-| 0.95 | 722 | 673 | 93.2% | 91.5% |
-| 0.97 | 596 | 558 | 93.6% | 91.7% |
-| 0.99 | 448 | 424 | 94.6% | 92.5% |
+| threshold | places | units | accuracy | 95 % sure of | 95 % sure, all ten |
+|---:|---:|---:|---:|---:|---:|
+| 0.50 | 3,073 | 3,073 | 73.5% | 72.2% | 71.4% |
+| 0.60 | 2,448 | 2,448 | 79.1% | 77.7% | 76.9% |
+| 0.70 | 1,859 | 1,859 | 84.2% | 82.7% | 81.9% |
+| 0.80 | 1,425 | 1,425 | 88.6% | 87.1% | 86.2% |
+| 0.85 | 1,209 | 1,209 | 90.2% | 88.6% | 87.7% |
+| 0.90 | 980 | 980 | 90.9% | 89.3% | 88.3% |
+| 0.93 | 823 | 823 | 92.3% | 90.6% | 89.6% |
+| 0.95 | 722 | 722 | 93.2% | 91.5% | 90.4% |
+| 0.97 | 596 | 596 | 93.6% | 91.7% | 90.6% |
+| 0.99 | 448 | 448 | 94.6% | 92.5% | 91.3% |
 
-| target | lowest threshold that proves it | places left above it |
+| target | lowest threshold that proves it (all ten) | places left |
 |---:|---:|---:|
-| 90% | 0.93 | 15% |
+| 90% | 0.95 | 13% |
 | 95% | not reached | — |
 | 98% | not reached | — |
 | 99% | not reached | — |
+
+### One threshold set beforehand: 0.70, 99.9% sure
+
+Tested once, so no correction for searching is needed.
+
+- Several readings: at least 85.7% right.
+- Unknown words: at least 81.4% right.
 
 **100 % cannot be proven by any test.** With every answer right the bound
 is alpha^(1/n): 299 right answers in a row prove 99 %, 2,995 prove 99.9 %.
