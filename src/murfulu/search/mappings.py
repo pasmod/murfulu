@@ -201,6 +201,9 @@ DERIVATIONS: dict[str, Any] = {
         # (rules/function_words.yaml). Set only then, and then no count above
         # is credited: *homograph of a function word, attestation unknown*.
         "attestation_function_word": _KEYWORD,
+        # True where the bank reads these letters only as another word (سرو
+        # for a built *saru*); then no count above is credited to this one.
+        "attestation_headword_homograph": {"type": "boolean"},
         # Whether some route to this word rests on written ground throughout.
         # A missing field is *not established*, never "no" — see
         # murfulu/scoring/grounding.py.

@@ -2,6 +2,57 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-19 — false claims of the short affixes: letters that are another word's
+
+The project lead, after corpus v18: fix the false hits before the release.
+The corrected rules' short affixes (-u, a-, kam-, be- on a کارنام, -ā) built
+forms whose letters are a word of their own, and the attestation credited
+them with that word's count: *saru* with سرو (13,181), *ber* with بهر (26,156),
+*kamr* with کمر, *Alae* with اله, *azu* with ازو. Measured on v18 record by
+record (`data/compare-v18-v19.md`). Two kinds, two fixes, both in
+`murfulu/scoring/attestation.py`, decided on the spelling alone as the
+function-word rule is, so every form written with the same letters gets the
+same answer:
+
+- **The bank reads the letters, and only as other words** — *headword
+  homograph*. سرو is *Sarv* and *Sorv* in the bank and nothing else; a built
+  *saru* is not it. The record keeps the spelling's counts and says whose they
+  are (the build screen already wrote «شمار برای این املاست؛ به‌گونهٔ … خوانده
+  می‌شود»); **nothing is credited**: no corpus mark on the build screen, not
+  attested in a rule's productivity, not ground for the chain, contested in the
+  affix map, ranked with the doubted sisters. A capital is a word class
+  showing, not another word: *nami* against the bank's *Nami* is credited.
+  **This applies to every rule, old and new**: the August pack had the same
+  fault (*šae* for شاه, *jehān* for جهان), and a ruling about letters cannot
+  depend on which rule built the form.
+- **A function word joined to a pronoun** that the bank holds no reading of —
+  ازو (از او), بما (به ما), باو، زتو، وزو: a `joined` block in
+  `rules/function_words.yaml`: 38 spellings, kept only where the bank holds no
+  reading or only the contraction itself (ازو is *azu*, پیش‌واژه), so a word of
+  its own written the same way (درو, the harvest) is never doubted by it; a
+  test checks the list against the lexicon. Treated as a listed contraction
+  is.
+
+**What is not changed, deliberately.** Letters the bank holds no reading of
+at all and that are not a joined function word — گفتا، هلاک، جزو، سهو, inflected
+forms and loanwords missing from the bank — keep their credit, marked and
+ranked down by the inflection reading where it applies (DECISIONS
+2026-08-13): a spelling with no reading is a gap in the bank, not proof of
+another word, and hiding its count was ruled out then. The linguist's rules
+and rows are untouched; nothing is dropped. The words the old N-098 lost
+(چیزی، کاری، یاری) are lost rightly: the bank holds Čizi, Kāri and Yāri as
+words of their own, and N-098 had claimed them as «worthy of» adjectives with
+those words' counts; چیزی's count is mostly the indefinite «a thing», which is
+inflection.
+
+**Corpus v22 is v18 with these fixes** and the release candidate (an index
+cannot be rebuilt in place). v19–v21 were intermediate builds while the
+review's findings were folded in — alternate readings the bank records
+(*jehān* beside *jahān*) count as the same word, the live lookup pages until
+it has every reading of a spelling, بهمن left the joined list (a month and a
+name), and a sister keeps the two kinds of doubt apart. v18–v21 are unreleased
+and superseded; their local indices can be dropped.
+
 ## 2026-11-19 — the linguist's corrected rules replace the August rule tables
 
 The linguist sent the corrected word-formation rules on 2026-11-19

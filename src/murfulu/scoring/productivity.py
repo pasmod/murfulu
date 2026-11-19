@@ -336,11 +336,9 @@ def measure(
                 echoes[rule_id] += 1
             # A function word's letters are written, but not as this word, and
             # nothing about it is known — not an attested output of the rule.
-            if (
-                evidence is None
-                or evidence.level is Level.NONE
-                or evidence.function_word
-            ):
+            # Nor where the bank reads the letters only as another word: سرو is
+            # *Sarv*, and -u did not make it (DECISIONS 2026-11-19).
+            if evidence is None or not evidence.credited:
                 continue
             attested[rule_id] += 1
             tokens[rule_id] += count

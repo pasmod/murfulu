@@ -54,6 +54,7 @@ def _attestation(raw: dict[str, Any]) -> Attestation | None:
         other_readings=tuple(raw.get("attested_other_readings") or ()),
         spelling_unlinked=bool(raw.get("attestation_unlinked", False)),
         function_word=raw.get("attestation_function_word") or "",
+        headword_homograph=bool(raw.get("attestation_headword_homograph", False)),
     )
 
 

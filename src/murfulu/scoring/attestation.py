@@ -25,6 +25,7 @@ asking one at a time is the only part of the whole path that would be slow.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -71,6 +72,21 @@ class Attestation:
     #: *never written*. See ``rules/function_words.yaml``.
     function_word: str = ""
 
+    #: True when the letters are a word-bank headword under another reading,
+    #: and under none that is the form asked about: سرو is *Sarv* (cypress),
+    #: and a built *saru* is not it. The counts above are the spelling's and
+    #: are kept for the reader, who is told whose they are; **none of them is
+    #: credited to this form** — not by the build screen's corpus mark, not by
+    #: a rule's productivity, not as ground. A form whose letters the bank
+    #: reads only as another word is not evidenced by them (DECISIONS
+    #: 2026-11-19, *false claims of the short affixes*).
+    headword_homograph: bool = False
+
+    @property
+    def credited(self) -> bool:
+        """True when the counts may be counted as this form's own evidence."""
+        return self.found and not self.function_word and not self.headword_homograph
+
     @property
     def found(self) -> bool:
         """True at either level of attestation."""
@@ -93,6 +109,11 @@ class Attestation:
             return evidence
         if self.spelling_unlinked:
             return f"{evidence}, but the lexicon has no reading for this spelling"
+        if self.headword_homograph:
+            return (
+                f"{evidence}, read as {' or '.join(self.other_readings)} — the "
+                f"letters are another word's, so none is credited to this one"
+            )
         return f"{evidence}, read as {' or '.join(self.other_readings)}"
 
 
@@ -103,6 +124,10 @@ class Index:
     corpus_version: str = ""
     #: normalised spelling → {latin or "" → the word type it was linked as}
     _by_spelling: dict[str, dict[str, WordType]] = field(default_factory=dict)
+    #: normalised spelling → every Latin the bank reads it as, its alternates
+    #: (*jehān* beside *jahān*) included, lower-cased. What a built form must
+    #: match not to be another word's (``Attestation.headword_homograph``).
+    _all_latin: dict[str, set[str]] = field(default_factory=dict)
     #: Spellings whose count is a function word's. Read from the rules by
     #: default, so every index — batch or live — applies the same list.
     function_words: FunctionWords = field(default_factory=_the_list)
@@ -119,11 +144,16 @@ class Index:
         if listed is not None:
             index.function_words = listed
         for item in result.linked:
-            spelling = normalise(item.spelling_fa)
-            index._by_spelling.setdefault(spelling, {})[item.latin or ""] = item.word
+            index.add(
+                item.word,
+                item.latin,
+                item.reading.latin_variants if item.reading else (),
+            )
         return index
 
-    def add(self, word: WordType, latin: str | None) -> None:
+    def add(
+        self, word: WordType, latin: str | None, variants: Iterable[str] = ()
+    ) -> None:
         """Record one corpus reading, whatever built it.
 
         The link pass is one way to fill this index and a query against the
@@ -133,6 +163,8 @@ class Index:
         """
         spelling = normalise(word.spelling_fa)
         self._by_spelling.setdefault(spelling, {})[latin or ""] = word
+        known = self._all_latin.setdefault(spelling, set())
+        known.update(one.lower() for one in (latin, *variants) if one)
 
     def look_up(self, form_fa: str, form_latin: str) -> Attestation:
         """Ask about one form."""
@@ -141,6 +173,9 @@ class Index:
         if not readings:
             return Attestation(level=Level.NONE, corpus_version=self.corpus_version)
 
+        # A joined contraction (ازو, بما) answers here as a listed one does —
+        # even where the bank holds a reading, which for ازو is the
+        # contraction itself (*azu*, پیش‌واژه).
         listed = self.function_words.get(spelling)
         if listed is not None:
             # The letters are written, and they are another word's. Nothing is
@@ -162,8 +197,17 @@ class Index:
         # The spelling is there but not under this reading. The letters have
         # been written; this particular word may still be new.
         others = tuple(sorted(r for r in readings if r))
+        # The bank reads these letters, and only as other words. A capital is
+        # a word class showing, not another word: *nami* is *Nami*.
+        # An alternate the bank records counts as the same word: *jehān*
+        # beside *jahān*.
+        homograph = bool(others) and form_latin.lower() not in self._all_latin.get(
+            spelling, set()
+        )
         any_word = next(iter(readings.values()))
-        return self._evidence(Level.SPELLING, any_word, others, unlinked=not others)
+        return self._evidence(
+            Level.SPELLING, any_word, others, unlinked=not others, homograph=homograph
+        )
 
     def look_up_many(
         self, forms: list[tuple[str, str]]
@@ -177,6 +221,7 @@ class Index:
         word: WordType,
         others: tuple[str, ...] = (),
         unlinked: bool = False,
+        homograph: bool = False,
     ) -> Attestation:
         return Attestation(
             level=level,
@@ -188,4 +233,5 @@ class Index:
             last_century=word.last_century,
             other_readings=others,
             spelling_unlinked=unlinked,
+            headword_homograph=homograph,
         )

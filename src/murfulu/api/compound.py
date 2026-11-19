@@ -33,7 +33,7 @@ from murfulu.corpus import inflection
 from murfulu.generation import WordNotFoundError
 from murfulu.lexicon.store import Lexicon
 from murfulu.rules.pack import RulePack, loaded
-from murfulu.scoring.attestation import Attestation, Index, Level
+from murfulu.scoring.attestation import Attestation, Index
 from murfulu.search.attested import look_up
 from murfulu.search.indices import connect
 
@@ -141,9 +141,7 @@ def _attested(found: Attestation | None) -> bool:
     Not where the letters are a function word's: written, but as another word,
     and nothing about this one is known (murfulu.corpus.function_words).
     """
-    return (
-        found is not None and found.level is not Level.NONE and not found.function_word
-    )
+    return found is not None and found.credited
 
 
 def _asked(pairings: list[compounding.Pairing]) -> Index | None:

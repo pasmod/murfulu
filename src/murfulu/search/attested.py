@@ -31,7 +31,15 @@ INDEX = "word_types"
 #: Spellings per request. A generated family is a few hundred forms; a batch
 #: this size keeps that to one or two queries without building a term query so
 #: large that Elasticsearch refuses it.
-BATCH = 1_000
+BATCH = 500
+
+#: Hits per page. A spelling can have many readings (کله has eight), and since
+#: 2026-11-19 a missing one is not harmless: a built form whose reading was cut
+#: off would be judged another word's and lose its credit. So every batch is
+#: paged until a short page says it is complete — within Elasticsearch's
+#: 10,000-hit window, which four pages of this size never leave for 500
+#: spellings.
+PAGE = 2_500
 
 
 def _word_type(source: dict[str, Any]) -> WordType:
@@ -73,15 +81,32 @@ def look_up(
 
     for start in range(0, len(wanted), BATCH):
         batch = wanted[start : start + BATCH]
-        response = client.search(
-            index=index,
-            size=len(batch) * 4,
-            query={"terms": {"spelling_fa": batch}},
-            track_total_hits=False,
-        )
-        for hit in response["hits"]["hits"]:
-            source = hit["_source"]
-            found.add(_word_type(source), source.get("latin"))
-            if not found.corpus_version:
-                found.corpus_version = source.get("corpus_version", "")
+        offset = 0
+        while True:
+            if offset + PAGE > 10_000:
+                raise RuntimeError(
+                    f"more than {offset:,} readings for {len(batch)} spellings; "
+                    "the lookup would be incomplete"
+                )
+            response = client.search(
+                index=index,
+                size=PAGE,
+                from_=offset,
+                sort=["_doc"],
+                query={"terms": {"spelling_fa": batch}},
+                track_total_hits=False,
+            )
+            hits = response["hits"]["hits"]
+            for hit in hits:
+                source = hit["_source"]
+                found.add(
+                    _word_type(source),
+                    source.get("latin"),
+                    source.get("latin_variants") or (),
+                )
+                if not found.corpus_version:
+                    found.corpus_version = source.get("corpus_version", "")
+            if len(hits) < PAGE:
+                break
+            offset += PAGE
     return found

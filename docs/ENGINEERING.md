@@ -229,6 +229,13 @@ text and counts unchanged, +926,456 records (+31 %), 2,289 fewer attested.
 **Not released**: it goes out with the rule pack, on the project lead's word
 (OPEN_QUESTIONS S48).
 
+**v22 (2026-11-19) is v18's recipe with the false-claim fixes** (DECISIONS
+2026-11-19, *letters that are another word's*): same text, lexicon and pack,
+7.9 minutes on the Mac; v19–v21 were intermediate builds, superseded. The
+comparison is `data/compare-v18-v22.md`: records unchanged, 3,126 headword
+homographs and 50 function-word contractions credited nothing, attested
+29,201 → 26,058. **v22 is the release candidate**, with `behnevis-v22`.
+
 **The precompute runs first, and this order is not cosmetic.** The ingest
 takes the precompute's affix map, so an ingest run before it has nothing to
 pass. This file listed the two the other way round until 2026-08-14, and **v6

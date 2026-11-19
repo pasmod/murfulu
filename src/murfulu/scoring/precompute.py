@@ -322,7 +322,7 @@ class Precompute:
             if (
                 evidence is not None
                 and evidence.level in _WRITTEN
-                and not evidence.function_word
+                and evidence.credited
             ):
                 solid.add(record.form_latin)
         for record in self._merged.values():

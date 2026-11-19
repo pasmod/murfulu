@@ -95,7 +95,13 @@ def _derivation_counts(source: Path) -> tuple[Counter[str], dict[str, int]]:
     computes, but `paths` remains the source of truth for both.
     """
     per_rule: Counter[str] = Counter()
-    totals = {"records": 0, "paths": 0, "attested": 0, "function_word": 0}
+    totals = {
+        "records": 0,
+        "paths": 0,
+        "attested": 0,
+        "function_word": 0,
+        "headword_homograph": 0,
+    }
     with source.open(encoding="utf-8") as handle:
         for line in handle:
             record = json.loads(line)
@@ -106,8 +112,13 @@ def _derivation_counts(source: Path) -> tuple[Counter[str], dict[str, int]]:
             # their own line, never as attested.
             homograph = bool(record.get("attestation_function_word"))
             totals["function_word"] += homograph
+            # Since 2026-11-19 also letters the bank reads only as another word.
+            other_word = bool(record.get("attestation_headword_homograph"))
+            totals["headword_homograph"] += other_word and not homograph
             totals["attested"] += (
-                record.get("attestation") not in (None, "none") and not homograph
+                record.get("attestation") not in (None, "none")
+                and not homograph
+                and not other_word
             )
             rules: set[str] = set()
             for path in paths:
@@ -122,7 +133,7 @@ def compare_derivations(before: Path, after: Path) -> None:
     old_rules, old_totals = _derivation_counts(before)
     new_rules, new_totals = _derivation_counts(after)
     print(f"\nderivations        {before.name} -> {after.name}")
-    for name in ("records", "paths", "attested", "function_word"):
+    for name in ("records", "paths", "attested", "function_word", "headword_homograph"):
         print(_row(name, old_totals[name], new_totals[name]))
 
     moved = sorted(

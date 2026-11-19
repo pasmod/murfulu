@@ -114,3 +114,61 @@ entries:
   - {spelling: مر,    class: particle,     rank: 187, count: 14215, note: "lexicon Mar, Mer"}
   - {spelling: هر,    class: particle,     rank: 21,  count: 130022, note: "lexicon Har"}
   - {spelling: همه,   class: particle,     rank: 32,  count: 74781}
+
+# A preposition or conjunction written joined to a pronoun, as classical texts
+# write them: ازو (از او), بما (به ما), باو (با او), زتو (ز تو), وزو (و ز او).
+# Added 2026-11-19, after the corrected rules' short affixes claimed them:
+# -u on a present stem built *azu* and was credited with ازو's 8,905
+# occurrences, -ā built *bamā* and was credited with بما's 2,796. Treated as
+# a listed contraction is: the letters are written, as function words, and
+# nothing is credited (murfulu/scoring/attestation.py).
+#
+# **How the list was made.** Every pair of a front (ب، به، ز، از، با، بر، در،
+# کز، وز، و) and a joined pronoun (و for او، ما، تو، من، وی، ش), kept only where
+# lexicon-20261111 holds no reading of the spelling, or holds it only in the
+# bank's پیش‌واژه group — as the bank itself files ازو (*azu*), ازش and برو. Left
+# out because the bank holds a word of its own there: بو، بتو، بوی، بش، بهو،
+# بهش، زو، زمن، زش، ازوی، باتو، بامن، باوی، باش، برما، بروی، برش، درو، درش، وزش،
+# وش; and بهمن, which the bank lacks but the corpus writes as the month and a
+# name (found by review). Not ranked like the entries above: these are rare one by one, and the
+# rank criterion is about whether a function word dominates a content word,
+# which here the bank has already answered.
+joined:
+  - بما
+  - بمن
+  - بهما
+  - بهتو
+  - بهوی
+  - زما
+  - زتو
+  - زوی
+  - ازو
+  - ازما
+  - ازتو
+  - ازمن
+  - ازش
+  - باو
+  - باما
+  - برو
+  - برتو
+  - برمن
+  - درما
+  - درتو
+  - درمن
+  - دروی
+  - کزو
+  - کزما
+  - کزتو
+  - کزمن
+  - کزوی
+  - کزش
+  - وزو
+  - وزما
+  - وزتو
+  - وزمن
+  - وزوی
+  - وو
+  - وما
+  - وتو
+  - ومن
+  - ووی

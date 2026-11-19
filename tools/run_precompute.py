@@ -159,6 +159,7 @@ def _write_sisters(path: Path, sisters: SisterForms, keep: int = 50) -> None:
                 "author_count": sister.author_count,
                 "suspect": sister.suspect,
                 "function_word": sister.function_word,
+                "headword_homograph": sister.headword_homograph,
             }
             for sister in sisters.for_rule(rule_id, limit=keep or None)
         ]

@@ -58,7 +58,10 @@ function Dots({ count, ring = false }: { count: number; ring?: boolean }) {
 function shown(form: BuiltForm, field: Field): { mark: React.ReactNode; said: string } {
   if (field === "corpus") {
     const found = form.attestation;
-    if (found?.function_word) return { mark: "نامعلوم", said: "نامعلوم" };
+    // The letters are another word's — a function word's, or a word of the
+    // bank read otherwise (سرو for a built *saru*): checked, and unknown.
+    if (found?.function_word || found?.headword_homograph)
+      return { mark: "نامعلوم", said: "نامعلوم" };
     if (found?.level === "none") return { mark: "نیامده", said: "نیامده" };
   }
   // An older API sends no marks. That is not *not measured* — the figures

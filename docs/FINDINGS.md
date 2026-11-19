@@ -5,6 +5,26 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-19 (session 32, last) — false claims fixed, corpus v22
+
+Measured on v18 record by record, then fixed (DECISIONS 2026-11-19) and
+rebuilt as v22 (`data/compare-v18-v22.md`). **3,176 attested records turned
+out to be another word's letters**: 3,126 the bank reads only as other words
+(سرو is *Sarv*, not -u's *saru*; بهر is *Bahr*, not *ber*; شاه is *Šāh*, not
+V-036's *šae*) and 50 a function word joined to a pronoun (ازو، بما، باو).
+Only 241 were claimed by new rules alone; 1,941 by rules the August pack
+already had. Attested: v17 31,490 → v18 29,201 → v22 26,058.
+
+**The old -i's losses are right.** چیزی، کاری، یاری were claimed in v17 by
+N-098 as «worthy of» adjectives (*čizi*, *kāri*, *yāri*) with the counts of
+the bank's own words Čizi, Kāri, Yāri; چیزی is mostly the indefinite «a
+thing», which is inflection. Under v22's rule they would not have been
+credited in v17 either.
+
+**What remains** is the gap the bank cannot close by spelling: ~1,500 records
+claimed by new rules on letters the bank has no reading of (گفتا، هلاک، جزو).
+Nothing in the data tells a missing headword from a new word there.
+
 ## 2026-11-19 (session 32, later) — corpus v18 on the corrected rules
 
 The project lead decided S48: build v18 on the new pack first, deploy pack and

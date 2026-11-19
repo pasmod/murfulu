@@ -66,6 +66,10 @@ class FunctionWords:
     corpus_version: str = ""
     max_rank: int = 0
     by_spelling: dict[str, FunctionWord] = field(default_factory=dict)
+    #: A preposition or conjunction written joined to a pronoun — ازو (از او),
+    #: بما (به ما), زتو (ز تو) — the ``joined`` list of the file, made so that
+    #: none is a word of its own in the bank.
+    joined: frozenset[str] = frozenset()
 
     def __len__(self) -> int:
         """How many spellings are listed."""
@@ -73,11 +77,30 @@ class FunctionWords:
 
     def __contains__(self, spelling: object) -> bool:
         """True when these letters, normalised, are on the list."""
-        return isinstance(spelling, str) and normalise(spelling) in self.by_spelling
+        return isinstance(spelling, str) and self.get(spelling) is not None
 
     def get(self, spelling: str) -> FunctionWord | None:
-        """The entry for these letters, or None."""
-        return self.by_spelling.get(normalise(spelling))
+        """The entry for these letters, or None.
+
+        A joined contraction (ازو) answers as an entry of class
+        ``contraction``, so every reader of the list — attestation, the
+        ingest's word-type documents, the text reader — treats it alike.
+        """
+        normalised = normalise(spelling)
+        entry = self.by_spelling.get(normalised)
+        if entry is None and normalised in self.joined:
+            return FunctionWord(
+                spelling=normalised,
+                word_class="contraction",
+                rank=0,
+                count=0,
+                note="a function word joined to a pronoun (the joined list)",
+            )
+        return entry
+
+    def is_joined(self, spelling: str) -> bool:
+        """True when these letters are a function word joined to a pronoun."""
+        return normalise(spelling) in self.joined
 
 
 def default_directory() -> Path:
@@ -121,11 +144,19 @@ def load(directory: Path | None = None) -> FunctionWords:
         entries[entry.spelling] = entry
     if not entries:
         raise FunctionWordError(f"{path}: the list is empty")
+    joined: frozenset[str] = frozenset()
+    for spelling in document.get("joined") or ():
+        if normalise(str(spelling)) != spelling:
+            raise FunctionWordError(f"{path}: {spelling!r} is not normalised")
+        if spelling in entries:
+            raise FunctionWordError(f"{path}: {spelling!r} is listed twice")
+        joined |= {spelling}
     return FunctionWords(
         version=str(document.get("version") or ""),
         corpus_version=str(document.get("corpus_version") or ""),
         max_rank=int(document.get("max_rank") or 0),
         by_spelling=entries,
+        joined=joined,
     )
 
 

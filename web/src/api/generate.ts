@@ -62,6 +62,9 @@ export interface Attestation {
    * word's. Absent from answers built before v14.
    */
   function_word?: string | null;
+  /** The bank reads the letters only as another word; the counts are shown,
+   *  and credited to none of this form's marks. Absent from older APIs. */
+  headword_homograph?: boolean;
   wording: string;
 }
 

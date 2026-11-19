@@ -66,11 +66,15 @@ class Sister:
     #: the corpus count is not this word's. Doubted like ``suspect``, for a
     #: reason that needs no measuring: از is the preposition, not *Az*.
     function_word: bool = False
+    #: The bank reads the letters only as another word (سرو is *Sarv*), so
+    #: the count is that word's (DECISIONS 2026-11-19). Doubted likewise, and
+    #: kept apart from ``function_word``, which it is not.
+    headword_homograph: bool = False
 
     @property
     def doubted(self) -> bool:
         """True when something says this may not be the rule's word at all."""
-        return self.suspect or self.function_word
+        return self.suspect or self.function_word or self.headword_homograph
 
     @property
     def confirmed(self) -> bool:
@@ -186,6 +190,7 @@ def collect(
                     # another, which is the whole shape of the fault.
                     suspect=(rule_id, derivation.form_latin) in doubted,
                     function_word=bool(evidence.function_word),
+                    headword_homograph=evidence.headword_homograph,
                 )
             )
 

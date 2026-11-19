@@ -129,7 +129,9 @@ def corpus_mark(found: Attestation | None) -> int | None:
     ``None`` where nothing can be said: the corpus was not asked, or the
     letters are a function word's and their count is that word's.
     """
-    if found is None or found.function_word:
+    if found is None or found.function_word or found.headword_homograph:
+        # Also where the bank reads the letters only as another word: the
+        # count is that word's (DECISIONS 2026-11-19).
         return None
     if found.level is Level.NONE:
         return 0

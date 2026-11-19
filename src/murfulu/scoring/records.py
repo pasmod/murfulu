@@ -28,10 +28,18 @@ DEFAULT_DEPTH = 2
 #: The bucket a function-word homograph is counted in, apart from ``spelling``.
 FUNCTION_WORD = "function_word"
 
+#: The bucket for letters the bank reads only as another word (سرو for a
+#: built *saru*): written, credited nothing. DECISIONS 2026-11-19.
+HEADWORD_HOMOGRAPH = "headword_homograph"
+
 
 def evidence_bucket(attestation: Attestation) -> str:
     """Which count a report puts one form's evidence in."""
-    return FUNCTION_WORD if attestation.function_word else attestation.level.value
+    if attestation.function_word:
+        return FUNCTION_WORD
+    if attestation.headword_homograph:
+        return HEADWORD_HOMOGRAPH
+    return attestation.level.value
 
 
 def _union(groups: Iterable[Iterable[str]]) -> list[str]:
@@ -234,6 +242,10 @@ class Derivation:
             # count above is credited. See ``rules/function_words.yaml``.
             if attested.function_word:
                 document["attestation_function_word"] = attested.function_word
+            # Likewise only where it is set: the bank reads these letters only
+            # as another word, and no count above is credited to this one.
+            if attested.headword_homograph:
+                document["attestation_headword_homograph"] = True
         return document
 
 
@@ -305,7 +317,8 @@ class Report:
                 f"attested       {self.attested:,} "
                 f"(reading {self.by_attestation[Level.READING.value]:,}, "
                 f"spelling {self.by_attestation[Level.SPELLING.value]:,}; "
-                f"{self.function_word_homographs:,} function-word homographs "
+                f"{self.function_word_homographs:,} function-word homographs and "
+                f"{self.by_attestation[HEADWORD_HOMOGRAPH]:,} headword homographs "
                 f"credited nothing)",
                 f"run time       {self.seconds:,.1f}s",
                 f"output size    {size}",

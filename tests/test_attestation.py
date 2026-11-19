@@ -120,3 +120,81 @@ def test_many_forms_are_asked_at_once(index: Index):
 def test_spelling_variants_do_not_split_the_evidence(index: Index):
     """Arabic ي and Persian ی are one spelling, as in the counting pass."""
     assert index.look_up("گفتار", "Goftār").total_count == 3
+
+
+# -- 2026-11-19: letters that are another word's ----------------------------
+#
+# The corrected rules' short affixes built forms whose letters are a word of
+# their own: -u on a present stem built *saru*, and was credited with سرو,
+# which the bank reads only as *Sarv*. The counts stay on the record for the
+# reader; none is credited to the built form.
+
+
+def test_letters_the_bank_reads_only_as_other_words_credit_nothing(index: Index):
+    found = index.look_up("مرد", "Mordan")
+    assert found.headword_homograph
+    assert not found.credited
+    assert found.total_count == 1, "shown, never hidden"
+    assert "none is credited" in found.describe()
+
+
+def test_a_capital_is_a_class_showing_not_another_word(index: Index):
+    """*Mard* against the bank's *mard*: the same word, so it is credited."""
+    found = index.look_up("مرد", "Mard")
+    assert found.level is Level.SPELLING
+    assert not found.headword_homograph
+    assert found.credited
+
+
+def test_a_reading_the_bank_holds_is_credited(index: Index):
+    found = index.look_up("رفتن", "raftan")
+    assert found.credited and not found.headword_homograph
+
+
+def test_unlinked_letters_keep_their_credit(index: Index):
+    """No reading at all is a gap in the bank, not another word."""
+    from murfulu.corpus.wordtypes import WordType
+
+    index.add(
+        WordType(spelling_fa="گفتارش", total_count=3, documents={"x:1"}), latin=None
+    )
+    found = index.look_up("گفتارش", "goftāreš")
+    assert found.spelling_unlinked
+    assert found.credited
+
+
+def test_a_function_word_joined_to_a_pronoun_credits_nothing(index: Index):
+    """ازو is از او. Held by no reading, it is a contraction, like کز."""
+    from murfulu.corpus.wordtypes import WordType
+
+    index.add(WordType(spelling_fa="ازو", total_count=8905, documents={"x:1"}), None)
+    found = index.look_up("ازو", "azu")
+    assert found.function_word == "contraction"
+    assert not found.credited
+    assert found.total_count == 0
+
+
+def test_an_alternate_the_bank_records_is_the_same_word() -> None:
+    """*jehān* is the bank's alternate of *jahān*: credited, not another word's."""
+    from murfulu.corpus.wordtypes import WordType
+    from murfulu.scoring.attestation import Index as Fresh
+
+    index = Fresh(corpus_version="t")
+    index.add(
+        WordType(spelling_fa="جهان", total_count=5, documents={"a"}),
+        "Jahān",
+        ("jehān",),
+    )
+    assert index.look_up("جهان", "jehān").credited
+    assert not index.look_up("جهان", "jahu").credited
+
+
+def test_a_joined_contraction_reads_as_a_listed_one() -> None:
+    """Every reader of the list sees ازو as a contraction, not only attestation."""
+    from murfulu.corpus.function_words import loaded
+
+    listed = loaded()
+    assert "ازو" in listed
+    entry = listed.get("ازو")
+    assert entry is not None and entry.word_class == "contraction"
+    assert listed.get("درو") is None, "the harvest is a word of its own"

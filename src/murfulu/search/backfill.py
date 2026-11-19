@@ -63,6 +63,9 @@ FIELDS = ("affixes", "rule_ids", "semantic_tags")
 #: Why a claim on a function word's letters is held out.
 FUNCTION_WORD_REASON = "the letters are a function word"
 
+#: Since 2026-11-19: the bank reads the letters only as another word.
+HEADWORD_REASON = "the letters are another word of the bank"
+
 
 @dataclass
 class AffixMap:
@@ -187,13 +190,13 @@ def build(
                     f"{derivation.rule_pack_version!r}"
                 )
             affix_map.rule_pack_version = derivation.rule_pack_version
-        if evidence.function_word:
+        if evidence.function_word or evidence.headword_homograph:
             # Written, but as another word: nothing to claim, and every rule
             # that would have claimed it is recorded as contested.
             identifier = f"{normalise(derivation.form_fa)}:{derivation.form_latin}"
             for rule_id, _ in _forming_rules(derivation):
                 affix_map.contested.setdefault(identifier, {})[rule_id] = (
-                    FUNCTION_WORD_REASON
+                    FUNCTION_WORD_REASON if evidence.function_word else HEADWORD_REASON
                 )
             continue
         found = _word_type_id(derivation, evidence)

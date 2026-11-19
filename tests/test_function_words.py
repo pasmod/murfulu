@@ -327,3 +327,33 @@ def test_an_unlinked_function_word_is_marked_and_keeps_its_count():
     source = ingest.word_type_source(item, "v14", "", None, loaded())
     assert source["function_word"] == "conjunction"
     assert source["total_count"] == 1_109_915
+
+
+def test_no_joined_contraction_is_a_word_of_its_own_in_the_bank() -> None:
+    """The ``joined`` list holds no word of its own in the bank.
+
+    Only letters the bank reads as nothing, or as a contraction itself (ازو is
+    *azu*, پیش‌واژه). A word written the same way (درو, the harvest) must never
+    be doubted by it.
+    """
+    import os
+    import sqlite3
+
+    import pytest
+
+    from murfulu.corpus.function_words import load
+
+    configured = os.environ.get("MURFULU_LEXICON_PATH", "")
+    if not configured or not os.path.isfile(configured):
+        pytest.skip("needs the real lexicon snapshot")
+    connection = sqlite3.connect(f"file:{configured}?mode=ro", uri=True)
+    for spelling in load().joined:
+        groups = {
+            row[0]
+            for row in connection.execute(
+                "select b.bank_group from infinitives i join bank_group b "
+                "on b.word_id = i.id where i.headword = ? and i.deleted_at is null",
+                (spelling,),
+            )
+        }
+        assert groups <= {"پیش‌واژه"}, (spelling, groups)

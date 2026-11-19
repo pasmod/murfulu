@@ -158,6 +158,9 @@ def _evidence(attestation: Attestation | None) -> dict[str, Any] | None:
         # null. When set the counts above are zero and mean *unknown*: the
         # occurrences are that word's (murfulu.corpus.function_words).
         "function_word": attestation.function_word or None,
+        # True where the bank reads the letters only as another word: the
+        # counts above are the spelling's, shown, and credited nothing.
+        "headword_homograph": attestation.headword_homograph,
         "wording": attestation.describe(),
     }
 
@@ -825,7 +828,7 @@ def generate(
             if (
                 found
                 and found.level in (Level.READING, Level.SPELLING)
-                and not found.function_word
+                and found.credited
             ):
                 solid.add(form.latin)
         return solid.__contains__
