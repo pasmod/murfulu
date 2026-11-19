@@ -60,7 +60,13 @@ def test_a_rule_carries_its_farsi(client: TestClient):
     rule = client.get("/rules/V-010").json()
     assert rule["explanation_fa"]
     assert rule["label_fa"]
-    assert rule["source"]["row"] == "10"
+    # The linguist's own number in his corrected rules of 2026-11-19; V-010
+    # was issued for row 10 of the August grammar, which the register keeps.
+    assert rule["source"] == {
+        "document": "2026-11-19",
+        "table": "suffixes",
+        "row": "134",
+    }
 
 
 def test_a_retired_rule_is_still_reachable(client: TestClient):
@@ -230,16 +236,22 @@ def test_a_lighter_answer_still_states_every_derivation(
 def test_a_step_says_what_its_rule_means(with_fixture_lexicon: TestClient):
     """The sense a rule carries, which is often all that tells it from its neighbours.
 
-    وارفتنی is built four ways and all four attach the same ``vā-`` to the same
-    stem by the same mechanics: V-070, V-071, V-072 and V-073 share a word for
-    word identical ``explanation_fa``. What separates them is the sense —
-    پس، دوباره، باز، آخشیج — and until 2026-08-18 the screen printed the same
-    sentence four times with no way to see why there were four.
+    وارفتنی is built several ways and each attaches the same ``vā-`` to the
+    same verb by the same mechanics: V-069 to V-072 share a word for word
+    identical ``explanation_fa``. What separates them is the sense — جلوگیری،
+    پسروی، دوبارگی، آشکارگی in the corrected rules of 2026-11-19 — and until
+    2026-08-18 the screen printed the same sentence over and over with no way
+    to see why. (V-073, vā- (Āxšij), has no row since 2026-11-19.)
     """
     from murfulu.rules.pack import loaded
 
     pack = loaded()
-    wanted = {"V-070": "پس", "V-071": "دوباره", "V-072": "باز", "V-073": "آخشیج"}
+    wanted = {
+        "V-069": "جلوگیری",
+        "V-070": "پسروی",
+        "V-071": "دوبارگی",
+        "V-072": "آشکارگی",
+    }
     for rule_id, gloss in wanted.items():
         rule = pack.by_id(rule_id)
         glosses = [

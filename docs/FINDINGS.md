@@ -5,6 +5,80 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-19 (session 32) — the linguist's corrected rules, imported and measured
+
+The corrected rules of 2026-11-19 replace the August rule tables (DECISIONS
+2026-11-19). What changed, read row by row and measured on
+`lexicon-20261111`. **These are counts of what the engine builds, not of
+attested words**: a generated form is a candidate, and most candidates from a
+dictionary-wide run are words nobody uses.
+
+**The document.** Three tables, 229 rows numbered by the linguist (one number,
+46, written twice), 202 of them word for word as in his draft of the day
+before. 227 distinct rules: 172 continue an August rule, 55 are new, 14 August
+rules have no row (11 gone, 3 merged into a neighbour). It corrects five
+August slips we had ruled on (-mand, bāž-, andar-, na- on a stem, and a-/ā- as
+prefixes rather than a suffix -ā) and settles two open questions (L24, L17c).
+
+**What the engine builds** (`tools/measure_pack_change.py`):
+
+| | before | after |
+|---|---|---|
+| active rules (with the 9 stem rules) | 193 | 223 |
+| one step, every reading in word formation (50,882) | 1,949,859 | 2,575,494 |
+| the build's pool at depth 2 (14,089 readings) | 3,036,182 | 3,932,946 |
+
+In one step, over all readings at once, 706,066 words are new, 63,793 are no
+longer built, and 190,303 are built as before but in another class (*Porxerad* was a نام and is a
+برنام now, so it loses its capital). The build pool grows by 30 %.
+
+**Where the new words come from**: broad new affixes that the rows give no
+restriction beyond the class — *-kār* on nouns, adjectives and both stems
+(N-125, 41,766), *-fām* and *-gun* (N-113, N-115, ~39,000 each), *-gar* now
+also on the past stem, برنام and کارنام (V-032, 26,877), and the new prefixes
+*kam-*, *degar-*, *digar-*, *vāž-*, *xar-* and *a-* and suffixes such as
+*-gen*, *-pād*, *-bad*, *-van*, each on every noun (~24,000 each). Examples
+from everyday bases: *delkār* دلکار (N-125), *dastfām* دستفام (N-113),
+*golgun* گلگون (N-115), *kamsar* کمسر (N-106), *degarsang* دگرسنگ (N-108),
+*digarāb* دیگرآب (N-109), *šāhgen* شاهگن (N-114), *mardāl* مردال (N-126),
+*zanbad* زنبد (N-129), *akuh* اکوه (N-001), *vāždard* واژدرد (N-111),
+*mehrvan* مهرون (N-117), *āhanpād* آهنپاد (N-134), *širšan* شیرشن (N-135),
+*kārgar* کارگر (V-032, now also on a کارنام).
+
+**Where words are lost**: *-gar* on a noun now written *-gār* (N-063:
+*delgar*, *golgar* become *delgār*, *golgār*), *na-* on a noun (N-019
+retired: *nadast*, *nasang*), *-i* on a کارنام (N-098 now takes the
+infinitive: *kāri*, *rangi* — lost because the bank files کار and رنگ as
+کارنام only, the L26 question again), *nā-* on a stem (V-065, V-066 retired:
+*nāruz*, *nāraft*), *-bān* on a past stem (V-015 retired: *xordbān*).
+*vāgoftan*, *varraftan*, *zirdidan* and *vāsāxtan* (V-070, V-074, V-076) are lost
+**from one step only**: the rows now take the infinitive, so they are built
+in two (goft → goftan → vāgoftan), like bar-, dar- and ham- always were, and
+still inside the build's depth of two. What is built on top of them
+(*vāguyande*) now takes three steps and falls outside it, as *hamandišande*
+always did.
+
+**The rule examples** (`tools/check_examples.py`, depth 3): 120 of the pack's
+own examples rebuilt by their own rule before, 126 after. The new document
+writes five examples with a capital the engine gives only a noun — *Barqāsā*,
+*Nāgahāni*, *Gereftār*, *Andarresidan*, *Bāžgunidan* — and has three typos
+(*Gotfār*, *vāgofta*, *Dustg,ani*); none is corrected here.
+
+**L26 re-measured on the new pack** (`tools/measure_karnam_switch.py`): with
+«نام» taking a کارنام everywhere the build pool goes from 3.9 M forms to
+51.2 M, thirteen times. Ten rows that say نام carry examples built on a
+کارنام (*bāhonar*, *nākām*, *Emšab*, *Pišāhang*, *dānešmand*, *ranjur*,
+*dānešvar*, *omidvār*, *Dānešgāh*, *Hušyār*); opening only those ten
+(an ad-hoc run, counting grouped forms: 4.09 M → 9.87 M) multiplies the pool
+by about 2.4 instead of 13. That is the proposal now put to the linguist.
+
+**The inflecting rows.** Eleven new rows put an ending on a word without
+making a new one — plurals (-hā, -ān, -gān), the enclitic -i of one, of a
+relative clause, of exclamation, and five -i endings on a classical inflected
+verb, illustrated with quotations. Run as suffixes, the plural *-hā* alone
+would add a form for every noun with the base's corpus count; they are
+transcribed and not run, as N-090 and N-099 are.
+
 ## 2026-11-14 (session 31) — the search index and the counting disagree on a few texts per word
 
 Building the word page's full list of evidence (DECISIONS 2026-11-14) put the

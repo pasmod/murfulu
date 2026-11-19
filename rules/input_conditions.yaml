@@ -21,25 +21,30 @@
 
 version: 0.1.0
 
+# Quotes updated 2026-11-19 to the linguist's corrected rules, which say the
+# same twelve things in his new wording (Pišinkārbon for Kārboné yek, "bā -e"
+# for "-e"). V-025 now names its base Čonyāftekārbahr, which the pack reads as
+# Kārandekārbahr (DECISIONS 2026-11-19); the ending it states is unchanged.
+
 conditions:
   # -- a final letter on the base ------------------------------------------
 
   - rule: V-010
-    source_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    source_text: Pišinkārbon (bištar bā Pāyāne -t , -d)
     test: ends_with
     values: [t, d]
     strictness: tendency
     note: The source writes *bištar* — mostly. Not a prohibition.
 
   - rule: V-011
-    source_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    source_text: Pišinkārbon (bištar bā Pāyāne -t , -d)
     test: ends_with
     values: [t, d]
     strictness: tendency
     note: The source writes *bištar* — mostly. Not a prohibition.
 
   - rule: V-012
-    source_text: Kārboné yek, bištar bā Pāyāne -t va -d
+    source_text: Pišinkārbon, bištar bā Pāyāne -t va -d
     test: ends_with
     values: [t, d]
     strictness: tendency
@@ -52,13 +57,13 @@ conditions:
   # stated flatly rather than hedged.
 
   - rule: V-023
-    source_text: Kārandekārbahr-ande
+    source_text: Kārandekārbahr bā -ande
     test: ends_with
     values: [ande]
     strictness: stated
 
   - rule: V-025
-    source_text: Kārandekārbahr-ā
+    source_text: Čonyāftekārbahr bā -ā
     test: ends_with
     values: ["ā"]
     strictness: stated
@@ -82,13 +87,13 @@ conditions:
     strictness: stated
 
   - rule: V-082
-    source_text: Kāridekārbahr-e
+    source_text: Kāridekārbahr bā -e
     test: ends_with
     values: [e]
     strictness: stated
 
   - rule: N-092
-    source_text: Nām-e
+    source_text: Nām bā -e
     test: ends_with
     values: [e]
     strictness: stated
@@ -102,21 +107,38 @@ conditions:
   # See docs/OPEN_QUESTIONS S7.
 
   - rule: V-001
-    source_text: Kārboné doé nāgozarā az Goruhé yek (NKZ)
+    source_text: Konunkārboné nāgozarā az G1
     test: stem_group
-    values: [NKZ]
+    values: [G1]
     strictness: stated
     needs_expert_check: true
     note: >-
-      Which of karbon's stem groups NKZ names has not been settled, so this is
-      recorded and not tested.
+      Which of karbon's stem groups G1 names has not been settled (L2), so this
+      is recorded and not tested. The August grammar wrote "Goruhé yek (NKZ)".
 
   - rule: V-002
-    source_text: Kārboné doé nāgozarā az Goruhé do (NKDZ)
+    source_text: Konunkārboné nāgozarā az G2
     test: stem_group
-    values: [NKDZ]
+    values: [G2]
     strictness: stated
     needs_expert_check: true
     note: >-
-      Which of karbon's stem groups NKDZ names has not been settled, so this is
-      recorded and not tested.
+      Which of karbon's stem groups G2 names has not been settled (L2), so this
+      is recorded and not tested. The August grammar wrote "Goruhé do (NKDZ)".
+
+  # -- a meaning of the base, which we cannot test --------------------------
+  #
+  # Added 2026-11-19. Row 115 of the corrected rules, «-i (Zamān)», takes
+  # «Nām (Zamān)»: a noun of time (šabi, ruzi, sahari). The lexicon says
+  # nothing about which nouns name a time, so the rule takes every noun and
+  # this records the restriction it does not apply.
+  - rule: N-124
+    source_text: Nām (Zamān)
+    test: meaning
+    values: [Zamān]
+    strictness: stated
+    needs_expert_check: true
+    note: >-
+      The source restricts the base to nouns of time; nothing marks them in
+      the lexicon, so this is recorded and not tested. Unconfirmed.
+

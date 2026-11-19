@@ -6,14 +6,14 @@ Murfulu generates the words a language *can* form, not only the ones its
 dictionaries already list: it applies word-formation rules to the stems of a
 lexicon and returns each possible word with the rule that built it, a composed
 meaning where the rule carries one, and whether the word occurs in a corpus.
-Today it is a working prototype for **Persian**, with 195 word-formation rules.
+Today it is a working prototype for **Persian**, with 214 word-formation rules in use.
 The next step is a **language-independent Python library** with an open,
 testable rule format and a checker for rule packs, a **German rule pack** beside
 the Persian one, and the Persian pack as its reference.
 
 **Kurz auf Deutsch:** Murfulu erzeugt aus den Wortbildungsregeln einer Sprache
 mögliche Wörter, jedes mit Herleitung, Bedeutung und Beleg im Korpus. Heute
-läuft ein Prototyp für Persisch mit 195 Regeln. Als Nächstes entstehen eine
+läuft ein Prototyp für Persisch mit 214 Regeln. Als Nächstes entstehen eine
 sprachunabhängige Python-Bibliothek mit einem offenen, prüfbaren Regelformat
 und einem Prüfwerkzeug sowie ein deutsches Regelpaket mit rund 40 produktiven
 Mustern; das persische Paket dient als Referenz. Der Prototyp läuft hinter
@@ -57,7 +57,7 @@ stems = [
     Word(latin="angixt", fa="انگیخت", word_class="karbon_yek"),  # past stem
 ]
 words = deduplicate([form for stem in stems for form in apply_all(pack, stem)])
-print(len(words))  # 38
+print(len(words))  # 36
 for word in words[:5]:
     print(word.shortest_path[-1].rule_id, word.latin, word.fa)
 ```
@@ -77,7 +77,7 @@ one verb through the whole system step by step, from input to presentation.
 | | Today (Persian prototype) | Next |
 |---|---|---|
 | Core | an engine written for Persian; a second language would need code changes | a language-independent Python library, published on PyPI |
-| Rules | 195 Persian word-formation rules (plus 17 glide and 9 stem rules) as YAML in [`rules/`](rules), in a Persian-specific schema | an open rule format: each rule with a fixed id, a condition, a change of form, a meaning and its own test cases; a checker validates a pack against the schema and runs its tests, so linguists can write rules without touching the core |
+| Rules | 241 Persian word-formation rules, 214 of them in use (plus 17 glide and 9 stem rules) as YAML in [`rules/`](rules), in a Persian-specific schema | an open rule format: each rule with a fixed id, a condition, a change of form, a meaning and its own test cases; a checker validates a pack against the schema and runs its tests, so linguists can write rules without touching the core |
 | Languages | Persian | a German pack with about 40 productive patterns, checked against the ~10,000 German Wikidata lexemes (CC0) that record how they are formed; the Persian pack moved into the new format as the reference |
 | Use case | — | carrying a term into another language: split it into its parts, give each part a meaning, and look for words with the same structure on the other side |
 

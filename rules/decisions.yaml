@@ -173,3 +173,127 @@ rules:
       The row's own example nāšāyest is nā- on šāyest, the past stem of
       šāyestan. Paired with V-065, which is the same prefix on the present
       stem.
+
+  # -- 2026-11-19: rows of the corrected rules that inflect ------------------
+  #
+  # The corrected rules add rows that put an ending on a word without making
+  # a new one: the plural (-hā, -ān (Biši), -gān on a participle), the -i of
+  # one (Sāli) and of a relative clause (Ketābi ke…), the -i of exclamation
+  # (če Goli!), and the -i a classical verb takes for habit, wish, condition
+  # and dream (raftami, budandi). **Their ids are issued and their rows
+  # transcribed; they are not run**, for the reason N-090 (the ezāfe) and
+  # N-099 (the indefinite -í) are not: run as a suffix, each would put an
+  # inflected form of every base into the pack as a new word and hand it the
+  # base's corpus count. The project lead settled that reading for the clitic
+  # rows (FOR_THE_LINGUIST L8, withdrawn 2026-11-12); these follow it.
+  # Unconfirmed by the linguist, one line each to bring back.
+  - id: V-092
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Inflection, not word formation: -gān here is the plural of a participle
+      (Mordegān, Raftegān — the dead, the departed). Not run, as N-090 and
+      N-099 are not.
+    reason_fa: >-
+      واژه‌سازی نیست: ـgān در این ردیف نشانهٔ جمع است (Mordegān، Raftegān) و واژهٔ تازه‌ای نمی‌سازد. مانند N-090 و N-099 اجرا نمی‌شود؛ شناسه و آوانگاشت ردیف بر جای مانده است.
+  - id: V-094
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Inflection, not word formation: the habitual -i on an inflected verb
+      (raftami, budandi). No word-bank group holds inflected verbs, and the
+      form is the same verb, not a new word.
+    reason_fa: >-
+      واژه‌سازی نیست: ـi گذرانی بر کارواژهٔ صرف‌شده می‌نشیند (raftami، budandi) و همان کارواژه را می‌سازد، نه واژه‌ای تازه. اجرا نمی‌شود؛ شناسه و آوانگاشت ردیف بر جای مانده است.
+  - id: V-095
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Inflection, not word formation: the -i of wish on an inflected verb
+      (didami, nadādandi). Not run, as V-094.
+    reason_fa: >-
+      واژه‌سازی نیست: ـi آرزویی بر کارواژهٔ صرف‌شده می‌نشیند (didami). مانند V-094 اجرا نمی‌شود.
+  - id: V-096
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Inflection, not word formation: the -i of condition on an inflected verb
+      (šodami, dānestami). Not run, as V-094.
+    reason_fa: >-
+      واژه‌سازی نیست: ـi اگری بر کارواژهٔ صرف‌شده می‌نشیند (šodami). مانند V-094 اجرا نمی‌شود.
+  - id: V-097
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Inflection, not word formation: an -i on an inflected verb (Bedidami,
+      beraftami), whose meaning label is asked (L43). Not run, as V-094.
+    reason_fa: >-
+      واژه‌سازی نیست: ـi بر کارواژهٔ صرف‌شده می‌نشیند (Bedidami). مانند V-094 اجرا نمی‌شود؛ برچسب معنای آن پرسیده شده است (L43).
+  - id: V-098
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Inflection, not word formation: the -i of dream and supposition on an
+      inflected verb (barāmadi, pendāri). Not run, as V-094.
+    reason_fa: >-
+      واژه‌سازی نیست: ـi رؤیا و گمان بر کارواژهٔ صرف‌شده می‌نشیند (pendāri). مانند V-094 اجرا نمی‌شود.
+  - id: N-122
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Not word formation: the -i of exclamation (če Goli!, če Soxané zešti!),
+      an enclitic on a word in a sentence. Not run, as N-099.
+    reason_fa: >-
+      واژه‌سازی نیست: ـi شگفتی پی‌واژه‌ای است بر واژه‌ای در جمله (če Goli!). مانند N-099 اجرا نمی‌شود.
+  - id: N-123
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Not word formation: the -i before a relative clause (Ketābi ke…), an
+      enclitic. Not run, as N-099.
+    reason_fa: >-
+      واژه‌سازی نیست: ـi پیوندی پیش از جملهٔ وابسته می‌آید (Ketābi ke…). مانند N-099 اجرا نمی‌شود.
+  - id: N-127
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Inflection, not word formation: the plural -ān (Deraxtān, Češmān). Not
+      run, as N-099; plurals are read as inflection of the base everywhere
+      else in the project.
+    reason_fa: >-
+      واژه‌سازی نیست: ـān در این ردیف نشانهٔ جمع است (Deraxtān). اجرا نمی‌شود؛ شناسه و آوانگاشت ردیف بر جای مانده است.
+  - id: N-132
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Inflection, not word formation: the plural -hā (Kuhhā, Sanghā). Not run,
+      as N-127.
+    reason_fa: >-
+      واژه‌سازی نیست: ـhā نشانهٔ جمع است (Kuhhā). مانند N-127 اجرا نمی‌شود.
+  - id: N-133
+    active: false
+    ruled_on: 2026-11-19
+    reason: >-
+      Not word formation: the -i of one (Sāli barāmad — a year passed), the
+      same enclitic as the indefinite -í of N-099. Not run, as N-099.
+    reason_fa: >-
+      واژه‌سازی نیست: ـi یکی همان پی‌واژهٔ نکره است (Sāli barāmad). مانند N-099 اجرا نمی‌شود.
+
+  # -- 2026-11-19: a row that names no base ---------------------------------
+  - id: N-117
+    input_types: [nam]
+    ruled_on: 2026-11-19
+    reason: >-
+      Row 99, «-van (Mānandi)», leaves «Afzudan be» empty. Its example setarvan
+      is a noun with -van, like its neighbour -vaš (Mānandi), which takes Nām.
+      Read as Nām, unconfirmed; the rule stays flagged.
+
+  # -- 2026-11-19: be- on a verb is written ب --------------------------------
+  - id: V-087
+    affix_fa: "ب"
+    ruled_on: 2026-11-19
+    reason: >-
+      Row 33, «be- (Barjastesāzi)», puts be- on a verb: beraften, bešodan,
+      bexordan — بخوردن, بشدن, written joined with ب. The affix table spells
+      be- به, which is right before a noun (N-004, bexrad) and would build
+      بهخوردن here. Found by review.

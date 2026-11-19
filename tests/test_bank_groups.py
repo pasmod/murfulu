@@ -213,10 +213,21 @@ def test_the_file_turns_the_switch(tmp_path: Path) -> None:
 
 
 def test_on_a_karnam_fills_a_noun_template_slot() -> None:
-    """N-104, نام + ā + نام (Sarāsar): its own slots say نام."""
-    from murfulu.engine.compound import fill
+    """A template whose own slots say نام takes a کارنام too, once switched on.
 
-    pack = load(RULES)
+    N-104, نام + ā + نام (Sarāsar), was the one such template and is retired
+    since 2026-11-19 — the corrected rules do not have it. The mechanism stays
+    for the next noun template, so it is tested on N-104 brought back here.
+    """
+    from dataclasses import replace
+
+    from murfulu.engine.compound import fill
+    from murfulu.rules.pack import RulePack
+
+    retired = load(RULES).by_id("N-104")
+    assert retired.active is False
+    noun_template = replace(retired, active=True, retired_reason="")
+    pack = RulePack(rules=[noun_template], version="test")
     front = Word(latin="Sar", fa="سر", word_class="karnam")
     behind = Word(latin="Pā", fa="پا", word_class="nam")
     with pytest.raises(CannotApplyError):

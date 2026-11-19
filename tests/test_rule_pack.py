@@ -34,8 +34,9 @@ def test_no_id_appears_twice_across_the_pack():
 
 
 def test_the_counts_match_the_source_documents():
-    assert len(PACK["verb_stems"]["rules"]) == 81
-    assert len(PACK["nominals"]["rules"]) == 105
+    """81 and 105 from August; 16 and 39 new ids since 2026-11-19 (V-077 reserved)."""
+    assert len(PACK["verb_stems"]["rules"]) == 81 + 16
+    assert len(PACK["nominals"]["rules"]) == 105 + 39
     assert len(PACK["glides"]["rules"]) == 17
     assert len(PACK["stem_rules"]["rules"]) == 9
 
@@ -87,21 +88,28 @@ def test_anything_uncertain_says_what_is_uncertain(rule: dict):
         assert all(note.strip() for note in rule["notes"])
 
 
-def test_only_one_affix_spelling_is_still_in_doubt():
-    """V-055: is it باژ or واژ? Everything else was ruled on 2026-08-11."""
+def test_only_the_two_rows_the_new_document_left_open_are_flagged():
+    """V-055 (باژ or واژ) was settled by the corrected rules of 2026-11-19.
+
+    What is flagged now is two rows of that document: N-117 names no base, and
+    N-125 names one we have no class for («Farmānkārvāžw»).
+    """
     flagged = {r["id"] for r in AFFIX_RULES if r.get("needs_expert_check")}
-    assert flagged == {"V-055"}
+    assert flagged == {"N-117", "N-125"}
 
 
 @pytest.mark.parametrize(
     ("rule_id", "kind", "affix", "source_affix", "affix_fa"),
     [
-        # The source writes -mānd; its own example dānešmand says -mand.
-        ("N-071", "suffix", "-mand", "-mānd", "مند"),
-        # The source writes -bāž as a suffix; its example bāžgunidan puts it
-        # at the front, so the dash was on the wrong side.
-        ("V-055", "prefix", "bāž-", "-bāž", "باژ"),
+        # The August grammar wrote -mānd and -bāž; the corrected rules of
+        # 2026-11-19 write -mand and bāž-, as the rulings had read them.
+        ("N-071", "suffix", "-mand", "-mand", "مند"),
+        ("V-055", "prefix", "bāž-", "bāž-", "باژ"),
         ("V-067", "prefix", "pa-", "pa-", "پ"),
+        # The corrected rules still put a dash on the wrong side, or none.
+        ("N-106", "prefix", "kam-", "-kam", "کم"),
+        ("V-086", "prefix", "bāz-", "bāz", "باز"),
+        ("N-001", "prefix", "a-", "A-", "ا"),
     ],
 )
 def test_the_corrected_affixes_keep_the_source_spelling_beside_them(

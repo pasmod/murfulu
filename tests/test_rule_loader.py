@@ -48,7 +48,7 @@ def _write_pack(directory: Path, rule: dict[str, Any]) -> Path:
 
 
 def test_the_whole_pack_loads():
-    assert len(PACK.rules) == 81 + 105 + 9
+    assert len(PACK.rules) == 97 + 144 + 9
     assert len(PACK.glides) == 17
 
 
@@ -79,9 +79,13 @@ def test_the_rules_that_apply_to_a_word_class_can_be_found():
 
 
 def test_the_flagged_rules_are_the_ones_we_know_about():
-    """Two left of the original six: one affix spelling, one missing stem."""
+    """One missing stem, and two rows of the 2026-11-19 document.
+
+    V-055's spelling was settled by that document; N-117 names no base and
+    N-125 a class we do not have.
+    """
     flagged = {rule.id for rule in PACK.needing_expert_check}
-    assert flagged == {"V-055", "S-09"}
+    assert flagged == {"N-117", "N-125", "S-09"}
     for rule in PACK.needing_expert_check:
         assert rule.notes
 

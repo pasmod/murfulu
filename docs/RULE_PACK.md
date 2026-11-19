@@ -1,6 +1,6 @@
 # Rule pack — draft schema
 
-**Status: draft.** 2026-08-11.
+**Status: draft.** 2026-08-11; the source replaced 2026-11-19 (below).
 
 The ~200 rules from `Dasturhāye Vāžesāzi az Kārbonhā.docx` as data. YAML in git
 is the source of truth; a loader syncs it into Postgres.
@@ -98,6 +98,30 @@ Three things the source document forced, all mechanical:
   (after row 8) and `-vand (Nesbat)` (after row 84). They become V-082 and
   N-105, at the end of their family, with `follows_row` recording where they
   sit in the document.
+
+### Since 2026-11-19: the corrected rules
+
+The linguist's corrected rules of 2026-11-19 replace the two rule tables (not
+the glides, not the stem rules). They are ordered by affix and numbered 1–229
+across three tables — prefixes, suffixes, and formations without an affix —
+so **the number in a V or N id is no longer the row's number**. It stays the
+August row the id was issued for: ids are permanent.
+
+- `rules/affix_source_rows.json` is the verbatim transcription
+  (`tools/extract_affix_tables.py`), the linguist's own number kept as the row.
+- `rules/affix_rows.yaml` says which row is which id — the same rule keeps its
+  id, a new rule gets the next id of its family (N-106 … N-144, V-083 …
+  V-098, in document order), an August rule with no row is retired with a
+  reason. Two rows repeat another and build nothing of their own.
+- `rules/rule_ids.json` records the consequences: new ids with their new row
+  as `source` (`document: 2026-11-19`), `current_source` on the ids that
+  continue, `retired_on` on those that do not. The August `source` of an id
+  never changes.
+- In the pack, a rule's `source` is where it is written **now** — the row
+  number the linguist will recognise — and `former_source` its August row.
+
+A new rule's family follows its base: N for a nominal class, V for a verb
+stem, an infinitive, a participle or an inflected verb.
 
 The glide table is the exception to the row-number rule: it numbers its own
 header row "1", so its numbers are offset by one from its rules. G ids follow

@@ -29,9 +29,14 @@ def test_the_meaning_the_build_plan_names():
     assert meaning
 
 
-@pytest.mark.parametrize("rule_id", ["N-057", "N-062", "N-068"])
+@pytest.mark.parametrize("rule_id", ["N-062", "N-068"])
 def test_every_place_rule_gives_the_same_kind_of_meaning(rule_id: str):
-    """Golestān, Meykade, Dānešgāh — all tagged Jā, all get the place gloss."""
+    """Meykade, Dānešgāh — both tagged Jā, both get the place gloss.
+
+    Golestān (N-057) was the third until 2026-11-19, when the corrected rules
+    tagged -stān *Anbuhjā*, a place where many are. That tag has no template,
+    so the word gets no sentence rather than the general one for Jā.
+    """
     form = apply(PACK, PACK.by_id(rule_id), Word("gol", "گل", "nam"))
     assert compose(PACK, form).text_fa == "جایی که گل در آن است"
 

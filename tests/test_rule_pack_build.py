@@ -73,8 +73,9 @@ def test_a_ruling_corrects_one_rule_and_not_the_affix_everywhere() -> None:
 
     assert verbs["V-052"]["kind"] == "prefix"
     assert verbs["V-052"]["affix"] == "andar-"
-    # The transcription is never rewritten, only the judgement about it.
-    assert verbs["V-052"]["affix_source"] == "-andar"
+    # The corrected rules of 2026-11-19 write it andar- themselves; the August
+    # spelling is kept with the August row in source_rows.json.
+    assert verbs["V-052"]["affix_source"] == "andar-"
 
     assert nouns["N-038"]["kind"] == "suffix"
     assert nouns["N-038"]["affix"] == "-andar"

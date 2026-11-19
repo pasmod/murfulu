@@ -112,13 +112,17 @@ def test_a_rule_builds_the_form_its_own_example_shows(
 
 
 def test_the_same_stem_gives_a_capital_or_not_by_word_class():
-    """Verb rows 5 and 6 differ only in this. porsidan vs Porsidan."""
-    stem = Word(latin="porsid", fa="پرسید", word_class="karbon_yek")
-    infinitive = apply(PACK, _rule("V-005"), stem)
-    noun = apply(PACK, _rule("V-006"), stem)
-    assert infinitive.latin == "porsidan", "to ask"
-    assert noun.latin == "Porsidan", "the asking"
-    assert infinitive.latin.lower() == noun.latin.lower()
+    """V-008 and V-009 differ only in this: zade, the done-to, and Dide, the eye.
+
+    Verb rows 5 and 6 of the August grammar were the first example (porsidan,
+    Porsidan); the corrected rules of 2026-11-19 dropped row 6 (V-006).
+    """
+    stem = Word(latin="did", fa="دید", word_class="karbon_yek")
+    participle = apply(PACK, _rule("V-008"), stem)
+    noun = apply(PACK, _rule("V-009"), stem)
+    assert participle.latin == "dide", "seen"
+    assert noun.latin == "Dide", "the eye"
+    assert participle.latin.lower() == noun.latin.lower()
 
 
 def test_persian_and_latin_are_built_together():
@@ -508,25 +512,46 @@ def test_an_infix_rule_builds_nothing_rather_than_building_it_wrongly():
     compounding and PLAN 2.3. Until then it builds nothing, because a rule
     that builds nothing is better than one that builds the wrong thing.
     """
-    rule = PACK.by_id("N-023")
-    assert rule.kind == "infix"
-    assert rule.active, "the rule is not retired; the engine simply cannot run it"
+    from dataclasses import replace
+
+    # Both infix rules are retired since 2026-11-19 — the corrected rules do
+    # not have them (L45). The engine must still refuse one if it comes back.
+    retired = PACK.by_id("N-023")
+    assert isinstance(retired, Rule)
+    assert retired.kind == "infix"
+    assert retired.active is False
+    rule = replace(retired, active=True, retired_reason="")
     with pytest.raises(CannotApplyError, match="infix"):
         apply(PACK, rule, Word(latin="časb", fa="چسب", word_class="barnam"))
 
 
 class TestAPrefixThatMakesAnInfinitive:
-    """V-070 to V-076 take a past stem and say they produce an infinitive.
+    """V-070 to V-076 took a past stem and said they produce an infinitive.
 
     The prefix alone left *vāgoft* — a past stem carrying the label of an
     infinitive. All seventeen examples those seven rules list end in -an, and
     stem rule S-01 states the converse: taking -an off any infinitive leaves
     kārbon-e yek. Fixed 2026-08-15 with PLAN 9.3; it moved seven of the pack's
     own examples from *not rebuilt at all* to *explained by its own rule*.
+
+    **The corrected rules of 2026-11-19 give these rows the infinitive as
+    their base**, like bar-, dar- and ham-, so no rule has this shape any more.
+    The engine keeps the path, tested here on V-071 as it was, because the
+    August reading is one line in decisions.yaml away.
     """
 
+    @staticmethod
+    def _as_in_august(rule_id: str) -> Rule:
+        from dataclasses import replace
+
+        rule = PACK.by_id(rule_id)
+        assert isinstance(rule, Rule)
+        return replace(rule, input_types=("karbon_yek",))
+
     def test_the_infinitive_ending_is_added(self):
-        built = apply(PACK, PACK.by_id("V-071"), Word("goft", "گفت", "karbon_yek"))
+        built = apply(
+            PACK, self._as_in_august("V-071"), Word("goft", "گفت", "karbon_yek")
+        )
         assert built.latin == "vāgoftan"
         assert built.fa == "واگفتن"
         assert built.word_class == "nabesudkarvaze"
@@ -541,16 +566,9 @@ class TestAPrefixThatMakesAnInfinitive:
             and rule.output_types
             and rule.output_types[0] == "nabesudkarvaze"
         ]
-        assert {rule.id for rule in shape} == {
-            "V-070",
-            "V-071",
-            "V-072",
-            "V-073",
-            "V-074",
-            "V-075",
-            "V-076",
-        }
-        for rule in shape:
+        assert shape == [], "the corrected rules give every verbal prefix an infinitive"
+        august = [self._as_in_august(i) for i in ("V-070", "V-071", "V-074", "V-076")]
+        for rule in august:
             built = apply(PACK, rule, Word("goft", "گفت", "karbon_yek"))
             assert built.latin.endswith("an"), rule.id
             assert built.fa.endswith("ن"), rule.id

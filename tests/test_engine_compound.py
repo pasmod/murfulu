@@ -87,26 +87,29 @@ def test_every_compound_carries_its_rule_and_class():
     assert result.latin[0].isupper(), "a kārnām is written with a capital"
 
 
-@pytest.mark.parametrize(
-    ("second", "expected"),
-    [(Word("sar", "سر", "nam"), "Sarāsar"), (Word("pā", "پا", "nam"), "Sarāpā")],
-)
-def test_a_noun_compound_is_built_from_nouns_not_verbs(second: Word, expected: str):
-    """N-104 joins two nouns: sar + ā + sar, and sar + ā + pā."""
-    result = fill(PACK.by_id("N-104"), Word("sar", "سر", "nam"), second)
-    assert result.latin == expected
-    assert expected in PACK.by_id("N-104").examples
+def test_the_retired_noun_compound_builds_nothing():
+    """N-104 joined two nouns with ā between them: Sarāsar, Sarāpā.
+
+    The corrected rules of 2026-11-19 do not have the row, so it is retired —
+    and with it the engine's کتاباخانه (L28). A retired template is refused,
+    never filled.
+    """
+    rule = PACK.by_id("N-104")
+    assert rule.active is False
+    assert "Sarāsar" in rule.examples, "the id keeps its August row"
+    with pytest.raises(CannotApplyError, match="retired"):
+        fill(rule, Word("sar", "سر", "nam"), Word("pā", "پا", "nam"))
 
 
 def test_a_slot_refuses_the_wrong_kind_of_word():
     with pytest.raises(CannotApplyError, match="was given"):
-        fill(PACK.by_id("N-104"), Word("goft", "گفت", "karbon_yek"), GOFTAN)
+        fill(PACK.by_id("V-017"), Word("sar", "سر", "nam"), Word("pā", "پا", "nam"))
 
 
 def test_every_compounding_rule_in_the_pack_can_be_filled():
     """No template may sit in the pack unusable."""
     templates = [r for r in PACK.rules if r.kind == "template" and r.active]
-    assert len(templates) == 10, "nine join verb stems, one joins nouns"
+    assert len(templates) == 9, "nine join verb stems; none joins nouns since N-104"
     sar = Word("sar", "سر", "nam")
     for rule in templates:
         needs_two = any(

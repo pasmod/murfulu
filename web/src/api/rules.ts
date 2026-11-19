@@ -108,6 +108,8 @@ export interface Rule {
   semantic_tags: string[];
   strength: string | null;
   examples: string[];
+  /** Quotations a row gives instead of single words. Absent from older APIs. */
+  example_sentences?: string[];
   label_fa: string | null;
   explanation_fa: string | null;
   active: boolean;

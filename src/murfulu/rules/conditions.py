@@ -44,7 +44,9 @@ STRICTNESS = ("tendency", "stated")
 #: The tests this module knows how to run. ``stem_group`` is declared and not
 #: implemented — see OPEN_QUESTIONS S7 — so a rule using it reports *unknown*
 #: rather than a verdict nobody has authorised.
-TESTS = ("ends_with", "stem_group")
+#: ``meaning`` likewise: a base of a stated meaning («Nām (Zamān)», a noun of
+#: time, N-124), which no data in the lexicon can test yet.
+TESTS = ("ends_with", "stem_group", "meaning")
 
 
 class ConditionError(ValueError):
@@ -85,7 +87,10 @@ class Condition:
     def describe_fa(self) -> str:
         """One line in Persian for a reader, from the source's own words."""
         listed = "، ".join(f"«{value}»" for value in self.values)
-        what = f"پایانهٔ {listed}" if self.test == "ends_with" else f"گروهِ {listed}"
+        what = {
+            "ends_with": f"پایانهٔ {listed}",
+            "meaning": f"معنای {listed}",
+        }.get(self.test, f"گروهِ {listed}")
         hedge = "بیشتر " if self.strictness == "tendency" else ""
         return f"سرچشمه می‌گوید این دستور {hedge}پایه‌ای با {what} می‌گیرد."
 

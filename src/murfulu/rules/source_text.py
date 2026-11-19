@@ -25,14 +25,41 @@ TYPE_SPELLINGS: dict[str, str] = {
     # The linguist's names since the word bank (2026-11-09).
     "pišinkārbon": "karbon_yek",
     "konunkārbon": "karbon_do",
+    # The 2026-11-19 rules document's own slips: "Pisinkārbon", "Pišinkarbon".
+    "pisinkārbon": "karbon_yek",
+    "pišinkarbon": "karbon_yek",
+    "konunkarbon": "karbon_do",
     "nābesudkārvāže": "nabesudkarvaze",
     "kārnām": "karnam",
     "nām": "nam",
     "nāmen": "nam",
     "barnām": "barnam",
     "barnam": "barnam",
+    "bārnām": "barnam",
+    "bārnāmen": "barnam",
     "kārandekārbahr": "karandekarbahr",
     "kāridekārbahr": "karidekarbahr",
+    # The 2026-11-19 document's result classes, mapped onto the closed set.
+    # Each mapping is recorded with its reason in docs/DECISIONS.md
+    # (2026-11-19); the unclear ones are asked (questions_fa.yaml, L46).
+    # Barjākārbahr is Kāridekārbahr renamed: the same rows (zade, goftār,
+    # ranje, Kāvāk) that produced Kāridekārbahr in August produce it now.
+    "barjākārbahr": "karidekarbahr",
+    # A kind of نام, and its rows (Xorāk, Pušāk) produced Nām in August.
+    "kārpazirnām": "nam",
+    # A kind of برنام by its own name; šāhvār was Barnām in August.
+    "šāyestbarnām": "barnam",
+    # Not clear, and asked (L46). dānā, ravān were Kārandekārbahr in August,
+    # and row 143 still calls ravān a Kārandekārbahr; the conservative reading.
+    "čonyāftekārbahr": "karandekarbahr",
+    # Not clear, and asked (L46). xordani was Barnām in August (N-098).
+    "āyākārbahr": "barnam",
+    # Mordegān, Raftegān: a plural, which the pack does not run (row 119).
+    "kārāk dar biši": "nam",
+    # Two classes the closed set gained on 2026-11-19, fed by no word-bank
+    # group: the numeral and the inflected verb.
+    "šomār": "somar",
+    "kārvāže": "karvaze",
     "čonvāže": "jonvaze",
     "čonvāze": "jonvaze",
     "jānām": "janam",
@@ -56,6 +83,8 @@ TYPE_FA: dict[str, str] = {
     "janam": "جانام",
     "pisvaze": "پیش‌واژه",
     "nedayi": "ندایی",
+    "somar": "شمار",
+    "karvaze": "کارواژه",
 }
 
 #: What a slot qualifier means. "Hamān" is *the same*, "Digar" is *another*.
@@ -64,6 +93,11 @@ CONSTRAINTS: dict[str, str] = {
     "az digarkārvāže": "different_verb",
     "hamānkārbon": "same_stem",
     "digarkārbon": "different_stem",
+    # The 2026-11-19 wording: "HamānKonunkārbon", "DigarKonunkārbon".
+    "hamānkonunkārbon": "same_stem",
+    "digarkonunkārbon": "different_stem",
+    "hamānpišinkārbon": "same_stem",
+    "digarpišinkārbon": "different_stem",
 }
 
 #: Letters that join the two halves of a compound: Zadoxord, Kešākeš.
@@ -74,7 +108,13 @@ NEGATOR = "na"
 
 #: "bištar" — *mostly*. A row that says it states a tendency, not a rule that
 #: always applies.
-_TENDENCY = re.compile(r"[,،]?\s*\bbištar\b.*$", re.IGNORECASE)
+_TENDENCY = re.compile(r"[,،(]?\s*\bbištar\b.*$", re.IGNORECASE)
+
+#: "Konun- va Pišinkārbon" — both stems, the first written as a truncated
+#: word (2026-11-19). Read as the two stems it names.
+_BOTH_STEMS = re.compile(
+    r"\b(konun|pišin|pisin)-\s*va\s+(\w+?)(kārbon|karbon)", re.IGNORECASE
+)
 
 _SPLIT = re.compile(r"[\n/,]+")
 
@@ -127,6 +167,7 @@ def word_classes(cell: str) -> tuple[list[str], list[str]]:
     """Every word class a cell names, and the parts that did not resolve."""
     resolved: list[str] = []
     unresolved: list[str] = []
+    cell = _BOTH_STEMS.sub(r"\1\3, \2\3", cell)
     for part in _SPLIT.split(cell):
         if not part.strip():
             continue
@@ -156,7 +197,7 @@ def parse_input(cell: str) -> ParsedInput:
     text = clean(cell)
 
     if match := _TENDENCY.search(text):
-        parsed.tendency = match.group(0).lstrip(" ,،")
+        parsed.tendency = match.group(0).lstrip(" ,،(").rstrip(" )")
         text = text[: match.start()]
 
     parts = [part.strip() for part in text.split("+") if part.strip()]

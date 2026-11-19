@@ -4,6 +4,14 @@ Reads ``rules/source_rows.json``, ``rules/rule_ids.json`` and the two authored
 tables (``affix_spellings.yaml``, ``semantic_tags.yaml``) and writes
 ``verb_stems.yaml``, ``nominals.yaml`` and ``glides.yaml``.
 
+**Since 2026-11-19 the affix rules come from the linguist's corrected
+document**, ``rules/affix_source_rows.json``, through the row map
+``rules/affix_rows.yaml``: a rule given a row there is built from that row,
+and its August row is kept beside it as ``former_source``. An August rule no
+row carries is built from its August row as before and retired with the
+map's reason. The glides still come from the August grammar, which is the
+only document that has them.
+
 **Nothing is invented.** Where a source cell cannot be resolved — an unknown
 word class, an affix with no Persian spelling, an example that does not parse —
 the rule is written out with ``needs_expert_check: true`` and a note saying
@@ -50,16 +58,28 @@ def _tags(cell: str) -> list[str]:
     return found
 
 
-def _examples(cell: str) -> list[str]:
-    """The example words a row gives, verbatim apart from separators.
+#: A chunk that is a sentence rather than a list of words: the corrected rules
+#: of 2026-11-19 illustrate the enclitic -i with quotations ("Ey kāški
+#: nadādandi be man…", "če Goli!"). Kept verbatim, never split into "words".
+_SENTENCE = re.compile(r"[.!?…]")
 
-    Kept exactly as written, typos included — a wrong example is a fact about
-    the source and PLAN task 1.5 turns each one into a test, which is where a
-    mistranscription should surface.
+
+def _example_parts(cell: str) -> tuple[list[str], list[str]]:
+    """The example words a row gives, and any sentences it quotes.
+
+    Words are kept exactly as written, typos included — a wrong example is a
+    fact about the source and PLAN task 1.5 turns each one into a test, which
+    is where a mistranscription should surface. Only separators are removed:
+    "/", spaces and commas, which the 2026-11-19 document also writes with no
+    space after them ("āmuzgār,āmorzgār"); and a gloss in brackets after a
+    word ("ākandan (kandan)"), which names the base rather than an example.
     """
     examples: list[str] = []
-    for chunk in clean(cell).split("/"):
-        stripped = chunk.strip(" ,،")
+    sentences: list[str] = []
+    # A line break separates examples as "/" does; a quotation starts on a
+    # line of its own.
+    for chunk in re.split(r"[/\n]", cell):
+        stripped = clean(chunk).strip(" ,،")
         if not stripped:
             continue
         # A worked derivation — "dānā + i = Dānāyi" — is one example even
@@ -69,11 +89,18 @@ def _examples(cell: str) -> list[str]:
             # A cell can hold several: "row + am = ravam  šow + am = šavam".
             worked = _WORKED.findall(stripped)
             examples.extend(worked or [stripped])
+        elif _SENTENCE.search(stripped):
+            sentences.append(stripped)
         else:
-            examples.extend(
-                w.strip(" ,،") for w in stripped.split(" ") if w.strip(" ,،")
-            )
-    return examples
+            for word in re.split(r"[\s,،]+", _BRACKETS.sub(" ", stripped)):
+                if word and word not in examples:
+                    examples.append(word)
+    return examples, sentences
+
+
+def _examples(cell: str) -> list[str]:
+    """The example words a row gives — see :func:`_example_parts`."""
+    return _example_parts(cell)[0]
 
 
 #: What the source writes in the affix column when a whole word fills the slot
@@ -147,6 +174,8 @@ def _build_rule(
     parsed = parse_input(row["attaches_to"] or "")
     input_types = parsed.types
     output_types, bad_output = word_classes(row["produces"] or "")
+    if not input_types and not parsed.unresolved:
+        problems.append("the source names no base for this row")
     if parsed.unresolved:
         problems.append(f"could not read part of the input: {parsed.unresolved}")
     if bad_output:
@@ -165,7 +194,15 @@ def _build_rule(
 
     rule: dict[str, Any] = {
         "id": entry["id"],
-        "source": {"table": entry["source"]["table"], "row": entry["source"]["row"]},
+        "source": {
+            **(
+                {"document": entry["source"]["document"]}
+                if entry["source"].get("document")
+                else {}
+            ),
+            "table": entry["source"]["table"],
+            "row": entry["source"]["row"],
+        },
         "kind": kind,
         "affix": corrected or primary,
         "affix_source": primary,
@@ -181,6 +218,11 @@ def _build_rule(
         # applies. Read from the source text, never assumed.
         "strength": "typical" if parsed.tendency else None,
         "examples": _examples(row["examples"] or ""),
+        **(
+            {"example_sentences": sentences}
+            if (sentences := _example_parts(row["examples"] or "")[1])
+            else {}
+        ),
         "label_fa": _label_fa(input_types, corrected or primary, kind),
         "explanation_fa": _explanation_fa(
             input_types, output_types, corrected or primary, kind
@@ -252,17 +294,123 @@ def _decide(rule: dict[str, Any], rulings: dict[str, dict[str, Any]]) -> dict[st
     kind = decision.get("kind") or rule["kind"]
     affix = decision.get("affix") or rule["affix"]
     inputs = decision.get("input_types") or rule["input"]["types"]
-    if (kind, affix, inputs) == (rule["kind"], rule["affix"], rule["input"]["types"]):
+    # The Persian spelling, per rule for the same reason as ``kind``: be- is
+    # به before a noun (bexrad, بخرد aside) and ب on a verb (bexordan, بخوردن).
+    affix_fa = decision.get("affix_fa") or rule["affix_fa"]
+    if (kind, affix, inputs, affix_fa) == (
+        rule["kind"],
+        rule["affix"],
+        rule["input"]["types"],
+        rule["affix_fa"],
+    ):
         return rule
     return {
         **rule,
         "kind": kind,
         "affix": affix,
+        "affix_fa": affix_fa,
         "input": {**rule["input"], "types": inputs},
         "label_fa": _label_fa(inputs, affix, kind),
         "explanation_fa": _explanation_fa(inputs, rule["output"]["types"], affix, kind),
         "corrected_by": clean(decision["reason"]),
     }
+
+
+def _affix_rows(
+    directory: Path,
+) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]], dict[str, list[str]]]:
+    """The 2026-11-19 rows by the id they build, the retirements, and repeats.
+
+    Empty where the document has not been imported, so the August build still
+    runs on its own.
+    """
+    dump_path = directory / "affix_source_rows.json"
+    map_path = directory / "affix_rows.yaml"
+    if not (dump_path.exists() and map_path.exists()):
+        return {}, {}, {}
+    dump = json.loads(dump_path.read_text(encoding="utf-8"))
+    row_map = yaml.safe_load(map_path.read_text(encoding="utf-8"))
+    by_id: dict[str, dict[str, Any]] = {}
+    repeats: dict[str, list[str]] = {}
+    for table, entries in row_map["rows"].items():
+        records = {
+            (r["row"], r["docx_row_position"]): r
+            for r in dump["tables"][table]
+            if not r["blank"]
+        }
+        for entry in entries:
+            if "same_as" in entry:
+                repeats.setdefault(f"{table}:{entry['same_as']}", []).append(
+                    entry["row"]
+                )
+                continue
+            found = [
+                record
+                for (number, position), record in records.items()
+                if number == entry["row"]
+                and entry.get("position", position) == position
+            ]
+            by_id[entry["id"]] = {
+                "table": table,
+                "record": found[0],
+                "change": entry.get("change"),
+            }
+    retired = {r["id"]: r for r in row_map.get("retired") or []}
+    return by_id, retired, repeats
+
+
+def _build_current(
+    entry: dict[str, Any],
+    current: dict[str, Any],
+    repeats: dict[str, list[str]],
+    affixes: dict[str, dict[str, Any]],
+    known_tags: set[str],
+) -> dict[str, Any]:
+    """One rule from its row in the 2026-11-19 document."""
+    record = current["record"]
+    issued = {
+        "id": entry["id"],
+        "source": {
+            "document": AFFIX_DOCUMENT,
+            "table": current["table"],
+            "row": record["row"],
+        },
+    }
+    rule = _build_rule(issued, record, affixes, known_tags)
+    also = repeats.get(f"{current['table']}:{record['row']}")
+    if also:
+        rule["source"]["also_rows"] = also
+    if entry["source"].get("document") != AFFIX_DOCUMENT:
+        # Where the id was issued: its August row. Kept so the reference a
+        # stored derivation or an old message makes still leads somewhere.
+        rule["former_source"] = {
+            "table": entry["source"]["table"],
+            "row": entry["source"]["row"],
+            **(
+                {"follows_row": entry["source"]["follows_row"]}
+                if entry["source"].get("follows_row")
+                else {}
+            ),
+        }
+    if current.get("change"):
+        rule["change_2026_11_19"] = current["change"]
+    return rule
+
+
+def _retire(rule: dict[str, Any], reason: dict[str, Any]) -> dict[str, Any]:
+    return {
+        **rule,
+        "active": False,
+        "retired_reason": clean(reason["reason"]),
+        "retired_reason_fa": clean(reason.get("reason_fa") or ""),
+    }
+
+
+#: The version every generated rule file carries.
+PACK_VERSION = "0.2.0"
+
+#: The ``document`` a 2026-11-19 row's source carries.
+AFFIX_DOCUMENT = "2026-11-19"
 
 
 def build(directory: Path) -> dict[str, list[dict[str, Any]]]:
@@ -286,22 +434,28 @@ def build(directory: Path) -> dict[str, list[dict[str, Any]]]:
         else {}
     )
     rulings = {d["id"]: d for d in (decisions.get("rules") or [])}
+    current, retired, repeats = _affix_rows(directory)
 
     built: dict[str, list[dict[str, Any]]] = {}
     for table in ("verb_stems", "nominals"):
         by_position = {
             r["docx_row_position"]: r for r in source["tables"][table] if not r["blank"]
         }
-        rules = [
-            _decide(
-                _build_rule(
+        rules = []
+        for entry in register["families"][table]:
+            if "reason" in entry:
+                continue
+            if entry["id"] in current:
+                rule = _build_current(
+                    entry, current[entry["id"]], repeats, affixes, known_tags
+                )
+            else:
+                rule = _build_rule(
                     entry, by_position[entry["docx_row_position"]], affixes, known_tags
-                ),
-                rulings,
-            )
-            for entry in register["families"][table]
-            if "reason" not in entry
-        ]
+                )
+                if entry["id"] in retired:
+                    rule = _retire(rule, retired[entry["id"]])
+            rules.append(_decide(rule, rulings))
         built[table] = sorted(rules, key=lambda r: r["id"])
 
     built["glides"] = _build_glides(source, register, decisions.get("glides") or [])
@@ -472,10 +626,13 @@ def main(argv: list[str] | None = None) -> int:
 
     built = build(args.directory)
     for table, rules in built.items():
+        # 0.2.0 since 2026-11-19: the corrected rules retire 14 rules, add 55
+        # and change what others do, so nothing built under 0.1.0 (a stored
+        # derivation, an affix map) may pass for this pack's.
         path = args.directory / f"{table}.yaml"
         path.write_text(
             yaml.safe_dump(
-                {"version": "0.1.0", "rules": rules},
+                {"version": PACK_VERSION, "rules": rules},
                 allow_unicode=True,
                 sort_keys=False,
                 width=100,

@@ -11,15 +11,28 @@ renumber. It exists so the register can be regenerated and checked, and it
 fails if it would ever produce a different answer for an existing row.
 
     python tools/assign_rule_ids.py [-i rules/source_rows.json] [-o rules/rule_ids.json]
+
+**The 2026-11-19 rules document** (``rules/affix_source_rows.json``) replaced
+the August grammar's two rule tables. Which of its rows is which existing rule
+is a judgement, authored in ``rules/affix_rows.yaml``; this tool checks that
+judgement against both transcriptions and writes its consequences into the
+register: the new ids, appended to their family with the new row as their
+source, and the August ids that no row carries any more, marked retired. The
+August entries themselves never change — an id keeps the row it was issued
+for — so ``source`` always says where an id came from and the pack's own
+``source`` says where its rule is written today.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
+
+import yaml
 
 # Family prefix and id width per source table. The number in a V or N id is the
 # document's own row number — see the worked examples in docs/RULE_PACK.md,
@@ -138,8 +151,134 @@ def _assign_stem_rules(dump: dict[str, Any]) -> list[dict[str, Any]]:
     return entries
 
 
+#: Which register family a V or N id belongs to.
+FAMILY_TABLE = {"V": "verb_stems", "N": "nominals"}
+
+#: Written into a new id's ``source`` so it can never be read as an August row.
+AFFIX_DOCUMENT = "2026-11-19"
+
+_ID = re.compile(r"^([VN])-(\d{3})$")
+
+
+def affix_row_positions(
+    affix_dump: dict[str, Any], row_map: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Every mapped row of the 2026-11-19 document, with its place in the table.
+
+    Each content row must be mapped exactly once. A row is found by its number;
+    where the document writes a number twice, ``position`` says which.
+    """
+    resolved: list[dict[str, Any]] = []
+    for table, entries in row_map["rows"].items():
+        records = [r for r in affix_dump["tables"][table] if not r["blank"]]
+        for entry in entries:
+            matches = [
+                r
+                for r in records
+                if r["row"] == entry["row"]
+                and entry.get("position", r["docx_row_position"])
+                == r["docx_row_position"]
+            ]
+            if len(matches) != 1:
+                raise ValueError(
+                    f"{table} row {entry['row']}: {len(matches)} rows match; "
+                    "give its position"
+                )
+            resolved.append(
+                {**entry, "table": table, "position": matches[0]["docx_row_position"]}
+            )
+        mapped = sorted(e["position"] for e in resolved if e["table"] == table)
+        content = sorted(r["docx_row_position"] for r in records)
+        if mapped != content:
+            raise ValueError(f"{table}: not every row is mapped exactly once")
+    return resolved
+
+
+def apply_affix_rows(
+    families: dict[str, list[dict[str, Any]]],
+    affix_dump: dict[str, Any],
+    row_map: dict[str, Any],
+) -> None:
+    """Append the new ids and mark the retired ones, checking every judgement."""
+    rows = affix_row_positions(affix_dump, row_map)
+    known = {
+        e["id"]: e
+        for table in FAMILY_TABLE.values()
+        for e in families[table]
+        if "reason" not in e
+    }
+    mapped = [r for r in rows if "id" in r]
+    ids = [r["id"] for r in mapped]
+    twice = sorted({i for i in ids if ids.count(i) > 1})
+    if twice:
+        raise ValueError(f"ids given to two rows: {twice}")
+
+    for row in rows:
+        if "same_as" in row and not any(
+            r["table"] == row["table"] and r["row"] == row["same_as"] and "id" in r
+            for r in rows
+        ):
+            raise ValueError(f"row {row['row']} repeats {row['same_as']}, unmapped")
+
+    retired = {r["id"]: r for r in row_map.get("retired") or []}
+    for rule_id in retired:
+        if rule_id not in known:
+            raise ValueError(f"{rule_id} is retired but was never issued")
+        if rule_id in ids:
+            raise ValueError(f"{rule_id} is retired and also given a row")
+    unaccounted = sorted(set(known) - set(ids) - set(retired))
+    if unaccounted:
+        raise ValueError(f"neither given a row nor retired: {unaccounted}")
+
+    for row in mapped:
+        match = _ID.match(row["id"])
+        if match is None:
+            raise ValueError(f"{row['id']} is not a V or N id")
+        if row.get("new"):
+            if row["id"] in known:
+                raise ValueError(f"{row['id']} is marked new but already issued")
+            continue
+        if row["id"] not in known:
+            raise ValueError(f"{row['id']} is not an issued id; mark it new")
+        known[row["id"]]["current_source"] = {
+            "document": AFFIX_DOCUMENT,
+            "table": row["table"],
+            "row": row["row"],
+            "docx_row_position": row["position"],
+        }
+
+    # New ids are appended to their family, in the order the document gives
+    # them, with no gap and nothing inserted.
+    for prefix, table in FAMILY_TABLE.items():
+        highest = max(int(e["id"].split("-")[1]) for e in families[table])
+        for row in (r for r in mapped if r.get("new") and r["id"][0] == prefix):
+            highest += 1
+            if row["id"] != f"{prefix}-{highest:03d}":
+                raise ValueError(
+                    f"{row['id']} is out of order: the next {prefix} id is "
+                    f"{prefix}-{highest:03d}"
+                )
+            families[table].append(
+                {
+                    "id": row["id"],
+                    "source": {
+                        "document": AFFIX_DOCUMENT,
+                        "table": row["table"],
+                        "row": row["row"],
+                    },
+                    "docx_row_position": row["position"],
+                }
+            )
+
+    for rule_id in retired:
+        known[rule_id]["retired_on"] = AFFIX_DOCUMENT
+
+
 def build_register(
-    dump: dict[str, Any], stem_dump: dict[str, Any] | None = None
+    dump: dict[str, Any],
+    stem_dump: dict[str, Any] | None = None,
+    affix_dump: dict[str, Any] | None = None,
+    row_map: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build the full id register from the raw transcriptions."""
     families: dict[str, list[dict[str, Any]]] = {}
@@ -147,6 +286,8 @@ def build_register(
         families[table] = _assign(table, dump["tables"][table])
     if stem_dump is not None:
         families["stem_rules"] = _assign_stem_rules(stem_dump)
+    if affix_dump is not None and row_map is not None:
+        apply_affix_rows(families, affix_dump, row_map)
 
     ids = [entry["id"] for entries in families.values() for entry in entries]
     duplicates = sorted({i for i in ids if ids.count(i) > 1})
@@ -159,6 +300,10 @@ def build_register(
         "source_sha256": dump["source_sha256"],
         "stem_source_document": (stem_dump["source_document"] if stem_dump else None),
         "stem_source_sha256": stem_dump["source_sha256"] if stem_dump else None,
+        "affix_source_document": (
+            affix_dump["source_document"] if affix_dump else None
+        ),
+        "affix_source_sha256": affix_dump["source_sha256"] if affix_dump else None,
         "families": families,
         "retired_families": {
             "D": (
@@ -183,6 +328,12 @@ def main(argv: list[str] | None = None) -> int:
         "-s", "--stems", type=Path, default=Path("rules/stem_source_rows.json")
     )
     parser.add_argument(
+        "-a", "--affixes", type=Path, default=Path("rules/affix_source_rows.json")
+    )
+    parser.add_argument(
+        "-m", "--row-map", type=Path, default=Path("rules/affix_rows.yaml")
+    )
+    parser.add_argument(
         "-o", "--output", type=Path, default=Path("rules/rule_ids.json")
     )
     args = parser.parse_args(argv)
@@ -193,7 +344,17 @@ def main(argv: list[str] | None = None) -> int:
         if args.stems.exists()
         else None
     )
-    register = build_register(dump, stem_dump)
+    affix_dump = (
+        json.loads(args.affixes.read_text(encoding="utf-8"))
+        if args.affixes.exists()
+        else None
+    )
+    row_map = (
+        yaml.safe_load(args.row_map.read_text(encoding="utf-8"))
+        if args.row_map.exists()
+        else None
+    )
+    register = build_register(dump, stem_dump, affix_dump, row_map)
 
     if args.output.exists():
         existing = json.loads(args.output.read_text(encoding="utf-8"))

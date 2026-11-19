@@ -1,4 +1,8 @@
-"""The semantic tag set must cover every bracketed tag in the source grammar."""
+"""The semantic tag set must cover every bracketed tag in the source grammar.
+
+Both rule sources count: the August grammar's two tables, which the retired
+rules still come from, and the linguist's corrected rules of 2026-11-19.
+"""
 
 import json
 import re
@@ -11,13 +15,24 @@ TAGS = yaml.safe_load(
     (ROOT / "rules" / "semantic_tags.yaml").read_text(encoding="utf-8")
 )
 SOURCE = json.loads((ROOT / "rules" / "source_rows.json").read_text(encoding="utf-8"))
+AFFIXES = json.loads(
+    (ROOT / "rules" / "affix_source_rows.json").read_text(encoding="utf-8")
+)
+
+#: (dump, table) for every rule table either document has.
+RULE_TABLES = [
+    (SOURCE, "verb_stems"),
+    (SOURCE, "nominals"),
+    (AFFIXES, "prefixes"),
+    (AFFIXES, "suffixes"),
+]
 
 
 def _labels_in_the_source() -> set[str]:
-    """Every bracketed label the two rule tables use, verbatim."""
+    """Every bracketed label the rule tables use, verbatim."""
     found: set[str] = set()
-    for table in ("verb_stems", "nominals"):
-        for row in SOURCE["tables"][table]:
+    for dump, table in RULE_TABLES:
+        for row in dump["tables"][table]:
             if row["blank"]:
                 continue
             for bracket in re.findall(r"\((.*?)\)", row["affix"] or ""):
@@ -51,8 +66,8 @@ def test_machine_ids_are_unique_and_ascii():
 def test_every_usage_points_at_a_real_source_row():
     rows = {
         f"{table}:{row['row']}"
-        for table in ("verb_stems", "nominals")
-        for row in SOURCE["tables"][table]
+        for dump, table in RULE_TABLES
+        for row in dump["tables"][table]
         if row["row"] and not row["blank"]
     }
     for tag in TAGS["tags"]:

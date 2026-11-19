@@ -9,6 +9,16 @@ from murfulu.rules.pack import load
 
 PACK = load()
 
+
+def _prefix_uses(form: DerivedForm) -> list[str]:
+    """The prefixes a form's own path put on it, in order."""
+    return [
+        rule.affix.strip("-")
+        for step in form.path
+        if (rule := PACK.by_id(step.rule_id)).kind == "prefix" and rule.affix
+    ]
+
+
 #: The module, not the function of the same name that ``murfulu.engine``
 #: exports over it.
 GENERATE = importlib.import_module("murfulu.engine.generate")
@@ -95,9 +105,11 @@ def test_the_guard_is_on_the_affix_not_the_rule_id():
     assert {r.id for r in farāz} == {"V-059", "V-060"}, "the pack still has both"
 
     verb = Word("andišidan", "اندیشیدن", "nabesudkarvaze")
-    built = {f.latin for f in generate(PACK, verb, max_depth=3).forms}
-    assert "farāzandišidan" in built, "one farāz- is still built"
-    assert not [name for name in built if name.count("farāz") > 1]
+    forms = generate(PACK, verb, max_depth=3).forms
+    assert "farāzandišidan" in {f.latin for f in forms}, "one farāz- is still built"
+    # Counted on the path, not the spelling: since 2026-11-19 zir- takes an
+    # infinitive too, and farā- + zir- spells *farāzir…* with no second farāz-.
+    assert not [f.latin for f in forms if _prefix_uses(f).count("farāz") > 1]
 
 
 def test_the_two_farāz_rules_give_one_word_carrying_both():
@@ -380,10 +392,15 @@ def test_nothing_is_built_on_a_causatives_stem(rule_id: str):
 
 
 def test_a_prefix_still_cannot_stack_on_itself_through_a_stem():
-    """The guard has to survive the new route, or ham-ham- comes back."""
+    """The guard has to survive the new route, or ham-ham- comes back.
+
+    Read on the path: the suffix -vā (N-136, 2026-11-19) followed by -vār
+    spells *andišidevāvār* without a prefix anywhere.
+    """
     for form in _verb(ANDIŠIDAN, 4):
-        assert "hamham" not in form.latin
-        assert "vāvā" not in form.latin
+        used = _prefix_uses(form)
+        assert used.count("ham") <= 1, form.latin
+        assert used.count("vā") <= 1, form.latin
 
 
 def test_the_cost_is_measured_and_small():
@@ -397,4 +414,7 @@ def test_the_cost_is_measured_and_small():
     without = sum(
         len(generate(PACK, b, max_depth=3, max_forms=ROOM).forms) for b in ANDIŠIDAN
     )
-    assert 1.2 < with_stems / without < 1.8
+    # 1.4 when measured; 1.03 since 2026-11-19, when the corrected rules gave
+    # vā-, var- and zir- the infinitive as their base, so they reach a verb's
+    # stems through V-005 like every other verbal prefix instead of directly.
+    assert 1.0 < with_stems / without < 1.8

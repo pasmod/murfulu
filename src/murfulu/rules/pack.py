@@ -85,6 +85,9 @@ class Rule:
     semantic_tags: tuple[str, ...] = ()
     strength: str | None = None
     examples: tuple[str, ...] = ()
+    #: Quotations a row gives instead of, or beside, single words (the -i rows
+    #: of the 2026-11-19 rules). Shown to a reader; never a test case.
+    example_sentences: tuple[str, ...] = ()
     label_fa: str | None = None
     explanation_fa: str | None = None
     pattern: str | None = None
@@ -302,6 +305,7 @@ def _load_rule(raw: dict[str, Any]) -> Rule:
         semantic_tags=tuple(raw.get("semantic_tags") or ()),
         strength=raw.get("strength"),
         examples=tuple(raw.get("examples") or ()),
+        example_sentences=tuple(raw.get("example_sentences") or ()),
         label_fa=raw.get("label_fa"),
         explanation_fa=raw.get("explanation_fa"),
         pattern=raw.get("pattern"),

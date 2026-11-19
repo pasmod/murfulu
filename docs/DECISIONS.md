@@ -2,6 +2,83 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-19 — the linguist's corrected rules replace the August rule tables
+
+The linguist sent the corrected word-formation rules on 2026-11-19
+(`Dasturhāyeé Vāžesāzi.docx`, sha256 `f74bd9ad…`); the project lead: import
+it. It replaces the August grammar's two rule tables and nothing else: it has
+no glide table and no stem rules, which keep their own sources.
+
+- **A transcription of its own.** `tools/extract_affix_tables.py` copies the
+  three tables (prefixes, suffixes, without an affix) verbatim into
+  `rules/affix_source_rows.json`, keeping the linguist's running number 1–229
+  as written — including row 48, which he numbers 46 a second time.
+  `rules/source_rows.json` stays: it is still the glides' source and the
+  retired rules' rows.
+- **Which row is which rule is authored, in `rules/affix_rows.yaml`.** A row
+  keeps an existing id when it is the same rule — same affix, same meaning,
+  same base, judged by its own examples; a row that relabels its base or
+  result but keeps the August examples is the same rule corrected and keeps
+  its id (its `change` note says what moved). **172 rows keep an id, 55 get a
+  new one** (N-106 … N-144, V-083 … V-098, appended in the document's order),
+  and two repeat another row (10 = 9, 132 = 120) and build nothing of their
+  own. **14 August ids are retired**, each with a reason in English and
+  Persian: V-006, V-015, V-065, V-066, V-073, N-005, N-007, N-019, N-020,
+  N-023, N-104 have no row; V-026, N-039, N-094 were merged into another
+  row. `tools/assign_rule_ids.py` checks the map against both
+  transcriptions and writes the new ids into `rules/rule_ids.json`; an id's
+  `source` stays the August row it was issued for, and the rule's `source` in
+  the pack is its row in the new document, with `former_source` beside it.
+- **New result classes mapped onto the closed set** (`source_text.py`):
+  *Barjākārbahr* → `karidekarbahr` (the same rows and examples as August's
+  Kāridekārbahr: a rename); *Kārpazirnām* → `nam` and *Šāyestbarnām* →
+  `barnam` (each is a kind of the class it names, and August built the same
+  words as that class). Two are **not clear and asked** (L46): *Čonyāftekārbahr*
+  → `karandekarbahr` and *Āyākārbahr* → `barnam`, the classes August gave the
+  same words — the conservative reading, since anything else changes what
+  feeds later rules.
+- **Two classes added to the closed set**, `somar` (Šomār, the numeral) and
+  `karvaze` (Kārvāže, the inflected verb): his own terms, and no word-bank
+  group feeds either. Mapping Šomār onto برنام would build *xubom* and *xubtā*
+  from every adjective; as its own class, rows 209–211 build nothing until
+  the bank has a numeral group (L47).
+- **Rows that inflect are transcribed and not run** (`decisions.yaml`): the
+  plurals (-hā, -ān (Biši), -gān on a participle), the -i of one, of a
+  relative clause and of exclamation, and the five -i rows on an inflected
+  verb (raftami). Eleven ids, retired for the reason N-090 and N-099 are —
+  the reading the project lead settled for the clitic rows (L8). Unconfirmed;
+  one line each brings it back.
+- **The source now says what three August rulings said**: *-mand* (not
+  -mānd), *bāž-* as a prefix (which also settles the باژ/واژ doubt: the verb
+  prefix is bāž-, row 31, the noun prefix vāž-, row 61), *andar-* as a prefix,
+  *na-* on a stem. The rulings stay in `decisions.yaml` and change nothing.
+  It also corrects the August *-ā (Nāyi)* (N-001, V-051) to the prefixes
+  *a-* and *ā-*, and gives vā-, var- and zir- (V-070 … V-076) the infinitive
+  as their base, like every other verbal prefix: those verbs are now reached
+  in two steps (goft → goftan → vāgoftan), no longer one.
+- **Row 99, «-van (Mānandi)», names no base**: read as نام from its example
+  *setarvan*, flagged. Row 127 names «Farmānkārvāžw», which no class matches:
+  flagged, the rest of its bases kept.
+- **be- on a verb is spelled ب** (V-087, row 33: bexordan, بخوردن), by a
+  ruling that sets the Persian spelling for that one rule; before a noun it
+  stays به. `decisions.yaml` can now correct `affix_fa` per rule. Found by
+  the Codex review.
+- **The pack is version 0.2.0.** Rules retired, added and changed: nothing
+  built under 0.1.0 — a stored derivation, an affix map — may pass for this
+  pack's. Found by the second Codex review.
+- **N-124's «Nām (Zamān)» is recorded as a condition** (`input_conditions.yaml`,
+  test `meaning`, needs_expert_check): the source restricts *-i (Zamān)* to
+  nouns of time, the lexicon cannot tell which those are, so the rule takes
+  every noun and the screen says the condition was not established.
+- **Quotations are kept apart from example words.** Four -i rows illustrate
+  with sentences («če Goli!», a line of verse); they go into
+  `example_sentences`, served by `/rules` and shown on the Rules screen
+  beside the words, and are never turned into a test case.
+- **The example baseline is re-measured, not shrunk by an engine change**:
+  120 of the pack's own examples rebuilt by their own rule before, 126 after,
+  on `lexicon-20261111`; the seventeen that left are listed with the reason
+  in `tests/example_baseline.json`. Measured with `tools/check_examples.py`.
+
 ## 2026-11-14 — a pick is plain to see: one or the other, and under its word
 
 The project lead, once picks taught the model: make it clearer when a

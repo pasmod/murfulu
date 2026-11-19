@@ -159,9 +159,12 @@ groups:
       (نام، برنام، کارنام، چون‌واژه) build nothing either.
 
 switches:
-  # L26 with L18: does «نام» in the rule table take a کارنام too? The linguist
-  # is revising his rules, so this is **not** answered here. false is today's
-  # behaviour: the 80 rules that ask for a نام take a نام only. true widens
+  # L26 with L18: does «نام» in the rule table take a کارنام too? Asked of
+  # the linguist since his corrected rules arrived (2026-11-19), with our
+  # proposal that only the ten rows whose own examples rest on a کارنام take
+  # one; **not** answered here. false is today's behaviour: the 102 rules that
+  # ask for a نام take a نام only (measured 2026-11-19: 3.9 M forms in the
+  # build pool, 51.2 M with the switch on). true widens
   # every active rule whose input names نام to take a کارنام as well — affix
   # rules and compounding slots alike, the engine's own built کارنام (دانش) as
   # much as the lexicon's — and marks the rule pack's version, so nothing built

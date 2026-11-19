@@ -188,11 +188,14 @@ export function RuleRow({ rule }: { rule: Rule }) {
               </dd>
             </div>
           ) : null}
-          {rule.examples.length > 0 ? (
+          {rule.examples.length > 0 || (rule.example_sentences ?? []).length > 0 ? (
             <div>
               <dt>نمونه‌ها</dt>
               <dd>
                 {rule.examples.slice(0, 6).map((one) => (
+                  <Latin key={one}>{one}</Latin>
+                ))}
+                {(rule.example_sentences ?? []).map((one) => (
                   <Latin key={one}>{one}</Latin>
                 ))}
               </dd>

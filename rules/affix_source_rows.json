@@ -1,0 +1,2080 @@
+{
+ "source_document": "Dasturhāyeé Vāžesāzi.docx",
+ "source_sha256": "f74bd9ade88f8e30a7428f855c60516656602364e676d08e9fee63dfb5abfadf",
+ "received": "2026-11-19",
+ "note": "Verbatim transcription of the linguist's corrected affix tables. No interpretation, no rule ids. The row is the linguist's own running number, as written.",
+ "headings": {
+  "prefixes": "Vāžesāzi bā Pišvand",
+  "suffixes": "Vāžesāzi bā Pasvand",
+  "no_affix": "Vāžesāzi bi Vand"
+ },
+ "tables": {
+  "prefixes": [
+   {
+    "examples": "bāhonar, bāhuš",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "bā- (Dāštan)",
+    "row": "1",
+    "docx_row_position": 1,
+    "blank": false
+   },
+   {
+    "examples": "barkenār",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "bar-",
+    "row": "2",
+    "docx_row_position": 2,
+    "blank": false
+   },
+   {
+    "examples": "bexrad, benām",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "be- (Dāštan)",
+    "row": "3",
+    "docx_row_position": 3,
+    "blank": false
+   },
+   {
+    "examples": "bigāne, bikār",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "bi- (Nāi)",
+    "row": "4",
+    "docx_row_position": 4,
+    "blank": false
+   },
+   {
+    "examples": "darham",
+    "produces": "Barnām",
+    "attaches_to": "Jānām",
+    "affix": "dar-",
+    "row": "5",
+    "docx_row_position": 5,
+    "blank": false
+   },
+   {
+    "examples": "forutan, forumāye",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "foru-",
+    "row": "6",
+    "docx_row_position": 6,
+    "blank": false
+   },
+   {
+    "examples": "hamkar, hamrang",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "ham-",
+    "row": "7",
+    "docx_row_position": 7,
+    "blank": false
+   },
+   {
+    "examples": "kampul, kamzur, kamkār, kamxān",
+    "produces": "Barnām",
+    "attaches_to": "Nām, konunkārbon",
+    "affix": "-kam",
+    "row": "8",
+    "docx_row_position": 8,
+    "blank": false
+   },
+   {
+    "examples": "nādorost, nāsezā",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "nā-",
+    "row": "9",
+    "docx_row_position": 9,
+    "blank": false
+   },
+   {
+    "examples": "nādorost",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "nā-",
+    "row": "10",
+    "docx_row_position": 10,
+    "blank": false
+   },
+   {
+    "examples": "nākām, nāsepās",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "nā-",
+    "row": "11",
+    "docx_row_position": 11,
+    "blank": false
+   },
+   {
+    "examples": "nasuz, nastuh, nāšenās",
+    "produces": "Barnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "na-",
+    "row": "12",
+    "docx_row_position": 12,
+    "blank": false
+   },
+   {
+    "examples": "nadid,",
+    "produces": "Barnām",
+    "attaches_to": "Pišinkārbon",
+    "affix": "na-",
+    "row": "13",
+    "docx_row_position": 13,
+    "blank": false
+   },
+   {
+    "examples": "nasanjide",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "na-",
+    "row": "14",
+    "docx_row_position": 14,
+    "blank": false
+   },
+   {
+    "examples": "Padid,",
+    "produces": "Barnām",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "pa-, (be, pey)",
+    "row": "15",
+    "docx_row_position": 15,
+    "blank": false
+   },
+   {
+    "examples": "vardast",
+    "produces": "Barnam",
+    "attaches_to": "Nām",
+    "affix": "var- (kenār)",
+    "row": "16",
+    "docx_row_position": 16,
+    "blank": false
+   },
+   {
+    "examples": "zebardast",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "zebar- (bālā)",
+    "row": "17",
+    "docx_row_position": 17,
+    "blank": false
+   },
+   {
+    "examples": "porxerad, pordard",
+    "produces": "Bārnāmen",
+    "attaches_to": "Nāmen",
+    "affix": "por- (besyār)",
+    "row": "18",
+    "docx_row_position": 18,
+    "blank": false
+   },
+   {
+    "examples": "bexubi, bezudi",
+    "produces": "Čonvāže",
+    "attaches_to": "Kārnām",
+    "affix": "be- (Dāštan)",
+    "row": "19",
+    "docx_row_position": 19,
+    "blank": false
+   },
+   {
+    "examples": "bigoftošenid",
+    "produces": "Čonvāze",
+    "attaches_to": "Nām",
+    "affix": "bi- (Nāi)",
+    "row": "20",
+    "docx_row_position": 20,
+    "blank": false
+   },
+   {
+    "examples": "farāham",
+    "produces": "Čonvāže",
+    "attaches_to": "Jānām",
+    "affix": "farā-",
+    "row": "21",
+    "docx_row_position": 21,
+    "blank": false
+   },
+   {
+    "examples": "hamčonin",
+    "produces": "Čonvāže",
+    "attaches_to": "Čonvāže",
+    "affix": "ham-",
+    "row": "22",
+    "docx_row_position": 22,
+    "blank": false
+   },
+   {
+    "examples": "hamin, hamān",
+    "produces": "Jānām,",
+    "attaches_to": "Jānām,",
+    "affix": "ham-",
+    "row": "23",
+    "docx_row_position": 23,
+    "blank": false
+   },
+   {
+    "examples": "ākandan (kandan), āramidan (ramidan)",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "ā- (Nāyi)",
+    "row": "24",
+    "docx_row_position": 24,
+    "blank": false
+   },
+   {
+    "examples": "Andarresidan\nAndarxordan\nAndarbāyestan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže,",
+    "affix": "andar- , andarun-",
+    "row": "25",
+    "docx_row_position": 25,
+    "blank": false
+   },
+   {
+    "examples": "bāoftādan, bāzadan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "bā- (bāz, vā)",
+    "row": "26",
+    "docx_row_position": 26,
+    "blank": false
+   },
+   {
+    "examples": "Bāzgaštan, bāzgereftan\nbāzāmadan, bāzšodan bāzdidan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "bāz- (dobāregi)",
+    "row": "27",
+    "docx_row_position": 27,
+    "blank": false
+   },
+   {
+    "examples": "bāzšenāxtan,  bāzdidan,bāzgoftan, bāzporsidan, bāzšodan, bāzjostan, bāzxāstan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "bāz- (āškāregi)",
+    "row": "28",
+    "docx_row_position": 28,
+    "blank": false
+   },
+   {
+    "examples": "Bāzistādan, bāzdāštan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "bāz (Jologiri)",
+    "row": "29",
+    "docx_row_position": 29,
+    "blank": false
+   },
+   {
+    "examples": "bāzgereftan, bāzāmadan, bāzgaštan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "bāz- (pasravi)",
+    "row": "30",
+    "docx_row_position": 30,
+    "blank": false
+   },
+   {
+    "examples": "Bāžgunidan, bāžgune",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "bāž- (vārun)",
+    "row": "31",
+    "docx_row_position": 31,
+    "blank": false
+   },
+   {
+    "examples": "barangixtan\nbarnešāndan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "bar- (bālā)",
+    "row": "32",
+    "docx_row_position": 32,
+    "blank": false
+   },
+   {
+    "examples": "beraften,bešodan, bexordan, beyafkandan, beyandāxtan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "be- (Barjastesāzi)",
+    "row": "33",
+    "docx_row_position": 33,
+    "blank": false
+   },
+   {
+    "examples": "Borunāmadan, birunāmadan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "borun-, birun-",
+    "row": "34",
+    "docx_row_position": 34,
+    "blank": false
+   },
+   {
+    "examples": "darāmadan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "dar-",
+    "row": "35",
+    "docx_row_position": 35,
+    "blank": false
+   },
+   {
+    "examples": "farsudan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "far-",
+    "row": "36",
+    "docx_row_position": 36,
+    "blank": false
+   },
+   {
+    "examples": "farāgereftan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "farā- (be, suy)",
+    "row": "37",
+    "docx_row_position": 37,
+    "blank": false
+   },
+   {
+    "examples": "farāzāmadan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "farāz- (boland)",
+    "row": "38",
+    "docx_row_position": 38,
+    "blank": false
+   },
+   {
+    "examples": "farāzāvordan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "farāz- (bepiš)",
+    "row": "39",
+    "docx_row_position": 39,
+    "blank": false
+   },
+   {
+    "examples": "foruraftan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "foru- (pāyin)",
+    "row": "40",
+    "docx_row_position": 40,
+    "blank": false
+   },
+   {
+    "examples": "hamandišidan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "ham-",
+    "row": "41",
+    "docx_row_position": 41,
+    "blank": false
+   },
+   {
+    "examples": "Pasāvardan, paszadan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "pas- (pasrow)",
+    "row": "42",
+    "docx_row_position": 42,
+    "blank": false
+   },
+   {
+    "examples": "pišāmadan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "piš- (pišrow)",
+    "row": "43",
+    "docx_row_position": 43,
+    "blank": false
+   },
+   {
+    "examples": "sarzadan, saršekastan, sarāmadan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "sar- (Āqāz)",
+    "row": "44",
+    "docx_row_position": 44,
+    "blank": false
+   },
+   {
+    "examples": "vādāštan, vāgereftan\nvāgozaštan, vāmāndan\nvārāndan, vāistādan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "vā- (Jelogiri)",
+    "row": "45",
+    "docx_row_position": 45,
+    "blank": false
+   },
+   {
+    "examples": "vāgardāndan, vāgardidan, vāzadan\nvāgereftan, vāxāstan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "vā- (pasravi)",
+    "row": "46",
+    "docx_row_position": 46,
+    "blank": false
+   },
+   {
+    "examples": "vāgofta, vāšurānidan\nvāporsidan\nvāgereftan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "vā- (dobāregi)",
+    "row": "47",
+    "docx_row_position": 47,
+    "blank": false
+   },
+   {
+    "examples": "vāgoftan, vārahidan, vākardan, vāšodan, vāšenāxtan, vāraftan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "vā- (Āškāregi, bāz)",
+    "row": "46",
+    "docx_row_position": 48,
+    "blank": false
+   },
+   {
+    "examples": "varčidan, vārāmadan varraftan, vardādan  varparidan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "var- (kenār)",
+    "row": "49",
+    "docx_row_position": 49,
+    "blank": false
+   },
+   {
+    "examples": "varoftādan varšekastan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "var- (pāyin)",
+    "row": "50",
+    "docx_row_position": 50,
+    "blank": false
+   },
+   {
+    "examples": "ziršodan, zurandāxtan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "zir- (pāyin)",
+    "row": "51",
+    "docx_row_position": 51,
+    "blank": false
+   },
+   {
+    "examples": "Amardād, Akār, Anuš",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "A-(Nāyi)",
+    "row": "52",
+    "docx_row_position": 52,
+    "blank": false
+   },
+   {
+    "examples": "Degarruz, Degargun",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "degar-",
+    "row": "53",
+    "docx_row_position": 53,
+    "blank": false
+   },
+   {
+    "examples": "Digarbar, Digargun",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "digar-",
+    "row": "54",
+    "docx_row_position": 54,
+    "blank": false
+   },
+   {
+    "examples": "Došnām, Došxār",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "doš- (Badi)",
+    "row": "55",
+    "docx_row_position": 55,
+    "blank": false
+   },
+   {
+    "examples": "Dožxim, Dožāgāh,",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "dož- (Badi)",
+    "row": "56",
+    "docx_row_position": 56,
+    "blank": false
+   },
+   {
+    "examples": "Emšab, Emruz",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "em- (Ini)",
+    "row": "57",
+    "docx_row_position": 57,
+    "blank": false
+   },
+   {
+    "examples": "Xarmagas, Xarguš",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "xar- (bozorg)",
+    "row": "58",
+    "docx_row_position": 58,
+    "blank": false
+   },
+   {
+    "examples": "Pādzahr",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "pād- (Āxšij)",
+    "row": "59",
+    "docx_row_position": 59,
+    "blank": false
+   },
+   {
+    "examples": "Pādšāh, Pādbān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "pād- (Bāni)",
+    "row": "60",
+    "docx_row_position": 60,
+    "blank": false
+   },
+   {
+    "examples": "Vāžgun",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "vāž- (sarnegun, vārune, bāž)",
+    "row": "61",
+    "docx_row_position": 61,
+    "blank": false
+   },
+   {
+    "examples": "Zirpuš, Zirdast",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "zir- (pāyin)",
+    "row": "62",
+    "docx_row_position": 62,
+    "blank": false
+   },
+   {
+    "examples": "Pišāhang",
+    "produces": "Nāmen",
+    "attaches_to": "Nāmen",
+    "affix": "piš- (pišrow)",
+    "row": "63",
+    "docx_row_position": 63,
+    "blank": false
+   },
+   {
+    "examples": "Sarmāye, Sarvar",
+    "produces": "Nāmen",
+    "attaches_to": "Nāmen",
+    "affix": "sar- (Āqāz)",
+    "row": "64",
+    "docx_row_position": 64,
+    "blank": false
+   }
+  ],
+  "suffixes": [
+   {
+    "examples": "xordani, didani, šenidani",
+    "produces": "Āyākārbahr",
+    "attaches_to": "Nābesudkārvāže",
+    "affix": "-i (Āyāyi)",
+    "row": "65",
+    "docx_row_position": 1,
+    "blank": false
+   },
+   {
+    "examples": "zahrāgin, xašmāgin",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-āgin, -agan",
+    "row": "66",
+    "docx_row_position": 2,
+    "blank": false
+   },
+   {
+    "examples": "Barqāsā, mehrāsā",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-āsā (Mānand)",
+    "row": "67",
+    "docx_row_position": 3,
+    "blank": false
+   },
+   {
+    "examples": "zanbāre, ešqbāre",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-bāre (āzmand, basdustdārande)",
+    "row": "68",
+    "docx_row_position": 4,
+    "blank": false
+   },
+   {
+    "examples": "tamāšāči",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-či",
+    "row": "69",
+    "docx_row_position": 5,
+    "blank": false
+   },
+   {
+    "examples": "hičkāre,  nabarde,",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-e",
+    "row": "70",
+    "docx_row_position": 6,
+    "blank": false
+   },
+   {
+    "examples": "xodkāme",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "-e (Afzāyeš)",
+    "row": "71",
+    "docx_row_position": 7,
+    "blank": false
+   },
+   {
+    "examples": "Sorxfām, āyinefām",
+    "produces": "Barnām",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-fām (Rang)",
+    "row": "72",
+    "docx_row_position": 8,
+    "blank": false
+   },
+   {
+    "examples": "dahgān",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "-gān (Šomār)",
+    "row": "73",
+    "docx_row_position": 9,
+    "blank": false
+   },
+   {
+    "examples": "jodāgāne",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "-gāne",
+    "row": "74",
+    "docx_row_position": 10,
+    "blank": false
+   },
+   {
+    "examples": "šarmgen, āzarmgen",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-gen (Dārandegi)",
+    "row": "75",
+    "docx_row_position": 11,
+    "blank": false
+   },
+   {
+    "examples": "xānegi, haftegi",
+    "produces": "Barnām",
+    "attaches_to": "Nām bā -e",
+    "affix": "-gi",
+    "row": "76",
+    "docx_row_position": 12,
+    "blank": false
+   },
+   {
+    "examples": "šarmgin, xašmgin, sahmgin,",
+    "produces": "Barnām",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-gin (Dārandegi)",
+    "row": "77",
+    "docx_row_position": 13,
+    "blank": false
+   },
+   {
+    "examples": "zardgun, nilgun",
+    "produces": "Barnam",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-gun",
+    "row": "78",
+    "docx_row_position": 14,
+    "blank": false
+   },
+   {
+    "examples": "irāni, šahri, jangi, emruzi, honari, nāmi, čubi, āhani, mošti,",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-i",
+    "row": "79",
+    "docx_row_position": 15,
+    "blank": false
+   },
+   {
+    "examples": "simin, zarrin",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-in",
+    "row": "80",
+    "docx_row_position": 16,
+    "blank": false
+   },
+   {
+    "examples": "rāstin, čerkin",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "-in",
+    "row": "81",
+    "docx_row_position": 17,
+    "blank": false
+   },
+   {
+    "examples": "dirin",
+    "produces": "Barnām",
+    "attaches_to": "Čonvāže",
+    "affix": "-in",
+    "row": "82",
+    "docx_row_position": 18,
+    "blank": false
+   },
+   {
+    "examples": "dirine, simine",
+    "produces": "Barnām",
+    "attaches_to": "Nām, Čonvāže",
+    "affix": "-ine",
+    "row": "83",
+    "docx_row_position": 19,
+    "blank": false
+   },
+   {
+    "examples": "Pākize, dušize",
+    "produces": "Barnām",
+    "attaches_to": "Bārnām",
+    "affix": "-ize",
+    "row": "84",
+    "docx_row_position": 20,
+    "blank": false
+   },
+   {
+    "examples": "dānešmand",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-mand (Dāštan)",
+    "row": "85",
+    "docx_row_position": 21,
+    "blank": false
+   },
+   {
+    "examples": "andišnak, xašmnāk",
+    "produces": "Barnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-nāk (Dāštan)",
+    "row": "86",
+    "docx_row_position": 22,
+    "blank": false
+   },
+   {
+    "examples": "dardnāk, tasrnāk, anduhnāk, ābnāk",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-nāk (Dāštan)",
+    "row": "87",
+    "docx_row_position": 23,
+    "blank": false
+   },
+   {
+    "examples": "divsān",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-sān (Mānand)",
+    "row": "88",
+    "docx_row_position": 24,
+    "blank": false
+   },
+   {
+    "examples": "divsār",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-sār (Mānand)",
+    "row": "89",
+    "docx_row_position": 25,
+    "blank": false
+   },
+   {
+    "examples": "šarmsār",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-sār",
+    "row": "90",
+    "docx_row_position": 26,
+    "blank": false
+   },
+   {
+    "examples": "saboksār",
+    "produces": "Barnām",
+    "attaches_to": "Barnam",
+    "affix": "-sār (Mānand)",
+    "row": "91",
+    "docx_row_position": 27,
+    "blank": false
+   },
+   {
+    "examples": "xubtar xubtarin",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "-tar, -tarin",
+    "row": "92",
+    "docx_row_position": 28,
+    "blank": false
+   },
+   {
+    "examples": "tanumand",
+    "produces": "Barnam",
+    "attaches_to": "Nām",
+    "affix": "-umand (Dāštan)",
+    "row": "93",
+    "docx_row_position": 29,
+    "blank": false
+   },
+   {
+    "examples": "ranjur, mozdur",
+    "produces": "Barnām",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-ur (Dāštan)",
+    "row": "94",
+    "docx_row_position": 30,
+    "blank": false
+   },
+   {
+    "examples": "dānešvar",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-var (Dāštan)",
+    "row": "95",
+    "docx_row_position": 31,
+    "blank": false
+   },
+   {
+    "examples": "omidvār, došvār",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-vār (Dāštan)",
+    "row": "96",
+    "docx_row_position": 32,
+    "blank": false
+   },
+   {
+    "examples": "divānevār, širvār, kuhvār",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-vār (Mānand)",
+    "row": "97",
+    "docx_row_position": 33,
+    "blank": false
+   },
+   {
+    "examples": "bozorgvār",
+    "produces": "Barnām",
+    "attaches_to": "Barnām",
+    "affix": "-vār",
+    "row": "98",
+    "docx_row_position": 34,
+    "blank": false
+   },
+   {
+    "examples": "setarvan",
+    "produces": "Barnām",
+    "attaches_to": "",
+    "affix": "-van (Mānandi)",
+    "row": "99",
+    "docx_row_position": 35,
+    "blank": false
+   },
+   {
+    "examples": "talxvaš, parivaš, māhvaš",
+    "produces": "Barnām",
+    "attaches_to": "Nām, Barnam",
+    "affix": "-vaš (Mānandi)",
+    "row": "100",
+    "docx_row_position": 36,
+    "blank": false
+   },
+   {
+    "examples": "sāzvar",
+    "produces": "Barnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-var",
+    "row": "101",
+    "docx_row_position": 37,
+    "blank": false
+   },
+   {
+    "examples": "Bārvar, pahnāvar, jānvar, soxanvar",
+    "produces": "Barnām",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-var",
+    "row": "102",
+    "docx_row_position": 38,
+    "blank": false
+   },
+   {
+    "examples": "tarsu, šekamu, rišu",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-u  (Dārandegi)",
+    "row": "103",
+    "docx_row_position": 39,
+    "blank": false
+   },
+   {
+    "examples": "rānjur, ganjur, dastur",
+    "produces": "Barnām",
+    "attaches_to": "Nām",
+    "affix": "-ur (Dārandegi)",
+    "row": "104",
+    "docx_row_position": 40,
+    "blank": false
+   },
+   {
+    "examples": "xošā, basā, šegeftā",
+    "produces": "Barnām, Čonvāže",
+    "attaches_to": "Barnām",
+    "affix": "-ā (Šegefti)",
+    "row": "105",
+    "docx_row_position": 41,
+    "blank": false
+   },
+   {
+    "examples": "māhāne, ruzāne, mardāne, divāne, zanāne, šāhāne, pirāne",
+    "produces": "Barnām, Čonvāže",
+    "attaches_to": "Nām",
+    "affix": "-āne",
+    "row": "106",
+    "docx_row_position": 42,
+    "blank": false
+   },
+   {
+    "examples": "penhāni, nahāni",
+    "produces": "Čonvāže, Barnām",
+    "attaches_to": "Barnām",
+    "affix": "-i",
+    "row": "107",
+    "docx_row_position": 43,
+    "blank": false
+   },
+   {
+    "examples": "āmuzgār,āmorzgār,sāzgār, parhizgār, āmizgār, kāmgār, āzgār, parvadgār, xāstgār, āfaridgār, raftgār, māndgār",
+    "produces": "Kārandekārbahr, Barnām",
+    "attaches_to": "Konun- va Pisinkārbon",
+    "affix": "-gār",
+    "row": "108",
+    "docx_row_position": 44,
+    "blank": false
+   },
+   {
+    "examples": "Yārā, Mehrbānā, xošā, dardā",
+    "produces": "Nām, Barnām",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-ā (Nedāyi)",
+    "row": "109",
+    "docx_row_position": 45,
+    "blank": false
+   },
+   {
+    "examples": "če Soxané zešti!, če Goli!",
+    "produces": "Nām, Barnām",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-i (Šegefti)",
+    "row": "110",
+    "docx_row_position": 46,
+    "blank": false
+   },
+   {
+    "examples": "Ketābi, ke… Ān Ketābi, ke…. Yek Ketābi, ke… Ketābé zibāi, ke…",
+    "produces": "Nām, Barnām",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-i (Peyvandi)",
+    "row": "111",
+    "docx_row_position": 47,
+    "blank": false
+   },
+   {
+    "examples": "bāmdādān",
+    "produces": "Čonvāže",
+    "attaches_to": "Nām",
+    "affix": "-ān (Zamān)",
+    "row": "112",
+    "docx_row_position": 48,
+    "blank": false
+   },
+   {
+    "examples": "xeradmandāne, delirāne",
+    "produces": "Čonvāze",
+    "attaches_to": "Barnām",
+    "affix": "-āne (Mānand)",
+    "row": "113",
+    "docx_row_position": 49,
+    "blank": false
+   },
+   {
+    "examples": "Nāgahāni, tondi, zudi",
+    "produces": "Čonvāže",
+    "attaches_to": "Čonvāže",
+    "affix": "-i (Barjastegi)",
+    "row": "114",
+    "docx_row_position": 50,
+    "blank": false
+   },
+   {
+    "examples": "šabi, ruzi, sahari",
+    "produces": "Čonvāže (Zamān)",
+    "attaches_to": "Nām (Zamān)",
+    "affix": "-i (Zamān)",
+    "row": "115",
+    "docx_row_position": 51,
+    "blank": false
+   },
+   {
+    "examples": "dānā, dārā, rahā, xānā",
+    "produces": "Čonyāftekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "-ā",
+    "row": "116",
+    "docx_row_position": 52,
+    "blank": false
+   },
+   {
+    "examples": "ravān, hastān, puyān",
+    "produces": "Čonyāftekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "-ān",
+    "row": "117",
+    "docx_row_position": 53,
+    "blank": false
+   },
+   {
+    "examples": "zāu",
+    "produces": "Čonyāftekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "-u",
+    "row": "118",
+    "docx_row_position": 54,
+    "blank": false
+   },
+   {
+    "examples": "Mordegān, Raftegān",
+    "produces": "Kārāk dar biši",
+    "attaches_to": "Konunkārbon",
+    "affix": "-gān",
+    "row": "119",
+    "docx_row_position": 55,
+    "blank": false
+   },
+   {
+    "examples": "Xorāk, Pušāk, Kārāk",
+    "produces": "Kārpazirnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-āk (Kārpaziri)",
+    "row": "120",
+    "docx_row_position": 56,
+    "blank": false
+   },
+   {
+    "examples": "Rostāk",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "-āk (Kārandegi)",
+    "row": "121",
+    "docx_row_position": 57,
+    "blank": false
+   },
+   {
+    "examples": "xāridār, dādār, xāstār, barxordār, farmānbordār",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Pišinkārbon (bištar bā Pāyāne -t , -d)",
+    "affix": "-ār",
+    "row": "122",
+    "docx_row_position": 58,
+    "blank": false
+   },
+   {
+    "examples": "parastār, dustdār",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "-ār",
+    "row": "123",
+    "docx_row_position": 59,
+    "blank": false
+   },
+   {
+    "examples": "ravande",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "-ande (Kārandegi)",
+    "row": "124",
+    "docx_row_position": 60,
+    "blank": false
+   },
+   {
+    "examples": "parvadgār, xāstgār, āfaridgār, raftgār, māndgār",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Pišinkārbon",
+    "affix": "-gār (Kārandegi)",
+    "row": "125",
+    "docx_row_position": 61,
+    "blank": false
+   },
+   {
+    "examples": "derowgar, tavāngar, dādgar, roftgar, rowšangar, sefidgar, nawāzešgar, bāzigar, āhangar, xonyāgar, āhangar",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Konun- va Pišinkārbon, Barnām, Kārnām",
+    "affix": "-gar",
+    "row": "126",
+    "docx_row_position": 62,
+    "blank": false
+   },
+   {
+    "examples": "setamkār, tabahkār, tarāškār, keštkār, bedehkār, bestānkār",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Nām, Barnām, Konun- va Pišinkarbon, Farmānkārvāžw",
+    "affix": "-kār",
+    "row": "127",
+    "docx_row_position": 63,
+    "blank": false
+   },
+   {
+    "examples": "Kāvāk",
+    "produces": "Barjākārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "-āk (Kāridegi)",
+    "row": "128",
+    "docx_row_position": 64,
+    "blank": false
+   },
+   {
+    "examples": "Gereftār, raftār, koštār, goftār",
+    "produces": "Barjākārbahr",
+    "attaches_to": "Pišinkārbon, bištar bā Pāyāne -t va -d",
+    "affix": "-ār",
+    "row": "129",
+    "docx_row_position": 65,
+    "blank": false
+   },
+   {
+    "examples": "zade, xorde, amade,",
+    "produces": "Barjākārbahr",
+    "attaches_to": "Pišinkārbon",
+    "affix": "-e",
+    "row": "130",
+    "docx_row_position": 66,
+    "blank": false
+   },
+   {
+    "examples": "ranje",
+    "produces": "Barjākārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "-e",
+    "row": "131",
+    "docx_row_position": 67,
+    "blank": false
+   },
+   {
+    "examples": "Xorāk, Pušāk, Kārāk",
+    "produces": "Kārpazirnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-āk (Kārpaziri)",
+    "row": "132",
+    "docx_row_position": 68,
+    "blank": false
+   },
+   {
+    "examples": "Pahnā, Derāzā, Garmā, Rošāna",
+    "produces": "Kārnām",
+    "attaches_to": "Barnām",
+    "affix": "-ā",
+    "row": "133",
+    "docx_row_position": 69,
+    "blank": false
+   },
+   {
+    "examples": "Gotfār, Jostār, Koštār",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon (bištar bā Pāyāne -t , -d)",
+    "affix": "-ār",
+    "row": "134",
+    "docx_row_position": 70,
+    "blank": false
+   },
+   {
+    "examples": "Xande, Gerye, Ranje, Pazire, Muye",
+    "produces": "Kārnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-e",
+    "row": "135",
+    "docx_row_position": 71,
+    "blank": false
+   },
+   {
+    "examples": "Pazireš",
+    "produces": "Kārnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-eš",
+    "row": "136",
+    "docx_row_position": 72,
+    "blank": false
+   },
+   {
+    "examples": "Konešt",
+    "produces": "Kārnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-ešt",
+    "row": "137",
+    "docx_row_position": 73,
+    "blank": false
+   },
+   {
+    "examples": "Xodāygāni, Mehrgani, Dustg,ani",
+    "produces": "Kārnām",
+    "attaches_to": "Nām",
+    "affix": "-gāni",
+    "row": "138",
+    "docx_row_position": 74,
+    "blank": false
+   },
+   {
+    "examples": "Zadegi",
+    "produces": "Kārnām",
+    "attaches_to": "Kāridekārbahr bā -e",
+    "affix": "-gi",
+    "row": "139",
+    "docx_row_position": 75,
+    "blank": false
+   },
+   {
+    "examples": "Ravandegi",
+    "produces": "Kārnām",
+    "attaches_to": "Kārandekārbahr bā -ande",
+    "affix": "-gi",
+    "row": "140",
+    "docx_row_position": 76,
+    "blank": false
+   },
+   {
+    "examples": "Dānāyi, Pārsāyi, Tavānāyi",
+    "produces": "Kārnām",
+    "attaches_to": "Čonyāftekārbahr bā -ā",
+    "affix": "-i",
+    "row": "141",
+    "docx_row_position": 77,
+    "blank": false
+   },
+   {
+    "examples": "Rahāyi",
+    "produces": "Kārnām",
+    "attaches_to": "Kāridekārbahr-ā",
+    "affix": "-i",
+    "row": "142",
+    "docx_row_position": 78,
+    "blank": false
+   },
+   {
+    "examples": "Ravāni",
+    "produces": "Kārnām",
+    "attaches_to": "Kārandekārbahr-ān",
+    "affix": "-i",
+    "row": "143",
+    "docx_row_position": 79,
+    "blank": false
+   },
+   {
+    "examples": "Māyi, Azi, Rāyi",
+    "produces": "Kārnām",
+    "attaches_to": "Jānām, Pišvāže",
+    "affix": "-i (Čoni)",
+    "row": "144",
+    "docx_row_position": 80,
+    "blank": false
+   },
+   {
+    "examples": "Āmuzgāri, Rāsti, Šādi, Šāgerdi, Xubi",
+    "produces": "Kārnām",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-i (Koneši)",
+    "row": "145",
+    "docx_row_position": 81,
+    "blank": false
+   },
+   {
+    "examples": "Goftmān, Sāxtmān",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon",
+    "affix": "-mān",
+    "row": "146",
+    "docx_row_position": 82,
+    "blank": false
+   },
+   {
+    "examples": "Zāymān, Sāzmān",
+    "produces": "Kārnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-mān",
+    "row": "147",
+    "docx_row_position": 83,
+    "blank": false
+   },
+   {
+    "examples": "raftami, budandi, goftami",
+    "produces": "Kārvāže",
+    "attaches_to": "Kārvāže",
+    "affix": "-i (Gozarāni)",
+    "row": "148",
+    "docx_row_position": 84,
+    "blank": false
+   },
+   {
+    "examples": "didami, āmadi, budami\nEy kāški nadādandi be man Nāmeé Kerdāreé man.",
+    "produces": "Kārvāže",
+    "attaches_to": "Kārvāže",
+    "affix": "-i (Ārezuyi)",
+    "row": "149",
+    "docx_row_position": 85,
+    "blank": false
+   },
+   {
+    "examples": "šodami, xāstami, bāšadami\nAgar man Jāyí dānestami andar Jahān az in Harab fāzeltar, ānjā šodami.",
+    "produces": "Kārvāže",
+    "attaches_to": "Kārvāže",
+    "affix": "-i (Agari)",
+    "row": "150",
+    "docx_row_position": 86,
+    "blank": false
+   },
+   {
+    "examples": "Bedidami, Az Gorosnegi pāyam Kār nemikard, ke beraftami.",
+    "produces": "Kārvāže",
+    "attaches_to": "Kārvāže",
+    "affix": "-i (āri)",
+    "row": "151",
+    "docx_row_position": 87,
+    "blank": false
+   },
+   {
+    "examples": "barāmadi, pendāri, guyi, Yusof dar Xāb did, ke yāzdah Setāre va Māh va Āftāb urā Sajde kardandi.",
+    "produces": "Kārvāže",
+    "attaches_to": "Kārvāže",
+    "affix": "-i (Royā, Gomān)",
+    "row": "152",
+    "docx_row_position": 88,
+    "blank": false
+   },
+   {
+    "examples": "raftan",
+    "produces": "Nābesudkārvāže",
+    "attaches_to": "Pišinkārbon",
+    "affix": "-an",
+    "row": "153",
+    "docx_row_position": 89,
+    "blank": false
+   },
+   {
+    "examples": "oftāndan parāndan",
+    "produces": "Nābesudkārvāžeé gozarā",
+    "attaches_to": "Konunkārboné nāgozarā az  G1",
+    "affix": "-āndan",
+    "row": "154",
+    "docx_row_position": 90,
+    "blank": false
+   },
+   {
+    "examples": "pazāndan, pazanānidan",
+    "produces": "Nābesudkārvāžeé gozarā",
+    "attaches_to": "Konunkārboné nāgozarā az G2",
+    "affix": "-āndan, -ānidan",
+    "row": "155",
+    "docx_row_position": 91,
+    "blank": false
+   },
+   {
+    "examples": "tarsāndan tarsānidan",
+    "produces": "Nābesudkārvāžeé gozarā",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-ānidan, -āndan",
+    "row": "156",
+    "docx_row_position": 92,
+    "blank": false
+   },
+   {
+    "examples": "tarsidan\nxašmidan",
+    "produces": "Nābesudkārvāžeé nāgozarā",
+    "attaches_to": "Nām, Barnām",
+    "affix": "-idan",
+    "row": "157",
+    "docx_row_position": 93,
+    "blank": false
+   },
+   {
+    "examples": "Čangāl",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-āl (Mānandi)",
+    "row": "158",
+    "docx_row_position": 94,
+    "blank": false
+   },
+   {
+    "examples": "Biābān, Gilān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-ān (Jā)",
+    "row": "159",
+    "docx_row_position": 95,
+    "blank": false
+   },
+   {
+    "examples": "Deraxtān, Cešmān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-ān (Biši)",
+    "row": "160",
+    "docx_row_position": 96,
+    "blank": false
+   },
+   {
+    "examples": "Aškān, Bābakān, Qobādān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-ān (Niyā)",
+    "row": "161",
+    "docx_row_position": 97,
+    "blank": false
+   },
+   {
+    "examples": "Angoštāne",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-āne",
+    "row": "162",
+    "docx_row_position": 98,
+    "blank": false
+   },
+   {
+    "examples": "Arusak",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-ak (Mānand)",
+    "row": "163",
+    "docx_row_position": 99,
+    "blank": false
+   },
+   {
+    "examples": "Sangak, Sorxak",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-ak",
+    "row": "164",
+    "docx_row_position": 100,
+    "blank": false
+   },
+   {
+    "examples": "Šāxak",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-ak (Kučaki)",
+    "row": "165",
+    "docx_row_position": 101,
+    "blank": false
+   },
+   {
+    "examples": "Mādarandar, Pesarandar",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-andar (nātani)",
+    "row": "166",
+    "docx_row_position": 102,
+    "blank": false
+   },
+   {
+    "examples": "Darbān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-bān (Bāni)",
+    "row": "167",
+    "docx_row_position": 103,
+    "blank": false
+   },
+   {
+    "examples": "Rudbār, Juybār",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-bār (Kenār)",
+    "row": "168",
+    "docx_row_position": 104,
+    "blank": false
+   },
+   {
+    "examples": "Sepahbod, Bārbod, Mowbad",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-bad, -bod (Dārande)",
+    "row": "169",
+    "docx_row_position": 105,
+    "blank": false
+   },
+   {
+    "examples": "Kuče,  Āluče",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-če (Kučaki)",
+    "row": "170",
+    "docx_row_position": 106,
+    "blank": false
+   },
+   {
+    "examples": "Namakdān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-dān (Jā)",
+    "row": "171",
+    "docx_row_position": 107,
+    "blank": false
+   },
+   {
+    "examples": "Tandis, Nāvdis",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-dis (Mānandi)",
+    "row": "172",
+    "docx_row_position": 108,
+    "blank": false
+   },
+   {
+    "examples": "Dide",
+    "produces": "Nām",
+    "attaches_to": "Pišinkārbon",
+    "affix": "-e",
+    "row": "173",
+    "docx_row_position": 109,
+    "blank": false
+   },
+   {
+    "examples": "Āvize, Māle, Rande, Tābe, Gire",
+    "produces": "Nām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-e",
+    "row": "174",
+    "docx_row_position": 110,
+    "blank": false
+   },
+   {
+    "examples": "Češme, Guše, Dandāne, Pāye, Riše",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-e (Mānandi)",
+    "row": "175",
+    "docx_row_position": 111,
+    "blank": false
+   },
+   {
+    "examples": "Zarde, Sade, Sabze",
+    "produces": "Nām",
+    "attaches_to": "Barnām",
+    "affix": "-e (Nāmsāz)",
+    "row": "176",
+    "docx_row_position": 112,
+    "blank": false
+   },
+   {
+    "examples": "Pesare, Doxtare, Xošgele",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-e (Āšnāyi)",
+    "row": "177",
+    "docx_row_position": 113,
+    "blank": false
+   },
+   {
+    "examples": "Ruze, Pošte",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-e",
+    "row": "178",
+    "docx_row_position": 114,
+    "blank": false
+   },
+   {
+    "examples": "Ketābé u",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-é (egi)",
+    "row": "179",
+    "docx_row_position": 115,
+    "blank": false
+   },
+   {
+    "examples": "Dānešgāh, Sahargāh",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-gāh (Jā, Zamān)",
+    "row": "180",
+    "docx_row_position": 116,
+    "blank": false
+   },
+   {
+    "examples": "Garmgāhan, Sahargāhan, Čāštgāhān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-gāhān (Zaman)",
+    "row": "181",
+    "docx_row_position": 117,
+    "blank": false
+   },
+   {
+    "examples": "Ruzgār, Yādgar, Xodāvandgār,",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-gār",
+    "row": "182",
+    "docx_row_position": 118,
+    "blank": false
+   },
+   {
+    "examples": "Kuhhā, Sanghā",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-hā (Biši)",
+    "row": "183",
+    "docx_row_position": 119,
+    "blank": false
+   },
+   {
+    "examples": "Sāli (yek Sāl) Sāli barāmad,",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-i (Yeki)",
+    "row": "184",
+    "docx_row_position": 120,
+    "blank": false
+   },
+   {
+    "examples": "Ketābí, Sālí",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-í (Nāšnāi)",
+    "row": "185",
+    "docx_row_position": 121,
+    "blank": false
+   },
+   {
+    "examples": "Meykade",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-kade (Jā)",
+    "row": "186",
+    "docx_row_position": 122,
+    "blank": false
+   },
+   {
+    "examples": "Sanglāx",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-lāx (Anbuhi)",
+    "row": "187",
+    "docx_row_position": 123,
+    "blank": false
+   },
+   {
+    "examples": "Rismān",
+    "produces": "Nām",
+    "attaches_to": "Konunkārbon",
+    "affix": "-mān",
+    "row": "188",
+    "docx_row_position": 124,
+    "blank": false
+   },
+   {
+    "examples": "Derāznā, Tangnā, Farāxnā",
+    "produces": "Nām",
+    "attaches_to": "Barnām",
+    "affix": "-nā (Nāmsāz)",
+    "row": "189",
+    "docx_row_position": 125,
+    "blank": false
+   },
+   {
+    "examples": "Āzarpād",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-pād (Negahbān)",
+    "row": "190",
+    "docx_row_position": 126,
+    "blank": false
+   },
+   {
+    "examples": "Golšan",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-šan",
+    "row": "191",
+    "docx_row_position": 127,
+    "blank": false
+   },
+   {
+    "examples": "Kuhsār",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-sār (Anbuhi)",
+    "row": "192",
+    "docx_row_position": 128,
+    "blank": false
+   },
+   {
+    "examples": "Roxsār",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-sār (Pirāmun)",
+    "row": "193",
+    "docx_row_position": 129,
+    "blank": false
+   },
+   {
+    "examples": "Garmsir",
+    "produces": "Nām",
+    "attaches_to": "Barnām",
+    "affix": "-sir",
+    "row": "194",
+    "docx_row_position": 130,
+    "blank": false
+   },
+   {
+    "examples": "Golestān, Bustān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-stān (Anbuhjā)",
+    "row": "195",
+    "docx_row_position": 131,
+    "blank": false
+   },
+   {
+    "examples": "Pišvā, Nānvā",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-vā (Negahbān)",
+    "row": "196",
+    "docx_row_position": 132,
+    "blank": false
+   },
+   {
+    "examples": "Polvān, Poštivān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-vān (Mānandi)",
+    "row": "197",
+    "docx_row_position": 133,
+    "blank": false
+   },
+   {
+    "examples": "Razvan, Sāyevān",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-vān (Neahbāni)",
+    "row": "198",
+    "docx_row_position": 134,
+    "blank": false
+   },
+   {
+    "examples": "Angaštarāne, Parvāne, Dastvāne",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-vāne",
+    "row": "199",
+    "docx_row_position": 135,
+    "blank": false
+   },
+   {
+    "examples": "Gāhvāre",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-vāre (Mānand)",
+    "row": "200",
+    "docx_row_position": 136,
+    "blank": false
+   },
+   {
+    "examples": "Māhvāre, Sangvāre, Gošvāre, Čerāqvāre, Dastvāre, Rāhvāre",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-vāre (Vābast)",
+    "row": "201",
+    "docx_row_position": 137,
+    "blank": false
+   },
+   {
+    "examples": "Pišvand, Xodāvand",
+    "produces": "Nām",
+    "attaches_to": "Nām, Pišvāže",
+    "affix": "-vand (Dāštan)",
+    "row": "202",
+    "docx_row_position": 138,
+    "blank": false
+   },
+   {
+    "examples": "Damāvand, Fulādvand",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-vand (Vābast)",
+    "row": "203",
+    "docx_row_position": 139,
+    "blank": false
+   },
+   {
+    "examples": "Čamanzār",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-zār (Anbuhi)",
+    "row": "204",
+    "docx_row_position": 140,
+    "blank": false
+   },
+   {
+    "examples": "Hušyār, Šahryār, Dānešyār",
+    "produces": "Nām",
+    "attaches_to": "Nām",
+    "affix": "-yār (Dārandegi)",
+    "row": "205",
+    "docx_row_position": 141,
+    "blank": false
+   },
+   {
+    "examples": "šāhāne, gedāyāne,šāgerdāne",
+    "produces": "Šāyestbarnām",
+    "attaches_to": "Nām",
+    "affix": "-āne (Šāyestan)",
+    "row": "206",
+    "docx_row_position": 142,
+    "blank": false
+   },
+   {
+    "examples": "Mehrgān, Šāhgān",
+    "produces": "Šāyestbarnām",
+    "attaches_to": "Nām",
+    "affix": "-gān (Šāyestan)",
+    "row": "207",
+    "docx_row_position": 143,
+    "blank": false
+   },
+   {
+    "examples": "šāhvār",
+    "produces": "Šāyestbarnām",
+    "attaches_to": "Nām",
+    "affix": "-vār (Šayest)",
+    "row": "208",
+    "docx_row_position": 144,
+    "blank": false
+   },
+   {
+    "examples": "dogāne, panjgāne",
+    "produces": "Šomār",
+    "attaches_to": "Šomār",
+    "affix": "-gāne (Šomār)",
+    "row": "209",
+    "docx_row_position": 145,
+    "blank": false
+   },
+   {
+    "examples": "sevom, sevom, čāharom, sadom",
+    "produces": "Šomār",
+    "attaches_to": "Šomār",
+    "affix": "-om (Šomār)",
+    "row": "210",
+    "docx_row_position": 146,
+    "blank": false
+   },
+   {
+    "examples": "dotā, setā, eyktā",
+    "produces": "Šomār",
+    "attaches_to": "Šomār",
+    "affix": "-tā",
+    "row": "211",
+    "docx_row_position": 147,
+    "blank": false
+   }
+  ],
+  "no_affix": [
+   {
+    "examples": "Darxāst",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon",
+    "affix": "‒",
+    "row": "212",
+    "docx_row_position": 1,
+    "blank": false
+   },
+   {
+    "examples": "Zadoxord, Goftošenid",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon + o + Pišinkārbon az  Digarkārvāže",
+    "affix": "‒",
+    "row": "213",
+    "docx_row_position": 2,
+    "blank": false
+   },
+   {
+    "examples": "Goftogu",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon\n+ o + Konunkārbon az  Hamānkārvāže",
+    "affix": "‒",
+    "row": "214",
+    "docx_row_position": 3,
+    "blank": false
+   },
+   {
+    "examples": "Xordoxāb",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon + o + Konunkārbon az Digarkārvāže",
+    "affix": "‒",
+    "row": "215",
+    "docx_row_position": 4,
+    "blank": false
+   },
+   {
+    "examples": "Sāxt",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon",
+    "affix": "‒",
+    "row": "216",
+    "docx_row_position": 5,
+    "blank": false
+   },
+   {
+    "examples": "Budonabud",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon +  o+ na + Pišinkārbon az Hamānkārvāže",
+    "affix": "‒",
+    "row": "217",
+    "docx_row_position": 6,
+    "blank": false
+   },
+   {
+    "examples": "Suzogodāz",
+    "produces": "Nām",
+    "attaches_to": "Konunkārbon + o + DigarKonunkārbon",
+    "affix": "‒",
+    "row": "218",
+    "docx_row_position": 7,
+    "blank": false
+   },
+   {
+    "examples": "Kešākeš",
+    "produces": "Nām",
+    "attaches_to": "Konunkārbon + ā + HamānKonunkārbon",
+    "affix": "‒",
+    "row": "219",
+    "docx_row_position": 8,
+    "blank": false
+   },
+   {
+    "examples": "Takāpu",
+    "produces": "Nām",
+    "attaches_to": "Konunkārbon + ā + DigarKonunkārbon",
+    "affix": "‒",
+    "row": "220",
+    "docx_row_position": 9,
+    "blank": false
+   },
+   {
+    "examples": "Šostošow, Soxtosāz",
+    "produces": "Nām",
+    "attaches_to": "Pišinkārbon + o + HamānKonunkārbon",
+    "affix": "‒",
+    "row": "221",
+    "docx_row_position": 10,
+    "blank": false
+   },
+   {
+    "examples": "Rixtopāš, Jastoxiz",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon + o + DigarKonunkārbon",
+    "affix": "‒",
+    "row": "222",
+    "docx_row_position": 11,
+    "blank": false
+   },
+   {
+    "examples": "Parhiz, Tarāš",
+    "produces": "Kārnām",
+    "attaches_to": "Konunkārbon",
+    "affix": "‒",
+    "row": "223",
+    "docx_row_position": 12,
+    "blank": false
+   },
+   {
+    "examples": "delpazir dastduz\nangošnamā",
+    "produces": "Kāridekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "Nām-",
+    "row": "224",
+    "docx_row_position": 13,
+    "blank": false
+   },
+   {
+    "examples": "soxanguy xodaparast delgir",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "Nām-",
+    "row": "225",
+    "docx_row_position": 14,
+    "blank": false
+   },
+   {
+    "examples": "xošnevis\ntondrow",
+    "produces": "Kārandekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "Čonvāže-",
+    "row": "226",
+    "docx_row_position": 15,
+    "blank": false
+   },
+   {
+    "examples": "diryāb\ndirjuš",
+    "produces": "Kāridekārbahr",
+    "attaches_to": "Konunkārbon",
+    "affix": "Čonvāže-",
+    "row": "227",
+    "docx_row_position": 16,
+    "blank": false
+   },
+   {
+    "examples": "Čašmdāšt",
+    "produces": "Kārnām",
+    "attaches_to": "Pišinkārbon",
+    "affix": "Nām-",
+    "row": "228",
+    "docx_row_position": 17,
+    "blank": false
+   },
+   {
+    "examples": "Širinoxorān",
+    "produces": "Kārnām",
+    "attaches_to": "Kārandekārbahr-ān",
+    "affix": "Nām-",
+    "row": "229",
+    "docx_row_position": 18,
+    "blank": false
+   }
+  ]
+ }
+}

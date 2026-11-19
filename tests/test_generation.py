@@ -163,7 +163,15 @@ def test_a_prefixed_verb_is_built_from_its_own_stems(lexicon_snapshot: Path):
     a present stem is irregular and is read from the lexicon, so the engine
     handed one stem at a time could never work the other one out.
     """
-    assert "vāguyande" in _forms(lexicon_snapshot, "گفتن")
+    # Three steps since 2026-11-19, when the corrected rules gave vā- the
+    # infinitive as its base: goft → goftan → vāgoftan → vāguyande.
+    with Lexicon.open(lexicon_snapshot) as lexicon:
+        built = {
+            form.latin
+            for result in from_word(lexicon, PACK, "گفتن", depth=3)
+            for form in result.forms
+        }
+    assert "vāguyande" in built
 
 
 def test_the_stems_are_handed_over_only_for_a_verb(lexicon_snapshot: Path):

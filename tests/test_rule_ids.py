@@ -24,7 +24,11 @@ def test_no_id_is_used_twice():
 @pytest.mark.parametrize("table", ["verb_stems", "nominals", "glides"])
 def test_every_content_row_has_exactly_one_id(table: str):
     content = [r for r in SOURCE["tables"][table] if not r["blank"]]
-    used = [e for e in REGISTER["families"][table] if "reason" not in e]
+    used = [
+        e
+        for e in REGISTER["families"][table]
+        if "reason" not in e and not e["source"].get("document")
+    ]
     assert len(used) == len(content)
     positions = sorted(e["docx_row_position"] for e in used)
     assert positions == sorted(r["docx_row_position"] for r in content)
@@ -111,3 +115,70 @@ def test_the_two_denominal_verb_rules_are_v_003_and_v_004():
     by_id = {e["id"]: e for e in REGISTER["families"]["verb_stems"]}
     assert by_id["V-003"]["source"]["row"] == "3"
     assert by_id["V-004"]["source"]["row"] == "4"
+
+
+# -- the corrected rules of 2026-11-19 ---------------------------------------
+
+AFFIXES = json.loads(
+    (ROOT / "rules" / "affix_source_rows.json").read_text(encoding="utf-8")
+)
+
+
+def _current(entry: dict) -> dict | None:
+    """Where an id's rule is written in the 2026-11-19 document, if anywhere."""
+    if entry["source"].get("document"):
+        return {**entry["source"], "docx_row_position": entry["docx_row_position"]}
+    return entry.get("current_source")
+
+
+def test_every_row_of_the_new_document_is_carried_by_an_id_or_repeats_one():
+    """229 rows: 227 rules, and two rows that repeat another (10 and 132)."""
+    carried = {
+        (c["table"], c["docx_row_position"])
+        for entries in REGISTER["families"].values()
+        for e in entries
+        if (c := _current(e))
+    }
+    content = {
+        (table, r["docx_row_position"])
+        for table, rows in AFFIXES["tables"].items()
+        for r in rows
+        if not r["blank"]
+    }
+    assert len(content) == 229
+    assert len(carried) == 227
+    assert carried <= content
+    assert {(t, p) for t, p in content - carried} == {
+        ("prefixes", 10),
+        ("suffixes", 68),
+    }
+
+
+def test_an_august_id_is_either_carried_or_retired():
+    """Nothing silently drops out: an id no row carries says it was retired."""
+    for table in ("verb_stems", "nominals"):
+        for entry in REGISTER["families"][table]:
+            if "reason" in entry or entry["source"].get("document"):
+                continue
+            assert ("current_source" in entry) != ("retired_on" in entry), entry
+
+
+def test_new_ids_are_appended_after_the_august_ones():
+    """N-106 … N-144 and V-083 … V-098, in the document's own order."""
+    for table, prefix, first, last in (
+        ("nominals", "N", 106, 144),
+        ("verb_stems", "V", 83, 98),
+    ):
+        new = [e for e in REGISTER["families"][table] if e["source"].get("document")]
+        assert [e["id"] for e in new] == [
+            f"{prefix}-{n:03d}" for n in range(first, last + 1)
+        ]
+        rows = [int(e["source"]["row"]) for e in new]
+        assert rows == sorted(rows)
+
+
+def test_an_id_keeps_the_august_row_it_was_issued_for():
+    """V-010 is still verb-table row 10, and its rule is written at row 134."""
+    entry = next(e for e in REGISTER["families"]["verb_stems"] if e["id"] == "V-010")
+    assert entry["source"] == {"table": "verb_stems", "row": "10"}
+    assert entry["current_source"]["row"] == "134"

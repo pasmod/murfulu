@@ -1,6 +1,6 @@
 """The code example in the README runs, and prints what the README says.
 
-The README's *Try it* block is the first code a visitor runs. It promises 38
+The README's *Try it* block is the first code a visitor runs. It promises 36
 words from the two stems of *angixtan* without the lexicon or the corpus, and
 the table above it lists four of them. A rule-pack change that moved either
 would leave the README wrong without anything failing, so this runs the block

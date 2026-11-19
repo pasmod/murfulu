@@ -150,11 +150,12 @@ def test_apply_adds_rewords_and_withdraws(session: Session, data: dict) -> None:
     plan = tool.load(session, data)
     session.commit()
 
-    deferred = store.by_reference(session, "L26")
-    assert deferred.state == "deferred" and deferred.blocks_work
-    assert deferred.context["covers"] == ["L18", "L26", "L35"]
-    assert deferred.context["deferred_because"].strip()
-    assert [c["id"] for c in store.choices_of(deferred)][0] == "nam_or_karnam"
+    # Deferred until the corrected rules arrived on 2026-11-19; asked now.
+    asked = store.by_reference(session, "L26")
+    assert asked.state == "blocked" and asked.blocks_work
+    assert asked.context["covers"] == ["L18", "L26", "L35"]
+    assert "deferred_because" not in asked.context
+    assert [c["id"] for c in store.choices_of(asked)][0] == "nam_or_karnam"
 
     reworded = store.by_reference(session, "L2")
     assert reworded.state == "blocked"
@@ -168,7 +169,7 @@ def test_apply_adds_rewords_and_withdraws(session: Session, data: dict) -> None:
 
     assert plan.withdrawn == 10  # L1 L5 L6 L7 L8 L9 L12 L13 L14 L15
     assert plan.reworded == 3  # L2 L3 L10
-    assert plan.deferred == 1  # L26
+    assert plan.deferred == 0  # L26 was, until 2026-11-19
     assert plan.added == len(data["questions"]) - 3
 
 
@@ -235,15 +236,38 @@ def test_a_blocking_question_listed_for_withdrawal_is_withdrawn(
     assert "جانام" in closed.context["withdrawn_because"]
 
 
+def _with_l26_deferred(data: dict) -> dict:
+    """The file as it stood before 2026-11-19, when L26 waited for the rules.
+
+    The deferral itself is still the loader's to honour, so its tests run on
+    a copy that defers L26 again rather than on the file, which no longer
+    defers anything.
+    """
+    deferred = dict(data)
+    deferred["questions"] = [
+        {
+            **one,
+            "defer": "تا رسیدن قاعده‌های تازه.",
+            "choices": [
+                {k: v for k, v in c.items() if k != "suggested"} for c in one["choices"]
+            ],
+        }
+        if one["reference"] == "L26"
+        else one
+        for one in data["questions"]
+    ]
+    return deferred
+
+
 def test_a_deferred_question_comes_back_when_its_deferral_is_lifted(
     session: Session, data: dict
 ) -> None:
-    tool.load(session, data)
+    tool.load(session, _with_l26_deferred(data))
     assert store.by_reference(session, "L26").state == "deferred"
     lifted = dict(data)
     lifted["questions"] = [
         {key: value for key, value in one.items() if key != "defer"}
-        for one in data["questions"]
+        for one in _with_l26_deferred(data)["questions"]
     ]
     tool.load(session, lifted)
     back = store.by_reference(session, "L26")
@@ -281,7 +305,7 @@ def test_the_store_refuses_to_defer_an_answered_question_or_without_reason(
 def test_a_deferred_question_takes_no_ruling_and_does_not_block(
     session: Session, data: dict
 ) -> None:
-    tool.load(session, data)
+    tool.load(session, _with_l26_deferred(data))
     deferred = store.by_reference(session, "L26")
     author = session.query(User).first()
     with pytest.raises(store.RulingRefusedError, match="deferred"):
@@ -293,7 +317,7 @@ def test_a_deferred_question_takes_no_ruling_and_does_not_block(
 def test_a_deferred_question_can_be_withdrawn_by_listing_it(
     session: Session, data: dict
 ) -> None:
-    tool.load(session, data)
+    tool.load(session, _with_l26_deferred(data))
     moved = dict(data)
     moved["questions"] = [q for q in data["questions"] if q["reference"] != "L26"]
     moved["withdraw"] = {**data["withdraw"], "L26": "دیگر لازم نیست."}

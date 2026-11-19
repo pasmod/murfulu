@@ -1,8 +1,11 @@
 # Semantic tags — the closed set taken from the brackets in the source grammar.
 #
 # Every bracketed string in the affix column of either rule table appears here
-# exactly once. Nothing was merged except differences of capitalisation
-# (kenār / Kenār), which are the same word.
+# exactly once — of the August grammar and of the corrected rules of
+# 2026-11-19 alike. Nothing was merged except differences of capitalisation
+# (kenār / Kenār), which are the same word, and four spellings of the
+# 2026-11-19 document that differ from an August label by one letter
+# (pišrow, Jologiri, Zaman) or one capital (pasravi); each says so in its note.
 #
 # Fields
 #   tag                 machine id: the Latin label, lower-cased and ASCII-folded
@@ -11,7 +14,10 @@
 #   gloss_template_fa   the sentence shown to the user for a word carrying this
 #                       tag, e.g. "جایی که {stem} در آن است". **Authored by the
 #                       linguist, not by the engine.** null until then.
-#   used_by             source rows, as table:row
+#   used_by             source rows, as table:row. verb_stems and nominals are
+#                       the August grammar's tables; prefixes and suffixes are
+#                       the corrected rules of 2026-11-19, numbered 1–229 by the
+#                       linguist. A label appears under both where both use it.
 #
 # Two things need a ruling before the templates are written — both marked with
 # needs_expert_check below:
@@ -21,332 +27,860 @@
 #      capitalised, and these are not.
 
 version: 0.1.0
-source_document: Dasturhāye Vāžesāzi az Kārbonhā.docx
-
+source_document:
+- Dasturhāye Vāžesāzi az Kārbonhā.docx
+- Dasturhāyeé Vāžesāzi.docx
 tags:
-  - tag: afzayes
-    label_source: ["Afzāyeš"]
-    gloss_fa: افزایش
-    gloss_en: increase
-    gloss_template_fa: null
-    used_by: ["nominals:87"]
-
-  - tag: anbuhi
-    label_source: ["Anbuhi"]
-    gloss_fa: انبوهی
-    gloss_en: abundance, a mass of
-    gloss_template_fa: null
-    used_by: ["nominals:50", "nominals:52", "nominals:70"]
-
-  - tag: aqaz
-    label_source: ["Āqāz"]
-    gloss_fa: آغاز
-    gloss_en: beginning
-    gloss_template_fa: null
-    used_by: ["nominals:28"]
-
-  - tag: axsij
-    label_source: ["Āxšij"]
-    gloss_fa: آخشیج
-    gloss_en: opposite, counter-
-    gloss_template_fa: null
-    used_by: ["verb_stems:73", "nominals:24"]
-
-  - tag: badi
-    label_source: ["Badi"]
-    gloss_fa: بدی
-    gloss_en: badness
-    gloss_template_fa: null
-    used_by: ["nominals:10", "nominals:11"]
-
-  - tag: bala
-    label_source: ["bālā"]
-    gloss_fa: بالا
-    gloss_en: up, above
-    gloss_template_fa: null
-    used_by: ["verb_stems:53", "nominals:30"]
-
-  - tag: bani
-    label_source: ["Bāni"]
-    gloss_fa: بانی
-    gloss_en: keeper, one who watches over
-    gloss_template_fa: null
-    used_by: ["nominals:25", "nominals:44"]
-
-  - tag: baz
-    label_source: ["bāz"]
-    gloss_fa: باز
-    gloss_en: open, back again
-    gloss_template_fa: null
-    used_by: ["verb_stems:72"]
-
-  - tag: be
-    label_source: ["be"]
-    gloss_fa: به
-    gloss_en: to, towards
-    gloss_template_fa: null
-    used_by: ["verb_stems:58", "verb_stems:67"]
-
-  - tag: bepis
-    label_source: ["bepiš"]
-    gloss_fa: به‌پیش
-    gloss_en: forward
-    gloss_template_fa: null
-    used_by: ["verb_stems:60"]
-
-  - tag: besyar
-    label_source: ["besyār"]
-    gloss_fa: بسیار
-    gloss_en: much, many
-    gloss_template_fa: null
-    used_by: ["nominals:27"]
-
-  - tag: boland
-    label_source: ["boland"]
-    gloss_fa: بلند
-    gloss_en: high
-    gloss_template_fa: null
-    used_by: ["verb_stems:59"]
-
-  - tag: coni
-    label_source: ["Čoni"]
-    gloss_fa: چونی
-    gloss_en: quality, the how of a thing
-    gloss_template_fa: null
-    used_by: ["nominals:91", "nominals:96", "nominals:97"]
-
-  - tag: darun
-    label_source: ["darun"]
-    gloss_fa: درون
-    gloss_en: inside
-    gloss_template_fa: null
-    used_by: ["verb_stems:52"]
-
-  - tag: dastan
-    label_source: ["Dāštan"]
-    gloss_fa: داشتن
-    gloss_en: having, possessing
-    gloss_template_fa: null
-    used_by:
-      ["nominals:2", "nominals:4", "nominals:5", "nominals:6", "nominals:71",
-       "nominals:73", "nominals:74", "nominals:80", "nominals:81",
-       "nominals:83", "nominals:84"]
-
-  - tag: dobare
-    label_source: ["dobāre"]
-    gloss_fa: دوباره
-    gloss_en: again
-    gloss_template_fa: null
-    used_by: ["verb_stems:71"]
-
-  - tag: ini
-    label_source: ["Ini"]
-    gloss_fa: اینی
-    gloss_en: this one, the present one
-    gloss_template_fa: null
-    used_by: ["nominals:12"]
-
-  - tag: ja
-    label_source: ["Jā"]
-    gloss_fa: جا
-    gloss_en: place
-    # The one template the design record already supplies — see RULE_PACK.md.
-    gloss_template_fa: "جایی که {stem} در آن است"
-    gloss_template_en: "place where {stem} is"
-    used_by: ["nominals:37", "nominals:48", "nominals:57", "nominals:62",
-              "nominals:68"]
-
-  - tag: jelogiri
-    label_source: ["Jelogiri"]
-    gloss_fa: جلوگیری
-    gloss_en: prevention, holding back
-    gloss_template_fa: null
-    used_by: ["verb_stems:69"]
-
-  - tag: jens
-    label_source: ["Jens"]
-    gloss_fa: جنس
-    gloss_en: material, what a thing is made of
-    gloss_template_fa: null
-    used_by: ["nominals:94"]
-
-  - tag: kenar
-    label_source: ["kenār", "Kenār"]
-    gloss_fa: کنار
-    gloss_en: side, beside
-    gloss_template_fa: null
-    used_by: ["verb_stems:74", "nominals:29", "nominals:43"]
-
-  - tag: konesi
-    label_source: ["Koneši"]
-    gloss_fa: کنشی
-    gloss_en: of the doing, action-related
-    gloss_template_fa: null
-    used_by: ["nominals:95"]
-
-  - tag: kucaki
-    label_source: ["Kučaki"]
-    gloss_fa: کوچکی
-    gloss_en: smallness, diminutive
-    gloss_template_fa: null
-    used_by: ["nominals:46", "nominals:59"]
-
-  - tag: manand
-    label_source: ["Mānand"]
-    gloss_fa: مانند
-    gloss_en: like, resembling
-    gloss_template_fa: null
-    needs_expert_check: true
-    note: >-
-      manand and manandi may be one tag spelled two ways. Kept separate because
-      merging them is a linguistic judgement, not a spelling correction.
-    used_by:
-      ["nominals:34", "nominals:35", "nominals:39", "nominals:40",
-       "nominals:49", "nominals:51", "nominals:55", "nominals:56",
-       "nominals:60", "nominals:69", "nominals:76", "nominals:78"]
-
-  - tag: manandi
-    label_source: ["Mānandi"]
-    gloss_fa: مانندی
-    gloss_en: likeness
-    gloss_template_fa: null
-    needs_expert_check: true
-    note: See the note on manand.
-    used_by: ["nominals:82", "nominals:86"]
-
-  - tag: nai
-    label_source: ["Nāi"]
-    gloss_fa: نایی
-    gloss_en: without, privative
-    gloss_template_fa: null
-    needs_expert_check: true
-    note: >-
-      nai and nayi may be one tag spelled two ways. Both mark absence — bi- in
-      bigāne, and -ā in Amardād. Kept separate for the same reason as manand.
-    used_by: ["nominals:8"]
-
-  - tag: namsaz
-    label_source: ["Nāmsāz"]
-    gloss_fa: نام‌ساز
-    gloss_en: noun-forming
-    gloss_template_fa: null
-    used_by: ["nominals:72", "nominals:88"]
-
-  - tag: nasnai
-    label_source: ["Nāšnāi"]
-    gloss_fa: ناشنایی
-    gloss_en: unfamiliar, the indefinite marker
-    gloss_template_fa: null
-    used_by: ["nominals:99"]
-
-  - tag: natani
-    label_source: ["nātani"]
-    gloss_fa: ناتنی
-    gloss_en: step-, not of the same body
-    gloss_template_fa: null
-    used_by: ["nominals:38"]
-
-  - tag: nayi
-    label_source: ["Nāyi"]
-    gloss_fa: نایی
-    gloss_en: without, privative
-    gloss_template_fa: null
-    needs_expert_check: true
-    note: See the note on nai.
-    used_by: ["verb_stems:51", "nominals:1"]
-
-  - tag: nesbat
-    label_source: ["Nesbat"]
-    gloss_fa: نسبت
-    gloss_en: relation, belonging to
-    gloss_template_fa: null
-    used_by:
-      ["nominals:7", "nominals:41", "nominals:42", "nominals:47",
-       "nominals:54", "nominals:61", "nominals:63", "nominals:64",
-       "nominals:65", "nominals:66", "nominals:67", "nominals:77",
-       "nominals:79", "nominals:85", "nominals:89", "nominals:92",
-       "nominals:93", "nominals:100", "nominals:103"]
-
-  - tag: pas
-    label_source: ["pas"]
-    gloss_fa: پس
-    gloss_en: back, behind
-    gloss_template_fa: null
-    used_by: ["verb_stems:70"]
-
-  - tag: pasravi
-    label_source: ["Pasravi"]
-    gloss_fa: پسروی
-    gloss_en: going back, retro-
-    gloss_template_fa: null
-    used_by: ["verb_stems:54"]
-
-  - tag: pey
-    label_source: ["pey"]
-    gloss_fa: پی
-    gloss_en: after, following
-    gloss_template_fa: null
-    used_by: ["verb_stems:67"]
-
-  - tag: piramun
-    label_source: ["Pirāmun"]
-    gloss_fa: پیرامون
-    gloss_en: around, surrounding
-    gloss_template_fa: null
-    used_by: ["nominals:53"]
-
-  - tag: pisro
-    label_source: ["pišro"]
-    gloss_fa: پیشرو
-    gloss_en: leading, in front
-    gloss_template_fa: null
-    used_by: ["verb_stems:68", "nominals:26"]
-
-  - tag: payin
-    label_source: ["pāyin"]
-    gloss_fa: پایین
-    gloss_en: down, below
-    gloss_template_fa: null
-    used_by: ["verb_stems:61", "verb_stems:75", "verb_stems:76", "nominals:31"]
-
-  - tag: sezavari
-    label_source: ["Sezāvāri"]
-    gloss_fa: سزاواری
-    gloss_en: worthiness, fit to be
-    gloss_template_fa: null
-    used_by: ["verb_stems:39", "nominals:75", "nominals:98"]
-
-  - tag: suy
-    label_source: ["suy"]
-    gloss_fa: سوی
-    gloss_en: towards
-    gloss_template_fa: null
-    used_by: ["verb_stems:58"]
-
-  - tag: vabastegi
-    label_source: ["Vābastegi"]
-    gloss_fa: وابستگی
-    gloss_en: dependency, the grammatical ezāfe
-    gloss_template_fa: null
-    used_by: ["nominals:90"]
-
-  - tag: varun
-    label_source: ["vārun"]
-    gloss_fa: وارون
-    gloss_en: inverted, turned over
-    gloss_template_fa: null
-    used_by: ["verb_stems:55"]
-
-  - tag: vorud
-    label_source: ["Vorud"]
-    gloss_fa: ورود
-    gloss_en: entry, going in
-    gloss_template_fa: null
-    used_by: ["verb_stems:56"]
-
-  - tag: zaman
-    label_source: ["Zamān"]
-    gloss_fa: زمان
-    gloss_en: time
-    gloss_template_fa: null
-    used_by: ["nominals:36", "nominals:68"]
+- tag: afzayes
+  label_source:
+  - Afzāyeš
+  gloss_fa: افزایش
+  gloss_en: increase
+  gloss_template_fa: null
+  used_by:
+  - nominals:87
+  - suffixes:71
+- tag: agari
+  label_source:
+  - Agari
+  gloss_fa: اگری
+  gloss_en: the condition
+  gloss_template_fa: null
+  used_by:
+  - suffixes:150
+- tag: anbuhi
+  label_source:
+  - Anbuhi
+  gloss_fa: انبوهی
+  gloss_en: abundance, a mass of
+  gloss_template_fa: null
+  used_by:
+  - nominals:50
+  - nominals:52
+  - nominals:70
+  - suffixes:187
+  - suffixes:192
+  - suffixes:204
+- tag: anbuhja
+  label_source:
+  - Anbuhjā
+  gloss_fa: انبوه‌جا
+  gloss_en: a place where many are
+  gloss_template_fa: null
+  used_by:
+  - suffixes:195
+- tag: aqaz
+  label_source:
+  - Āqāz
+  gloss_fa: آغاز
+  gloss_en: beginning
+  gloss_template_fa: null
+  used_by:
+  - nominals:28
+  - prefixes:44
+  - prefixes:64
+- tag: arezuyi
+  label_source:
+  - Ārezuyi
+  gloss_fa: آرزویی
+  gloss_en: the wish
+  gloss_template_fa: null
+  used_by:
+  - suffixes:149
+- tag: ari
+  label_source:
+  - āri
+  gloss_fa: آری
+  gloss_en: unclear — what is left of a longer label
+  gloss_template_fa: null
+  needs_expert_check: true
+  note: The 2026-11-19 document writes «-i (āri)» at row 151. The 18 November draft had «-i
+    (Vābastāri)»; the label looks cut by a find-and-replace that removed «Vābast». Asked (L43).
+  used_by:
+  - suffixes:151
+- tag: askaregi
+  label_source:
+  - āškāregi
+  - Āškāregi
+  gloss_fa: آشکارگی
+  gloss_en: disclosure, bringing into view
+  gloss_template_fa: null
+  used_by:
+  - prefixes:28
+  - prefixes:46
+- tag: asnayi
+  label_source:
+  - Āšnāyi
+  gloss_fa: آشنایی
+  gloss_en: familiarity
+  gloss_template_fa: null
+  used_by:
+  - suffixes:177
+- tag: axsij
+  label_source:
+  - Āxšij
+  gloss_fa: آخشیج
+  gloss_en: opposite, counter-
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:73
+  - nominals:24
+  - prefixes:59
+- tag: ayayi
+  label_source:
+  - Āyāyi
+  gloss_fa: آیایی
+  gloss_en: what ought to be done — xordani, didani
+  gloss_template_fa: null
+  used_by:
+  - suffixes:65
+- tag: azmand
+  label_source:
+  - āzmand
+  gloss_fa: آزمند
+  gloss_en: greedy for
+  gloss_template_fa: null
+  used_by:
+  - suffixes:68
+- tag: badi
+  label_source:
+  - Badi
+  gloss_fa: بدی
+  gloss_en: badness
+  gloss_template_fa: null
+  used_by:
+  - nominals:10
+  - nominals:11
+  - prefixes:55
+  - prefixes:56
+- tag: bala
+  label_source:
+  - bālā
+  gloss_fa: بالا
+  gloss_en: up, above
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:53
+  - nominals:30
+  - prefixes:17
+  - prefixes:32
+- tag: bani
+  label_source:
+  - Bāni
+  gloss_fa: بانی
+  gloss_en: keeper, one who watches over
+  gloss_template_fa: null
+  used_by:
+  - nominals:25
+  - nominals:44
+  - prefixes:60
+  - suffixes:167
+- tag: barjastegi
+  label_source:
+  - Barjastegi
+  gloss_fa: برجستگی
+  gloss_en: prominence
+  gloss_template_fa: null
+  used_by:
+  - suffixes:114
+- tag: barjastesazi
+  label_source:
+  - Barjastesāzi
+  gloss_fa: برجسته‌سازی
+  gloss_en: emphasis
+  gloss_template_fa: null
+  used_by:
+  - prefixes:33
+- tag: basdustdarande
+  label_source:
+  - basdustdārande
+  gloss_fa: بس‌دوست‌دارنده
+  gloss_en: very fond of
+  gloss_template_fa: null
+  used_by:
+  - suffixes:68
+- tag: baz
+  label_source:
+  - bāz
+  gloss_fa: باز
+  gloss_en: open, back again
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:72
+  - prefixes:26
+  - prefixes:46
+- tag: bazh
+  label_source:
+  - bāž
+  gloss_fa: باژ
+  gloss_en: the prefix bāž-, which vāž- glosses
+  gloss_template_fa: null
+  used_by:
+  - prefixes:61
+- tag: be
+  label_source:
+  - be
+  gloss_fa: به
+  gloss_en: to, towards
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:58
+  - verb_stems:67
+  - prefixes:15
+  - prefixes:37
+- tag: bepis
+  label_source:
+  - bepiš
+  gloss_fa: به‌پیش
+  gloss_en: forward
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:60
+  - prefixes:39
+- tag: besyar
+  label_source:
+  - besyār
+  gloss_fa: بسیار
+  gloss_en: much, many
+  gloss_template_fa: null
+  used_by:
+  - nominals:27
+  - prefixes:18
+- tag: bisi
+  label_source:
+  - Biši
+  gloss_fa: بیشی
+  gloss_en: plurality
+  gloss_template_fa: null
+  used_by:
+  - suffixes:160
+  - suffixes:183
+- tag: boland
+  label_source:
+  - boland
+  gloss_fa: بلند
+  gloss_en: high
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:59
+  - prefixes:38
+- tag: bozorg
+  label_source:
+  - bozorg
+  gloss_fa: بزرگ
+  gloss_en: big
+  gloss_template_fa: null
+  used_by:
+  - prefixes:58
+- tag: coni
+  label_source:
+  - Čoni
+  gloss_fa: چونی
+  gloss_en: quality, the how of a thing
+  gloss_template_fa: null
+  used_by:
+  - nominals:91
+  - nominals:96
+  - nominals:97
+  - suffixes:144
+- tag: darande
+  label_source:
+  - Dārande
+  gloss_fa: دارنده
+  gloss_en: holder, master of
+  gloss_template_fa: null
+  used_by:
+  - suffixes:169
+- tag: darandegi
+  label_source:
+  - Dārandegi
+  gloss_fa: دارندگی
+  gloss_en: having, possessing
+  gloss_template_fa: null
+  used_by:
+  - suffixes:75
+  - suffixes:77
+  - suffixes:103
+  - suffixes:104
+  - suffixes:205
+- tag: darun
+  label_source:
+  - darun
+  gloss_fa: درون
+  gloss_en: inside
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:52
+- tag: dastan
+  label_source:
+  - Dāštan
+  gloss_fa: داشتن
+  gloss_en: having, possessing
+  gloss_template_fa: null
+  used_by:
+  - nominals:2
+  - nominals:4
+  - nominals:5
+  - nominals:6
+  - nominals:71
+  - nominals:73
+  - nominals:74
+  - nominals:80
+  - nominals:81
+  - nominals:83
+  - nominals:84
+  - prefixes:1
+  - prefixes:3
+  - prefixes:19
+  - suffixes:85
+  - suffixes:86
+  - suffixes:87
+  - suffixes:93
+  - suffixes:94
+  - suffixes:95
+  - suffixes:96
+  - suffixes:202
+- tag: dobare
+  label_source:
+  - dobāre
+  gloss_fa: دوباره
+  gloss_en: again
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:71
+- tag: dobaregi
+  label_source:
+  - dobāregi
+  gloss_fa: دوبارگی
+  gloss_en: repetition, again
+  gloss_template_fa: null
+  used_by:
+  - prefixes:27
+  - prefixes:47
+- tag: egi
+  label_source:
+  - egi
+  gloss_fa: اگی
+  gloss_en: unclear — what is left of a longer label
+  gloss_template_fa: null
+  needs_expert_check: true
+  note: The 2026-11-19 document writes «-é (egi)» at row 179, the ezāfe that was «Vābastegi».
+    The label looks cut by the same find-and-replace. Asked (L43).
+  used_by:
+  - suffixes:179
+- tag: goman
+  label_source:
+  - Gomān
+  gloss_fa: گمان
+  gloss_en: supposition
+  gloss_template_fa: null
+  used_by:
+  - suffixes:152
+- tag: gozarani
+  label_source:
+  - Gozarāni
+  gloss_fa: گذرانی
+  gloss_en: the habitual past — raftami
+  gloss_template_fa: null
+  used_by:
+  - suffixes:148
+- tag: ini
+  label_source:
+  - Ini
+  gloss_fa: اینی
+  gloss_en: this one, the present one
+  gloss_template_fa: null
+  used_by:
+  - nominals:12
+  - prefixes:57
+- tag: ja
+  label_source:
+  - Jā
+  gloss_fa: جا
+  gloss_en: place
+  gloss_template_fa: جایی که {stem} در آن است
+  gloss_template_en: place where {stem} is
+  used_by:
+  - nominals:37
+  - nominals:48
+  - nominals:57
+  - nominals:62
+  - nominals:68
+  - suffixes:159
+  - suffixes:171
+  - suffixes:180
+  - suffixes:186
+  note: The one template the design record already supplies — see RULE_PACK.md.
+- tag: jelogiri
+  label_source:
+  - Jelogiri
+  - Jologiri
+  gloss_fa: جلوگیری
+  gloss_en: prevention, holding back
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:69
+  - prefixes:45
+  - prefixes:29
+  note: The 2026-11-19 document writes «Jologiri»; read as the same label.
+- tag: jens
+  label_source:
+  - Jens
+  gloss_fa: جنس
+  gloss_en: material, what a thing is made of
+  gloss_template_fa: null
+  used_by:
+  - nominals:94
+- tag: karandegi
+  label_source:
+  - Kārandegi
+  gloss_fa: کارندگی
+  gloss_en: doing, the doer
+  gloss_template_fa: null
+  used_by:
+  - suffixes:121
+  - suffixes:124
+  - suffixes:125
+- tag: karidegi
+  label_source:
+  - Kāridegi
+  gloss_fa: کاریدگی
+  gloss_en: having been done
+  gloss_template_fa: null
+  used_by:
+  - suffixes:128
+- tag: karpaziri
+  label_source:
+  - Kārpaziri
+  gloss_fa: کارپذیری
+  gloss_en: undergoing the action
+  gloss_template_fa: null
+  used_by:
+  - suffixes:120
+  - suffixes:132
+- tag: kenar
+  label_source:
+  - kenār
+  - Kenār
+  gloss_fa: کنار
+  gloss_en: side, beside
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:74
+  - nominals:29
+  - prefixes:16
+  - prefixes:49
+  - nominals:43
+  - suffixes:168
+- tag: konesi
+  label_source:
+  - Koneši
+  gloss_fa: کنشی
+  gloss_en: of the doing, action-related
+  gloss_template_fa: null
+  used_by:
+  - nominals:95
+  - suffixes:145
+- tag: kucaki
+  label_source:
+  - Kučaki
+  gloss_fa: کوچکی
+  gloss_en: smallness, diminutive
+  gloss_template_fa: null
+  used_by:
+  - nominals:46
+  - nominals:59
+  - suffixes:165
+  - suffixes:170
+- tag: manand
+  label_source:
+  - Mānand
+  gloss_fa: مانند
+  gloss_en: like, resembling
+  gloss_template_fa: null
+  needs_expert_check: true
+  note: manand and manandi may be one tag spelled two ways. Kept separate because merging
+    them is a linguistic judgement, not a spelling correction.
+  used_by:
+  - nominals:34
+  - nominals:35
+  - nominals:39
+  - nominals:40
+  - nominals:49
+  - nominals:51
+  - nominals:55
+  - nominals:56
+  - nominals:60
+  - nominals:69
+  - nominals:76
+  - nominals:78
+  - suffixes:67
+  - suffixes:88
+  - suffixes:89
+  - suffixes:91
+  - suffixes:97
+  - suffixes:113
+  - suffixes:163
+  - suffixes:200
+- tag: manandi
+  label_source:
+  - Mānandi
+  gloss_fa: مانندی
+  gloss_en: likeness
+  gloss_template_fa: null
+  needs_expert_check: true
+  note: See the note on manand.
+  used_by:
+  - nominals:82
+  - nominals:86
+  - suffixes:99
+  - suffixes:100
+  - suffixes:158
+  - suffixes:172
+  - suffixes:175
+  - suffixes:197
+- tag: nai
+  label_source:
+  - Nāi
+  gloss_fa: نایی
+  gloss_en: without, privative
+  gloss_template_fa: null
+  needs_expert_check: true
+  note: nai and nayi may be one tag spelled two ways. Both mark absence — bi- in bigāne, and
+    -ā in Amardād. Kept separate for the same reason as manand.
+  used_by:
+  - nominals:8
+  - prefixes:4
+  - prefixes:20
+- tag: namsaz
+  label_source:
+  - Nāmsāz
+  gloss_fa: نام‌ساز
+  gloss_en: noun-forming
+  gloss_template_fa: null
+  used_by:
+  - nominals:72
+  - nominals:88
+  - suffixes:176
+  - suffixes:189
+- tag: nasnai
+  label_source:
+  - Nāšnāi
+  gloss_fa: ناشنایی
+  gloss_en: unfamiliar, the indefinite marker
+  gloss_template_fa: null
+  used_by:
+  - nominals:99
+  - suffixes:185
+- tag: natani
+  label_source:
+  - nātani
+  gloss_fa: ناتنی
+  gloss_en: step-, not of the same body
+  gloss_template_fa: null
+  used_by:
+  - nominals:38
+  - suffixes:166
+- tag: nayi
+  label_source:
+  - Nāyi
+  gloss_fa: نایی
+  gloss_en: without, privative
+  gloss_template_fa: null
+  needs_expert_check: true
+  note: See the note on nai.
+  used_by:
+  - verb_stems:51
+  - nominals:1
+  - prefixes:24
+  - prefixes:52
+- tag: nedayi
+  label_source:
+  - Nedāyi
+  gloss_fa: ندایی
+  gloss_en: the vocative
+  gloss_template_fa: null
+  used_by:
+  - suffixes:109
+- tag: negahban
+  label_source:
+  - Negahbān
+  gloss_fa: نگهبان
+  gloss_en: guardian
+  gloss_template_fa: null
+  used_by:
+  - suffixes:190
+  - suffixes:196
+- tag: negahbani
+  label_source:
+  - Neahbāni
+  gloss_fa: نگهبانی
+  gloss_en: guarding
+  gloss_template_fa: null
+  note: The document writes «Neahbāni» (row 198); read as Negahbāni, a slip of one letter.
+    Kept apart from Negahbān, which has no -i.
+  used_by:
+  - suffixes:198
+- tag: nesbat
+  label_source:
+  - Nesbat
+  gloss_fa: نسبت
+  gloss_en: relation, belonging to
+  gloss_template_fa: null
+  used_by:
+  - nominals:7
+  - nominals:41
+  - nominals:42
+  - nominals:47
+  - nominals:54
+  - nominals:61
+  - nominals:63
+  - nominals:64
+  - nominals:65
+  - nominals:66
+  - nominals:67
+  - nominals:77
+  - nominals:79
+  - nominals:89
+  - nominals:92
+  - nominals:93
+  - nominals:100
+  - nominals:103
+- tag: niya
+  label_source:
+  - Niyā
+  gloss_fa: نیا
+  gloss_en: ancestry, lineage
+  gloss_template_fa: null
+  used_by:
+  - suffixes:161
+- tag: pas
+  label_source:
+  - pas
+  gloss_fa: پس
+  gloss_en: back, behind
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:70
+- tag: pasravi
+  label_source:
+  - Pasravi
+  - pasravi
+  gloss_fa: پسروی
+  gloss_en: going back, retro-
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:54
+  - prefixes:30
+  - prefixes:46
+  note: The 2026-11-19 document writes «pasravi»; read as the same label.
+- tag: pasrow
+  label_source:
+  - pasrow
+  gloss_fa: پس‌رو
+  gloss_en: going backward
+  gloss_template_fa: null
+  used_by:
+  - prefixes:42
+- tag: payin
+  label_source:
+  - pāyin
+  gloss_fa: پایین
+  gloss_en: down, below
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:61
+  - verb_stems:75
+  - verb_stems:76
+  - nominals:31
+  - prefixes:40
+  - prefixes:50
+  - prefixes:51
+  - prefixes:62
+- tag: pey
+  label_source:
+  - pey
+  gloss_fa: پی
+  gloss_en: after, following
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:67
+  - prefixes:15
+- tag: peyvandi
+  label_source:
+  - Peyvandi
+  gloss_fa: پیوندی
+  gloss_en: linking — the -i before a relative clause
+  gloss_template_fa: null
+  used_by:
+  - suffixes:111
+- tag: piramun
+  label_source:
+  - Pirāmun
+  gloss_fa: پیرامون
+  gloss_en: around, surrounding
+  gloss_template_fa: null
+  used_by:
+  - nominals:53
+  - suffixes:193
+- tag: pisro
+  label_source:
+  - pišro
+  - pišrow
+  gloss_fa: پیشرو
+  gloss_en: leading, in front
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:68
+  - nominals:26
+  - prefixes:43
+  - prefixes:63
+  note: The 2026-11-19 document writes «pišrow»; read as the same label.
+- tag: rang
+  label_source:
+  - Rang
+  gloss_fa: رنگ
+  gloss_en: colour
+  gloss_template_fa: null
+  used_by:
+  - suffixes:72
+- tag: roya
+  label_source:
+  - Royā
+  gloss_fa: رؤیا
+  gloss_en: the dream
+  gloss_template_fa: null
+  used_by:
+  - suffixes:152
+- tag: sarnegun
+  label_source:
+  - sarnegun
+  gloss_fa: سرنگون
+  gloss_en: overturned, upside down
+  gloss_template_fa: null
+  used_by:
+  - prefixes:61
+- tag: sayestan
+  label_source:
+  - Šāyestan
+  - Šayest
+  gloss_fa: شایستن
+  gloss_en: being fit for, worthy of
+  gloss_template_fa: null
+  note: Row 208 writes «Šayest» and rows 206–207 «Šāyestan», on the same result class Šāyestbarnām;
+    read as one tag. Unconfirmed.
+  used_by:
+  - suffixes:206
+  - suffixes:207
+  - suffixes:208
+- tag: segefti
+  label_source:
+  - Šegefti
+  gloss_fa: شگفتی
+  gloss_en: wonder, the exclamation
+  gloss_template_fa: null
+  used_by:
+  - suffixes:105
+  - suffixes:110
+- tag: sezavari
+  label_source:
+  - Sezāvāri
+  gloss_fa: سزاواری
+  gloss_en: worthiness, fit to be
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:39
+  - nominals:75
+  - nominals:98
+- tag: somar
+  label_source:
+  - Šomār
+  gloss_fa: شمار
+  gloss_en: number, the numeral
+  gloss_template_fa: null
+  used_by:
+  - suffixes:73
+  - suffixes:209
+  - suffixes:210
+- tag: suy
+  label_source:
+  - suy
+  gloss_fa: سوی
+  gloss_en: towards
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:58
+  - prefixes:37
+- tag: va
+  label_source:
+  - vā
+  gloss_fa: وا
+  gloss_en: open, back — as the prefix vā-
+  gloss_template_fa: null
+  used_by:
+  - prefixes:26
+- tag: vabast
+  label_source:
+  - Vābast
+  gloss_fa: وابست
+  gloss_en: belonging, attached to
+  gloss_template_fa: null
+  used_by:
+  - suffixes:201
+  - suffixes:203
+- tag: vabastegi
+  label_source:
+  - Vābastegi
+  gloss_fa: وابستگی
+  gloss_en: dependency, the grammatical ezāfe
+  gloss_template_fa: null
+  used_by:
+  - nominals:90
+- tag: varun
+  label_source:
+  - vārun
+  gloss_fa: وارون
+  gloss_en: inverted, turned over
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:55
+  - prefixes:31
+- tag: varune
+  label_source:
+  - vārune
+  gloss_fa: وارونه
+  gloss_en: inverted
+  gloss_template_fa: null
+  used_by:
+  - prefixes:61
+- tag: vorud
+  label_source:
+  - Vorud
+  gloss_fa: ورود
+  gloss_en: entry, going in
+  gloss_template_fa: null
+  used_by:
+  - verb_stems:56
+- tag: yeki
+  label_source:
+  - Yeki
+  gloss_fa: یکی
+  gloss_en: oneness — the -i of a single one
+  gloss_template_fa: null
+  used_by:
+  - suffixes:184
+- tag: zaman
+  label_source:
+  - Zamān
+  - Zaman
+  gloss_fa: زمان
+  gloss_en: time
+  gloss_template_fa: null
+  used_by:
+  - nominals:36
+  - nominals:68
+  - suffixes:112
+  - suffixes:115
+  - suffixes:180
+  - suffixes:181
+  note: The 2026-11-19 document writes «Zaman»; read as the same label.

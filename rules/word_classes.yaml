@@ -188,3 +188,28 @@ classes:
     explanation_fa: ریختی که با آن کسی یا چیزی را می‌خوانند.
     confirmed: false
     source: no coined term known — L17
+
+  # The two classes the linguist's corrected rules of 2026-11-19 name and the
+  # August grammar did not. Both are his own terms, written in his document,
+  # so the term is confirmed; the explanation is ours, as for every class.
+  # **No word-bank group feeds either**: the bank files the numerals under
+  # برنام and holds no inflected verbs. So the rules that take them (rows
+  # 148–152 and 209–211 of his document) build nothing yet — the conservative
+  # reading, recorded in DECISIONS 2026-11-19 and asked (L46).
+  - name: somar
+    behnevis: Šomār
+    coined_fa: شمار
+    traditional_fa: عدد
+    gloss_en: the numeral — do, se, panj
+    explanation_fa: واژه‌ای که شمارِ چیزی را می‌گوید، مانندِ «دو» و «سه».
+    confirmed: true
+    source: the linguist's corrected rules, rows 209–211 (2026-11-19)
+
+  - name: karvaze
+    behnevis: Kārvāže
+    coined_fa: کارواژه
+    traditional_fa: فعل
+    gloss_en: the inflected verb, as it stands in a sentence — raftam, budand
+    explanation_fa: کار، آن‌گونه که در جمله صرف می‌شود، مانندِ «رفتم».
+    confirmed: true
+    source: the linguist's corrected rules, rows 148–152 (2026-11-19)

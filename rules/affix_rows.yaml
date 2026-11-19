@@ -1,0 +1,366 @@
+# Which rule id each row of the linguist's 2026-11-19 rules document is.
+#
+# **Why this file exists.** The corrected rules (`rules/affix_source_rows.json`,
+# transcribed verbatim by tools/extract_affix_tables.py) replace the August
+# grammar's two rule tables. They are ordered by affix rather than by input and
+# numbered 1–229 across three tables, so the August row numbers — which the V
+# and N ids mirror — do not carry over. Ids are permanent (docs/RULE_PACK.md),
+# so which new row is which old rule is a judgement, and a judgement belongs in
+# an authored file rather than in code. This is that file.
+#
+# **Same rule, same id.** A row keeps an existing id when it is the same rule:
+# the same affix, the same meaning, and the same base — judged by the row's own
+# examples, which is what the August row and the new one have in common when
+# the wording around them moved. A row that relabels its base or its result but
+# keeps the August row's examples is the same rule corrected, and keeps the id
+# (the `change` note says what moved). A row with no August counterpart gets a
+# new id, appended to its family in document order: N if its base is a nominal
+# class, V if it is a verb stem, an infinitive, a participle or an inflected
+# verb. An August rule with no row here is **retired**, never deleted and never
+# reused: it keeps its id, its August transcription and a reason.
+#
+# **Two rows repeat another.** Row 10 is row 9 again with one example fewer,
+# and row 132 is row 120 cell for cell; each is recorded `same_as` and builds
+# no rule of its own.
+#
+# **One number is written twice.** The prefix table numbers its 48th row "46"
+# a second time; `position` (the row's place in the table) tells the two apart.
+# The linguist's number is kept as he wrote it.
+#
+# Read by tools/assign_rule_ids.py (new ids into rules/rule_ids.json) and
+# tools/build_rule_pack.py (the pack). Decided 2026-11-19; see DECISIONS.
+
+version: 1
+source_document: Dasturhāyeé Vāžesāzi.docx
+received: 2026-11-19
+
+rows:
+  # -- Vāžesāzi bā Pišvand (prefixes) --------------------------------------
+  prefixes:
+    - {row: "1", id: N-002}
+    - {row: "2", id: N-003}
+    - {row: "3", id: N-004}
+    - {row: "4", id: N-008}
+    - {row: "5", id: N-009}
+    - {row: "6", id: N-014}
+    - {row: "7", id: N-015}
+    - {row: "8", id: N-106, new: true}
+    - {row: "9", id: N-021}
+    - {row: "10", same_as: "9"}
+    - {row: "11", id: N-022}
+    - {row: "12", id: V-063, change: "examples now include nastuh (was N-019) and nāšenās (was V-065)"}
+    - {row: "13", id: V-064}
+    - {row: "14", id: N-018}
+    - {row: "15", id: V-067}
+    - {row: "16", id: N-029}
+    - {row: "17", id: N-030}
+    - {row: "18", id: N-027, change: "result Bārnāmen (برنام), was Nāmen"}
+    - {row: "19", id: N-006, change: "base Kārnām, was Nām; same examples bexubi, bezudi"}
+    - {row: "20", id: N-107, new: true}
+    - {row: "21", id: N-013}
+    - {row: "22", id: N-016}
+    - {row: "23", id: N-017}
+    - {row: "24", id: V-051, change: "a prefix ā-, was written as the suffix -ā"}
+    - {row: "25", id: V-052, change: "written andar- now, with andarun- beside it; tag darun dropped"}
+    - {row: "26", id: V-083, new: true}
+    - {row: "27", id: V-084, new: true}
+    - {row: "28", id: V-085, new: true}
+    - {row: "29", id: V-086, new: true}
+    - {row: "30", id: V-054}
+    - {row: "31", id: V-055, change: "written bāž- now, a prefix"}
+    - {row: "32", id: V-053}
+    - {row: "33", id: V-087, new: true}
+    - {row: "34", id: V-088, new: true}
+    - {row: "35", id: V-056, change: "tag Vorud dropped"}
+    - {row: "36", id: V-057}
+    - {row: "37", id: V-058}
+    - {row: "38", id: V-059}
+    - {row: "39", id: V-060}
+    - {row: "40", id: V-061}
+    - {row: "41", id: V-062}
+    - {row: "42", id: V-089, new: true}
+    - {row: "43", id: V-068}
+    - {row: "44", id: V-090, new: true}
+    - {row: "45", id: V-069}
+    - {row: "46", position: 46, id: V-070, change: "base Nābesudkārvāže, was Kārboné yek; tag pasravi, was pas"}
+    - {row: "47", id: V-071, change: "base Nābesudkārvāže, was Kārboné yek; tag dobāregi, was dobāre"}
+    - {row: "46", position: 48, id: V-072, change: "numbered 46 a second time; base Nābesudkārvāže, was Kārboné yek"}
+    - {row: "49", id: V-074, change: "base Nābesudkārvāže, was Kārboé yek"}
+    - {row: "50", id: V-075, change: "base Nābesudkārvāže, was Kārboné yek"}
+    - {row: "51", id: V-076, change: "base Nābesudkārvāže, was Kārboné yek"}
+    - {row: "52", id: N-001, change: "a prefix a-, was written as the suffix -ā"}
+    - {row: "53", id: N-108, new: true}
+    - {row: "54", id: N-109, new: true}
+    - {row: "55", id: N-010}
+    - {row: "56", id: N-011}
+    - {row: "57", id: N-012}
+    - {row: "58", id: N-110, new: true}
+    - {row: "59", id: N-024}
+    - {row: "60", id: N-025}
+    - {row: "61", id: N-111, new: true}
+    - {row: "62", id: N-031}
+    - {row: "63", id: N-026}
+    - {row: "64", id: N-028}
+
+  # -- Vāžesāzi bā Pasvand (suffixes) --------------------------------------
+  suffixes:
+    - {row: "65", id: N-098, change: "base Nābesudkārvāže, was Kārnām; result Āyākārbahr, was Barnam; same example xordani"}
+    - {row: "66", id: N-035, change: "written -āgin, -agan, was -gin (Mānand); same example zahrāgin"}
+    - {row: "67", id: N-034}
+    - {row: "68", id: N-112, new: true}
+    - {row: "69", id: N-047}
+    - {row: "70", id: N-085}
+    - {row: "71", id: N-087}
+    - {row: "72", id: N-113, new: true}
+    - {row: "73", id: N-065, change: "tag Šomār, was Nesbat"}
+    - {row: "74", id: N-066}
+    - {row: "75", id: N-114, new: true}
+    - {row: "76", id: N-092}
+    - {row: "77", id: N-069, change: "tag Dārandegi, was Mānand"}
+    - {row: "78", id: N-115, new: true}
+    - {row: "79", id: N-093, change: "now also lists čubi and āhani, which were N-094"}
+    - {row: "80", id: N-100}
+    - {row: "81", id: N-101}
+    - {row: "82", id: N-102}
+    - {row: "83", id: N-103}
+    - {row: "84", id: N-116, new: true}
+    - {row: "85", id: N-071, change: "written -mand; the August -mānd was the slip"}
+    - {row: "86", id: V-041}
+    - {row: "87", id: N-073}
+    - {row: "88", id: N-056}
+    - {row: "89", id: N-051}
+    - {row: "90", id: N-054, change: "tag Nesbat dropped"}
+    - {row: "91", id: N-055}
+    - {row: "92", id: N-045}
+    - {row: "93", id: N-083}
+    - {row: "94", id: N-081}
+    - {row: "95", id: N-080}
+    - {row: "96", id: N-074}
+    - {row: "97", id: N-076}
+    - {row: "98", id: N-077, change: "tag Nesbat dropped"}
+    - {row: "99", id: N-117, new: true}
+    - {row: "100", id: N-082}
+    - {row: "101", id: V-042}
+    - {row: "102", id: N-118, new: true}
+    - {row: "103", id: N-119, new: true}
+    - {row: "104", id: N-120, new: true}
+    - {row: "105", id: N-121, new: true}
+    - {row: "106", id: N-042, change: "now also lists divāne and zanāne, which were N-039; tag Nesbat dropped"}
+    - {row: "107", id: N-096, change: "result Čonvāže and Barnām, was Čonvāže; tag Čoni dropped; šabi moved to row 115"}
+    - {row: "108", id: V-028, change: "base both stems, was Kārboné do; result also Barnām"}
+    - {row: "109", id: N-032, change: "result Nām and Barnām, was Nedāyi"}
+    - {row: "110", id: N-122, new: true}
+    - {row: "111", id: N-123, new: true}
+    - {row: "112", id: N-036}
+    - {row: "113", id: N-040}
+    - {row: "114", id: N-097, change: "result Čonvāže, was Barnām; tag Barjastegi, was Čoni; same example nāgahāni"}
+    - {row: "115", id: N-124, new: true}
+    - {row: "116", id: V-024, change: "result Čonyāftekārbahr, was Kārandekārbahr; now also lists rahā and xānā, which were V-026"}
+    - {row: "117", id: V-029, change: "result Čonyāftekārbahr, was Kārandekārbahr"}
+    - {row: "118", id: V-091, new: true}
+    - {row: "119", id: V-092, new: true}
+    - {row: "120", id: V-039, change: "result Kārpazirnām, was Nām; tag Kārpaziri, was Sezāvāri"}
+    - {row: "121", id: V-093, new: true}
+    - {row: "122", id: V-011}
+    - {row: "123", id: V-048}
+    - {row: "124", id: V-022, change: "tag Kārandegi added"}
+    - {row: "125", id: V-013, change: "written -gār alone, was -gār, -gar / -kār, -bān; tag Kārandegi added"}
+    - {row: "126", id: V-032, change: "base both stems, Barnām and Kārnām, was Kārboné do"}
+    - {row: "127", id: N-125, new: true}
+    - {row: "128", id: V-040, change: "result Barjākārbahr (کاریده‌کاربهر renamed); tag Kāridegi added"}
+    - {row: "129", id: V-012, change: "result Barjākārbahr (کاریده‌کاربهر renamed)"}
+    - {row: "130", id: V-008, change: "result Barjākārbahr (کاریده‌کاربهر renamed)"}
+    - {row: "131", id: V-036, change: "result Barjākārbahr (کاریده‌کاربهر renamed)"}
+    - {row: "132", same_as: "120"}
+    - {row: "133", id: N-033, change: "result Kārnām, was Nām"}
+    - {row: "134", id: V-010}
+    - {row: "135", id: V-035}
+    - {row: "136", id: V-033}
+    - {row: "137", id: V-050}
+    - {row: "138", id: N-067, change: "result Kārnām, was Nām; tag Nesbat dropped"}
+    - {row: "139", id: V-082}
+    - {row: "140", id: V-023}
+    - {row: "141", id: V-025, change: "base Čonyāftekārbahr in -ā, was Kārandekārbahr in -ā"}
+    - {row: "142", id: V-027}
+    - {row: "143", id: V-030}
+    - {row: "144", id: N-091}
+    - {row: "145", id: N-095}
+    - {row: "146", id: V-014}
+    - {row: "147", id: V-037}
+    - {row: "148", id: V-094, new: true}
+    - {row: "149", id: V-095, new: true}
+    - {row: "150", id: V-096, new: true}
+    - {row: "151", id: V-097, new: true}
+    - {row: "152", id: V-098, new: true}
+    - {row: "153", id: V-005}
+    - {row: "154", id: V-001}
+    - {row: "155", id: V-002}
+    - {row: "156", id: V-004}
+    - {row: "157", id: V-003}
+    - {row: "158", id: N-126, new: true}
+    - {row: "159", id: N-037}
+    - {row: "160", id: N-127, new: true}
+    - {row: "161", id: N-128, new: true}
+    - {row: "162", id: N-041, change: "tag Nesbat dropped"}
+    - {row: "163", id: N-060}
+    - {row: "164", id: N-061, change: "tag Nesbat dropped"}
+    - {row: "165", id: N-059}
+    - {row: "166", id: N-038}
+    - {row: "167", id: N-044}
+    - {row: "168", id: N-043}
+    - {row: "169", id: N-129, new: true}
+    - {row: "170", id: N-046}
+    - {row: "171", id: N-048}
+    - {row: "172", id: N-049, change: "tag Mānandi, was Mānand"}
+    - {row: "173", id: V-009}
+    - {row: "174", id: V-034}
+    - {row: "175", id: N-086}
+    - {row: "176", id: N-088}
+    - {row: "177", id: N-130, new: true}
+    - {row: "178", id: N-089, change: "tag Nesbat dropped"}
+    - {row: "179", id: N-090, change: "tag egi, was Vābastegi; still not run (the ezāfe)"}
+    - {row: "180", id: N-068}
+    - {row: "181", id: N-131, new: true}
+    - {row: "182", id: N-063, change: "written -gār, was -gar; same example Ruzgār; tag Nesbat dropped"}
+    - {row: "183", id: N-132, new: true}
+    - {row: "184", id: N-133, new: true}
+    - {row: "185", id: N-099, change: "still not run (the indefinite -í)"}
+    - {row: "186", id: N-062}
+    - {row: "187", id: N-070}
+    - {row: "188", id: V-038}
+    - {row: "189", id: N-072}
+    - {row: "190", id: N-134, new: true}
+    - {row: "191", id: N-135, new: true}
+    - {row: "192", id: N-052}
+    - {row: "193", id: N-053}
+    - {row: "194", id: N-058}
+    - {row: "195", id: N-057, change: "tag Anbuhjā, was Jā"}
+    - {row: "196", id: N-136, new: true}
+    - {row: "197", id: N-137, new: true}
+    - {row: "198", id: N-138, new: true}
+    - {row: "199", id: N-139, new: true}
+    - {row: "200", id: N-078, change: "example Gāhvāre; Sangvāre moved to row 201"}
+    - {row: "201", id: N-079, change: "tag Vābast, was Nesbat"}
+    - {row: "202", id: N-084, change: "base Nām, result Nām and Pišvāže; in August Pišvāže stood on the base side"}
+    - {row: "203", id: N-105, change: "tag Vābast, was Nesbat"}
+    - {row: "204", id: N-050}
+    - {row: "205", id: N-140, new: true}
+    - {row: "206", id: N-141, new: true}
+    - {row: "207", id: N-064, change: "result Šāyestbarnām (برنام), was Nām; tag Šāyestan, was Nesbat"}
+    - {row: "208", id: N-075, change: "result Šāyestbarnām (برنام), was Barnām; tag Šayest, was Sezāvāri"}
+    - {row: "209", id: N-142, new: true}
+    - {row: "210", id: N-143, new: true}
+    - {row: "211", id: N-144, new: true}
+
+  # -- Vāžesāzi bi Vand (no affix, compounding) ----------------------------
+  no_affix:
+    - {row: "212", id: V-007}
+    - {row: "213", id: V-017}
+    - {row: "214", id: V-018}
+    - {row: "215", id: V-019}
+    - {row: "216", id: V-020}
+    - {row: "217", id: V-021}
+    - {row: "218", id: V-043}
+    - {row: "219", id: V-044}
+    - {row: "220", id: V-045}
+    - {row: "221", id: V-046}
+    - {row: "222", id: V-047}
+    - {row: "223", id: V-049}
+    - {row: "224", id: V-079}
+    - {row: "225", id: V-078}
+    - {row: "226", id: V-080}
+    - {row: "227", id: V-081}
+    - {row: "228", id: V-016}
+    - {row: "229", id: V-031}
+
+# August rules with no row in the 2026-11-19 document. Retired, not deleted:
+# each keeps its id and its August transcription, and the Rules screen shows
+# the reason. `reason_fa` is ours, as every retirement reason is (S14).
+retired:
+  - id: V-006
+    reason: >-
+      No row in the 2026-11-19 document. -an on Pišinkārbon now makes only the
+      infinitive (row 153, V-005); the row that made a Kārnām of the same form
+      (Porsidan) is gone.
+    reason_fa: >-
+      در جدول ۱۹ نوامبر ۲۰۲۶ ردیفی برای آن نیست: ـan بر پیشین‌کاربن اکنون تنها نابسودکارواژه می‌سازد (ردیف ۱۵۳).
+  - id: V-015
+    reason: >-
+      No row in the 2026-11-19 document. -bān now stands only on Nām (row 167,
+      Darbān); the August row that put it on Kārboné yek (Didebān) is gone.
+    reason_fa: >-
+      در جدول ۱۹ نوامبر ۲۰۲۶ ردیفی برای آن نیست: ـbān اکنون تنها بر نام می‌نشیند (ردیف ۱۶۷، Darbān).
+  - id: V-026
+    reason: >-
+      Merged into row 116 (V-024): -ā on Konunkārbon is one row now, and its
+      examples are this rule's (rahā, xānā) and V-024's (dānā, dārā).
+    reason_fa: >-
+      با ردیف ۱۱۶ (V-024) یکی شد: ـā بر کنون‌کاربن اکنون یک ردیف است و نمونه‌های این قاعده، rahā و xānā، در آن آمده‌اند.
+  - id: V-065
+    reason: >-
+      No row in the 2026-11-19 document. Its example nāšenās now stands under
+      na- on Konunkārbon (row 12, V-063); whether nā- on a stem is gone on
+      purpose is asked (L45).
+    reason_fa: >-
+      در جدول ۱۹ نوامبر ۲۰۲۶ ردیفی برای آن نیست، و نمونهٔ آن، nāšenās، اکنون زیر na- بر کنون‌کاربن آمده است (ردیف ۱۲). پرسیده شده است (L45).
+  - id: V-066
+    reason: >-
+      No row in the 2026-11-19 document: nā- on Pišinkārbon (nāšāyest) is
+      gone with V-065. Asked (L45).
+    reason_fa: >-
+      در جدول ۱۹ نوامبر ۲۰۲۶ ردیفی برای آن نیست: nā- بر پیشین‌کاربن (nāšāyest) همراه V-065 کنار رفته است. پرسیده شده است (L45).
+  - id: V-073
+    reason: >-
+      No row in the 2026-11-19 document. Its example vāxāstan now stands under
+      vā- (pasravi), row 46 (V-070).
+    reason_fa: >-
+      در جدول ۱۹ نوامبر ۲۰۲۶ ردیفی برای آن نیست، و نمونهٔ آن، vāxāstan، اکنون زیر vā- (pasravi) آمده است (ردیف ۴۶).
+  - id: N-005
+    reason: >-
+      No row in the 2026-11-19 document. be- (Dāštan) makes a Čonvāže now only
+      from a Kārnām (row 19, N-006); besāmān is not among its examples.
+    reason_fa: >-
+      در جدول ۱۹ نوامبر ۲۰۲۶ ردیفی برای آن نیست: be- (Dāštan) اکنون تنها از کارنام چون‌واژه می‌سازد (ردیف ۱۹).
+  - id: N-007
+    reason: >-
+      No row in the 2026-11-19 document: be- (Nesbat), Nām to Nām (Bedast), is
+      gone.
+    reason_fa: >-
+      در جدول ۱۹ نوامبر ۲۰۲۶ ردیفی برای آن نیست: be- (Nesbat) از نام به نام (Bedast) کنار رفته است.
+  - id: N-019
+    reason: >-
+      No row in the 2026-11-19 document. Its example nastuh now stands under
+      na- on Konunkārbon (row 12, V-063).
+    reason_fa: >-
+      در جدول ۱۹ نوامبر ۲۰۲۶ ردیفی برای آن نیست، و نمونهٔ آن، nastuh، اکنون زیر na- بر کنون‌کاربن آمده است (ردیف ۱۲).
+  - id: N-020
+    reason: >-
+      The infix -na- (xodānašnās) is not in the 2026-11-19 document. Whether
+      that is on purpose is asked (L45).
+    reason_fa: >-
+      میانوند -na- (xodānašnās) در جدول ۱۹ نوامبر ۲۰۲۶ نیامده است. پرسیده شده است که آیا این کنار گذاشتن خواسته بوده است (L45).
+  - id: N-023
+    reason: >-
+      The infix -nā- (delnāčasb) is not in the 2026-11-19 document. Whether
+      that is on purpose is asked (L45).
+    reason_fa: >-
+      میانوند -nā- (delnāčasb) در جدول ۱۹ نوامبر ۲۰۲۶ نیامده است. پرسیده شده است که آیا این کنار گذاشتن خواسته بوده است (L45).
+  - id: N-039
+    reason: >-
+      Merged into row 106 (N-042): -āne on Nām is one row now, and its examples
+      include this rule's divāne and zanāne.
+    reason_fa: >-
+      با ردیف ۱۰۶ (N-042) یکی شد: ـāne بر نام اکنون یک ردیف است و divāne و zanāne در نمونه‌های آن آمده‌اند.
+  - id: N-094
+    reason: >-
+      Merged into row 79 (N-093): -i on Nām making a Barnām is one row now, and
+      its examples include this rule's čubi and āhani.
+    reason_fa: >-
+      با ردیف ۷۹ (N-093) یکی شد: ـi بر نام که برنام می‌سازد اکنون یک ردیف است و čubi و āhani در نمونه‌های آن آمده‌اند.
+  - id: N-104
+    reason: >-
+      Nām + ā + Nām (Sarāsar) is not in the 2026-11-19 document, so the engine
+      no longer builds کتاباخانه from کتاب and خانه. Whether two nouns join with
+      nothing between them is still asked (L28).
+    reason_fa: >-
+      نام + ā + نام (Sarāsar) در جدول ۱۹ نوامبر ۲۰۲۶ نیامده است. پرسش پیوستن دو نام بی واکه همچنان باز است (L28).

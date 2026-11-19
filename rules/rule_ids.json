@@ -4,6 +4,8 @@
  "source_sha256": "5c897ce4a071ec3f45315accf03ec5d8b5f955b417243ca18a50a06d08e35170",
  "stem_source_document": "قواعد_مصدر_و_لاتین‌نویسی_…_۲۰۲۶۰۵۱۴.docx",
  "stem_source_sha256": "0d73079e9de447b2d97706a23dc4135cb287044240c21309c2936d126423dbe7",
+ "affix_source_document": "Dasturhāyeé Vāžesāzi.docx",
+ "affix_source_sha256": "f74bd9ade88f8e30a7428f855c60516656602364e676d08e9fee63dfb5abfadf",
  "families": {
   "verb_stems": [
    {
@@ -12,7 +14,13 @@
      "table": "verb_stems",
      "row": "1"
     },
-    "docx_row_position": 1
+    "docx_row_position": 1,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "154",
+     "docx_row_position": 90
+    }
    },
    {
     "id": "V-002",
@@ -20,7 +28,13 @@
      "table": "verb_stems",
      "row": "2"
     },
-    "docx_row_position": 2
+    "docx_row_position": 2,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "155",
+     "docx_row_position": 91
+    }
    },
    {
     "id": "V-003",
@@ -28,7 +42,13 @@
      "table": "verb_stems",
      "row": "3"
     },
-    "docx_row_position": 3
+    "docx_row_position": 3,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "157",
+     "docx_row_position": 93
+    }
    },
    {
     "id": "V-004",
@@ -36,7 +56,13 @@
      "table": "verb_stems",
      "row": "4"
     },
-    "docx_row_position": 4
+    "docx_row_position": 4,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "156",
+     "docx_row_position": 92
+    }
    },
    {
     "id": "V-005",
@@ -44,7 +70,13 @@
      "table": "verb_stems",
      "row": "5"
     },
-    "docx_row_position": 5
+    "docx_row_position": 5,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "153",
+     "docx_row_position": 89
+    }
    },
    {
     "id": "V-006",
@@ -52,7 +84,8 @@
      "table": "verb_stems",
      "row": "6"
     },
-    "docx_row_position": 6
+    "docx_row_position": 6,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "V-007",
@@ -60,7 +93,13 @@
      "table": "verb_stems",
      "row": "7"
     },
-    "docx_row_position": 7
+    "docx_row_position": 7,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "212",
+     "docx_row_position": 1
+    }
    },
    {
     "id": "V-008",
@@ -68,7 +107,13 @@
      "table": "verb_stems",
      "row": "8"
     },
-    "docx_row_position": 8
+    "docx_row_position": 8,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "130",
+     "docx_row_position": 66
+    }
    },
    {
     "id": "V-009",
@@ -76,7 +121,13 @@
      "table": "verb_stems",
      "row": "9"
     },
-    "docx_row_position": 10
+    "docx_row_position": 10,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "173",
+     "docx_row_position": 109
+    }
    },
    {
     "id": "V-010",
@@ -84,7 +135,13 @@
      "table": "verb_stems",
      "row": "10"
     },
-    "docx_row_position": 11
+    "docx_row_position": 11,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "134",
+     "docx_row_position": 70
+    }
    },
    {
     "id": "V-011",
@@ -92,7 +149,13 @@
      "table": "verb_stems",
      "row": "11"
     },
-    "docx_row_position": 12
+    "docx_row_position": 12,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "122",
+     "docx_row_position": 58
+    }
    },
    {
     "id": "V-012",
@@ -100,7 +163,13 @@
      "table": "verb_stems",
      "row": "12"
     },
-    "docx_row_position": 13
+    "docx_row_position": 13,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "129",
+     "docx_row_position": 65
+    }
    },
    {
     "id": "V-013",
@@ -108,7 +177,13 @@
      "table": "verb_stems",
      "row": "13"
     },
-    "docx_row_position": 14
+    "docx_row_position": 14,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "125",
+     "docx_row_position": 61
+    }
    },
    {
     "id": "V-014",
@@ -116,7 +191,13 @@
      "table": "verb_stems",
      "row": "14"
     },
-    "docx_row_position": 15
+    "docx_row_position": 15,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "146",
+     "docx_row_position": 82
+    }
    },
    {
     "id": "V-015",
@@ -124,7 +205,8 @@
      "table": "verb_stems",
      "row": "15"
     },
-    "docx_row_position": 16
+    "docx_row_position": 16,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "V-016",
@@ -132,7 +214,13 @@
      "table": "verb_stems",
      "row": "16"
     },
-    "docx_row_position": 17
+    "docx_row_position": 17,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "228",
+     "docx_row_position": 17
+    }
    },
    {
     "id": "V-017",
@@ -140,7 +228,13 @@
      "table": "verb_stems",
      "row": "17"
     },
-    "docx_row_position": 18
+    "docx_row_position": 18,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "213",
+     "docx_row_position": 2
+    }
    },
    {
     "id": "V-018",
@@ -148,7 +242,13 @@
      "table": "verb_stems",
      "row": "18"
     },
-    "docx_row_position": 19
+    "docx_row_position": 19,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "214",
+     "docx_row_position": 3
+    }
    },
    {
     "id": "V-019",
@@ -156,7 +256,13 @@
      "table": "verb_stems",
      "row": "19"
     },
-    "docx_row_position": 20
+    "docx_row_position": 20,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "215",
+     "docx_row_position": 4
+    }
    },
    {
     "id": "V-020",
@@ -164,7 +270,13 @@
      "table": "verb_stems",
      "row": "20"
     },
-    "docx_row_position": 21
+    "docx_row_position": 21,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "216",
+     "docx_row_position": 5
+    }
    },
    {
     "id": "V-021",
@@ -172,7 +284,13 @@
      "table": "verb_stems",
      "row": "21"
     },
-    "docx_row_position": 22
+    "docx_row_position": 22,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "217",
+     "docx_row_position": 6
+    }
    },
    {
     "id": "V-022",
@@ -180,7 +298,13 @@
      "table": "verb_stems",
      "row": "22"
     },
-    "docx_row_position": 23
+    "docx_row_position": 23,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "124",
+     "docx_row_position": 60
+    }
    },
    {
     "id": "V-023",
@@ -188,7 +312,13 @@
      "table": "verb_stems",
      "row": "23"
     },
-    "docx_row_position": 24
+    "docx_row_position": 24,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "140",
+     "docx_row_position": 76
+    }
    },
    {
     "id": "V-024",
@@ -196,7 +326,13 @@
      "table": "verb_stems",
      "row": "24"
     },
-    "docx_row_position": 25
+    "docx_row_position": 25,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "116",
+     "docx_row_position": 52
+    }
    },
    {
     "id": "V-025",
@@ -204,7 +340,13 @@
      "table": "verb_stems",
      "row": "25"
     },
-    "docx_row_position": 26
+    "docx_row_position": 26,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "141",
+     "docx_row_position": 77
+    }
    },
    {
     "id": "V-026",
@@ -212,7 +354,8 @@
      "table": "verb_stems",
      "row": "26"
     },
-    "docx_row_position": 27
+    "docx_row_position": 27,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "V-027",
@@ -220,7 +363,13 @@
      "table": "verb_stems",
      "row": "27"
     },
-    "docx_row_position": 28
+    "docx_row_position": 28,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "142",
+     "docx_row_position": 78
+    }
    },
    {
     "id": "V-028",
@@ -228,7 +377,13 @@
      "table": "verb_stems",
      "row": "28"
     },
-    "docx_row_position": 29
+    "docx_row_position": 29,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "108",
+     "docx_row_position": 44
+    }
    },
    {
     "id": "V-029",
@@ -236,7 +391,13 @@
      "table": "verb_stems",
      "row": "29"
     },
-    "docx_row_position": 30
+    "docx_row_position": 30,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "117",
+     "docx_row_position": 53
+    }
    },
    {
     "id": "V-030",
@@ -244,7 +405,13 @@
      "table": "verb_stems",
      "row": "30"
     },
-    "docx_row_position": 31
+    "docx_row_position": 31,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "143",
+     "docx_row_position": 79
+    }
    },
    {
     "id": "V-031",
@@ -252,7 +419,13 @@
      "table": "verb_stems",
      "row": "31"
     },
-    "docx_row_position": 32
+    "docx_row_position": 32,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "229",
+     "docx_row_position": 18
+    }
    },
    {
     "id": "V-032",
@@ -260,7 +433,13 @@
      "table": "verb_stems",
      "row": "32"
     },
-    "docx_row_position": 33
+    "docx_row_position": 33,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "126",
+     "docx_row_position": 62
+    }
    },
    {
     "id": "V-033",
@@ -268,7 +447,13 @@
      "table": "verb_stems",
      "row": "33"
     },
-    "docx_row_position": 34
+    "docx_row_position": 34,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "136",
+     "docx_row_position": 72
+    }
    },
    {
     "id": "V-034",
@@ -276,7 +461,13 @@
      "table": "verb_stems",
      "row": "34"
     },
-    "docx_row_position": 35
+    "docx_row_position": 35,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "174",
+     "docx_row_position": 110
+    }
    },
    {
     "id": "V-035",
@@ -284,7 +475,13 @@
      "table": "verb_stems",
      "row": "35"
     },
-    "docx_row_position": 36
+    "docx_row_position": 36,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "135",
+     "docx_row_position": 71
+    }
    },
    {
     "id": "V-036",
@@ -292,7 +489,13 @@
      "table": "verb_stems",
      "row": "36"
     },
-    "docx_row_position": 37
+    "docx_row_position": 37,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "131",
+     "docx_row_position": 67
+    }
    },
    {
     "id": "V-037",
@@ -300,7 +503,13 @@
      "table": "verb_stems",
      "row": "37"
     },
-    "docx_row_position": 38
+    "docx_row_position": 38,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "147",
+     "docx_row_position": 83
+    }
    },
    {
     "id": "V-038",
@@ -308,7 +517,13 @@
      "table": "verb_stems",
      "row": "38"
     },
-    "docx_row_position": 39
+    "docx_row_position": 39,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "188",
+     "docx_row_position": 124
+    }
    },
    {
     "id": "V-039",
@@ -316,7 +531,13 @@
      "table": "verb_stems",
      "row": "39"
     },
-    "docx_row_position": 40
+    "docx_row_position": 40,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "120",
+     "docx_row_position": 56
+    }
    },
    {
     "id": "V-040",
@@ -324,7 +545,13 @@
      "table": "verb_stems",
      "row": "40"
     },
-    "docx_row_position": 41
+    "docx_row_position": 41,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "128",
+     "docx_row_position": 64
+    }
    },
    {
     "id": "V-041",
@@ -332,7 +559,13 @@
      "table": "verb_stems",
      "row": "41"
     },
-    "docx_row_position": 42
+    "docx_row_position": 42,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "86",
+     "docx_row_position": 22
+    }
    },
    {
     "id": "V-042",
@@ -340,7 +573,13 @@
      "table": "verb_stems",
      "row": "42"
     },
-    "docx_row_position": 43
+    "docx_row_position": 43,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "101",
+     "docx_row_position": 37
+    }
    },
    {
     "id": "V-043",
@@ -348,7 +587,13 @@
      "table": "verb_stems",
      "row": "43"
     },
-    "docx_row_position": 44
+    "docx_row_position": 44,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "218",
+     "docx_row_position": 7
+    }
    },
    {
     "id": "V-044",
@@ -356,7 +601,13 @@
      "table": "verb_stems",
      "row": "44"
     },
-    "docx_row_position": 45
+    "docx_row_position": 45,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "219",
+     "docx_row_position": 8
+    }
    },
    {
     "id": "V-045",
@@ -364,7 +615,13 @@
      "table": "verb_stems",
      "row": "45"
     },
-    "docx_row_position": 46
+    "docx_row_position": 46,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "220",
+     "docx_row_position": 9
+    }
    },
    {
     "id": "V-046",
@@ -372,7 +629,13 @@
      "table": "verb_stems",
      "row": "46"
     },
-    "docx_row_position": 47
+    "docx_row_position": 47,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "221",
+     "docx_row_position": 10
+    }
    },
    {
     "id": "V-047",
@@ -380,7 +643,13 @@
      "table": "verb_stems",
      "row": "47"
     },
-    "docx_row_position": 48
+    "docx_row_position": 48,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "222",
+     "docx_row_position": 11
+    }
    },
    {
     "id": "V-048",
@@ -388,7 +657,13 @@
      "table": "verb_stems",
      "row": "48"
     },
-    "docx_row_position": 49
+    "docx_row_position": 49,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "123",
+     "docx_row_position": 59
+    }
    },
    {
     "id": "V-049",
@@ -396,7 +671,13 @@
      "table": "verb_stems",
      "row": "49"
     },
-    "docx_row_position": 50
+    "docx_row_position": 50,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "223",
+     "docx_row_position": 12
+    }
    },
    {
     "id": "V-050",
@@ -404,7 +685,13 @@
      "table": "verb_stems",
      "row": "50"
     },
-    "docx_row_position": 51
+    "docx_row_position": 51,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "137",
+     "docx_row_position": 73
+    }
    },
    {
     "id": "V-051",
@@ -412,7 +699,13 @@
      "table": "verb_stems",
      "row": "51"
     },
-    "docx_row_position": 52
+    "docx_row_position": 52,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "24",
+     "docx_row_position": 24
+    }
    },
    {
     "id": "V-052",
@@ -420,7 +713,13 @@
      "table": "verb_stems",
      "row": "52"
     },
-    "docx_row_position": 53
+    "docx_row_position": 53,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "25",
+     "docx_row_position": 25
+    }
    },
    {
     "id": "V-053",
@@ -428,7 +727,13 @@
      "table": "verb_stems",
      "row": "53"
     },
-    "docx_row_position": 54
+    "docx_row_position": 54,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "32",
+     "docx_row_position": 32
+    }
    },
    {
     "id": "V-054",
@@ -436,7 +741,13 @@
      "table": "verb_stems",
      "row": "54"
     },
-    "docx_row_position": 55
+    "docx_row_position": 55,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "30",
+     "docx_row_position": 30
+    }
    },
    {
     "id": "V-055",
@@ -444,7 +755,13 @@
      "table": "verb_stems",
      "row": "55"
     },
-    "docx_row_position": 56
+    "docx_row_position": 56,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "31",
+     "docx_row_position": 31
+    }
    },
    {
     "id": "V-056",
@@ -452,7 +769,13 @@
      "table": "verb_stems",
      "row": "56"
     },
-    "docx_row_position": 57
+    "docx_row_position": 57,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "35",
+     "docx_row_position": 35
+    }
    },
    {
     "id": "V-057",
@@ -460,7 +783,13 @@
      "table": "verb_stems",
      "row": "57"
     },
-    "docx_row_position": 58
+    "docx_row_position": 58,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "36",
+     "docx_row_position": 36
+    }
    },
    {
     "id": "V-058",
@@ -468,7 +797,13 @@
      "table": "verb_stems",
      "row": "58"
     },
-    "docx_row_position": 59
+    "docx_row_position": 59,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "37",
+     "docx_row_position": 37
+    }
    },
    {
     "id": "V-059",
@@ -476,7 +811,13 @@
      "table": "verb_stems",
      "row": "59"
     },
-    "docx_row_position": 60
+    "docx_row_position": 60,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "38",
+     "docx_row_position": 38
+    }
    },
    {
     "id": "V-060",
@@ -484,7 +825,13 @@
      "table": "verb_stems",
      "row": "60"
     },
-    "docx_row_position": 61
+    "docx_row_position": 61,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "39",
+     "docx_row_position": 39
+    }
    },
    {
     "id": "V-061",
@@ -492,7 +839,13 @@
      "table": "verb_stems",
      "row": "61"
     },
-    "docx_row_position": 62
+    "docx_row_position": 62,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "40",
+     "docx_row_position": 40
+    }
    },
    {
     "id": "V-062",
@@ -500,7 +853,13 @@
      "table": "verb_stems",
      "row": "62"
     },
-    "docx_row_position": 63
+    "docx_row_position": 63,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "41",
+     "docx_row_position": 41
+    }
    },
    {
     "id": "V-063",
@@ -508,7 +867,13 @@
      "table": "verb_stems",
      "row": "63"
     },
-    "docx_row_position": 64
+    "docx_row_position": 64,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "12",
+     "docx_row_position": 12
+    }
    },
    {
     "id": "V-064",
@@ -516,7 +881,13 @@
      "table": "verb_stems",
      "row": "64"
     },
-    "docx_row_position": 65
+    "docx_row_position": 65,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "13",
+     "docx_row_position": 13
+    }
    },
    {
     "id": "V-065",
@@ -524,7 +895,8 @@
      "table": "verb_stems",
      "row": "65"
     },
-    "docx_row_position": 66
+    "docx_row_position": 66,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "V-066",
@@ -532,7 +904,8 @@
      "table": "verb_stems",
      "row": "66"
     },
-    "docx_row_position": 67
+    "docx_row_position": 67,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "V-067",
@@ -540,7 +913,13 @@
      "table": "verb_stems",
      "row": "67"
     },
-    "docx_row_position": 68
+    "docx_row_position": 68,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "15",
+     "docx_row_position": 15
+    }
    },
    {
     "id": "V-068",
@@ -548,7 +927,13 @@
      "table": "verb_stems",
      "row": "68"
     },
-    "docx_row_position": 69
+    "docx_row_position": 69,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "43",
+     "docx_row_position": 43
+    }
    },
    {
     "id": "V-069",
@@ -556,7 +941,13 @@
      "table": "verb_stems",
      "row": "69"
     },
-    "docx_row_position": 70
+    "docx_row_position": 70,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "45",
+     "docx_row_position": 45
+    }
    },
    {
     "id": "V-070",
@@ -564,7 +955,13 @@
      "table": "verb_stems",
      "row": "70"
     },
-    "docx_row_position": 71
+    "docx_row_position": 71,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "46",
+     "docx_row_position": 46
+    }
    },
    {
     "id": "V-071",
@@ -572,7 +969,13 @@
      "table": "verb_stems",
      "row": "71"
     },
-    "docx_row_position": 72
+    "docx_row_position": 72,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "47",
+     "docx_row_position": 47
+    }
    },
    {
     "id": "V-072",
@@ -580,7 +983,13 @@
      "table": "verb_stems",
      "row": "72"
     },
-    "docx_row_position": 73
+    "docx_row_position": 73,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "46",
+     "docx_row_position": 48
+    }
    },
    {
     "id": "V-073",
@@ -588,7 +997,8 @@
      "table": "verb_stems",
      "row": "73"
     },
-    "docx_row_position": 74
+    "docx_row_position": 74,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "V-074",
@@ -596,7 +1006,13 @@
      "table": "verb_stems",
      "row": "74"
     },
-    "docx_row_position": 75
+    "docx_row_position": 75,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "49",
+     "docx_row_position": 49
+    }
    },
    {
     "id": "V-075",
@@ -604,7 +1020,13 @@
      "table": "verb_stems",
      "row": "75"
     },
-    "docx_row_position": 76
+    "docx_row_position": 76,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "50",
+     "docx_row_position": 50
+    }
    },
    {
     "id": "V-076",
@@ -612,7 +1034,13 @@
      "table": "verb_stems",
      "row": "76"
     },
-    "docx_row_position": 77
+    "docx_row_position": 77,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "51",
+     "docx_row_position": 51
+    }
    },
    {
     "id": "V-078",
@@ -620,7 +1048,13 @@
      "table": "verb_stems",
      "row": "78"
     },
-    "docx_row_position": 79
+    "docx_row_position": 79,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "225",
+     "docx_row_position": 14
+    }
    },
    {
     "id": "V-079",
@@ -628,7 +1062,13 @@
      "table": "verb_stems",
      "row": "79"
     },
-    "docx_row_position": 80
+    "docx_row_position": 80,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "224",
+     "docx_row_position": 13
+    }
    },
    {
     "id": "V-080",
@@ -636,7 +1076,13 @@
      "table": "verb_stems",
      "row": "80"
     },
-    "docx_row_position": 81
+    "docx_row_position": 81,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "226",
+     "docx_row_position": 15
+    }
    },
    {
     "id": "V-081",
@@ -644,7 +1090,13 @@
      "table": "verb_stems",
      "row": "81"
     },
-    "docx_row_position": 82
+    "docx_row_position": 82,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "no_affix",
+     "row": "227",
+     "docx_row_position": 16
+    }
    },
    {
     "id": "V-082",
@@ -654,7 +1106,13 @@
      "follows_row": "8"
     },
     "docx_row_position": 9,
-    "note": "unnumbered in the source document; appended to the family"
+    "note": "unnumbered in the source document; appended to the family",
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "139",
+     "docx_row_position": 75
+    }
    },
    {
     "id": "V-077",
@@ -663,6 +1121,150 @@
      "row": "77"
     },
     "reason": "the source row is empty; the id is reserved, never reused"
+   },
+   {
+    "id": "V-083",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "26"
+    },
+    "docx_row_position": 26
+   },
+   {
+    "id": "V-084",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "27"
+    },
+    "docx_row_position": 27
+   },
+   {
+    "id": "V-085",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "28"
+    },
+    "docx_row_position": 28
+   },
+   {
+    "id": "V-086",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "29"
+    },
+    "docx_row_position": 29
+   },
+   {
+    "id": "V-087",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "33"
+    },
+    "docx_row_position": 33
+   },
+   {
+    "id": "V-088",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "34"
+    },
+    "docx_row_position": 34
+   },
+   {
+    "id": "V-089",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "42"
+    },
+    "docx_row_position": 42
+   },
+   {
+    "id": "V-090",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "44"
+    },
+    "docx_row_position": 44
+   },
+   {
+    "id": "V-091",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "118"
+    },
+    "docx_row_position": 54
+   },
+   {
+    "id": "V-092",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "119"
+    },
+    "docx_row_position": 55
+   },
+   {
+    "id": "V-093",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "121"
+    },
+    "docx_row_position": 57
+   },
+   {
+    "id": "V-094",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "148"
+    },
+    "docx_row_position": 84
+   },
+   {
+    "id": "V-095",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "149"
+    },
+    "docx_row_position": 85
+   },
+   {
+    "id": "V-096",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "150"
+    },
+    "docx_row_position": 86
+   },
+   {
+    "id": "V-097",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "151"
+    },
+    "docx_row_position": 87
+   },
+   {
+    "id": "V-098",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "152"
+    },
+    "docx_row_position": 88
    }
   ],
   "nominals": [
@@ -672,7 +1274,13 @@
      "table": "nominals",
      "row": "1"
     },
-    "docx_row_position": 1
+    "docx_row_position": 1,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "52",
+     "docx_row_position": 52
+    }
    },
    {
     "id": "N-002",
@@ -680,7 +1288,13 @@
      "table": "nominals",
      "row": "2"
     },
-    "docx_row_position": 2
+    "docx_row_position": 2,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "1",
+     "docx_row_position": 1
+    }
    },
    {
     "id": "N-003",
@@ -688,7 +1302,13 @@
      "table": "nominals",
      "row": "3"
     },
-    "docx_row_position": 3
+    "docx_row_position": 3,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "2",
+     "docx_row_position": 2
+    }
    },
    {
     "id": "N-004",
@@ -696,7 +1316,13 @@
      "table": "nominals",
      "row": "4"
     },
-    "docx_row_position": 4
+    "docx_row_position": 4,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "3",
+     "docx_row_position": 3
+    }
    },
    {
     "id": "N-005",
@@ -704,7 +1330,8 @@
      "table": "nominals",
      "row": "5"
     },
-    "docx_row_position": 5
+    "docx_row_position": 5,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "N-006",
@@ -712,7 +1339,13 @@
      "table": "nominals",
      "row": "6"
     },
-    "docx_row_position": 6
+    "docx_row_position": 6,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "19",
+     "docx_row_position": 19
+    }
    },
    {
     "id": "N-007",
@@ -720,7 +1353,8 @@
      "table": "nominals",
      "row": "7"
     },
-    "docx_row_position": 7
+    "docx_row_position": 7,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "N-008",
@@ -728,7 +1362,13 @@
      "table": "nominals",
      "row": "8"
     },
-    "docx_row_position": 8
+    "docx_row_position": 8,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "4",
+     "docx_row_position": 4
+    }
    },
    {
     "id": "N-009",
@@ -736,7 +1376,13 @@
      "table": "nominals",
      "row": "9"
     },
-    "docx_row_position": 9
+    "docx_row_position": 9,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "5",
+     "docx_row_position": 5
+    }
    },
    {
     "id": "N-010",
@@ -744,7 +1390,13 @@
      "table": "nominals",
      "row": "10"
     },
-    "docx_row_position": 10
+    "docx_row_position": 10,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "55",
+     "docx_row_position": 55
+    }
    },
    {
     "id": "N-011",
@@ -752,7 +1404,13 @@
      "table": "nominals",
      "row": "11"
     },
-    "docx_row_position": 11
+    "docx_row_position": 11,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "56",
+     "docx_row_position": 56
+    }
    },
    {
     "id": "N-012",
@@ -760,7 +1418,13 @@
      "table": "nominals",
      "row": "12"
     },
-    "docx_row_position": 12
+    "docx_row_position": 12,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "57",
+     "docx_row_position": 57
+    }
    },
    {
     "id": "N-013",
@@ -768,7 +1432,13 @@
      "table": "nominals",
      "row": "13"
     },
-    "docx_row_position": 13
+    "docx_row_position": 13,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "21",
+     "docx_row_position": 21
+    }
    },
    {
     "id": "N-014",
@@ -776,7 +1446,13 @@
      "table": "nominals",
      "row": "14"
     },
-    "docx_row_position": 14
+    "docx_row_position": 14,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "6",
+     "docx_row_position": 6
+    }
    },
    {
     "id": "N-015",
@@ -784,7 +1460,13 @@
      "table": "nominals",
      "row": "15"
     },
-    "docx_row_position": 15
+    "docx_row_position": 15,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "7",
+     "docx_row_position": 7
+    }
    },
    {
     "id": "N-016",
@@ -792,7 +1474,13 @@
      "table": "nominals",
      "row": "16"
     },
-    "docx_row_position": 16
+    "docx_row_position": 16,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "22",
+     "docx_row_position": 22
+    }
    },
    {
     "id": "N-017",
@@ -800,7 +1488,13 @@
      "table": "nominals",
      "row": "17"
     },
-    "docx_row_position": 17
+    "docx_row_position": 17,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "23",
+     "docx_row_position": 23
+    }
    },
    {
     "id": "N-018",
@@ -808,7 +1502,13 @@
      "table": "nominals",
      "row": "18"
     },
-    "docx_row_position": 18
+    "docx_row_position": 18,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "14",
+     "docx_row_position": 14
+    }
    },
    {
     "id": "N-019",
@@ -816,7 +1516,8 @@
      "table": "nominals",
      "row": "19"
     },
-    "docx_row_position": 19
+    "docx_row_position": 19,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "N-020",
@@ -824,7 +1525,8 @@
      "table": "nominals",
      "row": "20"
     },
-    "docx_row_position": 20
+    "docx_row_position": 20,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "N-021",
@@ -832,7 +1534,13 @@
      "table": "nominals",
      "row": "21"
     },
-    "docx_row_position": 21
+    "docx_row_position": 21,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "9",
+     "docx_row_position": 9
+    }
    },
    {
     "id": "N-022",
@@ -840,7 +1548,13 @@
      "table": "nominals",
      "row": "22"
     },
-    "docx_row_position": 22
+    "docx_row_position": 22,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "11",
+     "docx_row_position": 11
+    }
    },
    {
     "id": "N-023",
@@ -848,7 +1562,8 @@
      "table": "nominals",
      "row": "23"
     },
-    "docx_row_position": 23
+    "docx_row_position": 23,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "N-024",
@@ -856,7 +1571,13 @@
      "table": "nominals",
      "row": "24"
     },
-    "docx_row_position": 24
+    "docx_row_position": 24,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "59",
+     "docx_row_position": 59
+    }
    },
    {
     "id": "N-025",
@@ -864,7 +1585,13 @@
      "table": "nominals",
      "row": "25"
     },
-    "docx_row_position": 25
+    "docx_row_position": 25,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "60",
+     "docx_row_position": 60
+    }
    },
    {
     "id": "N-026",
@@ -872,7 +1599,13 @@
      "table": "nominals",
      "row": "26"
     },
-    "docx_row_position": 26
+    "docx_row_position": 26,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "63",
+     "docx_row_position": 63
+    }
    },
    {
     "id": "N-027",
@@ -880,7 +1613,13 @@
      "table": "nominals",
      "row": "27"
     },
-    "docx_row_position": 27
+    "docx_row_position": 27,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "18",
+     "docx_row_position": 18
+    }
    },
    {
     "id": "N-028",
@@ -888,7 +1627,13 @@
      "table": "nominals",
      "row": "28"
     },
-    "docx_row_position": 28
+    "docx_row_position": 28,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "64",
+     "docx_row_position": 64
+    }
    },
    {
     "id": "N-029",
@@ -896,7 +1641,13 @@
      "table": "nominals",
      "row": "29"
     },
-    "docx_row_position": 29
+    "docx_row_position": 29,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "16",
+     "docx_row_position": 16
+    }
    },
    {
     "id": "N-030",
@@ -904,7 +1655,13 @@
      "table": "nominals",
      "row": "30"
     },
-    "docx_row_position": 30
+    "docx_row_position": 30,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "17",
+     "docx_row_position": 17
+    }
    },
    {
     "id": "N-031",
@@ -912,7 +1669,13 @@
      "table": "nominals",
      "row": "31"
     },
-    "docx_row_position": 31
+    "docx_row_position": 31,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "62",
+     "docx_row_position": 62
+    }
    },
    {
     "id": "N-032",
@@ -920,7 +1683,13 @@
      "table": "nominals",
      "row": "32"
     },
-    "docx_row_position": 32
+    "docx_row_position": 32,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "109",
+     "docx_row_position": 45
+    }
    },
    {
     "id": "N-033",
@@ -928,7 +1697,13 @@
      "table": "nominals",
      "row": "33"
     },
-    "docx_row_position": 33
+    "docx_row_position": 33,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "133",
+     "docx_row_position": 69
+    }
    },
    {
     "id": "N-034",
@@ -936,7 +1711,13 @@
      "table": "nominals",
      "row": "34"
     },
-    "docx_row_position": 34
+    "docx_row_position": 34,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "67",
+     "docx_row_position": 3
+    }
    },
    {
     "id": "N-035",
@@ -944,7 +1725,13 @@
      "table": "nominals",
      "row": "35"
     },
-    "docx_row_position": 35
+    "docx_row_position": 35,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "66",
+     "docx_row_position": 2
+    }
    },
    {
     "id": "N-036",
@@ -952,7 +1739,13 @@
      "table": "nominals",
      "row": "36"
     },
-    "docx_row_position": 36
+    "docx_row_position": 36,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "112",
+     "docx_row_position": 48
+    }
    },
    {
     "id": "N-037",
@@ -960,7 +1753,13 @@
      "table": "nominals",
      "row": "37"
     },
-    "docx_row_position": 37
+    "docx_row_position": 37,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "159",
+     "docx_row_position": 95
+    }
    },
    {
     "id": "N-038",
@@ -968,7 +1767,13 @@
      "table": "nominals",
      "row": "38"
     },
-    "docx_row_position": 38
+    "docx_row_position": 38,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "166",
+     "docx_row_position": 102
+    }
    },
    {
     "id": "N-039",
@@ -976,7 +1781,8 @@
      "table": "nominals",
      "row": "39"
     },
-    "docx_row_position": 39
+    "docx_row_position": 39,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "N-040",
@@ -984,7 +1790,13 @@
      "table": "nominals",
      "row": "40"
     },
-    "docx_row_position": 40
+    "docx_row_position": 40,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "113",
+     "docx_row_position": 49
+    }
    },
    {
     "id": "N-041",
@@ -992,7 +1804,13 @@
      "table": "nominals",
      "row": "41"
     },
-    "docx_row_position": 41
+    "docx_row_position": 41,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "162",
+     "docx_row_position": 98
+    }
    },
    {
     "id": "N-042",
@@ -1000,7 +1818,13 @@
      "table": "nominals",
      "row": "42"
     },
-    "docx_row_position": 42
+    "docx_row_position": 42,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "106",
+     "docx_row_position": 42
+    }
    },
    {
     "id": "N-043",
@@ -1008,7 +1832,13 @@
      "table": "nominals",
      "row": "43"
     },
-    "docx_row_position": 43
+    "docx_row_position": 43,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "168",
+     "docx_row_position": 104
+    }
    },
    {
     "id": "N-044",
@@ -1016,7 +1846,13 @@
      "table": "nominals",
      "row": "44"
     },
-    "docx_row_position": 44
+    "docx_row_position": 44,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "167",
+     "docx_row_position": 103
+    }
    },
    {
     "id": "N-045",
@@ -1024,7 +1860,13 @@
      "table": "nominals",
      "row": "45"
     },
-    "docx_row_position": 45
+    "docx_row_position": 45,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "92",
+     "docx_row_position": 28
+    }
    },
    {
     "id": "N-046",
@@ -1032,7 +1874,13 @@
      "table": "nominals",
      "row": "46"
     },
-    "docx_row_position": 46
+    "docx_row_position": 46,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "170",
+     "docx_row_position": 106
+    }
    },
    {
     "id": "N-047",
@@ -1040,7 +1888,13 @@
      "table": "nominals",
      "row": "47"
     },
-    "docx_row_position": 47
+    "docx_row_position": 47,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "69",
+     "docx_row_position": 5
+    }
    },
    {
     "id": "N-048",
@@ -1048,7 +1902,13 @@
      "table": "nominals",
      "row": "48"
     },
-    "docx_row_position": 48
+    "docx_row_position": 48,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "171",
+     "docx_row_position": 107
+    }
    },
    {
     "id": "N-049",
@@ -1056,7 +1916,13 @@
      "table": "nominals",
      "row": "49"
     },
-    "docx_row_position": 49
+    "docx_row_position": 49,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "172",
+     "docx_row_position": 108
+    }
    },
    {
     "id": "N-050",
@@ -1064,7 +1930,13 @@
      "table": "nominals",
      "row": "50"
     },
-    "docx_row_position": 50
+    "docx_row_position": 50,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "204",
+     "docx_row_position": 140
+    }
    },
    {
     "id": "N-051",
@@ -1072,7 +1944,13 @@
      "table": "nominals",
      "row": "51"
     },
-    "docx_row_position": 51
+    "docx_row_position": 51,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "89",
+     "docx_row_position": 25
+    }
    },
    {
     "id": "N-052",
@@ -1080,7 +1958,13 @@
      "table": "nominals",
      "row": "52"
     },
-    "docx_row_position": 52
+    "docx_row_position": 52,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "192",
+     "docx_row_position": 128
+    }
    },
    {
     "id": "N-053",
@@ -1088,7 +1972,13 @@
      "table": "nominals",
      "row": "53"
     },
-    "docx_row_position": 53
+    "docx_row_position": 53,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "193",
+     "docx_row_position": 129
+    }
    },
    {
     "id": "N-054",
@@ -1096,7 +1986,13 @@
      "table": "nominals",
      "row": "54"
     },
-    "docx_row_position": 54
+    "docx_row_position": 54,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "90",
+     "docx_row_position": 26
+    }
    },
    {
     "id": "N-055",
@@ -1104,7 +2000,13 @@
      "table": "nominals",
      "row": "55"
     },
-    "docx_row_position": 55
+    "docx_row_position": 55,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "91",
+     "docx_row_position": 27
+    }
    },
    {
     "id": "N-056",
@@ -1112,7 +2014,13 @@
      "table": "nominals",
      "row": "56"
     },
-    "docx_row_position": 56
+    "docx_row_position": 56,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "88",
+     "docx_row_position": 24
+    }
    },
    {
     "id": "N-057",
@@ -1120,7 +2028,13 @@
      "table": "nominals",
      "row": "57"
     },
-    "docx_row_position": 57
+    "docx_row_position": 57,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "195",
+     "docx_row_position": 131
+    }
    },
    {
     "id": "N-058",
@@ -1128,7 +2042,13 @@
      "table": "nominals",
      "row": "58"
     },
-    "docx_row_position": 58
+    "docx_row_position": 58,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "194",
+     "docx_row_position": 130
+    }
    },
    {
     "id": "N-059",
@@ -1136,7 +2056,13 @@
      "table": "nominals",
      "row": "59"
     },
-    "docx_row_position": 59
+    "docx_row_position": 59,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "165",
+     "docx_row_position": 101
+    }
    },
    {
     "id": "N-060",
@@ -1144,7 +2070,13 @@
      "table": "nominals",
      "row": "60"
     },
-    "docx_row_position": 60
+    "docx_row_position": 60,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "163",
+     "docx_row_position": 99
+    }
    },
    {
     "id": "N-061",
@@ -1152,7 +2084,13 @@
      "table": "nominals",
      "row": "61"
     },
-    "docx_row_position": 61
+    "docx_row_position": 61,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "164",
+     "docx_row_position": 100
+    }
    },
    {
     "id": "N-062",
@@ -1160,7 +2098,13 @@
      "table": "nominals",
      "row": "62"
     },
-    "docx_row_position": 62
+    "docx_row_position": 62,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "186",
+     "docx_row_position": 122
+    }
    },
    {
     "id": "N-063",
@@ -1168,7 +2112,13 @@
      "table": "nominals",
      "row": "63"
     },
-    "docx_row_position": 63
+    "docx_row_position": 63,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "182",
+     "docx_row_position": 118
+    }
    },
    {
     "id": "N-064",
@@ -1176,7 +2126,13 @@
      "table": "nominals",
      "row": "64"
     },
-    "docx_row_position": 64
+    "docx_row_position": 64,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "207",
+     "docx_row_position": 143
+    }
    },
    {
     "id": "N-065",
@@ -1184,7 +2140,13 @@
      "table": "nominals",
      "row": "65"
     },
-    "docx_row_position": 65
+    "docx_row_position": 65,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "73",
+     "docx_row_position": 9
+    }
    },
    {
     "id": "N-066",
@@ -1192,7 +2154,13 @@
      "table": "nominals",
      "row": "66"
     },
-    "docx_row_position": 66
+    "docx_row_position": 66,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "74",
+     "docx_row_position": 10
+    }
    },
    {
     "id": "N-067",
@@ -1200,7 +2168,13 @@
      "table": "nominals",
      "row": "67"
     },
-    "docx_row_position": 67
+    "docx_row_position": 67,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "138",
+     "docx_row_position": 74
+    }
    },
    {
     "id": "N-068",
@@ -1208,7 +2182,13 @@
      "table": "nominals",
      "row": "68"
     },
-    "docx_row_position": 68
+    "docx_row_position": 68,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "180",
+     "docx_row_position": 116
+    }
    },
    {
     "id": "N-069",
@@ -1216,7 +2196,13 @@
      "table": "nominals",
      "row": "69"
     },
-    "docx_row_position": 69
+    "docx_row_position": 69,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "77",
+     "docx_row_position": 13
+    }
    },
    {
     "id": "N-070",
@@ -1224,7 +2210,13 @@
      "table": "nominals",
      "row": "70"
     },
-    "docx_row_position": 70
+    "docx_row_position": 70,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "187",
+     "docx_row_position": 123
+    }
    },
    {
     "id": "N-071",
@@ -1232,7 +2224,13 @@
      "table": "nominals",
      "row": "71"
     },
-    "docx_row_position": 71
+    "docx_row_position": 71,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "85",
+     "docx_row_position": 21
+    }
    },
    {
     "id": "N-072",
@@ -1240,7 +2238,13 @@
      "table": "nominals",
      "row": "72"
     },
-    "docx_row_position": 72
+    "docx_row_position": 72,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "189",
+     "docx_row_position": 125
+    }
    },
    {
     "id": "N-073",
@@ -1248,7 +2252,13 @@
      "table": "nominals",
      "row": "73"
     },
-    "docx_row_position": 73
+    "docx_row_position": 73,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "87",
+     "docx_row_position": 23
+    }
    },
    {
     "id": "N-074",
@@ -1256,7 +2266,13 @@
      "table": "nominals",
      "row": "74"
     },
-    "docx_row_position": 74
+    "docx_row_position": 74,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "96",
+     "docx_row_position": 32
+    }
    },
    {
     "id": "N-075",
@@ -1264,7 +2280,13 @@
      "table": "nominals",
      "row": "75"
     },
-    "docx_row_position": 75
+    "docx_row_position": 75,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "208",
+     "docx_row_position": 144
+    }
    },
    {
     "id": "N-076",
@@ -1272,7 +2294,13 @@
      "table": "nominals",
      "row": "76"
     },
-    "docx_row_position": 76
+    "docx_row_position": 76,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "97",
+     "docx_row_position": 33
+    }
    },
    {
     "id": "N-077",
@@ -1280,7 +2308,13 @@
      "table": "nominals",
      "row": "77"
     },
-    "docx_row_position": 77
+    "docx_row_position": 77,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "98",
+     "docx_row_position": 34
+    }
    },
    {
     "id": "N-078",
@@ -1288,7 +2322,13 @@
      "table": "nominals",
      "row": "78"
     },
-    "docx_row_position": 78
+    "docx_row_position": 78,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "200",
+     "docx_row_position": 136
+    }
    },
    {
     "id": "N-079",
@@ -1296,7 +2336,13 @@
      "table": "nominals",
      "row": "79"
     },
-    "docx_row_position": 79
+    "docx_row_position": 79,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "201",
+     "docx_row_position": 137
+    }
    },
    {
     "id": "N-080",
@@ -1304,7 +2350,13 @@
      "table": "nominals",
      "row": "80"
     },
-    "docx_row_position": 80
+    "docx_row_position": 80,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "95",
+     "docx_row_position": 31
+    }
    },
    {
     "id": "N-081",
@@ -1312,7 +2364,13 @@
      "table": "nominals",
      "row": "81"
     },
-    "docx_row_position": 81
+    "docx_row_position": 81,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "94",
+     "docx_row_position": 30
+    }
    },
    {
     "id": "N-082",
@@ -1320,7 +2378,13 @@
      "table": "nominals",
      "row": "82"
     },
-    "docx_row_position": 82
+    "docx_row_position": 82,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "100",
+     "docx_row_position": 36
+    }
    },
    {
     "id": "N-083",
@@ -1328,7 +2392,13 @@
      "table": "nominals",
      "row": "83"
     },
-    "docx_row_position": 83
+    "docx_row_position": 83,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "93",
+     "docx_row_position": 29
+    }
    },
    {
     "id": "N-084",
@@ -1336,7 +2406,13 @@
      "table": "nominals",
      "row": "84"
     },
-    "docx_row_position": 84
+    "docx_row_position": 84,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "202",
+     "docx_row_position": 138
+    }
    },
    {
     "id": "N-085",
@@ -1344,7 +2420,13 @@
      "table": "nominals",
      "row": "85"
     },
-    "docx_row_position": 86
+    "docx_row_position": 86,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "70",
+     "docx_row_position": 6
+    }
    },
    {
     "id": "N-086",
@@ -1352,7 +2434,13 @@
      "table": "nominals",
      "row": "86"
     },
-    "docx_row_position": 87
+    "docx_row_position": 87,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "175",
+     "docx_row_position": 111
+    }
    },
    {
     "id": "N-087",
@@ -1360,7 +2448,13 @@
      "table": "nominals",
      "row": "87"
     },
-    "docx_row_position": 88
+    "docx_row_position": 88,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "71",
+     "docx_row_position": 7
+    }
    },
    {
     "id": "N-088",
@@ -1368,7 +2462,13 @@
      "table": "nominals",
      "row": "88"
     },
-    "docx_row_position": 89
+    "docx_row_position": 89,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "176",
+     "docx_row_position": 112
+    }
    },
    {
     "id": "N-089",
@@ -1376,7 +2476,13 @@
      "table": "nominals",
      "row": "89"
     },
-    "docx_row_position": 90
+    "docx_row_position": 90,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "178",
+     "docx_row_position": 114
+    }
    },
    {
     "id": "N-090",
@@ -1384,7 +2490,13 @@
      "table": "nominals",
      "row": "90"
     },
-    "docx_row_position": 91
+    "docx_row_position": 91,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "179",
+     "docx_row_position": 115
+    }
    },
    {
     "id": "N-091",
@@ -1392,7 +2504,13 @@
      "table": "nominals",
      "row": "91"
     },
-    "docx_row_position": 92
+    "docx_row_position": 92,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "144",
+     "docx_row_position": 80
+    }
    },
    {
     "id": "N-092",
@@ -1400,7 +2518,13 @@
      "table": "nominals",
      "row": "92"
     },
-    "docx_row_position": 93
+    "docx_row_position": 93,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "76",
+     "docx_row_position": 12
+    }
    },
    {
     "id": "N-093",
@@ -1408,7 +2532,13 @@
      "table": "nominals",
      "row": "93"
     },
-    "docx_row_position": 94
+    "docx_row_position": 94,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "79",
+     "docx_row_position": 15
+    }
    },
    {
     "id": "N-094",
@@ -1416,7 +2546,8 @@
      "table": "nominals",
      "row": "94"
     },
-    "docx_row_position": 95
+    "docx_row_position": 95,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "N-095",
@@ -1424,7 +2555,13 @@
      "table": "nominals",
      "row": "95"
     },
-    "docx_row_position": 96
+    "docx_row_position": 96,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "145",
+     "docx_row_position": 81
+    }
    },
    {
     "id": "N-096",
@@ -1432,7 +2569,13 @@
      "table": "nominals",
      "row": "96"
     },
-    "docx_row_position": 97
+    "docx_row_position": 97,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "107",
+     "docx_row_position": 43
+    }
    },
    {
     "id": "N-097",
@@ -1440,7 +2583,13 @@
      "table": "nominals",
      "row": "97"
     },
-    "docx_row_position": 98
+    "docx_row_position": 98,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "114",
+     "docx_row_position": 50
+    }
    },
    {
     "id": "N-098",
@@ -1448,7 +2597,13 @@
      "table": "nominals",
      "row": "98"
     },
-    "docx_row_position": 99
+    "docx_row_position": 99,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "65",
+     "docx_row_position": 1
+    }
    },
    {
     "id": "N-099",
@@ -1456,7 +2611,13 @@
      "table": "nominals",
      "row": "99"
     },
-    "docx_row_position": 100
+    "docx_row_position": 100,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "185",
+     "docx_row_position": 121
+    }
    },
    {
     "id": "N-100",
@@ -1464,7 +2625,13 @@
      "table": "nominals",
      "row": "100"
     },
-    "docx_row_position": 101
+    "docx_row_position": 101,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "80",
+     "docx_row_position": 16
+    }
    },
    {
     "id": "N-101",
@@ -1472,7 +2639,13 @@
      "table": "nominals",
      "row": "101"
     },
-    "docx_row_position": 102
+    "docx_row_position": 102,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "81",
+     "docx_row_position": 17
+    }
    },
    {
     "id": "N-102",
@@ -1480,7 +2653,13 @@
      "table": "nominals",
      "row": "102"
     },
-    "docx_row_position": 103
+    "docx_row_position": 103,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "82",
+     "docx_row_position": 18
+    }
    },
    {
     "id": "N-103",
@@ -1488,7 +2667,13 @@
      "table": "nominals",
      "row": "103"
     },
-    "docx_row_position": 104
+    "docx_row_position": 104,
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "83",
+     "docx_row_position": 19
+    }
    },
    {
     "id": "N-104",
@@ -1496,7 +2681,8 @@
      "table": "nominals",
      "row": "104"
     },
-    "docx_row_position": 105
+    "docx_row_position": 105,
+    "retired_on": "2026-11-19"
    },
    {
     "id": "N-105",
@@ -1506,7 +2692,364 @@
      "follows_row": "84"
     },
     "docx_row_position": 85,
-    "note": "unnumbered in the source document; appended to the family"
+    "note": "unnumbered in the source document; appended to the family",
+    "current_source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "203",
+     "docx_row_position": 139
+    }
+   },
+   {
+    "id": "N-106",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "8"
+    },
+    "docx_row_position": 8
+   },
+   {
+    "id": "N-107",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "20"
+    },
+    "docx_row_position": 20
+   },
+   {
+    "id": "N-108",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "53"
+    },
+    "docx_row_position": 53
+   },
+   {
+    "id": "N-109",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "54"
+    },
+    "docx_row_position": 54
+   },
+   {
+    "id": "N-110",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "58"
+    },
+    "docx_row_position": 58
+   },
+   {
+    "id": "N-111",
+    "source": {
+     "document": "2026-11-19",
+     "table": "prefixes",
+     "row": "61"
+    },
+    "docx_row_position": 61
+   },
+   {
+    "id": "N-112",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "68"
+    },
+    "docx_row_position": 4
+   },
+   {
+    "id": "N-113",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "72"
+    },
+    "docx_row_position": 8
+   },
+   {
+    "id": "N-114",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "75"
+    },
+    "docx_row_position": 11
+   },
+   {
+    "id": "N-115",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "78"
+    },
+    "docx_row_position": 14
+   },
+   {
+    "id": "N-116",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "84"
+    },
+    "docx_row_position": 20
+   },
+   {
+    "id": "N-117",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "99"
+    },
+    "docx_row_position": 35
+   },
+   {
+    "id": "N-118",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "102"
+    },
+    "docx_row_position": 38
+   },
+   {
+    "id": "N-119",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "103"
+    },
+    "docx_row_position": 39
+   },
+   {
+    "id": "N-120",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "104"
+    },
+    "docx_row_position": 40
+   },
+   {
+    "id": "N-121",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "105"
+    },
+    "docx_row_position": 41
+   },
+   {
+    "id": "N-122",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "110"
+    },
+    "docx_row_position": 46
+   },
+   {
+    "id": "N-123",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "111"
+    },
+    "docx_row_position": 47
+   },
+   {
+    "id": "N-124",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "115"
+    },
+    "docx_row_position": 51
+   },
+   {
+    "id": "N-125",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "127"
+    },
+    "docx_row_position": 63
+   },
+   {
+    "id": "N-126",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "158"
+    },
+    "docx_row_position": 94
+   },
+   {
+    "id": "N-127",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "160"
+    },
+    "docx_row_position": 96
+   },
+   {
+    "id": "N-128",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "161"
+    },
+    "docx_row_position": 97
+   },
+   {
+    "id": "N-129",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "169"
+    },
+    "docx_row_position": 105
+   },
+   {
+    "id": "N-130",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "177"
+    },
+    "docx_row_position": 113
+   },
+   {
+    "id": "N-131",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "181"
+    },
+    "docx_row_position": 117
+   },
+   {
+    "id": "N-132",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "183"
+    },
+    "docx_row_position": 119
+   },
+   {
+    "id": "N-133",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "184"
+    },
+    "docx_row_position": 120
+   },
+   {
+    "id": "N-134",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "190"
+    },
+    "docx_row_position": 126
+   },
+   {
+    "id": "N-135",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "191"
+    },
+    "docx_row_position": 127
+   },
+   {
+    "id": "N-136",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "196"
+    },
+    "docx_row_position": 132
+   },
+   {
+    "id": "N-137",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "197"
+    },
+    "docx_row_position": 133
+   },
+   {
+    "id": "N-138",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "198"
+    },
+    "docx_row_position": 134
+   },
+   {
+    "id": "N-139",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "199"
+    },
+    "docx_row_position": 135
+   },
+   {
+    "id": "N-140",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "205"
+    },
+    "docx_row_position": 141
+   },
+   {
+    "id": "N-141",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "206"
+    },
+    "docx_row_position": 142
+   },
+   {
+    "id": "N-142",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "209"
+    },
+    "docx_row_position": 145
+   },
+   {
+    "id": "N-143",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "210"
+    },
+    "docx_row_position": 146
+   },
+   {
+    "id": "N-144",
+    "source": {
+     "document": "2026-11-19",
+     "table": "suffixes",
+     "row": "211"
+    },
+    "docx_row_position": 147
    }
   ],
   "glides": [

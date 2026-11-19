@@ -5,14 +5,16 @@ The project archive lives in Google Drive at
 what each file is good for. All of it was read on 2026-08-11.
 
 **The archive is private, and none of its files is in this repository.** The
-two rule documents are transcribed into `rules/source_rows.json` and
-`rules/stem_source_rows.json`; no other file from the archive is copied here.
+rule documents are transcribed into `rules/source_rows.json`,
+`rules/stem_source_rows.json` and (since 2026-11-19)
+`rules/affix_source_rows.json`; no other file from the archive is copied here.
 
 ## The rule material (most important)
 
 | File | What it is |
 |---|---|
-| `Dasturhāye Vāžesāzi az Kārbonhā.docx` | **The core asset.** The full grammar: new terminology, verb categories, and ~200 word-formation rules in tables (from stems; from nouns/adjectives/adverbs; glide rules; conjugation table) |
+| `Dasturhāye Vāžesāzi az Kārbonhā.docx` | **The core asset until 2026-11-19, and still the glide table's source.** The full grammar: new terminology, verb categories, and ~200 word-formation rules in tables (from stems; from nouns/adjectives/adverbs; glide rules; conjugation table) |
+| `Dasturhāyeé Vāžesāzi.docx` (the linguist's, 2026-11-19; not yet filed in the archive) | **The corrected word-formation rules**, which replace the August grammar's two rule tables: three tables only (prefixes, suffixes, formations without an affix), numbered 1–229 by the linguist, verb-stem and nominal rules mixed. No glides, no stem rules, no theory. sha256 `f74bd9ade88f…`. Transcribed into `rules/affix_source_rows.json`; its draft of 2026-11-18 (`Dasturhāyé Vāžesāzi.docx`) is superseded and was not imported |
 | `Forschung/قواعد_مصدر_و_لاتین‌نویسی_..._۲۰۲۶۰۵۱۴.docx` | **The stem-rules file.** Stem rules 1–9 with exception lists, plus the Latin alphabet table (the later, canonical convention). This is what karbon implements, and the source for rule family `S` |
 
 ## Concept and rationale

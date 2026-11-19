@@ -62,6 +62,9 @@ def _as_json(rule: Rule) -> dict[str, Any]:
         "label_fa": rule.label_fa,
         "explanation_fa": rule.explanation_fa,
         "examples": list(rule.examples),
+        # Quotations, kept apart from the words: a sentence is not a form the
+        # engine can rebuild, but it is the row's own illustration.
+        "example_sentences": list(rule.example_sentences),
         "source": rule.source,
         "needs_expert_check": rule.needs_expert_check,
         "notes": list(rule.notes),

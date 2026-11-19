@@ -28,6 +28,11 @@ WORD_CLASSES: Final[dict[str, str]] = {
     "janam": "ضمیر — pronoun",
     "pisvaze": "حرف اضافه — preposition",
     "nedayi": "the vocative",
+    # Added 2026-11-19 with the linguist's corrected rules, which name both as
+    # classes (Šomār, Kārvāže). No word-bank group feeds either yet, so the
+    # rules that take them build nothing until one does — see DECISIONS.
+    "somar": "عدد — the numeral",
+    "karvaze": "فعل — the inflected verb, as it stands in a sentence",
 }
 
 

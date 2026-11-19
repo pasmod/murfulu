@@ -5,6 +5,31 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-19 (the corrected rules)
+
+### S48. Deploy the new rule pack with a corpus rebuilt on it, or ahead of one?
+
+The corrected rules change what the engine builds: the build pool grows from
+3.0 M to 3.9 M forms (FINDINGS 2026-11-19), 14 rules retire and 55 are new.
+The served corpus (v17) was built on the August pack, so its stored
+derivations, productivity and attestation were measured on rules that partly
+no longer exist; the live build screen, which generates on request, would use
+the new pack at once. **Options:** deploy the pack and the questions now and
+build corpus v18 after (the screens disagree with the stored figures until
+then), or build v18 first and deploy both together. Either way the deploy
+needs `tools/sync_rules.py` and `tools/load_questions.py --apply` on the
+server. The project lead's call; nothing is deployed until then.
+
+### S49. A rule that names two result classes builds only the first
+
+Found by review on 2026-11-19. `engine.affix.apply` gives a built word
+`output_types[0]` and generation never branches over the rest, so *xošā*
+(N-121, «Barnām, Čonvāže») is built as a برنام only and never feeds a rule
+that takes a چون‌واژه. **Not new**: the August pack had such rules too; the
+corrected rules have more. Active now: V-028, N-032, N-042, N-096, N-121. Branching over
+every declared class would grow generation; whether and how is the project
+lead's call, and is left for after the import.
+
 ## Opened 2026-11-14 (search suggestions)
 
 ### Should the search screen find a word by its second reading?

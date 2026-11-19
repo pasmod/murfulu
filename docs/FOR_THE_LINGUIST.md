@@ -15,7 +15,29 @@ changes if he rules the other way.
 
 ---
 
-## Where the questions stand (2026-11-12, after the word bank)
+## Where the questions stand (2026-11-19, after the corrected rules)
+
+The linguist's corrected rules arrived on 2026-11-19 and replace the August
+grammar's two rule tables (DECISIONS 2026-11-19). Read against the open
+questions, row by row:
+
+| | state | why |
+|---|---|---|
+| L24 | **settled, withdrawn** | دستور is row 104, *-ur (Dārandegi)*, beside rānjur and ganjur — neither the stem ور nor *-var* |
+| L17c | **settled, withdrawn** | *-ā (Nedāyi)*, row 109, now makes نام and برنام; the vocative is no class of its own |
+| L26 (with L18, L35) | **asked, no longer deferred** | the rules have arrived. They name کارنام only where a row takes it alone (row 19), yet ten rows that say نام are illustrated on a کارنام (bāhonar, dānešmand, omidvār, Hušyār). Our proposal: those ten rows take کارنام too |
+| L28 | **open, reworded** | the Sarāsar row is gone, so the engine no longer builds کتاباخانه — and builds nothing from two nouns. The question stands |
+| L3 | **open** | the corrected rules still state the seven endings flatly («Kārandekārbahr bā -ande»); *bištar* stays on the -ār rows only, which L3 does not ask about. Not settled |
+| L2 | open | row 155 still reads «G2» with pazāndan |
+| L43 | **new** | rows 151 «-i (āri)» and 179 «-é (egi)»: cut short by removing «Vābast»? |
+| L44 | **new** | Kāridekārbahr renamed Barjākārbahr in rows 128–131, still written in rows 142, 224, 227 |
+| L45 | **new** | the infixes -na-/-nā- and nā- on a stem (nāšenās, nāšāyest) are gone; on purpose? |
+| L46 | **new** | the new result classes Čonyāftekārbahr and Āyākārbahr: which rules take them |
+| L47 | **new** | rows 209–211 need a Šomār, and the bank has no numeral group; they build nothing yet |
+
+The rest of the table below stands as it was.
+
+## Where the questions stood (2026-11-12, after the word bank)
 
 The questions in the app were reworked against karbon 1.3.2, the linguist's
 final word bank (`rules/questions_fa.yaml`, loaded by `tools/load_questions.py`).
@@ -983,6 +1005,12 @@ the same letters as دست + the possessing suffix.
 row now shows which verb the second half is a stem of, so the claim is at least
 visible and checkable instead of being a bare ور.
 
+**Settled 2026-11-19 by his corrected rules.** Row 104 lists *dastur* under
+*-ur (Dārandegi)* beside *rānjur* and *ganjur*: دست + *-ur*, a suffix of its
+own (N-120), neither the stem ور nor *-var*. The question is withdrawn with
+that reason. The general display question (a stem spelled like a suffix)
+stays ours: the screen keeps showing every reading the engine finds.
+
 ---
 
 ## L25. Two vowels touch at the front of a word, and no rule stops them
@@ -1029,6 +1057,17 @@ directions change together and the round-trip test in
 ---
 
 ## L26. Four nominal rules cannot build their own examples
+
+**Update 2026-11-19: asked, no longer deferred.** The corrected rules name
+کارنام only where a row takes it alone — row 19 (*be-* on a کارنام: *bexubi*)
+and row 126 (*-gar*, beside برنام and the stems) — which reads as «نام means
+نام». But ten rows that say نام are illustrated with words built on a word the
+bank files as کارنام only: rows 1 (*bāhonar*), 11 (*nākām*), 57 (*Emšab*), 63
+(*Pišāhang*), 85 (*dānešmand*), 94 (*ranjur*), 95 (*dānešvar*), 96
+(*omidvār*), 180 (*Dānešgāh*) and 205 (*Hušyār*). **Our proposal: those ten
+rows take کارنام as well** — his examples are then built, without the
+thirteenfold growth of opening all of them (about 2.4 times instead). Re-measured on the new pack in
+FINDINGS 2026-11-19.
 
 Raised by the project lead on 2026-08-20, from the build screen. It is
 [L18](#l18-six-compounding-rules-take-a-nām-so-a-kārnām-can-form-no-compound)
@@ -1321,6 +1360,12 @@ Checked against all 409,916 corpus spellings: **بن‌کارواژه، کنند
   syllabifier.
 
 ## L28. Your own terminology is coined by a rule the document does not have
+
+**Update 2026-11-19.** The corrected rules do not have row 104 (Nām + ā +
+Nām, Sarāsar). N-104 is retired, so the engine no longer builds
+*کتاباخانه* — but it now builds **no** word from two nouns, and the question
+below stands: is nām + nām with nothing between them a rule? Reworded in the
+app against the new rows; our proposal is unchanged (a new row).
 
 Found while checking the candidates above, and it is the larger of the two.
 
@@ -2823,4 +2868,70 @@ common reading goes in its own column.
 2. For spellings where no single reading dominates (باد *bād* or *Bād*, کی
    *key* or *ki*), whether a default helps at all, or the word should stay
    unsure.
+
+---
+
+## L43. Two meaning labels cut short: «-i (āri)» and «-é (egi)»
+
+Opened 2026-11-19, reading the corrected rules. Between the drafts of 18 and
+19 November the label *Vābast* was removed beside most affixes (-āne, -in,
+-či, -sār, -gi). Two labels look cut by the same replacement: row 151 reads
+«-i (āri)», which was «-i (Vābastāri)», and row 179 reads «-é (egi)», which
+was «-é (Vābastegi)». Neither *āri* nor *egi* is a word.
+
+**What we did meanwhile:** both are kept verbatim as tags, flagged
+`needs_expert_check` in `rules/semantic_tags.yaml`. Neither rule runs (row 151
+is an -i on an inflected verb, row 179 the ezāfe), so nothing is built on a
+wrong label. **Our proposal:** both are slips for Vābastāri and Vābastegi.
+
+## L44. Kāridekārbahr is renamed in four rows and kept in three
+
+Opened 2026-11-19. Rows 128–131 call the done-to participle *Barjākārbahr*,
+with exactly the August examples of *Kāridekārbahr* (zade, goftār, ranje,
+Kāvāk). Rows 142 (Rahāyi), 224 (delpazir) and 227 (diryāb) still write
+*Kāridekārbahr*.
+
+**What we did meanwhile:** Barjākārbahr is read as `karidekarbahr`, so the
+same words are built as before; the class keeps its displayed name
+کاریده‌کاربهر until he answers. **Our proposal:** one class, the new name
+everywhere — then `rules/word_classes.yaml` takes برجاکاربهر as its label.
+
+## L45. -na-, -nā- and nā- on a stem are gone
+
+Opened 2026-11-19. The infixes -na- (*xodānašnās*, N-020) and -nā-
+(*delnāčasb*, N-023) and the two rows putting *nā-* on a stem — *nāšenās*
+(V-065) and *nāšāyest* (V-066) — have no row in the corrected rules;
+*nāšenās* is now listed under *na-* on a present stem (row 12).
+
+**What we did meanwhile:** all four are retired with their ids. The infixes
+never built anything (the engine refuses an infix), so nothing is lost there;
+without *nā-* on a stem, ناشناس, ناپسند and ناشایست are no longer built, and
+row 12 builds only *našenās*. **Our proposal:** the infixes go on purpose,
+nā- on a stem comes back as a row of its own.
+
+## L46. Two new result classes: Čonyāftekārbahr and Āyākārbahr
+
+Opened 2026-11-19. *Čonyāftekārbahr* is what rows 116–118 make (dānā, dārā,
+rahā, xānā with -ā; ravān, puyān with -ān; zāu with -u); *Āyākārbahr* what
+row 65 makes (xordani, didani). Neither is a word-bank group, and only row 141
+(*Dānāyi*) names one as a base.
+
+**What we did meanwhile:** Čonyāftekārbahr is read as `karandekarbahr` and
+Āyākārbahr as `barnam` — the classes the August grammar gave the same words.
+The cost: *rahā* is now a Čonyāftekārbahr, so row 142 (*Rahāyi*, «Kāridekārbahr
+in -ā») has no rule left to feed it; *Rahāyi* is still built, by row 141.
+Two other new classes were mapped with confidence and are not asked:
+*Kārpazirnām* (Xorāk, Pušāk) as نام and *Šāyestbarnām* (šāhāne, šāhvār) as
+برنام. **Our proposal:** the mapping stands, and row 142 takes Čonyāftekārbahr.
+
+## L47. The numerals have no group
+
+Opened 2026-11-19. Rows 209–211 build from a *Šomār*: dogāne, sevom, dotā.
+The bank has no numeral group; دو، سه، پنج are filed under برنام and کارنام,
+and row 73 itself writes the base of *dahgān* as Barnām.
+
+**What we did meanwhile:** `somar` is a class of its own in the closed set,
+fed by no group, so the three rows build nothing. Opening them on every برنام
+would build *xubom* and *xubtā* from every adjective. **Our proposal:** a
+numeral group in the bank (one to ten, twenty, a hundred, a thousand…).
 

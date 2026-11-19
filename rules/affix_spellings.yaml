@@ -15,8 +15,9 @@
 # `kind: slot` is not an affix at all — the source writes "Nām-" in the affix
 # column for compounding rules, meaning "a noun goes here".
 #
-# Three entries are flagged for the linguist. Everything else is a standard
-# Persian derivational affixes.
+# None is flagged any more: the last, «-bāž», was settled by the linguist's
+# corrected rules of 2026-11-19. Everything else is a standard Persian
+# derivational affix.
 
 version: 0.1.0
 
@@ -75,6 +76,29 @@ affixes:
   - {latin: "-āsā", fa: "آسا", kind: suffix}
   - {latin: "-če", fa: "چه", kind: suffix}
   - {latin: "-či", fa: "چی", kind: suffix}
+  # Suffixes the corrected rules of 2026-11-19 add. Standard Persian spellings,
+  # each confirmed by the row's own examples (row numbers are the linguist's).
+  - {latin: "-mand", fa: "مند", kind: suffix, note: "row 85, dānešmand; the August -mānd was the slip"}
+  - {latin: "-āgin", fa: "آگین", kind: suffix, note: "row 66, zahrāgin زهرآگین"}
+  - {latin: "-bāre", fa: "باره", kind: suffix, note: "row 68, zanbāre"}
+  - {latin: "-fām", fa: "فام", kind: suffix, note: "row 72, Sorxfām"}
+  - {latin: "-gen", fa: "گن", kind: suffix, note: "row 75, šarmgen"}
+  - {latin: "-gun", fa: "گون", kind: suffix, note: "row 78, zardgun"}
+  - {latin: "-ize", fa: "یزه", kind: suffix, note: "row 84, Pākize"}
+  - {latin: "-van", fa: "ون", kind: suffix, note: "row 99, setarvan"}
+  - {latin: "-u", fa: "و", kind: suffix, note: "rows 103 and 118, tarsu, zāu"}
+  - {latin: "-āl", fa: "ال", kind: suffix, note: "row 158, Čangāl"}
+  - {latin: "-bad", fa: "بد", kind: suffix, note: "row 169, Sepahbod; -bod beside it"}
+  - {latin: "-gāhān", fa: "گاهان", kind: suffix, note: "row 181, Sahargāhan"}
+  - {latin: "-hā", fa: "ها", kind: suffix, note: "row 183, Kuhhā"}
+  - {latin: "-pād", fa: "پاد", kind: suffix, note: "row 190, Āzarpād"}
+  - {latin: "-šan", fa: "شن", kind: suffix, note: "row 191, Golšan"}
+  - {latin: "-vā", fa: "وا", kind: suffix, note: "row 196, Pišvā, Nānvā"}
+  - {latin: "-vān", fa: "وان", kind: suffix, note: "rows 197 and 198, Polvān, Sāyevān"}
+  - {latin: "-vāne", fa: "وانه", kind: suffix, note: "row 199, Parvāne"}
+  - {latin: "-yār", fa: "یار", kind: suffix, note: "row 205, Hušyār"}
+  - {latin: "-om", fa: "م", kind: suffix, note: "row 210, čāharom چهارم"}
+  - {latin: "-tā", fa: "تا", kind: suffix, note: "row 211, dotā"}
 
   - latin: "-é"
     fa: "ِ"
@@ -106,14 +130,13 @@ affixes:
     fa: "باژ"
     kind: prefix
     ruled_on: 2026-08-11
-    needs_expert_check: true
     note: >-
-      **Half settled.** The source writes it as a suffix, "-bāž", but its own
-      example bāžgunidan puts it at the front, so it is a prefix — the dash was
-      on the wrong side. That much is settled.
-      **Still open: the spelling.** The source says bāž, giving باژ, but the
-      form written today is usually واژگون (vāžgun) with a v. Both exist in
-      older Persian. Being asked.
+      **Settled.** The August grammar writes it as a suffix, "-bāž", but its
+      own example bāžgunidan puts it at the front, so it is a prefix — the dash
+      was on the wrong side. The spelling was the open half: باژ, or واژ as
+      in واژگون? The corrected rules of 2026-11-19 answer it — the verb prefix
+      is bāž- (row 31) and the noun prefix vāž- (row 61). Kept as the August
+      lookup key; the pack builds from "bāž-" above.
 
   # -- prefixes ------------------------------------------------------------
   - {latin: "bar-", fa: "بر", kind: prefix}
@@ -149,6 +172,56 @@ affixes:
       **Settled: پ is correct.** Source row "pa- (be, pey)", example padid
       (پدید) from did. The prefix appears once in the whole grammar, so it was
       flagged; confirmed as پ.
+
+  # Prefixes the corrected rules of 2026-11-19 add or write differently.
+  - {latin: "ā-", fa: "آ", kind: prefix, note: "row 24, ākandan آکندن; the August grammar wrote -ā (V-051)"}
+  - {latin: "andar-", fa: "اندر", kind: prefix, note: "row 25, Andarresidan; the August grammar wrote -andar (V-052)"}
+  - {latin: "borun-", fa: "برون", kind: prefix, note: "row 34, Borunāmadan; birun- beside it"}
+  - {latin: "pas-", fa: "پس", kind: prefix, note: "row 42, Pasāvardan"}
+  - {latin: "degar-", fa: "دگر", kind: prefix, note: "row 53, Degargun"}
+  - {latin: "digar-", fa: "دیگر", kind: prefix, note: "row 54, Digargun"}
+  - {latin: "xar-", fa: "خر", kind: prefix, note: "row 58, Xarguš"}
+  - {latin: "vāž-", fa: "واژ", kind: prefix, note: "row 61, Vāžgun"}
+
+  - latin: "bāž-"
+    fa: "باژ"
+    kind: prefix
+    ruled_on: 2026-11-19
+    note: >-
+      **Settled by the linguist's corrected rules.** Row 31 writes the verb
+      prefix bāž- (Bāžgunidan, bāžgune), and row 61 gives the noun prefix vāž-
+      (Vāžgun) with «bāž» among its meanings: two prefixes, one spelling each.
+      This closes the August doubt about «-bāž» (باژ or واژ) below.
+
+  - latin: "bāz"
+    corrected_latin: "bāz-"
+    fa: "باز"
+    kind: prefix
+    ruled_on: 2026-11-19
+    note: >-
+      Row 29 writes «bāz (Jologiri)» without the dash its three neighbours
+      (rows 27, 28, 30) carry. The same prefix.
+
+  - latin: "A-"
+    corrected_latin: "a-"
+    fa: "ا"
+    kind: prefix
+    ruled_on: 2026-11-19
+    note: >-
+      Row 52, «A-(Nāyi)», with Amardād امرداد, Akār, Anuš: the privative a-,
+      written capitalised because the cell begins with it. The August grammar
+      wrote it as the suffix «-ā (Nāyi)» (N-001); the corrected rules put it
+      in front, where its examples always had it.
+
+  - latin: "-kam"
+    corrected_latin: "kam-"
+    fa: "کم"
+    kind: prefix
+    ruled_on: 2026-11-19
+    note: >-
+      Row 8 writes «-kam» in the prefix table, and every example (kampul,
+      kamzur, kamkār, kamxān) puts it in front: the dash is on the wrong side,
+      as it was for the August «-bāž».
 
   # -- infixes -------------------------------------------------------------
   - {latin: "-na-", fa: "ن", kind: infix}
