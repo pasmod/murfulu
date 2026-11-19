@@ -9,6 +9,9 @@ The linguist sent the corrected word-formation rules on 2026-11-19
 it. It replaces the August grammar's two rule tables and nothing else: it has
 no glide table and no stem rules, which keep their own sources.
 
+- **Corpus v18 before the deploy** (OPEN_QUESTIONS S48, the project lead):
+  v18 is built on the new pack first, and pack and corpus are deployed
+  together later. Built on the Mac, not released (`data/compare-v17-v18.md`).
 - **A transcription of its own.** `tools/extract_affix_tables.py` copies the
   three tables (prefixes, suffixes, without an affix) verbatim into
   `rules/affix_source_rows.json`, keeping the linguist's running number 1–229

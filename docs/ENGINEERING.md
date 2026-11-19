@@ -218,6 +218,17 @@ env MURFULU_ELASTICSEARCH_URL=http://127.0.0.1:9201 \
 Both in `data/compare-v16-v17.md`. **Released 2026-11-14** on the project
 lead's word: `corpus-mac v17`, then `release v17 lexicon-20261111` (DEPLOY §10).
 
+**v18 (2026-11-19) is v17's recipe with a new rule pack**: the linguist's
+corrected rules, pack 0.2.0 (DECISIONS 2026-11-19). Same text, lexicon and
+inputs, same commands with `v18`, built on the Mac from the branch that
+imports the rules, in **12 minutes**; then the Behnevis model and
+evaluation (`data/behnevis-eval-v18.md`) and the comparison
+(`compare_versions.py --report … --derivations …`, `compare_documents.py v17
+v18`, `measure_bank_gaps.py v18 --top 1000`), all in `data/compare-v17-v18.md`:
+text and counts unchanged, +926,456 records (+31 %), 2,289 fewer attested.
+**Not released**: it goes out with the rule pack, on the project lead's word
+(OPEN_QUESTIONS S48).
+
 **The precompute runs first, and this order is not cosmetic.** The ingest
 takes the precompute's affix map, so an ingest run before it has nothing to
 pass. This file listed the two the other way round until 2026-08-14, and **v6

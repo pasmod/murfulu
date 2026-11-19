@@ -9,6 +9,9 @@ Things we need answered before or during planning. Move each one to
 
 ### S48. Deploy the new rule pack with a corpus rebuilt on it, or ahead of one?
 
+**Settled 2026-11-19 by the project lead: v18 first, then pack and corpus
+together** (DECISIONS 2026-11-19). v18 is built, not released.
+
 The corrected rules change what the engine builds: the build pool grows from
 3.0 M to 3.9 M forms (FINDINGS 2026-11-19), 14 rules retire and 55 are new.
 The served corpus (v17) was built on the August pack, so its stored

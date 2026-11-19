@@ -5,6 +5,26 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-19 (session 32, later) — corpus v18 on the corrected rules
+
+The project lead decided S48: build v18 on the new pack first, deploy pack and
+corpus together later. Built on the Mac in 12 minutes, not released
+(`data/compare-v17-v18.md`). **The text is v17's exactly** — 133,142
+documents, 0 counts moved, the bank's gaps identical — so everything that
+moves is the pack's: records 2,949,164 → 3,875,620 (+31 %), paths +910,856,
+205 rules moved.
+
+**Attestation falls, and that is mostly good.** 31,490 → 29,201 attested
+records. The losses are largely N-098's false credits: with *-i* on every
+کارنام, inflected verbs in the text (می 113,522 times, کنی، داری، خواهی) were
+counted as built words; N-098 now takes only the infinitive. Real words lost
+with them: چیزی، کاری، یاری (L26 again). **But short new affixes bring false
+credits of their own**: *-u* on a present stem (V-091) is credited with سرو،
+ازو، برو، گاو; *be-* on a کارنام (N-006) with بهر and بهرام; *kam-* with کمر;
+*a-* with اله and ادراک. The attestation matches a spelling, not a reading,
+and a one-letter affix on every base finds many. Worth checking before the
+release whether the build screen's levels lean on these (L36).
+
 ## 2026-11-19 (session 32) — the linguist's corrected rules, imported and measured
 
 The corrected rules of 2026-11-19 replace the August rule tables (DECISIONS
