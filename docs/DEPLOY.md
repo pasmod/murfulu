@@ -487,3 +487,25 @@ files differing on the server.
 | 4 | the web container | `/` answers `Cache-Control: no-cache`; the served bundle carries «نشان دادن همهٔ شواهد» |
 
 The page itself was not viewed logged in on the server.
+
+## 13. The deploy of the linguist's corrected rules and corpus v22 — run 2026-11-19/20
+
+The rule pack of the corrected rules (0.2.0, DECISIONS 2026-11-19) and corpus
+v22 built on it (ENGINEERING, v22; `data/compare-v18-v22.md`), on the project
+lead's word. **The questions were not loaded**: `rules/questions_fa.yaml` is
+reworded and on the server, but the store keeps the questions that were live
+until the project lead has proofread the new Persian. Run from the worktree of
+the merged commit, with the host files copied there (as §12). No migration.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | `pg_dump` on the server | `data/backups/db-before-v22-20261119.dump` |
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, healthy; they read v17 meanwhile |
+| 2 | `deploy/server.sh data` | `deploy/server.env.example` names v22's three figures and `behnevis-v22.json`. **Before `release`, not after**: `release` refuses a version whose figures are not on the server, and it points the api at `behnevis-v22.json` |
+| 3 | `deploy/server.sh corpus-mac v22` | 133,142 / 411,712 / 3,875,620 documents on both sides; no alias moved. The first attempt stopped at its second SSH connection, refused by the server for a few minutes after a burst of connections; the retry reused one connection (`ControlMaster` in the local `deploy/ssh_config`) and ran clean, 4 min 42 s |
+| 4 | `deploy/server.sh release v22 lexicon-20261111` | aliases and server `.env`, api recreated. **The rollback is `release v17 lexicon-20261111`**; v17's indices and figures stay on the server |
+| 5 | `tools/sync_rules.py` in the api container | `--check`, then for real: rule pack 0.2.0, 250 rules, 17 glide rules |
+| 6 | `deploy/server.sh check` | all checks passed, corpus v22, `generate پر` 8,251 forms, the site answers 401 logged out |
+| 7 | inside the api container | `/rules`: pack 0.2.0; N-115 *-gun* at row 78 of the new document. `/generate گل`: *golgun* گلگون by N-115, attested at reading level (1,428). `/generate سریدن`: *saru* and *soru* (سرو) are headword homographs — 13,181 occurrences shown, read as *Sarv* or *Sorv*, corpus mark none |
+
+The pages were not viewed logged in on the server.
