@@ -569,3 +569,21 @@ On the project lead's word. Run from `main` at the rename commit (DECISIONS
 | 3 | grep in the web container's served files | ساختن، چسباندن and شکافتن present; the old `label:"ترکیب"` gone |
 
 The page itself was not viewed logged in on the server.
+
+## 18. The search and build screens in plain Persian — run 2026-11-21
+
+The thirteen interface changes the project lead approved on 2026-11-20
+(DECISIONS 2026-11-20), and the new route `GET /corpus/centuries`, on the
+project lead's word. Run from the worktree of `57069a6` with the host files
+copied there (as §12); a dry run of the copy showed only this change's files
+differing, and `uv.lock`, which no image reads. No migration, no data. The
+rollback is `deploy` from `d57e2bc`.
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy (1 min 15 s) |
+| 2 | `deploy/server.sh check` | all checks passed, corpus v22; the site answers 401 logged out |
+| 3 | inside the api container | `/corpus/centuries` answers `{"first": 11, "last": 20}`; `/rules` serves `traditional_fa` beside each class |
+| 4 | grep in the web container's served files | «با این تمام شود» present; «می‌نویسد:» gone |
+
+The page itself was not viewed logged in on the server.
