@@ -556,3 +556,16 @@ No migration, no data.
 | 4 | `deploy/server.sh check` | all checks passed; the site answers 401 logged out |
 
 The page itself was not viewed logged in on the server.
+
+## 17. The menu renamed after the linguist's ruling on L21 — run 2026-11-21
+
+On the project lead's word. Run from `main` at the rename commit (DECISIONS
+2026-11-21). No migration, no data, no questions load.
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `deploy/server.sh deploy` | api and web rebuilt, healthy |
+| 2 | `deploy/server.sh check` | all checks passed; the site answers 401 logged out |
+| 3 | grep in the web container's served files | ساختن، چسباندن and شکافتن present; the old `label:"ترکیب"` gone |
+
+The page itself was not viewed logged in on the server.
