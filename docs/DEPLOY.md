@@ -525,3 +525,19 @@ the merged commit, with the host files copied there (as §12).
 | 3 | the web container | the served bundle no longer carries «همهٔ پرسش‌ها»; it carries «پاسخ داده شده» |
 
 The page itself was not viewed logged in on the server.
+
+## 15. Loading the reworded questions — run 2026-11-20
+
+The project lead proofread the Persian of `rules/questions_fa.yaml` (the
+2026-11-19 rework, §13) and asked for it to be loaded. The proofreading text
+was exported before the last change to L26, which only puts a figure on how
+far the word count rises (about two and a half times instead of "much less");
+the rest is the text that was read.
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `deploy/server.sh questions` | dry run: 5 added (L43–L47), 3 reworded (L3, L26, L28), 7 unchanged, 2 withdrawn (L17c, L24) |
+| 2 | `deploy/server.sh questions --apply` | the same, written; a second dry run shows 15 unchanged and nothing to do |
+| 3 | `/questions` inside the api container | 15 unanswered (14 blocking work, L36 not), 1 answered (L16), 16 withdrawn; the screen's two boxes show 15 and 1 |
+
+The page itself was not viewed logged in on the server.
