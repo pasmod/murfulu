@@ -858,6 +858,13 @@ rather than graceful.
 Raised 2026-08-18. **Nothing is changed yet** — this one is his to rule on,
 because two of the three are real grammar words.
 
+**In the app's questions since 2026-11-20** (`rules/questions_fa.yaml`, not
+blocking). The 2026-10-17 re-check had withdrawn it by default because it blocks
+nothing; the project lead asked for it to be put to him after the menu again
+failed to say how ساخت and ترکیب differ. The app version carries three options:
+the verbs below (our proposal), «ساخت با وند / ترکیب دو واژه / تحلیل», or the
+names as they are.
+
 **What happened.** The project lead, who knows this project better than any
 reader will, asked what the difference between **ساخت** and **ترکیب** is. The
 menu had already been given a gloss line under each name on 2026-08-17 for

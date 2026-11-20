@@ -28,10 +28,13 @@
 # short), L44 (Kāridekārbahr left in three rows after the rename), L45 (na-
 # and nā- dropped), L46 (two new result classes) and L47 (no numeral group).
 #
-# **One question does not block work: L36** (2026-11-13), the three levels the
+# **Two questions do not block work: L36** (2026-11-13), the three levels the
 # build screen gives a word. They are built and marked unconfirmed under the
 # working rule, and the project lead asked for the question to be put to him;
-# it carries `blocks_work: false`.
+# it carries `blocks_work: false`. **And L21** (asked 2026-11-20), the menu
+# names ساخت، ترکیب and تحلیل: withdrawn by default on 2026-10-17 because it
+# blocks nothing, put back on the project lead's word after the project
+# lead could not tell ساخت and ترکیب apart from the menu either. Listing it here reopens the withdrawn row.
 #
 # **How the Persian is written** (the project lead, 2026-10-18 and 2026-11-12):
 # complete, simple sentences that carry the full meaning — nothing dropped to
@@ -530,6 +533,38 @@ questions:
       - id: no_levels
         text_fa: >-
           واژه‌ها نباید درجه بگیرند؛ صفحه سه سنجه را تنها جداگانه نشان دهد، همان‌گونه که پیش از این نشان می‌داد.
+      - id: unsure
+        text_fa: نمی‌دانم و باید بیشتر بررسی کنم.
+        settles: false
+
+  - reference: L21
+    blocks_work: false
+    question_en: >-
+      The menu names three screens ساخت، ترکیب and تحلیل — three abstract nouns
+      a new reader cannot tell apart; only the small line under each says
+      which is which. Should they be renamed, and to what?
+    question_fa: |
+      منوی بالای برنامه سه صفحه دارد که نام‌هایشان به هم نزدیک‌اند: «ساخت»، «ترکیب» و «تحلیل». کار این سه صفحه چنین است:
+      ساخت: یک واژه را می‌گیرد و با پیشوند یا پسوند از آن واژه‌های تازه می‌سازد، مانند گفت + ـار ← گفتار (Goftār).
+      ترکیب: یک واژه را می‌گیرد و واژه‌هایی را نشان می‌دهد که از آن واژه و یک واژه یا کاربن دیگر ساخته می‌شوند، مانند دل + سوز ← دلسوز (delsuz).
+      تحلیل: یک واژه را می‌گیرد و نشان می‌دهد که این واژه با کدام پایه‌ها و وندها می‌تواند ساخته شود.
+
+      هر سه نام می‌گویند که کاری با واژه انجام می‌شود، ولی هیچ‌کدام نمی‌گوید که واژه با وند ساخته می‌شود یا با واژه یا کاربنی دیگر، و اینکه از پاره‌ها به واژه می‌رویم یا از واژه به پاره‌ها. اکنون تنها یک خط کوتاه زیر هر نام این فرق را می‌گوید، و خواننده‌ای که برنامه را بار نخست می‌بیند «ساخت» و «ترکیب» را از هم بازنمی‌شناسد.
+
+      پرسش: آیا این سه صفحه نام‌های دیگری بگیرند، و اگر آری، کدام؟
+
+      پیشنهاد ما: گزینهٔ نخست، چون نام‌های «ساختن»، «چسباندن» و «شکافتن» کوتاه‌اند، فارسی‌اند و کار هر صفحه را روشن‌تر نشان می‌دهند؛ تنها نگرانی ما این است که «چسباندن» برای ابزاری پژوهشی بیش از اندازه ساده بنماید.
+    choices:
+      - id: verbs
+        suggested: true
+        text_fa: >-
+          سه صفحه نام‌های «ساختن»، «چسباندن» و «شکافتن» بگیرند.
+      - id: with_count
+        text_fa: >-
+          نام‌ها روشن‌تر شوند و واژه‌های کنونی بمانند: «ساخت با وند»، «ترکیب دو واژه» و «تحلیل».
+      - id: keep
+        text_fa: >-
+          نام‌ها همین بمانند، و خط کوتاه زیر هر نام فرق آن‌ها را بگوید.
       - id: unsure
         text_fa: نمی‌دانم و باید بیشتر بررسی کنم.
         settles: false

@@ -2,6 +2,16 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-20 — the menu-name question goes to the linguist after all
+
+L21 (are ساخت، ترکیب and تحلیل the right menu names) was withdrawn by default
+on 2026-10-17 because it blocks nothing. The project lead asked again what
+separates ساخت from ترکیب, which is the complaint L21 was written for, and
+asked for it to be put to the linguist. It is in `rules/questions_fa.yaml` with
+`blocks_work: false`, like L36; listing it reopens the withdrawn row. Our
+proposal is the verbs ساختن / چسباندن / شکافتن; the menu stays as it is until
+he rules. — project lead
+
 ## 2026-11-19 — false claims of the short affixes: letters that are another word's
 
 The project lead, after corpus v18: fix the false hits before the release.
