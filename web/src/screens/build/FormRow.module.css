@@ -1,10 +1,8 @@
-/* The word first, the machinery behind an expander. */
+/* One word as one row of the build table (direction A, the project lead's
+   choice of 2026-11-21). The head row in Build.tsx uses the same template, so
+   the columns line up: word, class, score, corpus, made with, actions. */
 
 .row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4) 0;
   border-block-end: 1px solid var(--line);
 }
 
@@ -12,66 +10,105 @@
   border-block-end: 0;
 }
 
-/* **The same content in less height.** From 60rem the buttons end the name's
-   line and everything else runs the full width under it. Nothing moves
-   behind an expander for the layout's sake — what is shown by default is the
-   linguist's and the project lead's to decide, not a layout's. */
-@media (min-width: 60rem) {
-  .row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    gap: var(--space-2) var(--space-6);
-    padding-block: var(--space-3);
-  }
-
-  .row > * {
-    grid-column: 1 / -1;
-  }
-
-  .row > .head {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: center;
-  }
-
-  .row > .actions {
-    grid-column: 2;
-    grid-row: 1;
-  }
-}
-
-/* The word, then its level beside it — not pushed to the far end, where on a
-   wide screen it would sit nearer the buttons than the word it describes. */
-.head {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+.cells {
+  display: grid;
+  grid-template-columns: var(--build-columns);
+  align-items: center;
   gap: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-4);
 }
 
-.forms {
+.row:hover .cells {
+  background: var(--paper-sunk);
+}
+
+.word {
   display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
+  flex-direction: column;
+  min-inline-size: 0;
+  line-height: var(--leading-tight);
 }
 
 .fa {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
 }
 
+/* Under the word, aligned with it: the Latin island is LTR, so it is set to
+   start on the word's side rather than its own. */
 .latin {
+  align-self: flex-start;
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}
+
+.wordClass {
   color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.scoreCell,
+.corpus,
+.made {
+  font-size: var(--text-sm);
 }
 
 .meaning {
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-2);
   color: var(--ink-soft);
+  font-size: var(--text-sm);
 }
 
 .actions {
   display: flex;
-  gap: var(--space-2);
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.evidence {
+  margin: 0 var(--space-4) var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-md);
+}
+
+/* **A phone gets two lines, not six columns.** The word and its score on the
+   first, what the corpus has on the second, the buttons on the third; the
+   class is the tab above, and the rule is one press away. */
+@media (max-width: 59.99rem) {
+  .cells {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-3) var(--space-4) var(--space-1);
+  }
+
+  .word {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--space-3);
+  }
+
+  .scoreCell {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .corpus {
+    grid-column: 1 / -1;
+  }
+
+  .wordClass,
+  .made {
+    display: none;
+  }
+
+  .actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    margin-inline-start: calc(-1 * var(--space-3));
+  }
 }
 
 /* The two rules used to be written `.toggle, .copy`. The copy button was
@@ -105,6 +142,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  margin: 0 var(--space-4) var(--space-3);
   padding: var(--space-3) var(--space-4);
   background: var(--paper-sunk);
   border-radius: var(--radius-md);

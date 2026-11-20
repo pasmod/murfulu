@@ -168,11 +168,11 @@ export interface BuiltForm {
     rule_says_fa?: string | null;
   } | null;
   /**
-   * How plausible the word is, as one of three levels, decided by the API
-   * (`murfulu/scoring/level.py`) because the deep answer is ranked and paged
+   * How much evidence the word has, 0 to 100, decided by the API
+   * (`murfulu/scoring/score.py`) because the deep answer is ranked and paged
    * there. Absent from an older API, which the screen treats as *not known*.
    */
-  level?: FormLevel;
+  score?: FormScore;
   /** Every chain that produces this form, shortest first. Two is information. */
   paths: Step[][];
 }
@@ -181,33 +181,29 @@ export interface BuiltForm {
 export type RuleBand = "low" | "middle" | "high";
 
 /**
- * 3 familiar, 2 well-formed, 1 weakly backed; null where it cannot be said —
- * the corpus was not asked, or no rule on the chain was measured.
+ * One score from 0 to 100: up to 70 from the corpus and up to 30 from the
+ * chain's weakest rule (DECISIONS 2026-11-21). `value` is null where the
+ * corpus was not asked.
  *
- * **Unconfirmed** while `confirmed` is false: the names and thresholds are
- * ours until the linguist rules (docs/FOR_THE_LINGUIST.md L36).
+ * **Unconfirmed** while `confirmed` is false: the scale is ours until the
+ * linguist rules (docs/FOR_THE_LINGUIST.md L36).
  */
-export interface FormLevel {
-  level: 1 | 2 | 3 | null;
+export interface FormScore {
+  value: number | null;
+  /** The corpus part, 0 to 70; null where the corpus was not asked. */
+  corpus: number | null;
+  /** The rule part, 0 to 30. */
+  rule: number;
   confirmed: boolean;
-  /** The chain's weakest measured rule, which the reason sentence names. */
+  /** The chain's measured rule with the lowest rate; the rule part's source. */
   weakest_rule: {
     rule_id: string;
     affix: string;
     types: number | null;
     attested: number | null;
-    band: RuleBand | null;
   } | null;
-  /**
-   * The three figures behind the evidence button as up to three dots each.
-   * `corpus` is 0 where the corpus does not have the word; null on any of
-   * them means not measured.
-   */
-  marks: {
-    corpus: number | null;
-    rule: number | null;
-    meaning: number | null;
-  };
+  /** How typical the base is for its rule, as up to three dots; not in the score. */
+  meaning_mark: number | null;
 }
 
 export interface Reading {

@@ -223,15 +223,13 @@ test.describe("a real build", () => {
     ).toBeVisible();
     await expect(page.getByRole("heading", { level: 2 }).first()).toContainText("raftan");
 
-    // The word classes come first and the words are behind them, from
-    // 2026-08-18 — رفتن answers with 660 words in 8 classes per reading, and
-    // opening all of them made a page 47,802px tall. So the class is asked for
-    // the way a reader asks for it, and then the words are there.
-    const karnam = page
-      .getByRole("heading", { level: 3, name: /کارنام/ })
-      .first();
+    // Every word is on the table, best first, and a class is a tab that
+    // narrows it (the project lead's choice of 2026-11-21). The table starts
+    // at fifty rows: رفتن answers with 660 words, and all of them at once made
+    // a page 47,802px tall.
+    const karnam = page.getByRole("tab", { name: /کارنام/ }).first();
     await expect(karnam).toBeVisible();
-    await karnam.getByRole("button").click();
+    await karnam.click();
 
     // رفتار is what the whole project walks through, and it is attested.
     await expect(page.getByText("رفتار").first()).toBeVisible();
@@ -252,9 +250,7 @@ test.describe("a built word's evidence", () => {
     const answer = await page.request.get("/api/generate?word=%D8%B1%D9%81%D8%AA%D9%86");
     test.skip(!answer.ok(), "no lexicon configured");
     await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86&depth=2");
-    const group = page.getByRole("heading", { level: 3 }).first();
-    await group.waitFor();
-    await group.getByRole("button").click();
+    await page.getByRole("tablist").first().waitFor();
     const row = page.getByRole("listitem").filter({ hasText: "شواهد" }).first();
     await row.getByRole("button", { name: "شواهد" }).click();
     for (const name of [/^پیکره/, /^دستور/, /^معنا/]) {
@@ -268,18 +264,14 @@ test.describe("a built word's evidence", () => {
     expect(overflow).toBeLessThanOrEqual(1);
   });
 
-  test("explains a level on a press without leaving the screen", async ({ page }) => {
-    // The ⓘ sits after the word, near a phone's left edge. Its explanation
-    // grew from it towards the line's end and ran off that edge until the
-    // row's head was made to hold it (2026-11-13).
+  test("explains the score on a press without leaving the screen", async ({ page }) => {
+    // The ⓘ beside the score filter, from 2026-11-21. An explanation grown
+    // from an ⓘ ran off a phone's edge once (2026-11-13); this holds it.
     const answer = await page.request.get("/api/generate?word=%D8%B1%D9%81%D8%AA%D9%86");
     test.skip(!answer.ok(), "no lexicon configured");
     await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86&depth=2");
-    const group = page.getByRole("heading", { level: 3 }).first();
-    await group.waitFor();
-    await group.getByRole("button").click();
-    const info = page.getByRole("listitem").getByRole("button", { name: /چیست؟/ });
-    test.skip((await info.count()) === 0, "no corpus here, so no word has a level");
+    await page.getByRole("tablist").first().waitFor();
+    const info = page.getByRole("button", { name: "امتیاز چیست؟" });
     await info.first().click();
     const tip = page.getByRole("tooltip");
     await expect(tip).toBeVisible();

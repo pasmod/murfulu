@@ -88,10 +88,8 @@ test.describe("the parts behind a click", () => {
     const answer = await page.request.get("/api/generate?word=%D8%B1%D9%81%D8%AA%D9%86");
     test.skip(!answer.ok(), "no API");
     await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86");
-    // A word class is opened first: the rows live inside one from 2026-08-18.
-    const group = page.getByRole("heading", { level: 3 }).first();
-    await group.waitFor();
-    await group.getByRole("button").click();
+    // Every word is on the table from 2026-11-21; no class has to be opened.
+    await page.getByRole("tablist").first().waitFor();
     const path = page.getByRole("button", { name: /راه ساخت/ }).first();
     await path.waitFor();
     await path.click();
@@ -99,14 +97,12 @@ test.describe("the parts behind a click", () => {
   });
 
   test("a built word with its evidence open and one field pressed", async ({ page }) => {
-    // The level's three fields, from 2026-11-13: controls that open on a
-    // press, each with a name a screen reader can say.
+    // The score's three fields: controls that open on a press, each with a
+    // name a screen reader can say.
     const answer = await page.request.get("/api/generate?word=%D8%B1%D9%81%D8%AA%D9%86");
     test.skip(!answer.ok(), "no API");
     await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86");
-    const group = page.getByRole("heading", { level: 3 }).first();
-    await group.waitFor();
-    await group.getByRole("button").click();
+    await page.getByRole("tablist").first().waitFor();
     await page.getByRole("button", { name: "شواهد" }).first().click();
     await page.getByRole("button", { name: /^دستور/ }).first().click();
     expect(readable((await audit(page)).violations)).toEqual([]);

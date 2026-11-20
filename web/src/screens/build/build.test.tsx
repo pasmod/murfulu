@@ -153,22 +153,19 @@ afterEach(() => {
 
 const ROUTE = "/build?word=%D8%B1%D9%81%D8%AA%D9%86&depth=2";
 
-
 /**
- * Open a word class, so its rows are on the page.
+ * Wait for the table, and choose a class if one is named.
  *
- * The classes are folded from 2026-08-18 and only **one is open at a time**
- * from later the same day — the words render below the grid, and two open
- * classes put the long scroll back. So a test that reads a row asks for the
- * class it lives in, the way a reader does. Without a name it opens the first,
- * which is where a single-class fixture puts everything.
+ * Every word is on the table when it opens since 2026-11-21 (direction A, the
+ * project lead's choice); a class is a tab that narrows it. So a test that
+ * reads a row waits for the table, and one that is about a class presses its
+ * tab, the way a reader does.
  */
 async function showForms(name?: RegExp) {
-  const headings = await screen.findAllByRole("heading", { level: 3 });
-  const wanted = name
-    ? headings.find((one) => name.test(one.textContent ?? ""))
-    : headings[0];
-  await userEvent.click(within(wanted!).getByRole("button"));
+  const tabs = await screen.findAllByRole("tab");
+  if (!name) return;
+  const wanted = tabs.find((one) => name.test(one.textContent ?? ""));
+  await userEvent.click(wanted!);
 }
 
 /**
@@ -184,6 +181,11 @@ async function openEvidence(word: string, field: RegExp) {
   await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
   await userEvent.click(within(row).getByRole("button", { name: field }));
   return row;
+}
+
+/** The stem buttons: the toggles that say how many words a stem builds. */
+function stemButtons() {
+  return screen.getAllByRole("button", { name: /از این بن/ });
 }
 
 /** The element whose whole text is this, even where a Latin island splits it. */
@@ -223,7 +225,10 @@ describe("the build screen", () => {
     // It read «از raftan ۳ واژه» and «۳ واژه»: a Latin word and two bare
     // numbers. The project lead asked on 2026-11-20 what they meant.
     renderApp(ROUTE);
-    const title = await screen.findByRole("heading", { level: 2, name: /ساخته می‌شود/ });
+    const title = await screen.findByRole("heading", {
+      level: 2,
+      name: /ساخته می‌شود/,
+    });
     // A space before the reading, so it is not read as one word with «می‌شود».
     expect(title.textContent).toContain("از «رفتن» ۳ واژه ساخته می‌شود raftan");
     expect(within(title).getByText("raftan")).toBeInTheDocument();
@@ -240,13 +245,21 @@ describe("the build screen", () => {
     expect(box).toHaveAttribute("dir", "rtl");
     await userEvent.click(box);
     const list = await screen.findByRole("listbox");
-    expect(within(list).getByRole("option", { name: "رفتن، نمونه" })).toBeInTheDocument();
-    await userEvent.click(within(list).getByRole("option", { name: "گفتن، نمونه" }));
+    expect(
+      within(list).getByRole("option", { name: "رفتن، نمونه" }),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      within(list).getByRole("option", { name: "گفتن، نمونه" }),
+    );
     await waitFor(() =>
       expect(
-        vi.mocked(fetch).mock.calls.some((call) =>
-          String(call[0]).includes(`/generate?word=${encodeURIComponent("گفتن")}`),
-        ),
+        vi
+          .mocked(fetch)
+          .mock.calls.some((call) =>
+            String(call[0]).includes(
+              `/generate?word=${encodeURIComponent("گفتن")}`,
+            ),
+          ),
       ).toBe(true),
     );
   });
@@ -414,70 +427,61 @@ describe("the build screen", () => {
     );
     renderApp(ROUTE);
 
-    // Both stems on, both classes offered.
-    const stems = await screen.findAllByRole("button", { pressed: true });
+    // Both stems on, both classes offered beside «همه».
+    await screen.findAllByRole("tab");
+    const stems = stemButtons();
     expect(stems).toHaveLength(2);
-    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(2);
+    expect(
+      stems.every((one) => one.getAttribute("aria-pressed") === "true"),
+    ).toBe(true);
+    expect(screen.getAllByRole("tab")).toHaveLength(3);
 
     // Turn one off: the classes recount against what is left.
     await userEvent.click(stems[0]!);
     expect(stems[0]).toHaveAttribute("aria-pressed", "false");
-    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(1);
+    expect(screen.getAllByRole("tab")).toHaveLength(2);
 
     // And back on.
     await userEvent.click(stems[0]!);
-    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(2);
+    expect(screen.getAllByRole("tab")).toHaveLength(3);
   });
 
   it("never turns the last stem off, which would empty the screen", async () => {
     renderApp(ROUTE);
-    const stems = await screen.findAllByRole("button", { pressed: true });
-    for (const one of stems) await userEvent.click(one);
+    await screen.findAllByRole("tab");
+    for (const one of stemButtons()) await userEvent.click(one);
     // Whatever the reader pressed, something is still showing.
-    expect(screen.getAllByRole("button", { pressed: true }).length).toBeGreaterThan(
-      0,
-    );
     expect(
-      screen.getAllByRole("heading", { level: 3 }).length,
+      stemButtons().filter((one) => one.getAttribute("aria-pressed") === "true")
+        .length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getAllByRole("button", { name: /راه ساخت/ }).length,
     ).toBeGreaterThan(0);
   });
 
-  it("shows the classes first and the words only when one is asked for", async () => {
-    // رفتن at depth 2 answers with 660 words in 8 classes, per reading. Every
-    // group used to be open at twenty rows, so the screen handed back a scroll
-    // of rows with the headings buried in it — the categories existed and were
-    // useless. The project lead named it on 2026-08-18.
+  it("shows every word at once, and a class tab narrows the table", async () => {
+    // The class tiles of 2026-08-18 made a reader open a class before seeing
+    // any word. The table (the project lead's choice of 2026-11-21) opens on
+    // all of them, best first; a class is a tab that narrows it.
     renderApp(ROUTE);
-
-    // The class is on screen, with its count and what it means.
-    const heading = await screen.findByRole("heading", {
-      level: 3,
-      name: /کارنام/,
-    });
-    const toggle = within(heading).getByRole("button");
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-
-    // Its words are not.
-    expect(screen.queryByText("رفتار")).toBeNull();
-
-    await userEvent.click(toggle);
-    expect(toggle).toHaveAttribute("aria-expanded", "true");
     expect(await screen.findByText("رفتار")).toBeInTheDocument();
-  });
-
-  it("opens one class without opening the others", async () => {
-    renderApp(ROUTE);
-    const headings = await screen.findAllByRole("heading", { level: 3 });
-    expect(headings.length).toBeGreaterThan(1);
-    await userEvent.click(within(headings[0]!).getByRole("button"));
-    expect(within(headings[0]!).getByRole("button")).toHaveAttribute(
-      "aria-expanded",
+    expect(screen.getByText("روشناک")).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /همه/ })).toHaveAttribute(
+      "aria-selected",
       "true",
     );
-    expect(within(headings[1]!).getByRole("button")).toHaveAttribute(
-      "aria-expanded",
-      "false",
+
+    await userEvent.click(screen.getByRole("tab", { name: /کارنام/ }));
+    expect(screen.getByRole("tab", { name: /کارنام/ })).toHaveAttribute(
+      "aria-selected",
+      "true",
     );
+    expect(screen.getByText("رفتار")).toBeInTheDocument();
+    expect(screen.queryByText("روشناک")).toBeNull();
+    // And says what the class is, with the name the reader was taught.
+    expect(screen.getByText(/همچون نام آورده می‌شود/)).toBeInTheDocument();
+    expect(screen.getByText(/اسم مصدر/)).toBeInTheDocument();
   });
 
   it("marks a definition karbon cut, and leaves a whole one alone", async () => {
@@ -495,9 +499,7 @@ describe("the build screen", () => {
             ? answers(CLASSES)
             : answers({
                 ...BUILT,
-                readings: [
-                  { ...BUILT.readings[0]!, definition_fa: whole },
-                ],
+                readings: [{ ...BUILT.readings[0]!, definition_fa: whole }],
               }),
         ),
       ),
@@ -576,7 +578,7 @@ describe("the build screen", () => {
     // Nothing is hidden: the count of what is folded away is on the button
     // that opens it, and one press shows the lot. What changes is that the
     // page starts at a length somebody can read.
-    const many = Array.from({ length: 30 }, (_, index) =>
+    const many = Array.from({ length: 60 }, (_, index) =>
       form(`Raft${index}`, `رفت${index}`, "karnam", attested("none")),
     );
     vi.stubGlobal(
@@ -587,24 +589,23 @@ describe("the build screen", () => {
             ? answers(CLASSES)
             : answers({
                 ...BUILT,
-                readings: [{ ...BUILT.readings[0]!, count: 30, forms: many }],
+                readings: [{ ...BUILT.readings[0]!, count: 60, forms: many }],
               }),
         ),
       ),
     );
     renderApp(ROUTE);
     await showForms();
-    await screen.findByRole("heading", { name: /کارنام/ });
     // Counted rather than named: the last tie-break is alphabetical, so which
     // twenty come first is not the point — how many do. Counted by the
     // «راه ساخت» control, one per row; it used to be the copy button, which
     // the project lead removed on 2026-08-18.
     const rows = () =>
       screen.getAllByRole("button", { name: /راه ساخت/ }).length;
-    expect(rows()).toBe(20);
+    expect(rows()).toBe(50);
 
     await userEvent.click(screen.getByRole("button", { name: /۱۰ واژهٔ دیگر/ }));
-    expect(rows()).toBe(30);
+    expect(rows()).toBe(60);
     expect(screen.queryByRole("button", { name: /واژهٔ دیگر/ })).toBeNull();
   });
 
@@ -615,12 +616,14 @@ describe("the build screen", () => {
     expect(screen.queryByRole("button", { name: /واژهٔ دیگر/ })).toBeNull();
   });
 
-  it("groups results by what they are, named in Persian", async () => {
+  it("names each word's class in Persian, on the tabs and on the row", async () => {
     renderApp(ROUTE);
     expect(
-      await screen.findByRole("heading", { name: /کارنام/ }),
+      await screen.findByRole("tab", { name: /کارنام/ }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /برنام/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /برنام/ })).toBeInTheDocument();
+    const row = screen.getByText("رفتار").closest("li")!;
+    expect(within(row).getByText("کارنام")).toBeInTheDocument();
   });
 
   it("ranks by evidence, never by depth", async () => {
@@ -724,8 +727,12 @@ describe("the build screen", () => {
       .getAllByText(/^(که|کهین)$/)
       .map((node) => node.textContent);
     expect(words).toEqual(["کهین", "که"]);
-    // Said on the row, in the sentence under the word, rather than a count.
-    expect(within(group).getByText(FUNCTION_WORD_HOMOGRAPH)).toBeInTheDocument();
+    // Said on the row as another word's, rather than a count, and in full
+    // behind the evidence.
+    const row = within(group).getByText("که").closest("li")!;
+    expect(within(row).getByText("واژهٔ دیگری است")).toBeInTheDocument();
+    await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
+    expect(within(row).getByText(FUNCTION_WORD_HOMOGRAPH)).toBeInTheDocument();
   });
 
   it("does not rank a form on a count the dictionary says is another word", async () => {
@@ -851,9 +858,7 @@ describe("the build screen", () => {
                 readings: [
                   {
                     ...BUILT.readings[0]!,
-                    forms: [
-                      { ...BUILT.readings[0]!.forms[0]!, paths: four },
-                    ],
+                    forms: [{ ...BUILT.readings[0]!.forms[0]!, paths: four }],
                   },
                 ],
               }),
@@ -908,14 +913,16 @@ describe("the build screen", () => {
 describe("the evidence", () => {
   it("never says a word does not exist, only that it was not found", async () => {
     renderApp(ROUTE);
-    // Ravešnāk is the fixture's unattested word and it is a برنام, so the
-    // class holding it is the one to open — one class is open at a time.
     await showForms(/برنام/);
-    // «نیامده است», not «یافت نشد»: the corpus is classical poetry, and a
-    // word missing from it may be in use (S33). On the row and behind it.
-    expect(await screen.findByText(/در پیکره نیامده است/)).toBeInTheDocument();
+    // «نیامده», not «یافت نشد»: the corpus is classical poetry, and a word
+    // missing from it may be in use (S33). On the row and behind it.
+    const row = (await screen.findByText("روشناک")).closest("li")!;
+    expect(within(row).getByText("نیامده")).toBeInTheDocument();
     await openEvidence("روشناک", /^پیکره/);
-    expect(screen.getByText(/نیامده است/, { selector: "span" })).toBeInTheDocument();
+    expect(within(row).getByText(/در پیکره نیامده است/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/نیامده است/, { selector: "span" }),
+    ).toBeInTheDocument();
     expect(screen.queryByText(/یافت نشد/)).not.toBeInTheDocument();
     expect(screen.queryByText(/وجود ندارد/)).not.toBeInTheDocument();
   });
@@ -969,9 +976,7 @@ describe("the evidence", () => {
     renderApp(ROUTE);
     await showForms();
     expect(await screen.findByText("سنجیده نشده")).toBeInTheDocument();
-    expect(
-      screen.getByText(/پیکره‌ای در دسترس نبود/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/پیکره‌ای در دسترس نبود/)).toBeInTheDocument();
   });
 });
 
@@ -993,7 +998,6 @@ describe("a word the lexicon does not have", () => {
     ).toBeInTheDocument();
   });
 });
-
 
 describe("the ground under a chain", () => {
   // Measured on رفتن: 231 of 510 words are built on an intermediate nobody
@@ -1061,7 +1065,6 @@ describe("the ground under a chain", () => {
   });
 });
 
-
 describe("how often a chain's rules produce real words", () => {
   // The criterion that makes three steps usable. At three steps one verb
   // builds 17,717 words, fifty of which the corpus has — so the ordering of
@@ -1088,7 +1091,10 @@ describe("how often a chain's rules produce real words", () => {
   const good = chained("hamandišande", "هماندیشنده", 0.2184);
   const nonsense = chained("hamandišidbāngāne", "هماندیشیدبانگانه", 0.0012);
 
-  function serving(forms: BuiltForm[], extra: Partial<Generated["readings"][0]> = {}) {
+  function serving(
+    forms: BuiltForm[],
+    extra: Partial<Generated["readings"][0]> = {},
+  ) {
     const body: Generated = {
       ...BUILT,
       readings: [
@@ -1106,9 +1112,7 @@ describe("how often a chain's rules produce real words", () => {
   }
 
   function order(): string[] {
-    return screen
-      .getAllByRole("listitem")
-      .map((row) => row.textContent ?? "");
+    return screen.getAllByRole("listitem").map((row) => row.textContent ?? "");
   }
 
   it("puts the word with the stronger rules first", async () => {
@@ -1213,7 +1217,8 @@ describe("a form that also reads as an inflection", () => {
     await showForms();
     await screen.findByText("رفتار");
     const shown = screen.getAllByRole("listitem").map((one) => one.textContent);
-    const at = (word: string) => shown.findIndex((text) => text?.includes(word));
+    const at = (word: string) =>
+      shown.findIndex((text) => text?.includes(word));
     expect(at("رفتار")).toBeLessThan(at("رفتی"));
   });
 
@@ -1224,9 +1229,12 @@ describe("a form that also reads as an inflection", () => {
     showing([rafti, raftar]);
     renderApp(ROUTE);
     await showForms();
-    // The row says it in its sentence; the detail is behind the corpus field.
-    expect(await screen.findByText(/خوانش دیگری هم دارند/)).toBeInTheDocument();
+    // The evidence says it in its first sentence, the detail behind the
+    // corpus field.
     await openEvidence("رفتی", /^پیکره/);
+    expect(
+      screen.getByText(/شکل صرف‌شدهٔ واژهٔ دیگری باشند/),
+    ).toBeInTheDocument();
     expect(screen.getByText(/خوانشِ دیگری هم دارد/)).toBeInTheDocument();
     expect(screen.getByText(/نمی‌توان گفت کدام است/)).toBeInTheDocument();
     expect(screen.getByText("N-095")).toBeInTheDocument();

@@ -31,7 +31,7 @@ from murfulu.engine.dedupe import GroupedForm
 from murfulu.lexicon.store import Lexicon
 from murfulu.rules.pack import Rule, RulePack, loaded
 from murfulu.scoring import inflected, stored
-from murfulu.scoring import level as levels
+from murfulu.scoring import score as scores
 from murfulu.scoring.attestation import Attestation, Index, Level
 from murfulu.scoring.grounding import IsGrounded, grounded
 from murfulu.scoring.semantics import loaded as semantics
@@ -296,21 +296,22 @@ def _realisation(form: GroupedForm) -> dict[str, Any] | None:
     }
 
 
-def _level(
+def _score(
     form: GroupedForm,
     found: Attestation | None,
     typical: dict[str, Any] | None,
-) -> levels.Assessment:
-    """Familiar, well-formed or weakly backed; see :mod:`murfulu.scoring.level`.
+) -> scores.Score:
+    """The form's score from 0 to 100; see :mod:`murfulu.scoring.score`.
 
     ``typical`` is the form's :func:`_typicality`, passed in rather than
     measured again: it is a 1,024-wide cosine, and a three-step answer ranks
     17,000 forms.
     """
-    return levels.assess(
+    return scores.assess(
         found,
-        levels.chain_of(form.shortest_path),
-        typical.get("band") if typical else None,
+        scores.chain_of(form.shortest_path),
+        inflected=inflected.reading(form.fa) is not None,
+        typicality_band=typical.get("band") if typical else None,
     )
 
 
@@ -349,11 +350,11 @@ def _form(
         "semantic_tags": list(form.semantic_tags),
         "meaning_fa": meaning_fa,
         "attestation": _evidence(attestation),
-        # How plausible the word is, as one of three levels, with what the
-        # level rests on and the three marks behind the evidence button. The
-        # screen sorts on it first and writes the sentence; `confirmed` stays
-        # false until the linguist rules on the levels (L36).
-        "level": _level(form, attestation, typical).as_json(),
+        # How much evidence the word has, 0 to 100, with its two parts — the
+        # corpus and the chain's weakest rule — for the evidence button. The
+        # screen sorts and filters on it; `confirmed` stays false until the
+        # linguist rules (L36). The project lead's choice of 2026-11-21.
+        "score": _score(form, attestation, typical).as_json(),
         # Whether some route to this form rests on written ground throughout —
         # measured on رفتن, 231 of its 476 two-step words are built on an
         # intermediate nobody ever wrote, and a form's own attestation cannot
@@ -664,14 +665,14 @@ def _ranked(
     is 39 MB, so it has to be paged — and a page of an unsorted list is a
     random handful. Ranking moved to where the paging is.
 
-    **The level first** — familiar, well-formed, not known, weakly backed
-    (:mod:`murfulu.scoring.level`; the project lead's choice of 2026-11-13).
-    Within a level: strongest corpus evidence, then **whether the form also
-    reads as an inflection of a word we already hold**, then how many poems
-    hold it, then how often the rules on the chain produce real words, then
-    whether the chain rests on written ground, then how much the first base
-    resembles the rule's usual bases, then alphabetically so the same request
-    always gives the same answer.
+    **The score first**, highest first (:mod:`murfulu.scoring.score`; the
+    project lead's choice of 2026-11-21, replacing the three levels of
+    2026-11-13). Between equal scores: strongest corpus evidence, then
+    **whether the form also reads as an inflection of a word we already hold**,
+    then how many poems hold it, then how often the rules on the chain produce
+    real words, then whether the chain rests on written ground, then how much
+    the first base resembles the rule's usual bases, then alphabetically so the
+    same request always gives the same answer.
 
     **The inflection test is new on 2026-08-17 and closes the second half of
     S8.** The first half stopped a count belonging to another *reading* from
@@ -730,9 +731,9 @@ def _ranked(
         realised = _realisation(form)
         typical = typicals[id(form)]
         return (
-            # **The level first** — the project lead's choice of 2026-11-13.
-            # Everything below orders forms within a level, as before.
-            levels.order(_level(form, found, typical).level),
+            # **The score first** — the project lead's choice of 2026-11-21.
+            # Everything below breaks ties between equal scores, as before.
+            scores.order(_score(form, found, typical).value),
             _standing(found),
             # 1 sinks. An unmeasured lexicon leaves this 0 for every form, so
             # a run without one ranks exactly as it did before — silence must

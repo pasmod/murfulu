@@ -2,6 +2,49 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 — the build screen gives each word a score from 0 to 100, in a table
+
+**The project lead's choice of 2026-11-21**, replacing the three levels of
+2026-11-13 (آشنا، خوش‌ساخت، کم‌پشتوانه). The project lead found the names
+unprofessional, and a list could not be sorted or filtered by them: «Instead
+of this naming, write a score, with sorting and filtering». The design is
+**direction A of three rendered drafts** (a table, against a refined list and
+a side panel of filters).
+
+**The score** (`murfulu/scoring/score.py`), from the same evidence the levels
+used, in two parts:
+
+| part | points | formula |
+|---|---|---|
+| corpus | 0–70 | under this reading in *n* texts: 30 + 40 · min(1, log10 *n* / 3); the letters only, and nothing says they are another word (no other reading but this one in another case, not an inflection, not a function word, not the bank's other headword): half of that; otherwise 0 |
+| rule | 0–30 | the chain's weakest measured rule, *r* = attested / built: 30 · clamp((log10 *r* + 4) / 3, 0, 1); an unmeasured chain counts at the median measured rate |
+
+**Why these numbers.** 70 and 30 put any word the corpus has under its reading
+(30 or more) above any word it does not have (30 at most): the corpus outranks
+the rules, as under the levels. A log scale, because the counts run from one
+text to ten thousand and the rates from 1 in 10,000 to 1 in 3. The weakest
+rule decides the rule part, as it decided *weakly backed* (2026-11-13).
+Measured on دانستن at two steps (corpus v17): 594 forms, 12 at 70 or more, 12
+from 40 to 69, 570 below 40; دانا 100, داننده 89, دانگر 22.
+
+**It is a rough measure, and says so.** No score where the corpus was not
+asked; a dash, never a zero. The line under the table says the corpus is
+classical poetry and the score a rough measure, not a verdict on the word.
+Served with `confirmed: false`; the question is L36, **reworded** for the
+score (`rules/questions_fa.yaml`), loaded into the store with the deploy.
+
+**The table.** Every word on the table when it opens, best first, fifty rows
+and a button for the rest; the class tiles of 2026-08-18 are tabs that narrow
+it; chips filter by the score's range and by whether the corpus has the word;
+«واژه»، «امتیاز» and «در پیکره» in the head row sort. The sentence of reason
+moved behind «شواهد», which now shows the corpus part out of 70 and the rule
+part out of 30; the meaning keeps its dots and is not in the score. The rule
+sentence says a rate as «از هر ۱٬۰۰۰ واژه‌ای که می‌سازد، حدود ۵ تا», not as a
+percentage. The rows are a list laid out on a shared grid
+(`--build-columns`), not a `<table>`, so what opens under a row belongs to it.
+— project lead (score, sorting, filtering, direction A); engineering (the
+formula, the weights)
+
 ## 2026-11-21 — the menu says ساختن، چسباندن and شکافتن
 
 The linguist ruled on L21 (2026-11-20, option `verbs`, our proposal): the three

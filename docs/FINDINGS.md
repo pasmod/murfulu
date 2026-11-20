@@ -5,6 +5,25 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-21 — a score in place of the levels, and how the words spread on it
+
+Measured while replacing the build screen's levels with a score (DECISIONS
+2026-11-21), on corpus v17 with `rule_productivity-v17`. **These are rough
+measurements on classical poetry, not results.**
+
+**The measured rules' rates spread over three orders of magnitude**: of the
+166 measured rules, the 10th percentile makes a corpus word 0.013 % of the
+time, the median 0.27 %, the 90th 7.1 %, the best 31 %; seven make none. That
+is why the rule part is on a log scale from 1 in 10,000 to 1 in 10.
+
+**Most built words score low, and that is the corpus, not the rules.** دانستن
+at two steps: 594 forms, 12 at 70 or more, 12 from 40 to 69, 570 below 40.
+رفتن's first 200 run from 100 (رفت، روان، روا) down to 11; the ones in between
+are mostly words whose letters the corpus has under no clear reading (رو
+*Row*, 65; نارفته *nārafte*, 57).
+
+---
+
 ## 2026-11-20 — the class names against the linguist's word bank
 
 Checked while putting the traditional name beside each class in the search

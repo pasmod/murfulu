@@ -153,6 +153,14 @@
    * has to be written in something calibrated to Persian and not to a digit,
    * and this is where it would go. */
   --page-max: 78rem;
+
+  /* The build table's columns — word, class, score, corpus, made with, the
+     row's buttons — shared by its head row (Build.module.css) and every row
+     (FormRow.module.css), which is the only thing keeping them aligned. The
+     last is fixed, not `auto`: «راه ساخت ۲ راه» is wider than «راه ساخت», and
+     an `auto` column moved every other column row by row. */
+  --build-columns: minmax(7.5rem, 1.3fr) minmax(5rem, 0.9fr) 7.5rem
+    minmax(6rem, 1fr) minmax(7rem, 1fr) 15rem;
   --measure: var(--page-max);
 
   /* ---- motion ---------------------------------------------------------- */

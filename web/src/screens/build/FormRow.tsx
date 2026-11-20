@@ -1,11 +1,18 @@
 /**
- * One built word.
+ * One built word: one row of the build table.
  *
- * The word, its level and one sentence of reason are always visible; what the
- * level rests on is behind «شواهد», and the derivation behind «راه ساخت».
- * docs/FRONTEND.md's rule: a translator wants the word, an expert wants the
- * machinery, and they get the same screen at different depths. The level is
- * the project lead's choice of 2026-11-13 (`Level.tsx`, `Signals.tsx`).
+ * The word, its class, its score, what the corpus has and the rule that made
+ * it are always visible, each in its own column; why it has its score is
+ * behind «شواهد», and the derivation behind «راه ساخت». docs/FRONTEND.md's
+ * rule: a translator wants the word, an expert wants the machinery, and they
+ * get the same screen at different depths. The table is the project lead's
+ * choice of 2026-11-21 (direction A), the score likewise (`Score.tsx`).
+ *
+ * **A list item laid out as a table row, not a `<tr>`.** What opens under a
+ * row belongs to it — the evidence and the routes — and a `<tr>` cannot hold
+ * it without a second row that a screen reader announces as another word.
+ * The columns line up with the head row in `Build.tsx` through one shared
+ * grid template (`FormRow.module.css`).
  *
  * **Where more than one chain produced the same form, all of them are shown**,
  * nested under it. Two derivations for one word is information — it often
@@ -20,7 +27,7 @@ import { Latin } from "../../text/Latin";
 import { Mixed } from "../../text/Mixed";
 import { Num } from "../../text/Num";
 import styles from "./FormRow.module.css";
-import { LevelBadge, Reason } from "./Level";
+import { CorpusCell, MadeWith, Reason, ScoreCell } from "./Score";
 import { Signals } from "./Signals";
 
 /**
@@ -117,84 +124,101 @@ function Chain({
 
 export interface FormRowProps {
   form: BuiltForm;
+  /** The class's name in the project's terms, for the class column. */
+  className?: React.ReactNode;
   /** Which corpus version the evidence beside it came from. */
   corpusVersion?: string | null;
 }
 
-export function FormRow({ form, corpusVersion = null }: FormRowProps) {
+export function FormRow({
+  form,
+  className = null,
+  corpusVersion = null,
+}: FormRowProps) {
   const [open, setOpen] = useState(false);
   const [showing, setShowing] = useState(false);
 
   return (
     <li className={styles.row}>
-      <div className={styles.head}>
-        <span className={styles.forms}>
+      <div className={styles.cells}>
+        <span className={styles.word}>
           <span className={styles.fa}>{form.form_fa}</span>
           <Latin className={styles.latin}>{form.form_latin}</Latin>
         </span>
-        <LevelBadge form={form} />
-      </div>
+        <span className={styles.wordClass}>{className}</span>
+        <span className={styles.scoreCell}>
+          <ScoreCell form={form} />
+        </span>
+        <span className={styles.corpus}>
+          <CorpusCell form={form} />
+        </span>
+        <span className={styles.made}>
+          <MadeWith form={form} />
+        </span>
+        <div className={styles.actions}>
+          {/* Why the word has its score: the parts, separate, one press away —
+            never folded into the number and hidden. */}
+          <button
+            type="button"
+            className={styles.toggle}
+            aria-expanded={showing}
+            onClick={() => setShowing((was) => !was)}
+          >
+            {showing ? "بستن شواهد" : "شواهد"}
+          </button>
 
-      <Reason form={form} />
+          <button
+            type="button"
+            className={styles.toggle}
+            aria-expanded={open}
+            onClick={() => setOpen((was) => !was)}
+          >
+            {open ? "بستن راه ساخت" : "راه ساخت"}
+            {form.paths.length > 1 ? (
+              <span className={styles.paths}>
+                <Num value={form.paths.length} /> راه
+              </span>
+            ) : null}
+          </button>
+
+          {/* *Raftorow is not a word* is docs/REVIEW.md's own example, and it
+            has to be sayable about the word rather than about the page. The
+            whole record travels with it: the chain that built it, the
+            evidence, and the corpus version that evidence is true for. */}
+          <Judge
+            subject={{
+              target_type: "derivation",
+              target_id: `${form.form_latin}:${form.word_class}`,
+              label: form.form_fa,
+              corpus_version: corpusVersion,
+              context: {
+                form_latin: form.form_latin,
+                form_fa: form.form_fa,
+                word_class: form.word_class,
+                rule_chain: form.paths[0]?.map((step) => step.rule_id) ?? [],
+                glide_rules:
+                  form.paths[0]?.flatMap((step) =>
+                    step.glide_id ? [step.glide_id] : [],
+                  ) ?? [],
+                meaning_fa: form.meaning_fa ?? null,
+                attestation: form.attestation?.level ?? null,
+                score: form.score?.value ?? null,
+              },
+            }}
+          />
+        </div>
+      </div>
 
       {form.meaning_fa ? (
         <p className={styles.meaning}>{form.meaning_fa}</p>
       ) : null}
 
-      <div className={styles.actions}>
-        {/* What the level rests on: the three parts of the score, separate,
-            one press away — never folded into the level and hidden. */}
-        <button
-          type="button"
-          className={styles.toggle}
-          aria-expanded={showing}
-          onClick={() => setShowing((was) => !was)}
-        >
-          {showing ? "بستن شواهد" : "شواهد"}
-        </button>
-
-        <button
-          type="button"
-          className={styles.toggle}
-          aria-expanded={open}
-          onClick={() => setOpen((was) => !was)}
-        >
-          {open ? "بستن راه ساخت" : "راه ساخت"}
-          {form.paths.length > 1 ? (
-            <span className={styles.paths}>
-              <Num value={form.paths.length} /> راه
-            </span>
-          ) : null}
-        </button>
-
-        {/* *Raftorow is not a word* is docs/REVIEW.md's own example, and it
-            has to be sayable about the word rather than about the page. The
-            whole record travels with it: the chain that built it, the
-            evidence, and the corpus version that evidence is true for. */}
-        <Judge
-          subject={{
-            target_type: "derivation",
-            target_id: `${form.form_latin}:${form.word_class}`,
-            label: form.form_fa,
-            corpus_version: corpusVersion,
-            context: {
-              form_latin: form.form_latin,
-              form_fa: form.form_fa,
-              word_class: form.word_class,
-              rule_chain: form.paths[0]?.map((step) => step.rule_id) ?? [],
-              glide_rules:
-                form.paths[0]?.flatMap((step) =>
-                  step.glide_id ? [step.glide_id] : [],
-                ) ?? [],
-              meaning_fa: form.meaning_fa ?? null,
-              attestation: form.attestation?.level ?? null,
-              level: form.level?.level ?? null,
-            },
-          }}
-        />
-      </div>
-
-      {showing ? <Signals form={form} corpusVersion={corpusVersion} /> : null}
+      {showing ? (
+        <div className={styles.evidence}>
+          <Reason form={form} />
+          <Signals form={form} corpusVersion={corpusVersion} />
+        </div>
+      ) : null}
 
       {open ? (
         <div className={styles.derivation}>

@@ -19,7 +19,7 @@
  * DEPTHS} for why this waited on the ranking rather than on the paging.
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { ApiError } from "../../api/client";
@@ -45,8 +45,17 @@ import {
 import { SCREENS } from "../../shell/screens";
 import styles from "./Build.module.css";
 import { useSubject } from "../../feedback/subject";
-import { ClassTile, ClassWords } from "./Group";
-import { levelOrder } from "./levels";
+import { FormRow } from "./FormRow";
+import { ScoreLegend } from "./Score";
+import {
+  IN_CORPUS,
+  SCORE_RANGES,
+  SCORE_SAYS,
+  creditedTexts,
+  scoreOrder,
+  type SortKey,
+} from "./scoring";
+import { Info } from "../../text/Info";
 import { WordInput } from "./WordInput";
 
 const SCREEN = SCREENS.find((one) => one.path === "/build")!;
@@ -149,8 +158,8 @@ function ranked(forms: BuiltForm[]): BuiltForm[] {
     // the project lead's choice of 2026-11-13 (`Level.tsx`). Everything below
     // orders forms within a level, exactly as before. The API decides the
     // level and `_ranked` sorts on it the same way.
-    const level = levelOrder(a.level) - levelOrder(b.level);
-    if (level !== 0) return level;
+    const scored = scoreOrder(a) - scoreOrder(b);
+    if (scored !== 0) return scored;
     const known = standing(a) - standing(b);
     if (known !== 0) return known;
     // Whether the letters also read as an inflection of a word the dictionary
@@ -223,24 +232,39 @@ function ranked(forms: BuiltForm[]): BuiltForm[] {
   });
 }
 
-function grouped(forms: BuiltForm[]): Map<string, BuiltForm[]> {
-  const groups = new Map<string, BuiltForm[]>();
-  for (const form of ranked(forms)) {
-    const found = groups.get(form.word_class);
-    if (found) found.push(form);
-    else groups.set(form.word_class, [form]);
-  }
-  return groups;
+/**
+ * How many rows the table starts with.
+ *
+ * Fifty is a page a reader can scan, and the table's rows are a line or two
+ * high, where the old cards were four. Nothing is hidden: the count of what
+ * is held back is on the button that shows it (measured in 2026-08: بلند at
+ * depth 2 rendered 3,185 rows and 588,102px of page at 375px when every form
+ * was on screen at once).
+ */
+export const FIRST = 50;
+
+/** The table's order: the score's, a count's, or the alphabet's. */
+function sorted(forms: BuiltForm[], by: SortKey): BuiltForm[] {
+  const best = ranked(forms);
+  if (by === "score") return best;
+  const place = new Map(best.map((form, at) => [form, at]));
+  return [...best].sort((a, b) =>
+    by === "texts"
+      ? creditedTexts(b) - creditedTexts(a) || place.get(a)! - place.get(b)!
+      : a.form_fa.localeCompare(b.form_fa, "fa") ||
+        a.form_latin.localeCompare(b.form_latin),
+  );
 }
 
-/**
- * Whether any route to this form starts on this stem.
- *
- * *Any*, not the first: a word the grammar can reach two ways belongs to both
- * starting points. Measured on گفتن — 16 words from گفت, 22 from گو, and **no
- * word reachable from both** — so on this data the two are a clean split and
- * the counts add up to the whole.
- */
+/** How many words each class has, biggest first: the tabs' order. */
+function classCounts(forms: BuiltForm[]): [string, number][] {
+  const counts = new Map<string, number>();
+  for (const form of forms) {
+    counts.set(form.word_class, (counts.get(form.word_class) ?? 0) + 1);
+  }
+  return [...counts].sort((a, b) => b[1] - a[1]);
+}
+
 function startsOn(form: BuiltForm, stem: string): boolean {
   return form.paths.some((steps) => steps[0]?.applied_to === stem);
 }
@@ -350,8 +374,20 @@ export function Build() {
    * its words. One at a time: the grid is the reader's place to stand, and two
    * open classes put it back where it was.
    */
-  const [openClass, setOpenClass] = useState<string | null>(null);
+  // The table's choices: which class, which scores, in the corpus or not, and
+  // in what order. One set for the screen; a word read two ways shows two
+  // tables, and the same choice applies to both.
+  const [wordClass, setWordClass] = useState<string>("all");
+  const [range, setRange] = useState("all");
+  const [inCorpus, setInCorpus] = useState("all");
+  const [sortBy, setSortBy] = useState<SortKey>("score");
   const [whole, setWhole] = useState(false);
+  const choose =
+    <T,>(set: (value: T) => void) =>
+    (value: T) => {
+      set(value);
+      setWhole(false);
+    };
 
   const builtOn = (reading: Generated["readings"][number], stem: string) =>
     reading.forms.filter((one) => startsOn(one, stem)).length;
@@ -376,7 +412,7 @@ export function Build() {
     // nothing about why, so it stays on.
     if (!next.length) return;
     setStems({ ...stems, [reading.latin]: next });
-    setOpenClass(null);
+    setWhole(false);
   };
 
   /**
@@ -446,8 +482,8 @@ export function Build() {
               apart. */}
           <h2 id={`reading-${reading.latin}`} className={styles.readingTitle}>
             <span>
-              از «{reading.spelling_fa}» <Num value={reading.count} /> واژه ساخته
-              می‌شود
+              از «{reading.spelling_fa}» <Num value={reading.count} /> واژه
+              ساخته می‌شود
             </span>{" "}
             <Latin className={styles.readingLatin}>{reading.latin}</Latin>
           </h2>
@@ -559,53 +595,26 @@ export function Build() {
             </p>
           ) : null}
 
-          {/* Closed until asked for. Eight classes is a thing a reader can
-              choose from; sixteen open groups of twenty rows is not. */}
-          {/* The classes, then the words of whichever one is open — apart,
-              so choosing a class never pushes the others off the screen. */}
-          <div className={styles.groups}>
-            {[...grouped(shownForms(reading))].map(([wordClass, forms]) => {
-              const said = classOf(wordClass);
-              const key = `${reading.latin}:${wordClass}`;
-              return (
-                <ClassTile
-                  key={wordClass}
-                  name={said?.name ?? <Latin>{wordClass}</Latin>}
-                  explanation={said?.explanation}
-                  traditional={said?.traditional}
-                  count={forms.length}
-                  open={openClass === key}
-                  panelId={`words-${key}`}
-                  onToggle={() => {
-                    setWhole(false);
-                    setOpenClass(openClass === key ? null : key);
-                  }}
-                />
-              );
-            })}
-          </div>
-
-          {[...grouped(shownForms(reading))]
-            .filter(([wordClass]) => openClass === `${reading.latin}:${wordClass}`)
-            .map(([wordClass, forms]) => (
-              <ClassWords
-                key={wordClass}
-                forms={forms}
-                corpusVersion={built.corpus_version}
-                panelId={`words-${reading.latin}:${wordClass}`}
-                whole={whole}
-                onWhole={() => setWhole(true)}
-              />
-            ))}
+          {reading.forms.length > 0 ? (
+            <Table
+              forms={shownForms(reading)}
+              idPrefix={reading.latin}
+              classOf={classOf}
+              corpusVersion={built.corpus_version}
+              wordClass={wordClass}
+              onWordClass={choose(setWordClass)}
+              range={range}
+              onRange={choose(setRange)}
+              inCorpus={inCorpus}
+              onInCorpus={choose(setInCorpus)}
+              sortBy={sortBy}
+              onSort={choose(setSortBy)}
+              whole={whole}
+              onWhole={() => setWhole(true)}
+            />
+          ) : null}
         </section>
       ))}
-
-      {built ? (
-        <p className={styles.deeper}>
-          گام سوم و پس از آن هنوز در دسترس نیست: پاسخ آن برای یک واژه بیش از
-          بیست مگابایت است و باید صفحه‌بندی شود.
-        </p>
-      ) : null}
 
       {built ? (
         <p className={styles.version}>
@@ -619,5 +628,259 @@ export function Build() {
         </p>
       ) : null}
     </article>
+  );
+}
+
+interface ClassSaid {
+  name: string;
+  explanation?: string;
+  traditional?: string;
+}
+
+/**
+ * The words as one table: class tabs, filters, a head row that sorts, and the
+ * rows. **Direction A, the project lead's choice of 2026-11-21**, from three
+ * rendered drafts; it replaced the class tiles of 2026-08-18, which made a
+ * reader open one class before seeing any word.
+ *
+ * Every word is on the table when it opens, best first. A class, a score
+ * range and whether the corpus has the word narrow it; nothing is removed
+ * from the answer, and the line above the rows says how many are showing.
+ */
+function Table({
+  forms,
+  idPrefix,
+  classOf,
+  corpusVersion,
+  wordClass,
+  onWordClass,
+  range,
+  onRange,
+  inCorpus,
+  onInCorpus,
+  sortBy,
+  onSort,
+  whole,
+  onWhole,
+}: {
+  forms: BuiltForm[];
+  idPrefix: string;
+  classOf: (name: string) => ClassSaid | undefined;
+  corpusVersion: string | null;
+  wordClass: string;
+  onWordClass: (name: string) => void;
+  range: string;
+  onRange: (key: string) => void;
+  inCorpus: string;
+  onInCorpus: (key: string) => void;
+  sortBy: SortKey;
+  onSort: (key: SortKey) => void;
+  whole: boolean;
+  onWhole: () => void;
+}) {
+  const classes = classCounts(forms);
+  // A class the stems no longer reach falls back to all, rather than showing
+  // an empty table under a tab that is not there.
+  const chosen = classes.some(([name]) => name === wordClass)
+    ? wordClass
+    : "all";
+  const keepRange = SCORE_RANGES.find((one) => one.key === range)!;
+  const keepCorpus = IN_CORPUS.find((one) => one.key === inCorpus)!;
+  const kept = sorted(
+    forms.filter(
+      (form) =>
+        (chosen === "all" || form.word_class === chosen) &&
+        keepRange.keeps(form) &&
+        keepCorpus.keeps(form),
+    ),
+    sortBy,
+  );
+  const rows = whole ? kept : kept.slice(0, FIRST);
+  const held = kept.length - rows.length;
+  const said = chosen === "all" ? undefined : classOf(chosen);
+  const nameOf = (name: string) => classOf(name)?.name ?? <Latin>{name}</Latin>;
+  const tabs: [string, number][] = [["all", forms.length], ...classes];
+  const tabKeys = tabs.map(([name]) => name);
+
+  const sortButton = (key: SortKey, label: string) => (
+    <button
+      type="button"
+      className={styles.sort}
+      aria-pressed={sortBy === key}
+      onClick={() => onSort(key)}
+    >
+      {label}
+      {sortBy === key ? <span aria-hidden="true">▾</span> : null}
+    </button>
+  );
+
+  return (
+    <div className={styles.table}>
+      <div
+        className={styles.tabs}
+        role="tablist"
+        aria-label="گونهٔ واژه"
+        onKeyDown={(event) => {
+          // The arrow keys move between the tabs, as a tablist promises; in a
+          // right-to-left row the left arrow is the next one.
+          const at = tabKeys.indexOf(chosen);
+          const step =
+            event.key === "ArrowLeft" ? 1 : event.key === "ArrowRight" ? -1 : 0;
+          const to =
+            event.key === "Home"
+              ? 0
+              : event.key === "End"
+                ? tabKeys.length - 1
+                : step
+                  ? (at + step + tabKeys.length) % tabKeys.length
+                  : -1;
+          if (to < 0) return;
+          event.preventDefault();
+          onWordClass(tabKeys[to]!);
+          document.getElementById(`tab-${idPrefix}-${tabKeys[to]}`)?.focus();
+        }}
+      >
+        {tabs.map(([name, count]) => (
+          <button
+            key={name}
+            type="button"
+            role="tab"
+            id={`tab-${idPrefix}-${name}`}
+            aria-selected={chosen === name}
+            aria-controls={`words-${idPrefix}`}
+            // One tab stop for the row: the chosen tab.
+            tabIndex={chosen === name ? 0 : -1}
+            className={styles.tab}
+            onClick={() => onWordClass(name)}
+          >
+            {name === "all" ? "همه" : nameOf(name)}
+            <span className={styles.tabCount}>
+              <Num value={count} />
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {said?.explanation ? (
+        <p className={styles.classSays}>
+          {said.explanation}
+          {said.traditional ? (
+            <span className={styles.classTraditional}>
+              {" "}
+              در دستور سنتی: {said.traditional}
+            </span>
+          ) : null}
+        </p>
+      ) : null}
+
+      <div className={styles.tools}>
+        <Chips
+          legend="امتیاز"
+          info={<Info label="امتیاز">{SCORE_SAYS}</Info>}
+          options={SCORE_RANGES}
+          value={range}
+          onChange={onRange}
+        />
+        <Chips
+          legend="پیکره"
+          options={IN_CORPUS}
+          value={inCorpus}
+          onChange={onInCorpus}
+        />
+        <div className={styles.phoneSort}>
+          <span className={styles.sortLabel}>ترتیب</span>
+          {sortButton("score", "امتیاز")}
+          {sortButton("texts", "شمار متن‌ها")}
+          {sortButton("alpha", "الفبا")}
+        </div>
+        <span className={styles.shown} role="status">
+          <Num value={kept.length} /> واژه
+        </span>
+      </div>
+
+      <div className={styles.head}>
+        {sortButton("alpha", "واژه")}
+        <span>گونه</span>
+        {sortButton("score", "امتیاز")}
+        {sortButton("texts", "در پیکره")}
+        <span>ساخته با</span>
+        <span />
+      </div>
+
+      {rows.length ? (
+        <div
+          id={`words-${idPrefix}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${idPrefix}-${chosen}`}
+        >
+          <ul className={styles.forms}>
+            {rows.map((form) => (
+              <FormRow
+                key={`${form.form_latin}:${form.word_class}:${form.depth}`}
+                form={form}
+                className={nameOf(form.word_class)}
+                corpusVersion={corpusVersion}
+              />
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p id={`words-${idPrefix}`} className={styles.empty}>
+          هیچ واژه‌ای با این گزینه‌ها نیست. یکی از آن‌ها را بردارید.
+        </p>
+      )}
+
+      {held > 0 ? (
+        <button type="button" className={styles.more} onClick={onWhole}>
+          <Num value={held} /> واژهٔ دیگر — نشان بده
+        </button>
+      ) : null}
+
+      <ScoreLegend corpusVersion={corpusVersion} />
+    </div>
+  );
+}
+
+/**
+ * One filter as a row of chips, only one of which can be on.
+ *
+ * **Native radio buttons drawn as chips**, so the keyboard is the browser's:
+ * one tab stop for the group, the arrow keys move the choice. Buttons with a
+ * radio role were a tab stop each and ignored the arrows (the review of
+ * 2026-11-21).
+ */
+function Chips({
+  legend,
+  info = null,
+  options,
+  value,
+  onChange,
+}: {
+  legend: string;
+  /** What the filter's measure is, one press away. */
+  info?: React.ReactNode;
+  options: { key: string; label: string }[];
+  value: string;
+  onChange: (key: string) => void;
+}) {
+  const name = useId();
+  return (
+    <fieldset className={styles.filter}>
+      <legend>
+        {legend} {info}
+      </legend>
+      {options.map((one) => (
+        <label key={one.key} className={styles.chip}>
+          <input
+            type="radio"
+            name={name}
+            className="visually-hidden"
+            checked={value === one.key}
+            onChange={() => onChange(one.key)}
+          />
+          {one.label}
+        </label>
+      ))}
+    </fieldset>
   );
 }

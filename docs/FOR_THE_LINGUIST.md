@@ -51,7 +51,7 @@ Every question asked now ends with our proposal and the reason in one sentence.
 | L24 | **half answered** | *var* is the present stem of وشتن (2026-11-11); what the screen shows for دستور remains |
 | L17d | **rewritten** | his twelve groups against the rules' twelve classes; the open point is how کاربهر divides: Dehkhoda marks about thirty of its 1,106 words «ن مف» (پسند، دمید), the done-to participle. Our proposal follows that mark; until he answers, the whole group feeds the doer participle |
 | L2, L3, L25, L28, L17c, L10, L10b, L10c | open | each with our proposal now; L2 re-checked, the verb groups did not move in 1.3.2 |
-| L36 | **open, not blocking** (2026-11-13) | the three levels the build screen gives a word — names and thresholds are ours, built and marked unconfirmed |
+| L36 | **open, not blocking** (2026-11-13, reworded 2026-11-21) | the score from 0 to 100 the build screen gives a word, in place of the three levels — the scale and its two weights are ours, built and marked unconfirmed |
 | L39 | **open, not blocking** (2026-11-13) | the reading screen's words: «این خوانش نادرست است», «؟», بیت/مصراع/نثر, and how a wrong reading reaches him |
 | L38 | **open, not blocking** (2026-11-13) | four words in ten of a classical text have no reading in the bank — common words such as عشق and خدا, and every inflected form; which of them belong in his bank |
 | L37 | **open, not blocking** (2026-11-13) | «متن» and «نویسنده» in place of «سروده» and «شاعر» wherever a count is shown, now that the corpus holds prose |
@@ -2647,42 +2647,39 @@ recommended on it alone.
 
 ---
 
-## L36. Three levels for a built word — the names, and where the lines fall
+## L36. A score for a built word — the scale, and the weight of its two parts
 
-Built 2026-11-13 at the project lead's choice (DECISIONS 2026-11-13); **in the
-app's questions as L36**, not blocking. The build screen now says of every
-word it builds one of three things, with one sentence of reason, and keeps the
-three figures behind a button:
+**Reworded 2026-11-21.** First asked 2026-11-13 about three named levels —
+آشنا، خوش‌ساخت، کم‌پشتوانه — which the project lead then replaced with a score
+(DECISIONS 2026-11-21): the names read as labels a reader had to learn, and a
+list could not be sorted or filtered by them. **In the app's questions as
+L36**, not blocking.
 
-| level | name on screen | when (ours) |
+| part | points | how (ours) |
 |---|---|---|
-| 3 | **آشنا** (familiar) | the corpus has the word under this reading in at least ten poems |
-| 2 | **خوش‌ساخت** (well-formed) | otherwise, if no rule on the chain is in the lowest third of all measured rules |
-| 1 | **کم‌پشتوانه** (weakly backed) | otherwise: some rule on the chain almost never makes a word the corpus has |
+| corpus | up to 70 | the word under this reading in *n* texts: 30 + 40 · min(1, log10 *n* / 3) — 30 for one text, 43 for ten, 70 for a thousand; the letters only, nothing saying they are another word: half of that; otherwise 0 |
+| rule | up to 30 | the chain's weakest measured rule, rate *r* of its words the corpus has: 30 · clamp((log10 *r* + 4) / 3) — 0 at 1 in 10,000, 30 at 1 in 10; unmeasured counts at the median rate |
 
-Measured on دانستن at two steps (655 forms, corpus v16): 17 familiar, 307
-well-formed, 329 weakly backed. In its doer-participle group دانا، داننده and
-دانان are familiar; دانار and دانگر well-formed; زیردانا weakly backed,
-because *zir-* has made 1 corpus word in 7,830.
+Examples as the question gives them: دانا 100 (2,118 texts); دانگر 22 (not in the
+corpus, *-gar* 139 of 8,339); زیردانا 1 (*zir-* 1 of 7,830). With 70 and 30,
+any word the corpus has under its reading (30 or more) stands above any word it
+does not (30 at most) — the order the levels gave, kept.
 
 **What we did meanwhile**: built it, marked it unconfirmed in the code and in
-what the API serves, and listed the two choices below for one answer.
+what the API serves (`confirmed: false`), and listed the choices for one answer.
 
-**What changes if he rules otherwise**: the names and their one-line
-explanations are in one file of the interface (`web/src/screens/build/levels.ts`);
-the ten poems — ten texts since 2026-11-13, L37 — are `MIN_TEXTS` in
-`murfulu/scoring/level.py`, said again in that file's explanation. The lowest third is the productivity run's own
-division of the rules, so a different line for *weakly backed* is a rate in
-`level.py` in place of the band, or a different division in the run.
+**What changes if he rules otherwise**: the weights and the two scales are
+constants at the top of `murfulu/scoring/score.py`; the screen's sentence
+explaining them is `SCORE_SAYS` in `web/src/screens/build/scoring.ts`. Named
+levels again would be a band over the score in the same two files.
 
 ### The question
 
-1. **The names.** Do آشنا، خوش‌ساخت and کم‌پشتوانه say what is meant to a
-   reader who is not a linguist — or which names would he use?
-2. **The lines.** Ten poems for *familiar*; the lowest third of the rules for
-   *weakly backed*. A prefix such as *ham-* is weak in classical poetry and
-   ordinary today (هم‌اندیش), which is the price of judging by the corpus
-   (S33, S39).
+1. **A score at all.** Is one number from 0 to 100 right for a reader who is
+   not a linguist, or would he rather see named levels, or the figures alone?
+2. **The weights.** 70 for the corpus and 30 for the rule. A prefix such as
+   *ham-* is weak in classical poetry and ordinary today (هم‌اندیش), which is
+   the price of judging by the corpus (S33, S39).
 
 ## L37. «متن» and «نویسنده» for what the corpus counts, now that it holds prose
 

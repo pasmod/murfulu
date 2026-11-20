@@ -1,25 +1,19 @@
 /**
- * What a word's level rests on: three fields behind «شواهد», each a row of
- * dots that opens on a press to the figures behind it.
+ * What a word's score rests on: three fields behind «شواهد», each opening on
+ * a press to the figures behind it.
  *
- * **The project lead's choice of 2026-11-13**: the level and its sentence are
- * what a reader sees; the three parts of the score stay one press away, and
- * separate, because a single opaque number is what the project argues against
- * (FRONTEND.md). Each field says its part without numbers — up to three dots,
- * decided by the API — and the numbers, with the corpus version they are true
- * of, come on a press. A press is what a phone has; nothing here waits for a
- * hover.
+ * **The project lead's choice of 2026-11-21**: the score is on the row; its
+ * parts stay one press away, and separate, because a single opaque number is
+ * what the project argues against (FRONTEND.md). A press is what a phone has;
+ * nothing here waits for a hover.
  *
- * - **پیکره** — how many poems hold the word. A filled dot is the word under
- *   its own reading; a ring is the letters only, which may be another word.
- * - **دستور** — the third of all measured rules the chain's weakest rule falls
- *   in, and on a press each rule's own record and the ground under the chain.
- * - **معنا** — how close the base sits to the bases the rule usually takes,
- *   and on a press the bases it was measured against.
- *
- * The sentences behind the presses are the ones the row carried until
- * 2026-11-13, moved here unchanged except that the rule's own sentence now has
- * its Latin set apart (`text/Mixed.tsx`).
+ * - **پیکره** — its part of the score, out of 70, and on a press how many
+ *   texts hold the word and the lines themselves.
+ * - **دستور** — its part, out of 30, from the chain's weakest rule, and on a
+ *   press each rule's own record and the ground under the chain.
+ * - **معنا** — not part of the score: how close the base sits to the bases
+ *   the rule usually takes, as up to three dots, and on a press the bases it
+ *   was measured against.
  */
 
 import { useId, useState } from "react";
@@ -31,6 +25,7 @@ import { Num } from "../../text/Num";
 import { persianNumber, persianPercent } from "../../text/numbers";
 import { CorpusLines } from "./CorpusLines";
 import { Evidence } from "./Evidence";
+import { CORPUS_MAX, RULE_MAX } from "./scoring";
 import styles from "./Signals.module.css";
 
 type Field = "corpus" | "rule" | "meaning";
@@ -54,28 +49,39 @@ function Dots({ count, ring = false }: { count: number; ring?: boolean }) {
   );
 }
 
-/** What a field shows before it is pressed: dots, or why there are none. */
-function shown(form: BuiltForm, field: Field): { mark: React.ReactNode; said: string } {
+/**
+ * What a field shows before it is pressed: the part of the score it gives,
+ * or why there is none. The meaning is not in the score and keeps its dots.
+ */
+function shown(
+  form: BuiltForm,
+  field: Field,
+): { mark: React.ReactNode; said: string } {
   if (field === "corpus") {
     const found = form.attestation;
-    // The letters are another word's — a function word's, or a word of the
-    // bank read otherwise (سرو for a built *saru*): checked, and unknown.
     if (found?.function_word || found?.headword_homograph)
-      return { mark: "نامعلوم", said: "نامعلوم" };
+      return { mark: "واژهٔ دیگری است", said: "واژهٔ دیگری است" };
     if (found?.level === "none") return { mark: "نیامده", said: "نیامده" };
   }
-  // An older API sends no marks. That is not *not measured* — the figures
-  // may well be behind the press — so the field shows its name and nothing.
-  if (!form.level) return { mark: null, said: "" };
-  const value = form.level.marks[field];
-  if (value === null || value === undefined) {
+  const score = form.score;
+  if (!score) return { mark: null, said: "" };
+  if (field === "meaning") {
+    const value = score.meaning_mark;
+    if (value === null || value === undefined) {
+      return { mark: "سنجیده نشده", said: "سنجیده نشده" };
+    }
+    return {
+      mark: <Dots count={value} />,
+      said: `${persianNumber(value)} از ${persianNumber(3)}`,
+    };
+  }
+  const part = field === "corpus" ? score.corpus : score.rule;
+  if (part === null || part === undefined) {
     return { mark: "سنجیده نشده", said: "سنجیده نشده" };
   }
-  const ring = field === "corpus" && form.attestation?.level === "spelling";
-  return {
-    mark: <Dots count={value} ring={ring} />,
-    said: `${persianNumber(value)} از ${persianNumber(3)}`,
-  };
+  const of = field === "corpus" ? CORPUS_MAX : RULE_MAX;
+  const said = `${persianNumber(part)} از ${persianNumber(of)}`;
+  return { mark: said, said: `${said} امتیاز` };
 }
 
 function CorpusDetail({ form }: { form: BuiltForm }) {
@@ -127,7 +133,10 @@ function RuleDetail({
      the run never measured is left out rather than shown as a zero. */
   const counted = (form.paths[0] ?? []).flatMap((step) => {
     const built = step.built;
-    if (typeof built?.types !== "number" || typeof built.attested !== "number") {
+    if (
+      typeof built?.types !== "number" ||
+      typeof built.attested !== "number"
+    ) {
       return [];
     }
     return [
@@ -173,9 +182,8 @@ function RuleDetail({
             </>
           ) : (
             <>
-              پایهٔ میانی این واژه در پیکرهٔ{" "}
-              <Latin>{corpusVersion ?? "?"}</Latin> نیامده است — آن را ما
-              ساخته‌ایم.
+              پایهٔ میانی این واژه در پیکرهٔ <Latin>{corpusVersion ?? "?"}</Latin>{" "}
+              نیامده است — آن را ما ساخته‌ایم.
             </>
           )}
         </p>

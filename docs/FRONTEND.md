@@ -45,12 +45,10 @@ participle…). Each row:
 | Persian | script form |
 | rule | `v-010: stem1 + -ār → kārnām`, clickable to the rule |
 | meaning | composed from the semantic tag |
-| level | one of three, with one sentence of reason — see below (2026-11-13) |
+| score | one number from 0 to 100 with a bar — see below (2026-11-21; three named levels from 2026-11-13 until then) |
 | evidence | attested *n×* in corpus v3, or «در پیکرهٔ v3 نیامده است» — behind «شواهد» |
 | sisters | other words the same rule made that do exist |
-| score | its parts, never one number — corpus evidence, whether the
-chain rests on written ground, how often the chain's rules produce real
-words, and how typical the base is for its rule — behind «شواهد» |
+| the score's parts | never folded away — the corpus part out of 70, the rule part out of 30, and how typical the base is for its rule (not in the score) — behind «شواهد», with the reason in a sentence |
 
 **Built 2026-08-17, and not as drafted.** Steps 1, 2 and 3 are offered as a
 choice rather than as a *go deeper* button, because the third step is not more
@@ -60,23 +58,31 @@ the route and then paged** — the screen asks for the best thousand and says ho
 many of how many it is showing. It takes about a second, and is *not* instant
 after that: the cache is still task 6.2.
 
-Sorted by **level first, then by score** within a level, **never by depth**
-(the project lead's choice of 2026-11-13). The API decides the level and ranks
-on it, because a deep answer is paged there; the screen sorts one and two
-steps the same way.
+Sorted by **score, highest first, never by depth** (the project lead's choice
+of 2026-11-21); equal scores keep the old order of evidence. The API decides
+the score and ranks on it, because a deep answer is paged there; the screen
+sorts one and two steps the same way, and the reader can sort by the texts a
+word is in or by the alphabet instead.
 
-**The level (2026-11-13).** Each row shows the word, one of three levels —
-آشنا (familiar: under this reading in at least ten poems), خوش‌ساخت
-(well-formed: no rule on the chain in the lowest third), کم‌پشتوانه (weakly
-backed: some rule there) — as a name with three bars and an ⓘ, and one
-sentence of reason under the word: the poems and poets for a familiar word,
-otherwise what the corpus says and the record of the chain's weakest rule. A
-line above the list says what the three mean and that the corpus is classical
-poetry. «شواهد» opens three fields — پیکره، دستور، معنا — of up to three dots
-each, and a press on a field gives its figures with the corpus version. The
-names and thresholds are **unconfirmed** until the linguist rules (L36). The
-corpus version is said once above the list and beside every count behind the
-button, not in each row's sentence (DECISIONS 2026-11-13).
+**The table (2026-11-21, direction A of three drafts).** One card: the word
+classes as tabs (همه first, with counts), the chosen class's explanation and
+its traditional name under them, two filters as chips — the score's range
+(۷۰ و بیشتر، ۴۰ تا ۶۹، زیر ۴۰) and whether the corpus has the word — and a
+count of what is showing; then a head row whose «واژه»، «امتیاز» and «در پیکره»
+sort, and rows of word (with its Behnevis under it), class, score, corpus
+texts, the affix that made it with its steps, and the buttons. A phone drops
+the head row and the class and affix columns, and keeps the sorts as chips.
+The table opens on its best fifty rows and says how many more there are. Under
+it, one line says the corpus is classical poetry and the score a rough
+measure. The scale and weights are **unconfirmed** until the linguist rules
+(L36). The corpus version is said once under the table and beside every count
+behind the button.
+
+**The score's parts (2026-11-21).** «شواهد» opens a sentence of reason — what
+the corpus says, then how often the chain's weakest rule makes a word the
+corpus has, as «از هر ۱٬۰۰۰ واژه‌ای که می‌سازد، حدود ۵ تا» — and three fields:
+پیکره (its points out of 70), دستور (out of 30), معنا (up to three dots; not
+in the score). A press on a field gives its figures with the corpus version.
 
 **The verses (2026-11-14).** Under the «پیکره» field's figures stand the
 lines they were counted from: when the field opens, three texts by three
@@ -92,7 +98,7 @@ the corpus does not have, and the letters of a function word, list nothing
 One row per word. Where more than one rule chain produced the same form, the
 paths are nested under it — that is information, not noise.
 
-Controls: filter by output type, hide/show unattested forms.
+Controls: the class tabs, the score range, in the corpus or not, and the sort.
 
 Each row expands to show the full derivation path when it took more than one
 step (*gu* → *guyā* → *Guyāyi*).
