@@ -541,3 +541,18 @@ the rest is the text that was read.
 | 3 | `/questions` inside the api container | 15 unanswered (14 blocking work, L36 not), 1 answered (L16), 16 withdrawn; the screen's two boxes show 15 and 1 |
 
 The page itself was not viewed logged in on the server.
+
+## 16. Adding the menu-name question (L21) — run 2026-11-20
+
+On the project lead's word, after proofreading the Persian. Run from `main` at
+the commit that added L21 to `rules/questions_fa.yaml` (DECISIONS 2026-11-20).
+No migration, no data.
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `deploy/server.sh deploy` | api and web rebuilt with the new questions file, healthy |
+| 2 | `deploy/server.sh questions` | dry run: L21 added (4 options), 15 unchanged |
+| 3 | `deploy/server.sh questions --apply` | the same, written; a second dry run shows 16 unchanged |
+| 4 | `deploy/server.sh check` | all checks passed; the site answers 401 logged out |
+
+The page itself was not viewed logged in on the server.
