@@ -2,6 +2,15 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 — the menu says ساختن، چسباندن and شکافتن
+
+The linguist ruled on L21 (2026-11-20, option `verbs`, our proposal): the three
+menu items are now «ساختن» (/build), «چسباندن» (/compound) and «شکافتن»
+(/explain). Only the menu labels change; the screens' titles, their addresses
+and the gloss line under each name stay. The browser layout tests pass with
+the longer names, the narrowest phone width included. — linguist, on the
+project lead's word to put it live
+
 ## 2026-11-20 — the menu-name question goes to the linguist after all
 
 L21 (are ساخت، ترکیب and تحلیل the right menu names) was withdrawn by default

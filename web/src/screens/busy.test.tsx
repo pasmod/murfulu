@@ -63,7 +63,7 @@ describe("building a word", () => {
     await screen.findByRole("button", { name: "در حال ساخت" });
 
     // The menu's own link to this screen clears the word from the address.
-    await userEvent.click(screen.getByRole("link", { name: "ساخت" }));
+    await userEvent.click(screen.getByRole("link", { name: "ساختن" }));
 
     const button = await screen.findByRole("button", { name: "بساز" });
     expect(button).toBeEnabled();

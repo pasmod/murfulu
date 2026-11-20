@@ -42,7 +42,7 @@ describe("the shell", () => {
     // Both in the name gives one long run and no name at all; the gloss
     // dropped entirely would tell a screen reader less than the screen shows.
     renderApp();
-    const link = screen.getByRole("link", { name: "ترکیب" });
+    const link = screen.getByRole("link", { name: "چسباندن" });
     const described = link.getAttribute("aria-describedby");
     expect(described).toBeTruthy();
     expect(document.getElementById(described!)).toHaveTextContent(
