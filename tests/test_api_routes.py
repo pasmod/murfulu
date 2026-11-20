@@ -490,6 +490,48 @@ def test_the_total_is_counted_exactly(
     assert body["total"] == 222_859
 
 
+def test_the_corpus_centuries_are_the_bounds_the_century_filter_reads(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+):
+    """The search filters open on these two centuries.
+
+    So they must be read from the fields ``century:`` filters on, and come
+    back as whole numbers.
+    """
+    from murfulu.api import search as route
+
+    asked: dict[str, object] = {}
+
+    class _Client:
+        def search(self, **kwargs: object) -> dict[str, object]:
+            asked.update(kwargs)
+            return {
+                "hits": {"total": {"value": 0}, "hits": []},
+                "aggregations": {"first": {"value": 3.0}, "last": {"value": 14.0}},
+            }
+
+    monkeypatch.setattr(route, "_client", lambda: _Client())
+    body = client.get("/corpus/centuries").json()
+    assert body == {"first": 3, "last": 14}
+    assert asked["aggs"] == {
+        "first": {"min": {"field": "first_century"}},
+        "last": {"max": {"field": "last_century"}},
+    }
+
+
+def test_no_century_in_the_index_is_null_not_zero(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+):
+    from murfulu.api import search as route
+
+    class _Client:
+        def search(self, **kwargs: object) -> dict[str, object]:
+            return {"aggregations": {"first": {"value": None}, "last": {"value": None}}}
+
+    monkeypatch.setattr(route, "_client", lambda: _Client())
+    assert client.get("/corpus/centuries").json() == {"first": None, "last": None}
+
+
 def test_a_bad_word_index_is_a_400(client: TestClient):
     assert client.get("/word/x", params={"index": "poems"}).status_code == 400
 

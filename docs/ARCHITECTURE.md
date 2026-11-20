@@ -465,6 +465,7 @@ GET  /word/{id}    → readings, stats, citations
 POST /explain      {word}                          → structural decomposition
 GET  /rules        → the rule pack
 GET  /corpus       → versions, sources, sizes
+GET  /corpus/centuries → the first and last century a word is written in
 ```
 
 ## Deployment

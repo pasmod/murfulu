@@ -23,7 +23,13 @@ from murfulu.search.citations import find as find_citations
 from murfulu.search.facets import aggregations
 from murfulu.search.facets import read as read_facets
 from murfulu.search.indices import connect
-from murfulu.search.query import QueryError, parse, to_elasticsearch
+from murfulu.search.query import (
+    CENTURY_FIRST,
+    CENTURY_LAST,
+    QueryError,
+    parse,
+    to_elasticsearch,
+)
 
 router = APIRouter(tags=["search"])
 
@@ -246,6 +252,41 @@ def _readings_of(client: Any, index: str, spelling: str) -> list[dict[str, Any]]
     field = "spelling_fa" if index == "word_types" else "form_fa"
     response = client.search(index=index, size=20, query={"term": {field: spelling}})
     return _hits(dict(response))
+
+
+@router.get("/corpus/centuries")
+def centuries() -> dict[str, int | None]:
+    """The earliest and the latest century any served word is written in.
+
+    The search filters open with the century fields already filled with
+    these two, so a reader narrows a range rather than having to know where
+    the corpus begins (the project lead's request of 2026-11-20). They are the
+    same two fields ``century:`` filters on, so the range they make takes in
+    every word that has a century at all.
+
+    Both are null when the index holds no word with a century; the screen
+    then leaves the fields empty, as it did before.
+    """
+    try:
+        response = _client().search(
+            index="word_types",
+            size=0,
+            aggs={
+                "first": {"min": {"field": CENTURY_FIRST}},
+                "last": {"max": {"field": CENTURY_LAST}},
+            },
+        )
+    except NotFoundError:
+        raise HTTPException(503, "the word index has not been built") from None
+    except (ApiError, TransportError, OSError) as unreachable:
+        raise HTTPException(503, f"{_UNREACHABLE}: {unreachable}") from None
+    found = dict(response).get("aggregations") or {}
+
+    def bound(name: str) -> int | None:
+        value = (found.get(name) or {}).get("value")
+        return None if value is None else int(value)
+
+    return {"first": bound("first"), "last": bound("last")}
 
 
 @router.get("/corpus")
