@@ -213,19 +213,60 @@ describe("the questions screen", () => {
       }),
     );
     renderApp("/questions");
-    const boxes = await screen.findByRole("button", { name: /همهٔ پرسش‌ها/ });
-    expect(boxes.textContent).toMatch(/۲/);
+    const waiting = await screen.findByRole("button", { name: /بی‌پاسخ/ });
+    expect(waiting.textContent).toMatch(/۱/);
     expect(screen.getByRole("button", { name: /پاسخ داده شده/ }).textContent).toMatch(
       /۱/,
     );
     // It opens on the unanswered, so L2 is not on screen until its box is hit.
-    expect(screen.queryByText("L2")).toBeNull();
-    await userEvent.click(screen.getByRole("button", { name: /همهٔ پرسش‌ها/ }));
-    // One question at a time now, so the box shows the first of the two and
-    // the second is one step away.
     expect(await screen.findByText("L1")).toBeInTheDocument();
-    await userEvent.click(screen.getAllByRole("button", { name: "پرسش بعدی" })[0]!);
+    expect(screen.queryByText("L2")).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: /پاسخ داده شده/ }));
     expect(await screen.findByText("L2")).toBeInTheDocument();
+  });
+
+  it("gives withdrawn and set-aside questions no box and no count", async () => {
+    // Six boxes, four of them for questions nobody is asking the linguist,
+    // invited him to read those; the project lead cut them to two.
+    serve(
+      answer({
+        questions: [
+          question({ reference: "L1" }),
+          question({
+            reference: "L2",
+            state: "withdrawn",
+            context: { withdrawn_because: "قاعده‌های تازه پاسخ را داده‌اند." },
+          }),
+          question({ reference: "L3", state: "deferred" }),
+        ],
+      }),
+    );
+    renderApp("/questions");
+    expect(await screen.findByText("L1")).toBeInTheDocument();
+    for (const gone of [/همهٔ پرسش‌ها/, /کار را متوقف کرده/, /پس گرفته شده/, /فعلاً پرسیده نمی‌شود/]) {
+      expect(screen.queryByRole("button", { name: gone })).toBeNull();
+    }
+    expect(screen.getByRole("button", { name: /بی‌پاسخ/ }).textContent).toMatch(/۱/);
+    expect(screen.queryByText("L2")).toBeNull();
+    expect(screen.queryByText("L3")).toBeNull();
+  });
+
+  it("still opens a withdrawn question from a link, with its reason", async () => {
+    serve(
+      answer({
+        questions: [
+          question({ reference: "L1" }),
+          question({
+            reference: "L2",
+            state: "withdrawn",
+            context: { withdrawn_because: "قاعده‌های تازه پاسخ را داده‌اند." },
+          }),
+        ],
+      }),
+    );
+    renderApp("/questions?q=L2");
+    expect(await screen.findByText("L2")).toBeInTheDocument();
+    expect(screen.getByText(/پس گرفته شد، چون/)).toBeInTheDocument();
   });
 
   it("shows one question at a time, and says which one", async () => {

@@ -76,11 +76,6 @@
   color: var(--ink-soft);
 }
 
-/* The one that stops work is the one to look at first. */
-.tally[data-kind="blocked"] .tallyCount {
-  color: var(--evidence-spelling);
-}
-
 .list {
   display: flex;
   flex-direction: column;

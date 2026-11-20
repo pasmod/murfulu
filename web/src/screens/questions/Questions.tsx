@@ -58,14 +58,21 @@ const STATE_LABEL: Record<string, string> = {
 };
 
 /**
- * The boxes at the top: how many questions are in each state, and the filter.
+ * The boxes at the top: how many questions wait and how many are answered,
+ * and the filter.
  *
- * **The states are the store's own five**, not a set invented here:
- * `open`, `blocked`, `answered`, `withdrawn`, and since 2026-11-12
- * `deferred` — set aside until something else arrives (see
- * `db/models/rulings.py`).
+ * **Two boxes, not six** (the project lead, 2026-11-20). The store has five
+ * states — `open`, `blocked`, `answered`, `withdrawn`, and since 2026-11-12
+ * `deferred`, set aside until something else arrives (see
+ * `db/models/rulings.py`) — and the screen had a box for most of them, plus
+ * «همهٔ پرسش‌ها» and «کار را متوقف کرده». The linguist comes here to answer.
+ * A withdrawn or deferred question is our bookkeeping, and a box for it
+ * invited him to read questions nobody is asking him, so neither has a box
+ * and neither is counted. A direct link (`?q=`) still opens one, with the
+ * reason it was taken back or set aside. Whether a question stops work is
+ * said on its own card, so it needs no box either.
  * *Resolved* — a maintainer closing a question after the linguist has ruled
- * on it — is a fifth the database does not have yet.
+ * on it — is a state the database does not have yet.
  */
 interface Tally {
   key: string;
@@ -73,33 +80,17 @@ interface Tally {
   holds: (one: Question) => boolean;
 }
 
-/** The box that holds everything, and the fallback when none is chosen. */
-const EVERY: Tally = { key: "all", label: "همهٔ پرسش‌ها", holds: () => true };
+/** What still waits for an answer, and the fallback when no box is chosen. */
+const WAITING: Tally = {
+  key: "waiting",
+  label: "بی‌پاسخ",
+  holds: (one) => one.state === "open" || one.state === "blocked",
+};
 
-const TALLIES: Tally[] =
-  [
-    EVERY,
-    {
-      key: "waiting",
-      label: "بی‌پاسخ",
-      holds: (one) => one.state === "open" || one.state === "blocked",
-    },
-    {
-      key: "blocked",
-      label: "کار را متوقف کرده",
-      // Only what still waits: a withdrawn or deferred question that once
-      // blocked work stops nothing now.
-      holds: (one) =>
-        (one.state === "open" || one.state === "blocked") && one.blocks_work,
-    },
-    { key: "answered", label: "پاسخ داده شده", holds: (one) => one.state === "answered" },
-    { key: "withdrawn", label: "پس گرفته شده", holds: (one) => one.state === "withdrawn" },
-    {
-      key: "deferred",
-      label: "فعلاً پرسیده نمی‌شود",
-      holds: (one) => one.state === "deferred",
-    },
-  ];
+const TALLIES: Tally[] = [
+  WAITING,
+  { key: "answered", label: "پاسخ داده شده", holds: (one) => one.state === "answered" },
+];
 
 function Trouble({ error }: { error: ApiError }): React.ReactElement {
   // Every message says what to do next, which for this screen is almost
@@ -402,7 +393,7 @@ export function Questions(): React.ReactElement {
   useEffect(load, [load]);
 
   const all = list?.questions ?? [];
-  const chosen = TALLIES.find((one) => one.key === only) ?? EVERY;
+  const chosen = TALLIES.find((one) => one.key === only) ?? WAITING;
   // **The open question stays in the list whatever the filter says.** Answer
   // one while looking at the unanswered and it stops being unanswered — the
   // filter would drop it, the screen would jump to a different question, and
