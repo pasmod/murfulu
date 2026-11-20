@@ -437,11 +437,19 @@ export function Build() {
           className={styles.reading}
           aria-labelledby={`reading-${reading.latin}`}
         >
+          {/* **Said as a sentence.** It read «از raftan ۵۹۴ واژه»: a Latin
+              word and a bare number, and the project lead asked on 2026-11-20
+              why it was so cryptic. The word is named in its own script, the
+              number says what it counts, and the reading stays beside it,
+              small, because a word read two ways — بلند is Baland and boland —
+              has one of these per reading and the Latin is what tells them
+              apart. */}
           <h2 id={`reading-${reading.latin}`} className={styles.readingTitle}>
-            از <Latin>{reading.latin}</Latin>
-            <span className={styles.readingCount}>
-              <Num value={reading.count} /> واژه
-            </span>
+            <span>
+              از «{reading.spelling_fa}» <Num value={reading.count} /> واژه ساخته
+              می‌شود
+            </span>{" "}
+            <Latin className={styles.readingLatin}>{reading.latin}</Latin>
           </h2>
 
           {/* **The two stems, named and counted.**
@@ -474,8 +482,11 @@ export function Build() {
                     <span className={styles.stemForms}>
                       <span className={styles.stemFa}>{base.fa}</span>
                       <Latin className={styles.stemLatin}>{base.latin}</Latin>
+                      {/* «۱۵۷ واژه» alone left the reader to guess what was
+                          counted; the project lead asked on 2026-11-20. */}
                       <span className={styles.stemCount}>
-                        <Num value={builtOn(reading, base.latin)} /> واژه
+                        <Num value={builtOn(reading, base.latin)} /> واژه از این
+                        بن ساخته می‌شود
                       </span>
                     </span>
                   </button>

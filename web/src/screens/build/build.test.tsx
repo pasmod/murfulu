@@ -6,7 +6,7 @@
  * four states of evidence never collapse into each other.
  */
 
-import { screen, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -217,6 +217,38 @@ describe("the build screen", () => {
     );
     renderApp(ROUTE);
     expect(await screen.findByText(NEEDS_REVIEW)).toBeInTheDocument();
+  });
+
+  it("says in a sentence what the number counts, with the reading beside it", async () => {
+    // It read «از raftan ۳ واژه» and «۳ واژه»: a Latin word and two bare
+    // numbers. The project lead asked on 2026-11-20 what they meant.
+    renderApp(ROUTE);
+    const title = await screen.findByRole("heading", { level: 2, name: /ساخته می‌شود/ });
+    // A space before the reading, so it is not read as one word with «می‌شود».
+    expect(title.textContent).toContain("از «رفتن» ۳ واژه ساخته می‌شود raftan");
+    expect(within(title).getByText("raftan")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /۳ واژه از این بن ساخته می‌شود/ }),
+    ).toBeInTheDocument();
+  });
+
+  it("takes the word right to left, and offers examples on stepping into the empty box", async () => {
+    // The project lead, 2026-11-20: the box ran left to right, and a press in
+    // it opened nothing.
+    renderApp("/build");
+    const box = screen.getByRole("combobox", { name: "واژه‌ای بنویسید" });
+    expect(box).toHaveAttribute("dir", "rtl");
+    await userEvent.click(box);
+    const list = await screen.findByRole("listbox");
+    expect(within(list).getByRole("option", { name: "رفتن، نمونه" })).toBeInTheDocument();
+    await userEvent.click(within(list).getByRole("option", { name: "گفتن، نمونه" }));
+    await waitFor(() =>
+      expect(
+        vi.mocked(fetch).mock.calls.some((call) =>
+          String(call[0]).includes(`/generate?word=${encodeURIComponent("گفتن")}`),
+        ),
+      ).toBe(true),
+    );
   });
 
   it("says nothing about review when the dictionary is content", async () => {

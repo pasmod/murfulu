@@ -37,7 +37,7 @@ import { Results } from "./Results";
  */
 const UNREADABLE: Record<string, (facts: Record<string, string>) => string> = {
   "unknown-field": (facts) =>
-    `«${facts.name}» چیزی نیست که بتوان بر آن جست‌وجو کرد. راهنمای نحو را باز کنید تا ببینید چه چیزهایی هست.`,
+    `«${facts.name}» چیزی نیست که بتوان بر آن جست‌وجو کرد. کادر جست‌وجو را پاک کنید و رویش بزنید تا ببینید بر چه چیزهایی می‌شود جست‌وجو کرد.`,
   "no-value": (facts) =>
     `پس از «${facts.name}:» چیزی نوشته نشده است. برای نمونه: ${facts.name}:x`,
   "bad-count": (facts) =>
@@ -65,7 +65,7 @@ function trouble(error: ApiError): { title: string; advice: string } {
       // Persian is better than a precise one in English.
       advice: said
         ? said(error.reason!.facts)
-        : "چیزی در این جست‌وجو خوانده نشد. راهنمای نحو را باز کنید تا شکل درست را ببینید.",
+        : "چیزی در این جست‌وجو خوانده نشد. کادر جست‌وجو را پاک کنید و رویش بزنید تا نمونه‌های درست را ببینید.",
     };
   }
   if (error.trouble === "not-built") {

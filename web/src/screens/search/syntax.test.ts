@@ -13,7 +13,8 @@ import { describe, expect, it } from "vitest";
 import {
   FIELDS,
   PATTERNS,
-  REFERENCE,
+  EXAMPLES,
+  examplesFor,
   getPattern,
   getTerm,
   readTerms,
@@ -127,11 +128,26 @@ describe("what the interface offers", () => {
     }
   });
 
-  it("shows every field in the reference, so nothing is reachable only by reading the source", () => {
+  it("shows every field among the examples, so nothing is reachable only by reading the source", () => {
     for (const one of FIELDS) {
-      expect(REFERENCE.some((row) => row.query.startsWith(`${one.name}:`))).toBe(
+      expect(EXAMPLES.some((row) => row.query.startsWith(`${one.name}:`))).toBe(
         true,
       );
     }
+  });
+
+  it("says in Persian what every example finds", () => {
+    for (const one of EXAMPLES) expect(one.hint).toMatch(/[؀-ۿ]/);
+  });
+
+  it("offers every example to an empty box, and narrows them as the reader types", () => {
+    expect(examplesFor("")).toEqual(EXAMPLES);
+    expect(examplesFor("count").map((one) => one.query)).toEqual([
+      "count:>10",
+      "count:1",
+    ]);
+    // By its line of Persian too: a reader who types the word they mean.
+    expect(examplesFor("کارنام").map((one) => one.query)).toEqual(["type:karnam"]);
+    expect(examplesFor("Type").map((one) => one.query)).toContain("type:karnam");
   });
 });

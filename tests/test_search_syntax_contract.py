@@ -31,7 +31,7 @@ SYNTAX = Path(__file__).resolve().parents[1] / "web/src/screens/search/syntax.ts
 #: `{ name: "type", title: …` — one entry of the FIELDS list in syntax.ts.
 _FIELD = re.compile(r"""\bname:\s*["'](?P<name>[a-z0-9_]+)["']""")
 
-#: `{ query: "count:>10", hint: …` — one row of the REFERENCE list.
+#: `{ query: "count:>10", hint: …` — one row of the EXAMPLES list.
 _REFERENCE = re.compile(r"""\bquery:\s*["'](?P<query>[^"']+)["']""")
 
 

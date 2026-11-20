@@ -21,12 +21,14 @@ function Box({
   onSubmit = () => undefined,
   initial = "",
   atEndOnly = false,
+  openOnFocus = false,
 }: {
   source?: Source<Suggestion>;
   onPick?: (one: Suggestion) => void;
   onSubmit?: (value: string) => void;
   initial?: string;
   atEndOnly?: boolean;
+  openOnFocus?: boolean;
 }) {
   const [value, setValue] = useState(initial);
   return (
@@ -44,6 +46,7 @@ function Box({
         source={source}
         listLabel="پیشنهادها"
         atEndOnly={atEndOnly}
+        openOnFocus={openOnFocus}
         onPick={(one) => {
           setValue(one.text);
           onPick(one);
@@ -258,5 +261,33 @@ describe("a box that suggests", () => {
     await userEvent.keyboard("{ArrowDown}{Enter}");
     expect(onPick).not.toHaveBeenCalled();
     expect(onSubmit).toHaveBeenCalledWith("دل");
+  });
+
+  it("opens on stepping into an empty box, where the screen asks for it", async () => {
+    const source = vi.fn(fromList);
+    render(<Box source={source} openOnFocus />);
+    await userEvent.click(box());
+    await screen.findByRole("listbox", { name: "پیشنهادها" });
+    expect(source).toHaveBeenCalledWith("", expect.anything());
+    expect(screen.getAllByRole("option")).toHaveLength(WORDS.length);
+  });
+
+  it("opens again on a press after Escape closed it", async () => {
+    render(<Box openOnFocus />);
+    await userEvent.click(box());
+    await screen.findByRole("listbox");
+    await userEvent.keyboard("{Escape}");
+    expect(box()).toHaveAttribute("aria-expanded", "false");
+    await userEvent.click(box());
+    await waitFor(() => expect(box()).toHaveAttribute("aria-expanded", "true"));
+  });
+
+  it("stays shut on stepping in when the screen did not ask for it", async () => {
+    const source = vi.fn(fromList);
+    render(<Box source={source} />);
+    await userEvent.click(box());
+    await new Promise((done) => setTimeout(done, 300));
+    expect(source).not.toHaveBeenCalled();
+    expect(box()).toHaveAttribute("aria-expanded", "false");
   });
 });

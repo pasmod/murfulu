@@ -1,7 +1,7 @@
 /**
  * The search language, in one place.
  *
- * Three things write queries — the examples under the box, the facet panel
+ * Three things write queries — the examples the box suggests, the facet panel
  * beside the results, and the builder — and until 2026-08-17 each spelled the
  * syntax out for itself. They drifted: the facet panel wrote `category:…` for
  * a year and `src/murfulu/search/query.py` had no `category` field, so every
@@ -33,21 +33,21 @@ export interface Pattern {
 export const PATTERNS: Pattern[] = [
   {
     key: "ends",
-    label: "پایان‌یافته به",
+    label: "با این تمام شود",
     write: (value) => `*${value}`,
     read: (term) =>
       term.startsWith("*") && !term.endsWith("*") ? term.slice(1) : null,
   },
   {
     key: "starts",
-    label: "آغازشده با",
+    label: "با این شروع شود",
     write: (value) => `${value}*`,
     read: (term) =>
       term.endsWith("*") && !term.startsWith("*") ? term.slice(0, -1) : null,
   },
   {
     key: "contains",
-    label: "دربردارندهٔ",
+    label: "این را در خود داشته باشد",
     write: (value) => `*${value}*`,
     read: (term) =>
       term.startsWith("*") && term.endsWith("*") && term.length > 2
@@ -56,7 +56,7 @@ export const PATTERNS: Pattern[] = [
   },
   {
     key: "exact",
-    label: "دقیقاً همین",
+    label: "درست همین واژه",
     write: (value) => value,
     read: (term) =>
       term.includes("*") || term.startsWith("/") ? null : term || null,
@@ -73,7 +73,7 @@ export const PATTERNS: Pattern[] = [
 export interface Field {
   name: string;
   title: string;
-  /** An example value, for the reference list. */
+  /** An example value. */
   example: string;
   hint: string;
 }
@@ -88,10 +88,15 @@ export const FIELDS: Field[] = [
   {
     name: "category",
     title: `گونه در ${LEXICON}`,
-    example: "اسم ذات",
+    example: "مصدر",
     hint: `گونه‌ای که ${LEXICON} برای واژه نوشته است`,
   },
-  { name: "in", title: "کجا پیدا شده", example: "corpus", hint: "پیکره، واژه‌نامه یا ساخته‌شده" },
+  {
+    name: "in",
+    title: "این واژه از کجاست",
+    example: "corpus",
+    hint: "در متن‌ها آمده، در واژه‌نامه هست، یا ساختهٔ دستور است",
+  },
   { name: "stem1", title: "پیشین‌کاربن", example: "goft", hint: "بن گذشته" },
   { name: "stem2", title: "کنون‌کاربن", example: "gu", hint: "بن اکنون" },
   { name: "affix", title: "وند", example: "-eš", hint: "واژه‌هایی که این وند را دارند" },
@@ -111,23 +116,59 @@ export const COUNTS = [
   { key: "eq", label: "دقیقاً", write: (n: number) => `count:${n}` },
 ];
 
-/** Every form the language takes, for the reference list. Each one runs. */
-export const REFERENCE: { query: string; hint: string }[] = [
-  { query: "*nā", hint: "واژه‌هایی که به nā ختم می‌شوند" },
-  { query: "bar*", hint: "واژه‌هایی که با bar آغاز می‌شوند" },
-  { query: "*raft*", hint: "واژه‌هایی که raft در آن‌هاست" },
-  { query: "gereft", hint: "دقیقاً همین واژه" },
-  { query: "/g[ou]ft/", hint: "الگوی باقاعده" },
-  { query: "روش", hint: "نوشتار فارسی، که در املا جست‌وجو می‌شود" },
-  ...FIELDS.map((one) => ({
-    query: `${one.name}:${one.example}`,
-    hint: one.hint,
-  })),
-  { query: "count:>10", hint: "بیش از ده بار نوشته شده" },
-  { query: "count:1", hint: "تنها یک بار نوشته شده" },
-  { query: "century:10-13", hint: "میان سدهٔ دهم و سیزدهم" },
-  { query: "*nā type:nam in:corpus", hint: "همه با هم می‌آیند" },
+/**
+ * Every form the language takes, as the search box's suggestions. Each runs.
+ *
+ * Until 2026-11-20 these were a list behind an ⓘ beside the box. The project
+ * lead asked for them to be what the box suggests instead: stepping into the
+ * empty box shows them all, typing narrows them, and each says in a line of
+ * Persian what it finds — so the list teaches what the search can do by
+ * example, where the reader already is.
+ *
+ * Written out one by one rather than made from `FIELDS`, because a line that
+ * says what *this* query finds is clearer than one that describes the field.
+ * A test holds that every field has one.
+ */
+export const EXAMPLES: { query: string; hint: string }[] = [
+  { query: "*eš", hint: "واژه‌هایی که با «ـِش» تمام می‌شوند" },
+  { query: "bar*", hint: "واژه‌هایی که با «بر» شروع می‌شوند" },
+  { query: "*raft*", hint: "واژه‌هایی که «رفت» را در خود دارند" },
+  { query: "gereft", hint: "درست همین واژه: «گرفت»" },
+  { query: "/g[ou]ft/", hint: "چند شکل با یک الگو: goft یا guft" },
+  { query: "روش", hint: "با خط فارسی هم می‌شود جست‌وجو کرد" },
+  { query: "type:karnam", hint: "همهٔ کارنام‌ها (اسم مصدر)" },
+  { query: "category:مصدر", hint: `آنچه ${LEXICON} «مصدر» نامیده است` },
+  { query: "in:corpus", hint: "واژه‌هایی که در متن‌ها آمده‌اند" },
+  { query: "stem1:goft", hint: "واژه‌هایی که از پیشین‌کاربن «گفت» ساخته شده‌اند" },
+  { query: "stem2:gu", hint: "واژه‌هایی که از کنون‌کاربن «گو» ساخته شده‌اند" },
+  { query: "affix:-eš", hint: "واژه‌هایی که با وند «ـِش» ساخته شده‌اند" },
+  { query: "tag:ja", hint: "واژه‌هایی که وندشان معنای «جا» دارد" },
+  { query: "rule:V-010", hint: "واژه‌هایی که با دستور V-010 ساخته شده‌اند" },
+  { query: "author:فردوسی", hint: "واژه‌هایی که در متن‌های فردوسی آمده‌اند" },
+  { query: "source:ganjoor", hint: "واژه‌هایی که از گنجور آمده‌اند" },
+  { query: "count:>10", hint: "بیش از ده بار در متن‌ها آمده" },
+  { query: "count:1", hint: "تنها یک بار در متن‌ها آمده" },
+  { query: "century:10-13", hint: "در متن‌های سدهٔ دهم تا سیزدهم آمده" },
+  {
+    query: "*nā type:nam in:corpus",
+    hint: "چند خواسته با هم: نام‌هایی که با «ـنا» تمام می‌شوند و در متن‌ها آمده‌اند",
+  },
 ];
+
+/**
+ * The examples that fit what is typed: all of them for an empty box, else
+ * those whose query or line of Persian holds the text. Upper and lower case
+ * are one, as they are nowhere else in a query, because a reader typing
+ * «Type» means the field.
+ */
+export function examplesFor(text: string): { query: string; hint: string }[] {
+  const wanted = text.trim().toLowerCase();
+  if (!wanted) return EXAMPLES;
+  return EXAMPLES.filter(
+    (one) =>
+      one.query.toLowerCase().includes(wanted) || one.hint.includes(text.trim()),
+  );
+}
 
 /** One term of a query: a `name:value`, or the bare pattern. */
 export interface Term {

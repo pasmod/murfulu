@@ -6,31 +6,20 @@
    controls each sized themselves, so nothing lined up down the panel and the
    native select drew its own height, its own corner and its own arrow beside
    inputs that had ours. The project lead's word for it was that it looked
-   like the eighties. Three things fix that and they are all about rhythm: one
-   column for the labels, one shape for every control, and the panel's own
-   ground behind its explanation and its result rather than behind everything. */
+   like the eighties. Two things fix that and they are both about rhythm: one
+   column for the labels, and one shape for every control.
+
+   The strip of explanation at its head and the line at its foot that repeated
+   the query went on 2026-11-20, at the project lead's word: the box above
+   already shows what the filters write. */
 
 .builder {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--paper);
-  /* The header and footer strips carry their own ground to the panel's edge,
-     and the radius has to cut them. Nothing focusable sits against the edge —
-     every control is a --space-4 inset — so no focus ring is clipped. */
+  /* Nothing focusable sits against the edge — every control is a --space-4
+     inset — so no focus ring is clipped. */
   overflow: hidden;
-}
-
-/* What the panel is for, as a strip across the top rather than a floating
-   line of small grey text. */
-.about {
-  margin: 0;
-  padding: var(--space-3) var(--space-4);
-  max-width: none;
-  font-size: var(--text-sm);
-  line-height: var(--leading-tight);
-  color: var(--ink-soft);
-  background: var(--paper-sunk);
-  border-block-end: 1px solid var(--line);
 }
 
 .rows {
@@ -53,7 +42,7 @@
 }
 
 .label {
-  /* The labels are phrases — «بسامد در پیکره», «کجا پیدا شده» — so they wrap
+  /* The labels are phrases — «بسامد در پیکره», «این واژه از کجاست» — so they wrap
      inside their column rather than clipping to «بسامد در…», which loses the
      part that says what is being filtered. */
   min-width: 0;
@@ -134,43 +123,28 @@
 
 /* A Latin form is data and is read as written; the same rule as the results
    and the examples. Said from inside the row, so it outweighs the face the
-   shared field inherits. */
-.controls .text,
-.controls .number {
+   shared field inherits. The number fields are not: their digits are Persian
+   since 2026-11-20, and read right to left with the rest of the row. */
+.controls .text {
   font-family: var(--font-latin);
+}
+
+/* A century end that makes the range run backwards: held, not written, and
+   marked until the other end makes it whole. The sentence beside it says
+   why, so the mark is not colour alone. */
+.number[aria-invalid="true"] {
+  border-color: var(--level-unsure);
+}
+
+.backwards {
+  flex-basis: 100%;
+  font-size: var(--text-sm);
+  color: var(--level-unsure);
 }
 
 .between {
   font-size: var(--text-sm);
   color: var(--ink-faint);
-}
-
-/* What it wrote, as the panel's result: its own strip at the foot, so the
-   reader watching the query fill in has one place to watch. */
-.written {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin: 0;
-  padding: var(--space-3) var(--space-4);
-  max-width: none;
-  background: var(--paper-sunk);
-  border-block-start: 1px solid var(--line);
-}
-
-.writtenLabel {
-  font-size: var(--text-sm);
-  color: var(--ink-faint);
-}
-
-.writtenQuery {
-  /* Syntax, so it is shown exactly as it must be typed: left to right and
-     isolated, the same reasoning as the examples in QueryBox. */
-  unicode-bidi: isolate;
-  font-family: var(--font-latin);
-  color: var(--accent-strong);
-  overflow-wrap: anywhere;
 }
 
 /* Narrow: a 9rem label column is a third of a 320px screen, so the label goes

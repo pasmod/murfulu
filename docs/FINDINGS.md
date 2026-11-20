@@ -5,6 +5,21 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-20 — the class names against the linguist's word bank
+
+Checked while putting the traditional name beside each class in the search
+filters. **The coined names agree with his word-bank groups**
+(`rules/bank_groups.yaml`) wherever a group exists: نام، کارنام، برنام،
+چون‌واژه، جانام، پیش‌واژه. The differences are all known and recorded:
+نابِسودکارواژه carries a reading kasra the bank's نابسودکارواژه does not
+(his own table writes it with one); the bank has one group «کاربهر» where the
+rules keep کارنده‌کاربهر and کاریده‌کاربهر apart (L17d); and شمار، کارواژه and
+ندایی have no group (L46, L47, L17c). Nothing was renamed.
+
+The local corpus's words span **centuries 11 to 20** (min `first_century`,
+max `last_century` in `word_types`), which is what the search filters' century
+fields now open on.
+
 ## 2026-11-19 (session 32, last) — false claims fixed, corpus v22
 
 Measured on v18 record by record, then fixed (DECISIONS 2026-11-19) and

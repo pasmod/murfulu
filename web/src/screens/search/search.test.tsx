@@ -44,6 +44,17 @@ const ANSWER: SearchResult = {
   string_match_only: [word("فنا:Fanā", "فنا", "Fanā", { total_count: 4315 })],
 };
 
+/**
+ * The requests that searched, leaving out the corpus's century range, which
+ * the filters ask for on arrival to fill their century fields.
+ */
+function searches(): string[] {
+  return vi
+    .mocked(fetch)
+    .mock.calls.map((call) => String(call[0]))
+    .filter((url) => !url.includes("/corpus/centuries"));
+}
+
 function answerWith(body: unknown, status = 200) {
   return vi.fn().mockResolvedValue({
     ok: status >= 200 && status < 300,
@@ -62,15 +73,17 @@ afterEach(() => {
 });
 
 describe("running a search", () => {
-  it("asks nothing until there is a query", () => {
+  it("asks nothing until there is a query, but the corpus's range of centuries", () => {
+    // The range fills the century fields before anyone touches them — the
+    // project lead's request of 2026-11-20. Nothing else is asked.
     renderApp("/");
-    expect(fetch).not.toHaveBeenCalled();
+    expect(searches()).toEqual([]);
   });
 
   it("runs the query in the address, so a search can be linked to", async () => {
     renderApp("/?q=*n%C4%81");
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
-    const url = String(vi.mocked(fetch).mock.calls[0]?.[0]);
+    await waitFor(() => expect(searches()).not.toEqual([]));
+    const url = searches()[0]!;
     expect(url).toContain("/api/search");
     expect(url).toContain("q=*n%C4%81");
   });
@@ -82,17 +95,75 @@ describe("running a search", () => {
     await waitFor(() => expect(fetch).toHaveBeenCalled());
   });
 
-  // The four example chips under the box were folded into راهنمای نحو on
-  // 2026-08-18 — every one of them was already a row in it. The syntax is
-  // still taught by being clickable; it is now taught from one place.
-  it("runs a listed query when it is clicked, which is how the syntax is taught", async () => {
+  // The examples were a table behind an ⓘ until 2026-11-20; the project lead
+  // asked for them to open under the box like a search engine's suggestions.
+  it("shows the examples when the reader steps into the empty box", async () => {
     renderApp("/");
-    await userEvent.click(
-      screen.getByRole("button", { name: "راهنمای نحو" }),
+    await userEvent.click(screen.getByRole("combobox", { name: "جست‌وجوی واژه" }));
+    const list = await screen.findByRole("listbox");
+    // Each says what it finds, in Persian, beside the query.
+    expect(
+      within(list).getByRole("option", { name: /^\*eš، واژه‌هایی که با «ـِش» تمام می‌شوند$/ }),
+    ).toBeInTheDocument();
+    for (const query of ["stem1:goft", "tag:ja", "rule:V-010", "century:10-13"]) {
+      expect(within(list).getByText(query)).toBeVisible();
+    }
+    // The examples are the screen's own; an empty box asks the API nothing.
+    expect(searches()).toEqual([]);
+    expect(screen.queryByRole("button", { name: "راهنمای نحو" })).toBeNull();
+  });
+
+  it("narrows the examples as the reader types", async () => {
+    renderApp("/");
+    await userEvent.type(screen.getByRole("combobox", { name: "جست‌وجوی واژه" }), "count");
+    const list = await screen.findByRole("listbox");
+    await waitFor(() =>
+      expect(within(list).getAllByRole("option").map((one) => one.textContent)).toEqual([
+        "count:>10بیش از ده بار در متن‌ها آمده",
+        "count:1تنها یک بار در متن‌ها آمده",
+      ]),
     );
-    await userEvent.click(screen.getByText("type:karnam"));
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
-    expect(String(vi.mocked(fetch).mock.calls[0]?.[0])).toContain("type%3Akarnam");
+  });
+
+  it("keeps the examples when the word suggestions do not answer", async () => {
+    // The examples are the screen's own; a word bank that is down must not
+    // take them with it, now that they are the only list of examples.
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string) =>
+        String(url).includes("/suggest/")
+          ? Promise.resolve({ ok: false, status: 503, statusText: "", json: async () => ({}) } as Response)
+          : answerWith(ANSWER)(),
+      ),
+    );
+    renderApp("/");
+    await userEvent.type(screen.getByRole("combobox", { name: "جست‌وجوی واژه" }), "count");
+    const list = await screen.findByRole("listbox");
+    expect(within(list).getAllByRole("option")).toHaveLength(2);
+  });
+
+  it("shows the fitting examples without waiting for slow word suggestions", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string) =>
+        String(url).includes("/suggest/") ? new Promise(() => undefined) : answerWith(ANSWER)(),
+      ),
+    );
+    renderApp("/");
+    await userEvent.type(screen.getByRole("combobox", { name: "جست‌وجوی واژه" }), "count");
+    const list = await screen.findByRole("listbox", {}, { timeout: 3000 });
+    expect(within(list).getAllByRole("option")).toHaveLength(2);
+  });
+
+  it("runs an example when it is picked, which is how the syntax is taught", async () => {
+    renderApp("/");
+    await userEvent.click(screen.getByRole("combobox", { name: "جست‌وجوی واژه" }));
+    await userEvent.click(await screen.findByText("type:karnam"));
+    await waitFor(() => expect(searches()).not.toEqual([]));
+    expect(searches()[0]).toContain("type%3Akarnam");
+    expect(screen.getByRole("combobox", { name: "جست‌وجوی واژه" })).toHaveValue(
+      "type:karnam",
+    );
   });
 });
 
@@ -219,8 +290,8 @@ describe("when it goes wrong", () => {
       ),
     );
     renderApp("/?q=count%3Aabc");
-    // The whole sentence, because `count:1` on its own is also a reference row
-    // and an example chip — it is offered in three places on this screen.
+    // The whole sentence, because `count:1` on its own is also one of the
+    // box's examples.
     const advice = await screen.findByText(
       /بسامد باید عدد باشد، نه «abc».+count:1/,
     );
@@ -233,7 +304,7 @@ describe("when it goes wrong", () => {
     vi.stubGlobal("fetch", answerWith({ detail: "unknown field 'poem'" }, 400));
     renderApp("/?q=poem%3Ax");
     expect(await screen.findByText("این جست‌وجو خوانده نشد.")).toBeInTheDocument();
-    expect(screen.getByText(/راهنمای نحو را باز کنید/)).toBeInTheDocument();
+    expect(screen.getByText(/کادر جست‌وجو را پاک کنید و رویش بزنید/)).toBeInTheDocument();
     expect(screen.queryByText(/unknown field/)).not.toBeInTheDocument();
   });
 

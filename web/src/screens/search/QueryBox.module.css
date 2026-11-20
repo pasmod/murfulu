@@ -1,4 +1,4 @@
-/* One clear action, with the two folded ways in under it. */
+/* One clear action, with the filters under it. */
 
 .box {
   display: flex;
@@ -25,41 +25,16 @@
   composes: primary from "../../styles/controls.module.css";
 }
 
-/* The builder and the reference sit side by side where there is room and
-   stack where there is not. Both are folded, so this is two rows of one line
-   until a reader opens one. */
-.ways {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: var(--space-3);
-  align-items: start;
-}
-
-.labelRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-/* The mark is small; the hit area is a touch target around it, so it explains
-   without competing with the field it sits beside. */
-.guide {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--touch-target);
-  height: var(--touch-target);
-  margin-inline-start: calc(var(--space-2) * -1);
-  padding: 0;
-  background: none;
-  border: 0;
-  border-radius: 50%;
-  color: var(--accent);
-  cursor: pointer;
-  line-height: 1;
-}
-
-.guide:hover,
-.guide[aria-expanded="true"] {
+/* An example in the box's suggestions: the query as it must be typed, and
+   what it finds after it. */
+.example {
+  unicode-bidi: isolate;
+  font-family: var(--font-latin);
+  font-weight: var(--weight-medium);
   color: var(--accent-strong);
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
 }

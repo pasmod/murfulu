@@ -8,13 +8,42 @@
 
 import { useState } from "react";
 
-import { Suggest } from "../../suggest/Suggest";
+import { type Source, type Suggestion, Suggest } from "../../suggest/Suggest";
 import { wordSource } from "../../suggest/sources";
 import { Num } from "../../text/Num";
+import suggest from "../../suggest/Suggest.module.css";
 import styles from "./WordInput.module.css";
 
 /** Only words the rules build from: a loanword here would build nothing. */
 const BUILDS = wordSource({ builds: true });
+
+/** A suggestion here: what it shows, and the word it builds from. */
+interface WordPick extends Suggestion {
+  word: string;
+}
+
+/**
+ * The examples for an empty box, and the bank's words once something is
+ * typed — the same as the search box does since 2026-11-20, when the project
+ * lead asked for a list on stepping into this box too.
+ */
+const WORDS: Source<WordPick> = async (text, signal) => {
+  if (!text.trim()) {
+    return EXAMPLES.map((word) => ({
+      key: `example:${word}`,
+      text: `${word}، نمونه`,
+      view: (
+        <>
+          <span className={suggest.main}>{word}</span>
+          <span className={suggest.kind}>نمونه</span>
+        </>
+      ),
+      word,
+    }));
+  }
+  const found = await BUILDS(text, signal);
+  return found.map((one) => ({ ...one, word: one.word.value }));
+};
 
 export interface WordInputProps {
   value: string;
@@ -47,15 +76,19 @@ export function WordInput({ value, depth, depths, busy, onBuild }: WordInputProp
           id="word"
           name="word"
           className={styles.input}
-          dir="auto"
+          // Right to left: the box takes a Persian word, and «رفتن» sat
+          // against the wrong edge (the project lead, 2026-11-20). A Latin
+          // reading typed into it keeps its own letter order, set at the right.
+          dir="rtl"
           placeholder="رفتن"
           value={draft}
           onChange={setDraft}
-          source={BUILDS}
+          source={WORDS}
+          openOnFocus
           listLabel="واژه‌هایی که از آنها می‌توان ساخت"
           onPick={(one) => {
-            setDraft(one.word.value);
-            onBuild(one.word.value, depth);
+            setDraft(one.word);
+            onBuild(one.word, depth);
           }}
         />
         <button className={styles.submit} type="submit" disabled={busy}>

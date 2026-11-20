@@ -23,6 +23,13 @@
  * not: the list is for the reader at the keyboard, and one opening under a
  * box nobody is typing in reads as the page doing something on its own.
  *
+ * **Or the reader stepping into the box, where a screen asks for it.** With
+ * `openOnFocus`, a click or a tab into the box asks its source too — with the
+ * empty text when nothing is typed, which a source answers with its examples.
+ * Asked for by the project lead on 2026-11-20: the search screen's examples
+ * were a separate list behind an ⓘ, and are now what the box suggests before
+ * anything is typed. Still the reader's own act, so the rule above holds.
+ *
  * On a phone the list is as wide as the box and scrolls inside itself, and
  * every suggestion is a full touch target. A pressed suggestion keeps the
  * focus in the box, so the keyboard stays up.
@@ -78,6 +85,12 @@ export interface SuggestProps<T extends Suggestion>
   /** Fewer letters than this ask for nothing. */
   minLength?: number;
   /**
+   * Suggest as soon as the reader steps into the box, typed or not. The
+   * source is then asked with whatever is there, the empty text included,
+   * and `minLength` no longer applies.
+   */
+  openOnFocus?: boolean;
+  /**
    * Suggest only while the caret is at the end of the box. For a box whose
    * suggestions finish its last term: with the caret further in, the reader
    * is editing another term, and a suggestion would replace the wrong one.
@@ -100,8 +113,10 @@ export function Suggest<T extends Suggestion>({
   className,
   minLength = 1,
   atEndOnly = false,
+  openOnFocus = false,
   onKeyDown,
   onBlur,
+  onFocus,
   ...input
 }: SuggestProps<T>) {
   const [items, setItems] = useState<T[]>([]);
@@ -109,6 +124,8 @@ export function Suggest<T extends Suggestion>({
   const [active, setActive] = useState(-1);
   /** True from the reader's keystroke until a pick, an Escape or leaving the box. */
   const [armed, setArmed] = useState(false);
+  /** Bumped to ask again for the same text: a press in the box, list shut. */
+  const [again, setAgain] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listId = `${useId()}-${id}-suggestions`;
   const optionId = (at: number) => `${listId}-${at}`;
@@ -126,7 +143,7 @@ export function Suggest<T extends Suggestion>({
     // The text goes to the source as typed, a last space and all: after a
     // space a word is finished, and that is something a source may use.
     const text = value;
-    if (text.trim().length < minLength) {
+    if (!openOnFocus && text.trim().length < minLength) {
       setItems([]);
       setOpen(false);
       setActive(-1);
@@ -160,7 +177,7 @@ export function Suggest<T extends Suggestion>({
       window.clearTimeout(timer);
       stop.abort();
     };
-  }, [value, armed, minLength, atEndOnly]);
+  }, [value, armed, again, minLength, atEndOnly, openOnFocus]);
 
   const shown = open && items.length > 0;
 
@@ -286,6 +303,18 @@ export function Suggest<T extends Suggestion>({
         // to, is checked here.
         onSelect={() => {
           if (!caretFits()) close();
+        }}
+        onFocus={(event) => {
+          onFocus?.(event);
+          if (openOnFocus) setArmed(true);
+        }}
+        // A press in a box that already has the focus — after Escape closed
+        // the list, or a pick — opens it again, as stepping in did.
+        onPointerDown={() => {
+          if (openOnFocus && document.activeElement === inputRef.current && !open) {
+            setArmed(true);
+            setAgain((count) => count + 1);
+          }
         }}
         onBlur={(event) => {
           onBlur?.(event);

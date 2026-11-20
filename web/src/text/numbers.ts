@@ -43,3 +43,26 @@ const PERSIAN_PERCENT = new Intl.NumberFormat("fa-IR", {
 export function persianPercent(value: number): string {
   return PERSIAN_PERCENT.format(value);
 }
+
+const LATIN_DIGIT = /[0-9]/g;
+const OTHER_DIGIT = /[۰-۹٠-٩]/g;
+
+/**
+ * Digits written in Persian, one for one, with nothing grouped — for a number
+ * that sits in a field the reader edits, where a separator would be one more
+ * character in the way of the caret.
+ */
+export function persianDigits(text: string): string {
+  return text.replace(LATIN_DIGIT, (digit) => String.fromCharCode(0x06f0 + Number(digit)));
+}
+
+/**
+ * The other way: Persian and Arabic-Indic digits back to the ones a query is
+ * written in. A reader types on whichever keyboard is up, and both are read.
+ */
+export function latinDigits(text: string): string {
+  return text.replace(OTHER_DIGIT, (digit) => {
+    const code = digit.charCodeAt(0);
+    return String(code >= 0x06f0 ? code - 0x06f0 : code - 0x0660);
+  });
+}

@@ -28,9 +28,9 @@
 import { useEffect, useState } from "react";
 
 import { wordClasses, type WordClass } from "../../api/generate";
-import { POPULATION_LABEL } from "../../text/lexicon";
+import { POPULATION_CHOICE } from "../../text/lexicon";
+import { NumberRows } from "./NumberRows";
 import {
-  COUNTS,
   PATTERNS,
   POPULATIONS,
   getPattern,
@@ -42,6 +42,8 @@ import styles from "./Builder.module.css";
 
 export interface BuilderProps {
   query: string;
+  /** The search the screen is showing, which the address holds. */
+  searched?: string;
   onChange: (next: string) => void;
 }
 
@@ -55,15 +57,23 @@ function patternMode(query: string): { key: string; value: string } {
   return { key: PATTERNS[0]!.key, value: "" };
 }
 
-/** `century:10-13` as its two ends, so each gets its own field. */
-function centuries(query: string): [string, string] {
-  const [low = "", high = ""] = getTerm(query, "century").split("-");
-  return [low, high];
+/**
+ * A class as the list names it: the linguist's term, and the traditional one
+ * after it in brackets — «کارنام (اسم مصدر)». The project lead asked for both
+ * on 2026-11-20: a reader who knows only the school grammar finds the class by
+ * the name they know, and learns the new one beside it. Not repeated where the
+ * label already is the traditional term (the vocative, which has no coined
+ * one), and left off where the traditional grammar has no name.
+ */
+function classLabel(one: WordClass): string {
+  const label = one.label_fa ?? one.name;
+  if (one.label_is_traditional || !one.traditional_fa) return label;
+  return `${label} (${one.traditional_fa})`;
 }
 
-export function Builder({ query, onChange }: BuilderProps) {
+export function Builder({ query, searched, onChange }: BuilderProps) {
   const read = patternMode(query);
-  // The mode is held rather than derived: a reader who picks «آغازشده با»
+  // The mode is held rather than derived: a reader who picks «با این شروع شود»
   // before typing anything has written nothing into the query yet, and a
   // derived mode would snap back to the default under them.
   const [mode, setMode] = useState(read.key);
@@ -103,31 +113,6 @@ export function Builder({ query, onChange }: BuilderProps) {
   useEffect(() => setMode(read.key), [read.key]);
 
   const pattern = PATTERNS.find((one) => one.key === mode) ?? PATTERNS[0]!;
-  const [low, high] = centuries(query);
-  const count = getTerm(query, "count");
-  const countOperator = count.startsWith(">")
-    ? "gt"
-    : count.startsWith("<")
-      ? "lt"
-      : "eq";
-  const countValue = count.replace(/^[<>]=?/, "");
-
-  const writeCount = (operator: string, value: string) => {
-    const found = COUNTS.find((one) => one.key === operator) ?? COUNTS[0]!;
-    if (!value) return onChange(setTerm(query, "count", null));
-    onChange(
-      setTerm(query, "count", found.write(Number(value)).split(":")[1]!),
-    );
-  };
-
-  const writeCentury = (from: string, to: string) => {
-    if (!from && !to) return onChange(setTerm(query, "century", null));
-    const start = from || to;
-    onChange(
-      setTerm(query, "century", to && to !== start ? `${start}-${to}` : start),
-    );
-  };
-
   return (
     /* **Open, not folded.** The filters were behind «ساختن جست‌وجو» and a
        reader had to know to press it. The project lead asked for them visible
@@ -137,7 +122,9 @@ export function Builder({ query, onChange }: BuilderProps) {
        needing the API, and `docs/DECISIONS.md` holds *the screen asks nothing
        until there is a query* with a test behind it. So the list is asked for
        when a reader first reaches that one select — on focus or on a press —
-       not when the screen loads. Everything else here is local.
+       not when the screen loads. The one thing asked on arrival is the
+       corpus's range of centuries, for the filled century fields (see
+       NumberRows.tsx); everything else here is local.
 
        **Every row is a label and one `controls` span**, and every select sits
        in a `picker` that draws the arrow. Both are for the eye rather than the
@@ -145,11 +132,6 @@ export function Builder({ query, onChange }: BuilderProps) {
        with three of them begins where a row with one does, and the picker
        replaces the arrow that `appearance: none` takes away. See the CSS. */
     <div className={styles.builder}>
-      <p className={styles.about}>
-        هر گزینه، جست‌وجو را در همان کادر بالا می‌نویسد. می‌توانید همان را
-        دست‌کاری کنید، یا نشانی صفحه را برای کسی بفرستید.
-      </p>
-
       <div className={styles.rows}>
         <p className={styles.row}>
           <label className={styles.label} htmlFor="build-pattern">
@@ -224,7 +206,7 @@ export function Builder({ query, onChange }: BuilderProps) {
                   <option value="">هر گونه</option>
                   {classes.map((one) => (
                     <option key={one.name} value={one.name}>
-                      {one.label_fa ?? one.name}
+                      {classLabel(one)}
                     </option>
                   ))}
                 </select>
@@ -235,7 +217,7 @@ export function Builder({ query, onChange }: BuilderProps) {
 
         <p className={styles.row}>
           <label className={styles.label} htmlFor="build-in">
-            کجا پیدا شده
+            این واژه از کجاست
           </label>
           <span className={styles.controls}>
             <span className={styles.picker}>
@@ -250,7 +232,7 @@ export function Builder({ query, onChange }: BuilderProps) {
                 <option value="">هر جا</option>
                 {POPULATIONS.map((one) => (
                   <option key={one} value={one}>
-                    {POPULATION_LABEL[one] ?? one}
+                    {POPULATION_CHOICE[one] ?? one}
                   </option>
                 ))}
               </select>
@@ -258,76 +240,8 @@ export function Builder({ query, onChange }: BuilderProps) {
           </span>
         </p>
 
-        <p className={styles.row}>
-          <label className={styles.label} htmlFor="build-count">
-            بسامد در پیکره
-          </label>
-          <span className={styles.controls}>
-            <span className={styles.picker}>
-              <select
-                className={styles.select}
-                id="build-count-operator"
-                aria-label="جور بسامد"
-                value={countOperator}
-                onChange={(event) => writeCount(event.target.value, countValue)}
-              >
-                {COUNTS.map((one) => (
-                  <option key={one.key} value={one.key}>
-                    {one.label}
-                  </option>
-                ))}
-              </select>
-            </span>
-            <input
-              className={styles.number}
-              id="build-count"
-              type="number"
-              min={0}
-              inputMode="numeric"
-              value={countValue}
-              onChange={(event) => writeCount(countOperator, event.target.value)}
-            />
-          </span>
-        </p>
-
-        <p className={styles.row}>
-          <label className={styles.label} htmlFor="build-century-from">
-            سده
-          </label>
-          <span className={styles.controls}>
-            <input
-              className={styles.number}
-              id="build-century-from"
-              type="number"
-              min={1}
-              inputMode="numeric"
-              aria-label="سده از"
-              value={low}
-              onChange={(event) => writeCentury(event.target.value, high)}
-            />
-            <span className={styles.between}>تا</span>
-            <input
-              className={styles.number}
-              id="build-century-to"
-              type="number"
-              min={1}
-              inputMode="numeric"
-              aria-label="سده تا"
-              value={high}
-              onChange={(event) => writeCentury(low, event.target.value)}
-            />
-          </span>
-        </p>
+        <NumberRows query={query} searched={searched} onChange={onChange} />
       </div>
-
-      {/* What it wrote, in the direction it has to be typed. The reader who
-          watches this fill in has learnt the syntax without being taught it. */}
-      <p className={styles.written}>
-        <span className={styles.writtenLabel}>می‌نویسد:</span>
-        <span className={styles.writtenQuery} dir="ltr">
-          {query || "—"}
-        </span>
-      </p>
     </div>
   );
 }

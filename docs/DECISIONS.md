@@ -21,6 +21,73 @@ asked for it to be put to the linguist. It is in `rules/questions_fa.yaml` with
 proposal is the verbs ساختن / چسباندن / شکافتن; the menu stays as it is until
 he rules. — project lead
 
+## 2026-11-20 — the search and build screens say it in plain Persian
+
+The project lead went through the search and build screens with a comment
+tool on 2026-11-20 and approved thirteen changes as proposed. The wordings
+are the approved ones; where a line had to be written that the list did not
+give, it is noted below as ours.
+
+**Texts.** The search screen's purpose line names everything the search now
+reads (letters, affixes, stems, class, frequency, century). The build screen's
+says what the reader does and sees. The pattern shapes read as wishes — «با
+این تمام شود», «با این شروع شود», «این را در خود داشته باشد», «درست همین
+واژه». «کجا پیدا شده» is «این واژه از کجاست», answered by «در متن‌ها آمده»,
+«در واژه‌نامه هست», «ساختهٔ دستور، هنوز دیده نشده»; the short labels on the
+result rows stay (`POPULATION_CHOICE` beside `POPULATION_LABEL`). The build
+headings are sentences: «از «رفتن» ۵۹۴ واژه ساخته می‌شود» with the Latin
+reading small beside it, and «۱۵۷ واژه از این بن ساخته می‌شود» on a stem.
+
+**Two lines are gone.** The filters' opening explanation, and the line at
+their foot that repeated the query after «می‌نویسد:». The box above shows
+the query; the line taught nothing the box does not.
+
+**The class list shows both names.** «کارنام (اسم مصدر)»: the linguist's term,
+then the traditional one in brackets, from `traditional_fa` in
+`rules/word_classes.yaml`, which `/rules` already served. Not repeated where
+the label is itself the traditional term (the vocative).
+
+**The examples are the search box's suggestions.** The table of examples
+behind the ⓘ is gone, and the ⓘ with it. Stepping into the empty box opens
+every example under it, typing narrows them (by the query or by its Persian
+line), and the bank's words or authors follow as before. Each example says in
+one Persian line what it finds; those lines are ours, apart from the one for
+*eš, which the approved list gave. `Suggest` gained `openOnFocus` for this:
+stepping in is the reader's own act, so *only the reader opens the list*
+still holds. The two error messages that sent the reader to «راهنمای نحو» now
+send them to the empty box (our wording). The dictionary-category example is
+`category:مصدر`, one word: the old `category:اسم ذات` was written unquoted and
+searched for something else.
+
+**The build box is right to left and suggests on stepping in**: the five
+example verbs when it is empty, the bank's words that build once something is
+typed. Still only words that build — the search box offers every word, but a
+loanword here builds nothing. The row of example buttons under it stays: it
+is the screen's empty state.
+
+**The number fields are Persian, right to left, and filled.** Text fields
+that take digits from either keyboard and show Persian ones; the query keeps
+Latin digits. Frequency opens on «بیش از ۰», the centuries on the corpus's
+first and last century. **What is shown is not written.** A field changes
+the query only once the reader moves it, and moved back to what it showed,
+the term goes again: written on arrival, `count:>0 century:…` would have
+dropped every built word not yet seen in a text from every search. A century
+range typed backwards («۱۰ تا ۹» on the way to «۴ تا ۹») is not written, so
+the box never holds a query the parser refuses; the typed end is held, marked
+and explained in the search's own words («سدهٔ آغاز از سدهٔ پایان بزرگ‌تر
+است.») until the other end makes the range whole. An emptied end stands for
+the corpus's bound, or, with no range served, takes the century filter away.
+A figure typed into a field gives way when the search itself changes (the
+Back button). The rows live in `NumberRows.tsx` and `DigitField.tsx`.
+
+**The screen now asks one thing on arrival**, the corpus's century range, from
+a new `GET /corpus/centuries` (min of `first_century`, max of
+`last_century`, the fields `century:` reads). This changes *the screen asks
+nothing until there is a query* (2026-08-18), for one small answer the filled
+fields need before anyone touches them; the word classes are still fetched
+only when their control is reached. An API without the route leaves the
+century fields empty, as before.
+
 ## 2026-11-19 — false claims of the short affixes: letters that are another word's
 
 The project lead, after corpus v18: fix the false hits before the release.

@@ -36,6 +36,18 @@ export const POPULATION_LABEL: Record<string, string> = {
 };
 
 /**
+ * The same three, as the answers to «این واژه از کجاست» in the search
+ * filters. Longer than the row labels above on purpose: a choice in a list is
+ * read as a sentence, and «پیکره» alone did not say that a word in it has been
+ * seen in the texts. Approved by the project lead on 2026-11-20.
+ */
+export const POPULATION_CHOICE: Record<string, string> = {
+  corpus: "در متن‌ها آمده",
+  lexicon: "در واژه‌نامه هست",
+  generated: "ساختهٔ دستور، هنوز دیده نشده",
+};
+
+/**
  * The corpus has the letters and the dictionary has no entry for them — which
  * is the coverage gap itself, not an error and not a blank. Said the same way
  * on a search row and on a word screen.

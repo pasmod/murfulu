@@ -218,7 +218,10 @@ test.describe("a real build", () => {
     test.skip(!answer.ok(), "no lexicon configured");
 
     await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86&depth=2");
-    await expect(page.getByRole("heading", { name: /از raftan/ })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 2, name: /از «رفتن» .+ واژه ساخته می‌شود/ }).first(),
+    ).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2 }).first()).toContainText("raftan");
 
     // The word classes come first and the words are behind them, from
     // 2026-08-18 — رفتن answers with 660 words in 8 classes per reading, and

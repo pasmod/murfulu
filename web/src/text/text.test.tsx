@@ -10,7 +10,13 @@ import { describe, expect, it } from "vitest";
 import { Latin } from "./Latin";
 import { Num } from "./Num";
 import { Term } from "./Term";
-import { persianCentury, persianCenturyRange, persianNumber } from "./numbers";
+import {
+  latinDigits,
+  persianCentury,
+  persianCenturyRange,
+  persianDigits,
+  persianNumber,
+} from "./numbers";
 
 describe("a Latin form inside Persian text", () => {
   it("declares its own direction", () => {
@@ -112,5 +118,17 @@ describe("a grammar term", () => {
     render(<Term {...term} />);
     await userEvent.click(screen.getByRole("button", { name: "کارنام" }));
     expect(screen.getByRole("tooltip")).toHaveTextContent(term.explanation);
+  });
+});
+
+describe("digits in a field the reader edits", () => {
+  it("are written in Persian, one for one, with nothing grouped", () => {
+    expect(persianDigits("1450")).toBe("۱۴۵۰");
+  });
+
+  it("are read back from Persian and Arabic-Indic digits alike", () => {
+    expect(latinDigits("۱۴۵۰")).toBe("1450");
+    expect(latinDigits("١٢")).toBe("12");
+    expect(latinDigits("12")).toBe("12");
   });
 });

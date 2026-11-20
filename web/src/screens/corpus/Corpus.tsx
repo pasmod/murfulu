@@ -170,7 +170,7 @@ export function Corpus() {
                 {/* The name to read, not the identifier to type. This said
                     «ganjoor» — Latin, on an otherwise Persian page — until
                     2026-08-18. The identifier is still what `source:ganjoor`
-                    is written with, and راهنمای نحو is where that is taught;
+                    is written with, and the search box's examples are where that is taught;
                     it falls back to it for a source that has no Persian name
                     yet, so a new corpus is named badly rather than not at
                     all. */}

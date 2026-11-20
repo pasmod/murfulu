@@ -79,7 +79,7 @@ describe("the corpus screen", () => {
     expect(within(block).getByText("گنجور")).toBeInTheDocument();
     // The heading says سرچشمه and this said «ganjoor» under it until
     // 2026-08-18. `source:ganjoor` is still how the query is written; that is
-    // راهنمای نحو's job to teach, not this column's.
+    // the search box's examples' job to teach, not this column's.
     expect(within(block).queryByText("ganjoor")).not.toBeInTheDocument();
     expect(within(block).getByText(/confirm terms/)).toBeInTheDocument();
   });

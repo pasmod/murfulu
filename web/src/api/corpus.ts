@@ -88,3 +88,24 @@ export function corpus(signal?: AbortSignal): Promise<CorpusState> {
     describes_the_served_version: body.describes_the_served_version ?? false,
   }));
 }
+
+/** The earliest and the latest century a served word is written in. */
+export interface CorpusCenturies {
+  first: number | null;
+  last: number | null;
+}
+
+/**
+ * The corpus's first and last century, which the search filters open on.
+ *
+ * An API a version behind has no such route; the answer is then two nulls and
+ * the fields stay empty, as they were before there was a range to fill them.
+ */
+export function corpusCenturies(signal?: AbortSignal): Promise<CorpusCenturies> {
+  return get<Partial<CorpusCenturies>>("/corpus/centuries", {}, signal).then(
+    (body) => ({
+      first: typeof body.first === "number" ? body.first : null,
+      last: typeof body.last === "number" ? body.last : null,
+    }),
+  );
+}
