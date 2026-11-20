@@ -509,3 +509,19 @@ the merged commit, with the host files copied there (as §12). No migration.
 | 7 | inside the api container | `/rules`: pack 0.2.0; N-115 *-gun* at row 78 of the new document. `/generate گل`: *golgun* گلگون by N-115, attested at reading level (1,428). `/generate سریدن`: *saru* and *soru* (سرو) are headword homographs — 13,181 occurrences shown, read as *Sarv* or *Sorv*, corpus mark none |
 
 The pages were not viewed logged in on the server.
+
+## 14. The deploy of the questions screen with two boxes — run 2026-11-20
+
+The questions screen shows two boxes, the unanswered and the answered, instead
+of six; withdrawn and deferred questions get no box and no count, and a direct
+link still opens one (commit `1e2593e`). Code only, on the project lead's word
+the same day; the rollback is `deploy` from `73c3db3`. Run from the worktree of
+the merged commit, with the host files copied there (as §12).
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy |
+| 2 | `deploy/server.sh check` | all checks passed, corpus v22, the site answers 401 logged out |
+| 3 | the web container | the served bundle no longer carries «همهٔ پرسش‌ها»; it carries «پاسخ داده شده» |
+
+The page itself was not viewed logged in on the server.
