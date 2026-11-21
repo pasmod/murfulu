@@ -354,10 +354,10 @@ def _form(
         "semantic_tags": list(form.semantic_tags),
         "meaning_fa": meaning_fa,
         "attestation": _evidence(attestation),
-        # How much evidence the word has, 0 to 100, with its two parts — the
-        # corpus and the chain's weakest rule — for the evidence button. The
-        # screen sorts and filters on it; `confirmed` stays false until the
-        # linguist rules (L36). The project lead's choice of 2026-11-21.
+        # Two values, kept apart: how well the word is built (0 to 100, from
+        # the chain's weakest rule) and what the corpus says (reading,
+        # letters, other, none) with its texts. The screen sorts and filters
+        # on both; `confirmed` stays false until the linguist rules (L36).
         "score": _score(form, attestation, typical).as_json(),
         # Whether some route to this form rests on written ground throughout —
         # measured on رفتن, 231 of its 476 two-step words are built on an
@@ -669,9 +669,11 @@ def _ranked(
     is 39 MB, so it has to be paged — and a page of an unsorted list is a
     random handful. Ranking moved to where the paging is.
 
-    **The score first**, highest first (:mod:`murfulu.scoring.score`; the
-    project lead's choice of 2026-11-21, replacing the three levels of
-    2026-11-13). Between equal scores: strongest corpus evidence, then
+    **How well built first**, then what the corpus says and in how many texts
+    (:mod:`murfulu.scoring.score`; the project lead's choice of 2026-11-21,
+    replacing the three levels of 2026-11-13 and the single score of the same
+    day: a good word the poets never used must not sink for that). Between
+    equal values: strongest corpus evidence, then
     **whether the form also reads as an inflection of a word we already hold**,
     then how many poems hold it, then how often the rules on the chain produce
     real words, then whether the chain rests on written ground, then how much
@@ -735,9 +737,10 @@ def _ranked(
         realised = _realisation(form)
         typical = typicals[id(form)]
         return (
-            # **The score first** — the project lead's choice of 2026-11-21.
-            # Everything below breaks ties between equal scores, as before.
-            scores.order(_score(form, found, typical).value),
+            # **How well built first, then the corpus** — the project lead's
+            # choice of 2026-11-21. Everything below breaks the remaining ties
+            # as before.
+            *scores.order(_score(form, found, typical)),
             _standing(found),
             # 1 sinks. An unmeasured lexicon leaves this 0 for every form, so
             # a run without one ranks exactly as it did before — silence must
@@ -860,7 +863,9 @@ def generate(
                 "latin": result.reading.latin,
                 "spelling_fa": result.reading.spelling_fa,
                 "spelling_fa_marked": vocalise(
-                    result.reading.spelling_fa, result.reading.latin
+                    result.reading.spelling_fa,
+                    result.reading.latin,
+                    tuple(result.reading.latin_variants),
                 ),
                 "lexicon_category": result.reading.lexicon_category,
                 "bank_groups": list(result.reading.bank_groups),

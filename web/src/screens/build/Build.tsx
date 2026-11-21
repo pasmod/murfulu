@@ -49,10 +49,14 @@ import { FormRow } from "./FormRow";
 import { ScoreLegend } from "./Score";
 import {
   IN_CORPUS,
-  SCORE_RANGES,
-  SCORE_SAYS,
+  BUILD_RANGES,
+  BUILD_SAYS,
+  CANDIDATES_SAY,
+  CORPUS_SAYS,
+  isCandidate,
   creditedTexts,
-  scoreOrder,
+  buildOrder,
+  hasValues,
   type SortKey,
 } from "./scoring";
 import { Info } from "../../text/Info";
@@ -154,12 +158,15 @@ function standing(form: BuiltForm): number {
 
 function ranked(forms: BuiltForm[]): BuiltForm[] {
   return [...forms].sort((a, b) => {
-    // **The level first** — familiar, well-formed, not known, weakly backed:
-    // the project lead's choice of 2026-11-13 (`Level.tsx`). Everything below
-    // orders forms within a level, exactly as before. The API decides the
-    // level and `_ranked` sorts on it the same way.
-    const scored = scoreOrder(a) - scoreOrder(b);
+    // **How well built, then what the corpus says, then its texts** — the
+    // whole of `order` in murfulu/scoring/score.py, before any older
+    // tie-breaker, so the two sides agree (the review of 2026-11-21).
+    const scored = buildOrder(a) - buildOrder(b);
     if (scored !== 0) return scored;
+    if (hasValues(a) && hasValues(b)) {
+      const texts = (b.score?.texts ?? 0) - (a.score?.texts ?? 0);
+      if (texts !== 0) return texts;
+    }
     const known = standing(a) - standing(b);
     if (known !== 0) return known;
     // Whether the letters also read as an inflection of a word the dictionary
@@ -246,7 +253,7 @@ export const FIRST = 50;
 /** The table's order: the score's, a count's, or the alphabet's. */
 function sorted(forms: BuiltForm[], by: SortKey): BuiltForm[] {
   const best = ranked(forms);
-  if (by === "score") return best;
+  if (by === "build") return best;
   const place = new Map(best.map((form, at) => [form, at]));
   return [...best].sort((a, b) =>
     by === "texts"
@@ -380,7 +387,13 @@ export function Build() {
   const [wordClass, setWordClass] = useState<string>("all");
   const [range, setRange] = useState("all");
   const [inCorpus, setInCorpus] = useState("all");
-  const [sortBy, setSortBy] = useState<SortKey>("score");
+  // **Built first** by default (DECISIONS 2026-11-21): the reader looks for
+  // the best-made words whether or not the poets used them, and the corpus
+  // column says which are known.
+  const [sortBy, setSortBy] = useState<SortKey>("build");
+  // All words, or only the candidates for new ones: not in the corpus under
+  // this reading, best-built first.
+  const [view, setView] = useState<"all" | "new">("all");
   const [whole, setWhole] = useState(false);
   const choose =
     <T,>(set: (value: T) => void) =>
@@ -605,6 +618,11 @@ export function Build() {
               onWordClass={choose(setWordClass)}
               range={range}
               onRange={choose(setRange)}
+              view={view}
+              onView={choose((next: "all" | "new") => {
+                setView(next);
+                if (next === "new") setSortBy("build");
+              })}
               inCorpus={inCorpus}
               onInCorpus={choose(setInCorpus)}
               sortBy={sortBy}
@@ -643,9 +661,12 @@ interface ClassSaid {
  * rendered drafts; it replaced the class tiles of 2026-08-18, which made a
  * reader open one class before seeing any word.
  *
- * Every word is on the table when it opens, best first. A class, a score
- * range and whether the corpus has the word narrow it; nothing is removed
- * from the answer, and the line above the rows says how many are showing.
+ * Every word is on the table when it opens, best-built first. A class, a
+ * build range and what the corpus says narrow it; nothing is removed from the
+ * answer, and the line above the rows says how many are showing. **«واژه‌های
+ * تازه»** (2026-11-21) shows only the candidates for new words — not in the
+ * corpus under this reading — best-built first: the words the project looks
+ * for, which the single score of the morning had sunk to the bottom.
  */
 function Table({
   forms,
@@ -656,6 +677,8 @@ function Table({
   onWordClass,
   range,
   onRange,
+  view,
+  onView,
   inCorpus,
   onInCorpus,
   sortBy,
@@ -671,6 +694,8 @@ function Table({
   onWordClass: (name: string) => void;
   range: string;
   onRange: (key: string) => void;
+  view: "all" | "new";
+  onView: (view: "all" | "new") => void;
   inCorpus: string;
   onInCorpus: (key: string) => void;
   sortBy: SortKey;
@@ -684,8 +709,12 @@ function Table({
   const chosen = classes.some(([name]) => name === wordClass)
     ? wordClass
     : "all";
-  const keepRange = SCORE_RANGES.find((one) => one.key === range)!;
-  const keepCorpus = IN_CORPUS.find((one) => one.key === inCorpus)!;
+  const keepRange = BUILD_RANGES.find((one) => one.key === range)!;
+  // The candidates view has its own corpus filter: not under this reading.
+  const keepCorpus =
+    view === "new"
+      ? { keeps: isCandidate }
+      : IN_CORPUS.find((one) => one.key === inCorpus)!;
   const kept = sorted(
     forms.filter(
       (form) =>
@@ -716,6 +745,26 @@ function Table({
 
   return (
     <div className={styles.table}>
+      <fieldset className={styles.views}>
+        <legend className="visually-hidden">کدام واژه‌ها</legend>
+        {(
+          [
+            ["all", "همهٔ واژه‌ها"],
+            ["new", "واژه‌های تازه"],
+          ] as const
+        ).map(([key, label]) => (
+          <label key={key} className={styles.view}>
+            <input
+              type="radio"
+              name={`view-${idPrefix}`}
+              className="visually-hidden"
+              checked={view === key}
+              onChange={() => onView(key)}
+            />
+            {label}
+          </label>
+        ))}
+      </fieldset>
       <div
         className={styles.tabs}
         role="tablist"
@@ -773,23 +822,30 @@ function Table({
         </p>
       ) : null}
 
+      {view === "new" ? (
+        <p className={styles.classSays}>{CANDIDATES_SAY}</p>
+      ) : null}
+
       <div className={styles.tools}>
         <Chips
-          legend="امتیاز"
-          info={<Info label="امتیاز">{SCORE_SAYS}</Info>}
-          options={SCORE_RANGES}
+          legend="ساخت"
+          info={<Info label="ساخت">{BUILD_SAYS}</Info>}
+          options={BUILD_RANGES}
           value={range}
           onChange={onRange}
         />
-        <Chips
-          legend="پیکره"
-          options={IN_CORPUS}
-          value={inCorpus}
-          onChange={onInCorpus}
-        />
+        {view === "all" ? (
+          <Chips
+            legend="پیکره"
+            info={<Info label="پیکره">{CORPUS_SAYS}</Info>}
+            options={IN_CORPUS}
+            value={inCorpus}
+            onChange={onInCorpus}
+          />
+        ) : null}
         <div className={styles.phoneSort}>
           <span className={styles.sortLabel}>ترتیب</span>
-          {sortButton("score", "امتیاز")}
+          {sortButton("build", "ساخت")}
           {sortButton("texts", "شمار متن‌ها")}
           {sortButton("alpha", "الفبا")}
         </div>
@@ -801,9 +857,9 @@ function Table({
       <div className={styles.head}>
         {sortButton("alpha", "واژه")}
         <span>گونه</span>
-        {sortButton("score", "امتیاز")}
+        {sortButton("build", "ساخت")}
         {sortButton("texts", "در پیکره")}
-        <span>ساخته با</span>
+        <span>وند</span>
         <span />
       </div>
 

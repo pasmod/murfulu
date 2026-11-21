@@ -1,27 +1,31 @@
 /**
- * The score's explanation, its filters and its sorts — shared by the row
+ * The two values' explanations, filters and sorts — shared by the row
  * (`Score.tsx`) and the table (`Build.tsx`).
  *
- * **The project lead's choice of 2026-11-21**: one score from 0 to 100 in
- * place of the three levels of 2026-11-13, so the list can be sorted and
- * filtered. The API decides the score (`murfulu/scoring/score.py`); this file
- * only explains, filters and sorts. Unconfirmed until the linguist rules
- * (docs/FOR_THE_LINGUIST.md L36).
+ * **The project lead's choice of 2026-11-21 (second)**: how well a word is
+ * built (0 to 100, from its rules alone) and what the corpus says about it,
+ * kept apart. The single score of the same day capped a word the corpus lacks
+ * at 30, so good new words sank — the very words the project looks for. The
+ * API decides both (`murfulu/scoring/score.py`); this file only explains,
+ * filters and sorts. Unconfirmed until the linguist rules (L36).
  */
 
-import type { BuiltForm } from "../../api/generate";
+import type { BuiltForm, FormScore } from "../../api/generate";
 
-/** The two parts' ceilings, as the API sets them. Said, never computed here. */
-export const CORPUS_MAX = 70;
-export const RULE_MAX = 30;
+/** The build value's ceiling, as the API sets it. Said, never computed here. */
+export const BUILD_MAX = 100;
 
-/**
- * What the score is, said once under the table and in the ⓘ beside its
- * column. It has to say that a low score is little evidence, not a wrong
- * word: the corpus is classical poetry (OPEN_QUESTIONS S33).
- */
-export const SCORE_SAYS =
-  "امتیاز عددی از ۰ تا ۱۰۰ است و نشان می‌دهد چقدر شاهد برای این واژه داریم. تا ۷۰ امتیازش از پیکره می‌آید و بستگی دارد به اینکه واژه در چند متن، و با همین معنا، آمده است. تا ۳۰ امتیاز دیگر از دستوری می‌آید که واژه را ساخته، و بستگی دارد به اینکه این دستور چند بار واژه‌ای ساخته که در پیکره هم آمده است. پیکره بیشتر شعر کهن است؛ پس امتیاز کم یعنی شاهد کم، نه واژهٔ نادرست.";
+/** What «ساخت» means, in the ⓘ beside its filter. */
+export const BUILD_SAYS =
+  "این عدد، از ۰ تا ۱۰۰، می‌گوید واژه چقدر خوب ساخته شده است. فقط به دستوری بستگی دارد که واژه را ساخته: این دستور از واژه‌هایی که می‌سازد، چند تا را در پیکره داریم. برای واژه‌ای که در پیکره هست و واژه‌ای که نیست، یکسان حساب می‌شود.";
+
+/** What «در پیکره» means, in the ⓘ beside its filter. */
+export const CORPUS_SAYS =
+  "در چند متن از پیکره، با همین معنا، آمده است. پیکره بیشتر شعر کهن است؛ پس واژه‌ای که در آن نیامده، شاید امروز به کار برود یا واژهٔ تازهٔ خوبی باشد.";
+
+/** What the candidates view shows, said above its rows. */
+export const CANDIDATES_SAY =
+  "واژه‌هایی که با همین معنا در پیکره نیامده‌اند، خوش‌ساخت‌ترین‌ها اول. شاید واژهٔ تازهٔ خوبی میانشان باشد.";
 
 export interface Filter {
   key: string;
@@ -29,17 +33,42 @@ export interface Filter {
   keeps: (form: BuiltForm) => boolean;
 }
 
-const value = (form: BuiltForm) => form.score?.value ?? null;
+/**
+ * Whether the API sent the two values. The API of the morning of 2026-11-21
+ * sent `{value, corpus: number, rule}`, and reading its numeric `corpus` as
+ * the new answer put attested words among the candidates (the review of
+ * 2026-11-21); such a form is read from its attestation instead.
+ */
+export function hasValues(form: BuiltForm): boolean {
+  const score = form.score as Partial<FormScore> | undefined;
+  return (
+    !!score &&
+    typeof score.build === "number" &&
+    (score.corpus === null || typeof score.corpus === "string")
+  );
+}
 
-/** Score ranges. A word with no score is kept only by «همه». */
-export const SCORE_RANGES: Filter[] = [
+const build = (form: BuiltForm) => (hasValues(form) ? form.score!.build : null);
+
+/** What the corpus says, from the API's answer, or from the attestation of an older API. */
+export function corpusKind(form: BuiltForm): FormScore["corpus"] {
+  if (hasValues(form)) return form.score!.corpus;
+  const found = form.attestation;
+  if (!found) return null;
+  if (found.level === "none") return "none";
+  if (found.function_word || found.headword_homograph) return "other";
+  return found.level === "reading" ? "reading" : "letters";
+}
+
+/** Build-value ranges. A word with no value is kept only by «همه». */
+export const BUILD_RANGES: Filter[] = [
   { key: "all", label: "همه", keeps: () => true },
-  { key: "high", label: "۷۰ و بیشتر", keeps: (f) => (value(f) ?? -1) >= 70 },
+  { key: "high", label: "۷۰ و بیشتر", keeps: (f) => (build(f) ?? -1) >= 70 },
   {
     key: "middle",
     label: "۴۰ تا ۶۹",
     keeps: (f) => {
-      const v = value(f);
+      const v = build(f);
       return v !== null && v >= 40 && v < 70;
     },
   },
@@ -47,28 +76,50 @@ export const SCORE_RANGES: Filter[] = [
     key: "low",
     label: "زیر ۴۰",
     keeps: (f) => {
-      const v = value(f);
+      const v = build(f);
       return v !== null && v < 40;
     },
   },
 ];
 
-/** Whether the corpus has the word. The letters alone count as having it. */
+/** What the corpus says, kept as distinct as the API keeps it. */
 export const IN_CORPUS: Filter[] = [
   { key: "all", label: "همه", keeps: () => true },
   {
-    key: "in",
-    label: "در پیکره آمده",
-    keeps: (f) => !!f.attestation && f.attestation.level !== "none",
+    key: "reading",
+    label: "با همین معنا آمده",
+    keeps: (f) => corpusKind(f) === "reading",
   },
   {
-    key: "out",
-    label: "در پیکره نیامده",
-    keeps: (f) => f.attestation?.level === "none",
+    key: "letters",
+    label: "فقط همین حروف",
+    keeps: (f) => corpusKind(f) === "letters" || corpusKind(f) === "other",
+  },
+  {
+    key: "none",
+    label: "نیامده",
+    keeps: (f) => corpusKind(f) === "none",
   },
 ];
 
-export type SortKey = "score" | "texts" | "alpha";
+/**
+ * The candidates for new words: not in the corpus under this reading —
+ * absent, or only as letters that may be another word.
+ */
+export function isCandidate(form: BuiltForm): boolean {
+  const kind = corpusKind(form);
+  return kind !== null && kind !== "reading";
+}
+
+export type SortKey = "build" | "texts" | "alpha";
+
+/** How strongly the corpus speaks for a word, as `CORPUS_ORDER` in score.py. */
+const CORPUS_ORDER: Record<string, number> = {
+  reading: 0,
+  letters: 1,
+  other: 2,
+  none: 3,
+};
 
 /**
  * The texts a word's own count rests on — zero where the count is another
@@ -81,12 +132,14 @@ export function creditedTexts(form: BuiltForm): number {
 }
 
 /**
- * Where a score sorts: highest first, and no score last.
+ * The default order's keys: how well built, then what the corpus says.
  *
  * **`order` in murfulu/scoring/score.py says the same**: steps 1 and 2 are
  * sorted here, a deep answer there. An older API sends no score, and every
  * form then ties here and the old order below decides, as it did before.
  */
-export function scoreOrder(form: BuiltForm): number {
-  return -(value(form) ?? -1);
+export function buildOrder(form: BuiltForm): number {
+  if (!hasValues(form)) return 0;
+  const score = form.score!;
+  return -score.build * 10 + (CORPUS_ORDER[score.corpus ?? ""] ?? 4);
 }

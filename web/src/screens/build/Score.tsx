@@ -1,15 +1,14 @@
 /**
- * A built word's score, what the corpus says about it, and the one sentence
- * that says why — the cells of the build table that carry the evidence.
+ * A built word's two values — how well it is built, and what the corpus says
+ * — and the sentence that says why: the cells of the build table that carry
+ * the evidence.
  *
- * **The project lead's choice of 2026-11-21** (DECISIONS): the three levels
- * of 2026-11-13 read as names a reader had to learn, and a list could not be
- * sorted or filtered by them. So each row now shows **one number from 0 to
- * 100** with a bar beside it, so the score is a length and not only a figure;
- * the parts it is made of are behind «شواهد» (`Signals.tsx`).
- *
- * The API decides the score (`murfulu/scoring/score.py`); this file only says
- * it. Unconfirmed until the linguist rules (FOR_THE_LINGUIST L36).
+ * **The project lead's choice of 2026-11-21 (second)**: the single score of
+ * the same day capped a word the corpus lacks at 30 of 100, so good new words
+ * sank. Now «ساخت» is a number from 0 to 100 with a bar, from the rules alone,
+ * and «در پیکره» says what the corpus has in its own words; the figures
+ * behind both are behind «شواهد» (`Signals.tsx`). The API decides both
+ * (`murfulu/scoring/score.py`). Unconfirmed until the linguist rules (L36).
  *
  * **Nothing here says a word does not exist.** A zero is «نیامده»: the corpus
  * is classical poetry, and a modern word can be missing from it and still be
@@ -23,9 +22,9 @@ import { FUNCTION_WORD_HOMOGRAPH } from "../../text/lexicon";
 import { persianNumber } from "../../text/numbers";
 import styles from "./Score.module.css";
 
-/** The number and its bar; a dash where nothing was measured. */
+/** How well built: the number and its bar; a dash where nothing was sent. */
 export function ScoreCell({ form }: { form: BuiltForm }) {
-  const value = form.score?.value ?? null;
+  const value = form.score?.build ?? null;
   if (value === null) {
     return (
       <span className={styles.none} title="سنجیده نشده">
@@ -36,7 +35,7 @@ export function ScoreCell({ form }: { form: BuiltForm }) {
   return (
     <span
       className={styles.score}
-      aria-label={`امتیاز ${persianNumber(value)} از ${persianNumber(100)}`}
+      aria-label={`ساخت ${persianNumber(value)} از ${persianNumber(100)}`}
     >
       <b>
         <Num value={value} />
@@ -109,7 +108,9 @@ function ruleSays(score: FormScore): React.ReactNode {
     rule.attested === null ||
     rule.types <= 0
   ) {
-    return "دستورهای این واژه هنوز سنجیده نشده‌اند";
+    return score.unmeasured_step
+      ? "یکی از دستورهای این واژه هنوز سنجیده نشده است، و برای آن میانهٔ دستورهای سنجیده‌شده را گرفته‌ایم"
+      : "دستورهای این واژه هنوز سنجیده نشده‌اند";
   }
   const who = affixWord(rule.affix);
   const named = who ? (
@@ -217,8 +218,8 @@ export function ScoreLegend({
           (نسخهٔ <Latin>{corpusVersion}</Latin>)
         </>
       ) : null}
-      . واژه‌ای که در آن نیامده، شاید امروز به کار برود. امتیاز فقط اندازه‌ای
-      تقریبی است، نه داوری دربارهٔ واژه.
+      . واژه‌ای که در آن نیامده، شاید امروز به کار برود یا واژهٔ تازهٔ خوبی
+      باشد. هر دو عدد سنجشی تقریبی‌اند، نه داوری دربارهٔ واژه.
     </p>
   );
 }

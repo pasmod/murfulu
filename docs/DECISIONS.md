@@ -2,6 +2,66 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 (second) — the short vowels on every screen that shows a word with its reading
+
+The project lead approved putting the marks wherever a Persian word stands
+with a known reading, not only on the build, compound and bank screens. Now
+also: the search results and the word page (`spelling_fa_marked`,
+`form_fa_marked` on `/search` and `/word/{id}`), and the reading screen —
+a word with exactly one reading in the bank (`fa_marked`), or the reading the
+model shows under it (`auto.fa_marked`), and the review list of marked
+readings. **Search, matching, links, ids, keys, `data-*` and `aria-label`s stay
+on the plain spelling.**
+
+- **Only marks every shown pronunciation agrees on.** Where a page shows a
+  reading with its variants (برنا *barnā* / *bornā*), a mark the variants
+  dispute is left off (the review of 2026-11-21); `vocalise` takes the
+  variants.
+- **A source's own marks are never replaced** on the reading screen: a word
+  written with marks inside it stays exactly as written, because those marks
+  are evidence and they rule readings out. Marks after the last letter (the
+  ezafe's kasra, the hamza of خانهٔ) are kept.
+- **Left plain on purpose**: quoted lines and their highlight (a line is
+  evidence for the spelling, not for one reading), a word with several
+  readings on the reading screen, the word panel's heading (it lists every
+  reading), and a reading picked during the visit until the text is loaded
+  again (the API has no marks for it yet).
+
+## 2026-11-21 (second) — two values in place of one score: how well built, and what the corpus says
+
+**The project lead's choice**, the same day the single score went live:
+«if a word does not appear in corpus automatically gets a low score? because
+the intention is also to identify such words and use them maybe as new words
+if they are good.» Under the score an unattested word could reach at most 30
+of 100, so the good new words — what the project is for — sank to the bottom.
+
+**Two values, kept apart** (`murfulu/scoring/score.py`):
+
+| value | what | how |
+|---|---|---|
+| ساخت | how well the word is built, 0–100 | the chain's weakest rule, *r* = attested / built: 100 · clamp((log10 *r* + 4) / 3, 0, 1); the same for attested and unattested words |
+| پیکره | what the corpus says, in words | `reading` (under this reading, in *n* texts), `letters` (only the letters, which may be it), `other` (another word's letters: a function word, the bank's other headword, an inflection), `none`, or not asked |
+
+**An unmeasured step counts at the median rate, never skipped.** The first run
+on real data gave کَمرَوه a full 100: *kam-* was not measured, and its one
+measured step was strong. Silence neither lifts nor sinks a word.
+
+**The default order is ساخت first** (then the corpus's answer, then texts):
+a coiner looking for a word wants the best-made ones whether or not the poets
+used them, and the corpus column says which are known. Measured on رفتن (corpus
+v17 locally): the top of the list still holds رَفت، رَوان، رَوِش, because their
+rules are strong; what changes is that a well-made unattested word now stands
+above a weakly made attested one (وادان above زیردانا).
+
+**«واژه‌های تازه»**, a view switch above the class tabs: only the words not in
+the corpus under this reading (absent, letters only, or another word's
+letters), best-built first. Its own corpus filter replaces the general one
+there. Both values have range filters or a filter of their own and sort from
+the head row. The caveat stays under the table: the corpus is mostly old
+poetry, and both values are rough measures. L36 is reworded for the two values
+and loaded with the deploy. — project lead (the split, the candidates view);
+engineering (the formula, the default order, the median for unmeasured steps)
+
 ## 2026-11-21 — choices made overnight, without asking
 
 The project lead asked for the score, the table, the texts and the short

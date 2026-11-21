@@ -29,11 +29,12 @@
 # and nā- dropped), L46 (two new result classes) and L47 (no numeral group).
 #
 # **Three questions do not block work: L48** (2026-11-21), which short-vowel
-# marks the app puts on Persian words, made from each word's reading. **And L36** (2026-11-13, reworded 2026-11-21),
-# the score from 0 to 100 the build screen gives a word, which replaced the
-# three named levels the question first asked about. It is built and marked
-# unconfirmed under the working rule, and the project lead asked for the
-# question to be put to him; it carries `blocks_work: false`. **And L21** (asked 2026-11-20), the menu
+# marks the app puts on Persian words, made from each word's reading. **And
+# L36** (2026-11-13, reworded twice on 2026-11-21), the two values the build
+# screen gives a word — how well built, and what the corpus says — which
+# replaced the three named levels and then a single score. It is built and
+# marked unconfirmed under the working rule, and the project lead asked for
+# the question to be put to him; it carries `blocks_work: false`. **And L21** (asked 2026-11-20), the menu
 # names ساخت، ترکیب and تحلیل: withdrawn by default on 2026-10-17 because it
 # blocks nothing, put back on the project lead's word after the project
 # lead could not tell ساخت and ترکیب apart from the menu either. Listing it here reopens the withdrawn row.
@@ -541,37 +542,39 @@ questions:
   - reference: L36
     blocks_work: false
     question_en: >-
-      The build screen now gives every built word a score from 0 to 100 in
-      place of the three named levels of 2026-11-13: up to 70 from the corpus
-      (in how many texts the word occurs under its reading) and up to 30 from
-      the chain's weakest rule (how often it makes a word the corpus has). The
-      scale and the weights are ours. Is a score right for a reader who is not
-      a linguist, and are the two parts weighted rightly?
+      The build screen now shows two separate values for every built word: how
+      well it is built (0 to 100, from the chain's weakest rule alone, the same
+      for attested and unattested words) and what the corpus says (texts under
+      this reading, letters only, another word, or absent). A view «واژه‌های
+      تازه» lists the unattested ones, best-built first. Are the two values
+      right for a reader who is not a linguist, and is the weakest rule the
+      right measure of how well a word is built?
     question_fa: |
-      صفحهٔ ساخت واژه اکنون به هر واژه‌ای که می‌سازد امتیازی از ۰ تا ۱۰۰ می‌دهد. پیش از این به جای امتیاز یکی از سه نام «آشنا»، «خوش‌ساخت» و «کم‌پشتوانه» را نشان می‌داد. با امتیاز، خواننده می‌تواند فهرست را بر پایهٔ آن مرتب کند و تنها واژه‌های یک بازه را ببیند. امتیاز دو بخش دارد. هر دو بخش و وزن آن‌ها را ما گذاشته‌ایم و هنوز به تأیید شما نرسیده‌اند:
-      بخش پیکره، تا ۷۰ امتیاز: اگر واژه با همین خوانش در پیکره آمده باشد، دست‌کم ۳۰ امتیاز می‌گیرد، و هرچه در متن‌های بیشتری آمده باشد امتیازش بیشتر می‌شود، تا ۷۰ امتیاز برای هزار متن یا بیشتر. اگر تنها همین حروف در پیکره آمده باشند و روشن نباشد که به همین خوانش‌اند، نیمی از این امتیاز را می‌گیرد. اگر این حروف همیشه واژهٔ دیگری باشند، واژه از پیکره امتیازی نمی‌گیرد.
-      بخش قاعده، تا ۳۰ امتیاز: از سست‌ترین قاعده‌ای که واژه را ساخته است. هرچه این قاعده از واژه‌هایی که می‌سازد شمار بیشتری را در پیکره داشته باشد، امتیاز بیشتر است.
-      نمونه‌ها: دانا (dānā) در ۲٬۱۱۸ متن آمده است و ۱۰۰ می‌گیرد. دانگر (dāngar) در پیکره نیامده است، ولی پسوند ـگر از هر صد واژه‌ای که می‌سازد نزدیک به دو تا را در پیکره دارد، و این واژه ۲۲ می‌گیرد. زیردانا (zirdānā) ۱ می‌گیرد، چون پیشوند زیر از ۷٬۸۳۰ واژه‌ای که ساخته، تنها یکی را در پیکره دارد.
+      صفحهٔ ساخت واژه اکنون برای هر واژه‌ای که می‌سازد دو چیز را جدا از هم نشان می‌دهد. پیش از این یکی از سه نام «آشنا»، «خوش‌ساخت» و «کم‌پشتوانه» را نشان می‌داد، و پس از آن امتیازی از ۰ تا ۱۰۰ که پیکره و قاعده را با هم می‌آمیخت. در آن امتیاز، واژه‌ای که در پیکره نیامده بود دست‌بالا ۳۰ می‌گرفت، و واژه‌های تازهٔ خوش‌ساخت، که این برنامه برای یافتن آن‌ها ساخته شده است، به ته فهرست می‌رفتند. اکنون این دو جدا هستند. هر دو را ما گذاشته‌ایم و هنوز به تأیید شما نرسیده‌اند:
+      ساخت، از ۰ تا ۱۰۰: تنها از سست‌ترین قاعده‌ای که واژه را ساخته است. هرچه این قاعده از واژه‌هایی که می‌سازد شمار بیشتری را در پیکره داشته باشد، این عدد بزرگ‌تر است. این عدد برای واژه‌ای که در پیکره هست و واژه‌ای که نیست یکسان حساب می‌شود.
+      پیکره: اینکه واژه با همین خوانش در چند متن آمده است، یا تنها همین حروف آمده‌اند، یا این حروف واژهٔ دیگری‌اند، یا واژه اصلاً نیامده است.
+      فهرست به‌طور پیش‌فرض بر پایهٔ ساخت مرتب می‌شود. بخشی جدا به نام «واژه‌های تازه» تنها واژه‌هایی را نشان می‌دهد که با همین خوانش در پیکره نیامده‌اند، خوش‌ساخت‌ترین‌ها نخست.
+      نمونه‌ها: دانا (dānā) ساخت ۹۸ دارد و در ۲٬۱۱۸ متن آمده است. وادان (vādān) ساخت ۵۶ دارد و در پیکره نیامده است. زیردانا (zirdānā) ساخت ۴ دارد، چون پیشوند زیر از ۷٬۸۳۰ واژه‌ای که ساخته، تنها یکی را در پیکره دارد.
 
-      پیکره بیشتر شعر کهن است. پس امتیاز کم یعنی شاهد کم، نه واژهٔ نادرست، و صفحه این را زیر فهرست می‌گوید. پیشوندی مانند «هم» در شعر کهن کم واژه ساخته و امروز بسیار به کار می‌رود، و از این رو واژه‌ای مانند هماندیشنده (hamandišande) امتیاز کمی می‌گیرد.
+      پیکره بیشتر شعر کهن است. پیشوندی مانند «هم» در شعر کهن کم واژه ساخته و امروز بسیار به کار می‌رود، و از این رو واژه‌ای مانند هماندیشنده (hamandišande) ساخت کمی می‌گیرد.
 
-      پرسش: آیا امتیاز برای خواننده‌ای که زبان‌شناس نیست راه درستی برای نشان دادن این شاهدهاست، و آیا وزن دو بخش، ۷۰ برای پیکره و ۳۰ برای قاعده، به‌جاست؟
+      پرسش: آیا این دو سنجهٔ جدا از هم برای خواننده‌ای که زبان‌شناس نیست درست‌اند، و آیا سنجیدن ساخت از روی سست‌ترین قاعده به‌جاست؟
 
-      پیشنهاد ما: گزینهٔ نخست، چون با این وزن‌ها هر واژه‌ای که با همین خوانش در پیکره آمده بالاتر از هر واژه‌ای می‌ایستد که نیامده است، و هر دو بخش از شمارش خود پیکره گرفته شده‌اند، نه از داوری ما دربارهٔ تک‌تک واژه‌ها.
+      پیشنهاد ما: گزینهٔ نخست، چون واژهٔ تازهٔ خوش‌ساخت دیگر تنها به این دلیل که شاعران کهن آن را به کار نبرده‌اند پایین نمی‌افتد، و هر دو سنجه از شمارش خود پیکره گرفته شده‌اند، نه از داوری ما دربارهٔ تک‌تک واژه‌ها.
     choices:
       - id: keep
         suggested: true
         text_fa: >-
-          امتیاز و وزن دو بخش آن همین‌گونه بمانند.
-      - id: other_weights
+          دو سنجه جدا و همین‌گونه بمانند.
+      - id: other_build
         text_fa: >-
-          امتیاز درست است، ولی وزن دو بخش باید دیگر باشد؛ وزن‌های درست را در جعبهٔ متن می‌نویسم.
+          دو سنجه جدا بمانند، ولی ساخت باید از چیز دیگری سنجیده شود؛ آن را در جعبهٔ متن می‌نویسم.
+      - id: one_score
+        text_fa: >-
+          دو سنجه دوباره در یک امتیاز آمیخته شوند؛ وزن هر کدام را در جعبهٔ متن می‌نویسم.
       - id: named_levels
         text_fa: >-
-          به جای امتیاز، واژه‌ها دوباره در چند درجهٔ نام‌دار نشان داده شوند؛ نام‌ها و مرزها را در جعبهٔ متن می‌نویسم.
-      - id: no_score
-        text_fa: >-
-          واژه‌ها نه امتیاز بگیرند و نه درجه؛ صفحه سنجه‌ها را تنها جداگانه نشان دهد.
+          به جای عدد، واژه‌ها در چند درجهٔ نام‌دار نشان داده شوند؛ نام‌ها و مرزها را در جعبهٔ متن می‌نویسم.
       - id: unsure
         text_fa: نمی‌دانم و باید بیشتر بررسی کنم.
         settles: false

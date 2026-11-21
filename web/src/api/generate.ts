@@ -174,7 +174,7 @@ export interface BuiltForm {
     rule_says_fa?: string | null;
   } | null;
   /**
-   * How much evidence the word has, 0 to 100, decided by the API
+   * How well built, and what the corpus says, decided by the API
    * (`murfulu/scoring/score.py`) because the deep answer is ranked and paged
    * there. Absent from an older API, which the screen treats as *not known*.
    */
@@ -187,29 +187,34 @@ export interface BuiltForm {
 export type RuleBand = "low" | "middle" | "high";
 
 /**
- * One score from 0 to 100: up to 70 from the corpus and up to 30 from the
- * chain's weakest rule (DECISIONS 2026-11-21). `value` is null where the
- * corpus was not asked.
+ * Two values, kept apart (DECISIONS 2026-11-21, second): how well the word is
+ * built, 0 to 100 from its rules alone, and what the corpus says about it.
  *
  * **Unconfirmed** while `confirmed` is false: the scale is ours until the
  * linguist rules (docs/FOR_THE_LINGUIST.md L36).
  */
 export interface FormScore {
-  value: number | null;
-  /** The corpus part, 0 to 70; null where the corpus was not asked. */
-  corpus: number | null;
-  /** The rule part, 0 to 30. */
-  rule: number;
+  /** How well built, 0 to 100, the same for attested and unattested words. */
+  build: number;
+  /**
+   * What the corpus says: the word under this reading, only its letters (that
+   * may be it), another word's letters, not there, or null — not asked.
+   */
+  corpus: "reading" | "letters" | "other" | "none" | null;
+  /** Texts holding the letters; null where the corpus was not asked. */
+  texts: number | null;
   confirmed: boolean;
-  /** The chain's measured rule with the lowest rate; the rule part's source. */
+  /** The chain's measured rule with the lowest rate; the build value's source. */
   weakest_rule: {
     rule_id: string;
     affix: string;
     types: number | null;
     attested: number | null;
   } | null;
-  /** How typical the base is for its rule, as up to three dots; not in the score. */
+  /** How typical the base is for its rule, as up to three dots; in neither value. */
   meaning_mark: number | null;
+  /** An unmeasured step, counted at the median rate, limits the build value. */
+  unmeasured_step?: boolean;
 }
 
 export interface Reading {

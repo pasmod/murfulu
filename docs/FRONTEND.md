@@ -45,7 +45,7 @@ participle…). Each row:
 | Persian | script form |
 | rule | `v-010: stem1 + -ār → kārnām`, clickable to the rule |
 | meaning | composed from the semantic tag |
-| score | one number from 0 to 100 with a bar — see below (2026-11-21; three named levels from 2026-11-13 until then) |
+| ساخت / پیکره | how well built, 0–100 with a bar, and what the corpus says — see below (2026-11-21, second; one mixed score earlier that day, three named levels from 2026-11-13) |
 | evidence | attested *n×* in corpus v3, or «در پیکرهٔ v3 نیامده است» — behind «شواهد» |
 | sisters | other words the same rule made that do exist |
 | the score's parts | never folded away — the corpus part out of 70, the rule part out of 30, and how typical the base is for its rule (not in the score) — behind «شواهد», with the reason in a sentence |
@@ -58,11 +58,19 @@ the route and then paged** — the screen asks for the best thousand and says ho
 many of how many it is showing. It takes about a second, and is *not* instant
 after that: the cache is still task 6.2.
 
-Sorted by **score, highest first, never by depth** (the project lead's choice
-of 2026-11-21); equal scores keep the old order of evidence. The API decides
+Sorted by **how well built, then what the corpus says, never by depth** (the
+project lead's choice of 2026-11-21); equal values keep the old order of
+evidence. The API decides
 the score and ranks on it, because a deep answer is paged there; the screen
 sorts one and two steps the same way, and the reader can sort by the texts a
 word is in or by the alphabet instead.
+
+**The candidates (2026-11-21, second).** A switch above the class tabs,
+«همهٔ واژه‌ها» / «واژه‌های تازه»: the second shows only the words not in the
+corpus under this reading, best-built first, with a line saying so; its corpus
+filter is its own. The columns are word, class, ساخت (0–100 with a bar), در پیکره
+(texts, or «همین حروف», «به معنای واژه‌ای دیگر», «نیامده»), وند, buttons; the
+filters are ساخت's range and the corpus's three answers.
 
 **The table (2026-11-21, direction A of three drafts).** One card: the word
 classes as tabs (همه first, with counts), the chosen class's explanation and
@@ -78,11 +86,14 @@ measure. The scale and weights are **unconfirmed** until the linguist rules
 (L36). The corpus version is said once under the table and beside every count
 behind the button.
 
-**The short vowels (2026-11-21).** The word in each row, the reading's
-heading, the compound rows and the word bank show the Persian with zabar,
-zir, pish and tashdid made from the reading (`form_fa_marked`,
-`spelling_fa_marked`); the plain spelling stays the key for search, links and
-tests. The rule is unconfirmed (L48).
+**The short vowels (2026-11-21).** Wherever a word stands with a known
+reading — the build table and its heading, the compound rows, the word bank,
+the search results, the word page, and on the reading screen a word with one
+reading or the model's — the Persian carries zabar, zir, pish and tashdid made
+from the reading (`form_fa_marked`, `spelling_fa_marked`, `fa_marked`), only
+the marks every shown pronunciation agrees on; the plain spelling stays the
+key for search, links, ids and tests. Quoted lines stay as written. The rule
+is unconfirmed (L48).
 
 **The score's parts (2026-11-21).** «شواهد» opens a sentence of reason — what
 the corpus says, then how often the chain's weakest rule makes a word the

@@ -1,17 +1,17 @@
 /**
- * What a word's score rests on: three fields behind «شواهد», each opening on
+ * What a word's two values rest on: three fields behind «شواهد», each opening on
  * a press to the figures behind it.
  *
- * **The project lead's choice of 2026-11-21**: the score is on the row; its
- * parts stay one press away, and separate, because a single opaque number is
+ * **The project lead's choice of 2026-11-21**: the two values are on the
+ * row; what they rest on stays one press away, and separate, because a single opaque number is
  * what the project argues against (FRONTEND.md). A press is what a phone has;
  * nothing here waits for a hover.
  *
- * - **پیکره** — its part of the score, out of 70, and on a press how many
- *   texts hold the word and the lines themselves.
- * - **دستور** — its part, out of 30, from the chain's weakest rule, and on a
- *   press each rule's own record and the ground under the chain.
- * - **معنا** — not part of the score: how close the base sits to the bases
+ * - **پیکره** — how many texts hold the word, under this reading or as
+ *   letters only, and on a press the lines themselves.
+ * - **دستور** — how well built, out of 100, from the chain's weakest rule, and
+ *   on a press each rule's own record and the ground under the chain.
+ * - **معنا** — in neither value: how close the base sits to the bases
  *   the rule usually takes, as up to three dots, and on a press the bases it
  *   was measured against.
  */
@@ -25,7 +25,7 @@ import { Num } from "../../text/Num";
 import { persianNumber, persianPercent } from "../../text/numbers";
 import { CorpusLines } from "./CorpusLines";
 import { Evidence } from "./Evidence";
-import { CORPUS_MAX, RULE_MAX } from "./scoring";
+import { BUILD_MAX, hasValues } from "./scoring";
 import styles from "./Signals.module.css";
 
 type Field = "corpus" | "rule" | "meaning";
@@ -50,8 +50,8 @@ function Dots({ count, ring = false }: { count: number; ring?: boolean }) {
 }
 
 /**
- * What a field shows before it is pressed: the part of the score it gives,
- * or why there is none. The meaning is not in the score and keeps its dots.
+ * What a field shows before it is pressed: what the corpus says, how well the
+ * word is built out of 100, or the meaning's dots — or why there is none.
  */
 function shown(
   form: BuiltForm,
@@ -59,9 +59,13 @@ function shown(
 ): { mark: React.ReactNode; said: string } {
   if (field === "corpus") {
     const found = form.attestation;
-    if (found?.function_word || found?.headword_homograph)
+    if (!found) return { mark: "سنجیده نشده", said: "سنجیده نشده" };
+    if (found.function_word || found.headword_homograph)
       return { mark: "به معنای واژه‌ای دیگر", said: "به معنای واژه‌ای دیگر" };
-    if (found?.level === "none") return { mark: "نیامده", said: "نیامده" };
+    if (found.level === "none") return { mark: "نیامده", said: "نیامده" };
+    const texts = `${persianNumber(found.doc_count)} متن`;
+    const said = found.level === "reading" ? texts : `همین حروف، ${texts}`;
+    return { mark: said, said };
   }
   const score = form.score;
   if (!score) return { mark: null, said: "" };
@@ -75,13 +79,9 @@ function shown(
       said: `${persianNumber(value)} از ${persianNumber(3)}`,
     };
   }
-  const part = field === "corpus" ? score.corpus : score.rule;
-  if (part === null || part === undefined) {
-    return { mark: "سنجیده نشده", said: "سنجیده نشده" };
-  }
-  const of = field === "corpus" ? CORPUS_MAX : RULE_MAX;
-  const said = `${persianNumber(part)} از ${persianNumber(of)}`;
-  return { mark: said, said: `${said} امتیاز` };
+  if (!hasValues(form)) return { mark: null, said: "" };
+  const said = `${persianNumber(score.build)} از ${persianNumber(BUILD_MAX)}`;
+  return { mark: said, said };
 }
 
 function CorpusDetail({ form }: { form: BuiltForm }) {

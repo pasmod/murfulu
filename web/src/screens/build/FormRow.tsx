@@ -202,7 +202,7 @@ export function FormRow({
                   ) ?? [],
                 meaning_fa: form.meaning_fa ?? null,
                 attestation: form.attestation?.level ?? null,
-                score: form.score?.value ?? null,
+                build: form.score?.build ?? null,
               },
             }}
           />

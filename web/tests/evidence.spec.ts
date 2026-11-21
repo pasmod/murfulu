@@ -104,8 +104,9 @@ test.describe("every text of a spelling", () => {
  * the corpus filter keeps the page short enough to measure.
  */
 async function showAll(page: Page) {
-  await expect(page.getByRole("tablist").first()).toBeVisible();
-  const attested = page.getByRole("radio", { name: "در پیکره آمده" });
+  // بس at two steps is a large answer: give it the time a deep build takes.
+  await expect(page.getByRole("tablist").first()).toBeVisible({ timeout: 30_000 });
+  const attested = page.getByRole("radio", { name: "با همین معنا آمده" });
   for (let at = 0; at < (await attested.count()); at += 1) {
     // The radio is drawn as its label, which takes the press.
     await attested.nth(at).check({ force: true });

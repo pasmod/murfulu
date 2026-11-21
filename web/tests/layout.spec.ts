@@ -170,7 +170,8 @@ test.describe("a real word", () => {
 
     await page.goto(`/word/${encodeURIComponent(first.id)}`);
     await expect(
-      page.getByRole("heading", { level: 1, name: first.spelling_fa }),
+      // The heading carries the reading's short vowels since 2026-11-21.
+      page.getByRole("heading", { level: 1, name: unmarked(new RegExp(`^${first.spelling_fa}$`)) }),
     ).toBeVisible();
     // `exact`: a name is matched as a substring otherwise, and «همهٔ شواهد»
     // below the citations holds this one.
@@ -283,7 +284,7 @@ test.describe("a built word's evidence", () => {
     test.skip(!answer.ok(), "no lexicon configured");
     await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86&depth=2");
     await page.getByRole("tablist").first().waitFor();
-    const info = page.getByRole("button", { name: "امتیاز چیست؟" });
+    const info = page.getByRole("button", { name: "ساخت چیست؟" });
     await info.first().click();
     const tip = page.getByRole("tooltip");
     await expect(tip).toBeVisible();

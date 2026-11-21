@@ -86,6 +86,42 @@
   background: var(--paper);
 }
 
+/* All words, or the candidates for new ones: the table's first choice, so it
+   sits above the class tabs and looks like a switch, not a filter. */
+.views {
+  display: flex;
+  min-inline-size: 0;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-3) var(--space-4) 0;
+  border: 0;
+}
+
+.view {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.view:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.view:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 /* The classes, as tabs: a choice that filters, not a heading that opens. A
    scroll on a phone rather than a wrap, so the table does not start a screen
    down. */
@@ -156,6 +192,9 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+  /* A fieldset is never narrower than its content unless told: the corpus's
+     four chips pushed a phone's page sideways. Here it scrolls instead. */
+  min-inline-size: 0;
   margin: 0;
   padding: 0;
   border: 0;
@@ -170,6 +209,9 @@
 }
 
 .chip {
+  /* Holds its visually hidden radio: positioned against the page, the input
+     of a chip scrolled out of the filter's row widened a phone's page. */
+  position: relative;
   display: inline-flex;
   align-items: center;
   min-block-size: 2.25rem;

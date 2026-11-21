@@ -28,15 +28,15 @@ function step(ruleId: string, appliedTo: string, affix: string | null) {
 }
 
 function scored(
-  value: number | null,
-  corpus: number | null,
-  rule: number,
+  build: number,
+  corpus: FormScore["corpus"],
+  texts: number | null,
   weakest: FormScore["weakest_rule"] = null,
 ): FormScore {
   return {
-    value,
+    build,
     corpus,
-    rule,
+    texts,
     confirmed: false,
     weakest_rule: weakest,
     meaning_mark: 2,
@@ -83,14 +83,16 @@ const ZIR = { rule_id: "V-076", affix: "zir-", types: 7830, attested: 1 };
 const VA = { rule_id: "V-070", affix: "vā-", types: 7835, attested: 38 };
 const A = { rule_id: "V-024", affix: "-ā", types: 8337, attested: 748 };
 
-/** Four words, given out of order, so the screen's own order shows. */
+/** Five words, given out of order, so the screen's own order shows. */
 const FORMS = [
+  // In the corpus once, but on a weak rule: zir- makes a corpus word 1 time
+  // in 7,830.
   form(
     "zirdānā",
     "زیردانا",
     "karandekarbahr",
-    attested("none"),
-    scored(1, 0, 1, ZIR),
+    attested("reading", 1),
+    scored(4, "reading", 1, ZIR),
     "zir-",
   ),
   form(
@@ -98,18 +100,32 @@ const FORMS = [
     "دانا",
     "karandekarbahr",
     attested("reading", 2118),
-    scored(100, 70, 30, A),
+    scored(98, "reading", 2118, A),
   ),
-  form("vādān", "وادان", "nam", attested("none"), scored(17, 0, 17, VA), "vā-"),
+  // Not in the corpus, on an ordinary rule: the candidate the split is for.
+  form(
+    "vādān",
+    "وادان",
+    "nam",
+    attested("none"),
+    scored(56, "none", 0, VA),
+    "vā-",
+  ),
   // In more texts than any other, as letters only: so sorting by texts and
-  // sorting by score disagree about it.
-  form("Row", "رو", "nam", attested("spelling", 5000), scored(45, 35, 10, VA)),
+  // sorting by how well built disagree about it.
+  form(
+    "Row",
+    "رو",
+    "nam",
+    attested("spelling", 5000),
+    scored(56, "letters", 5000, VA),
+  ),
   form(
     "dānande",
     "داننده",
     "karandekarbahr",
     attested("reading", 306),
-    scored(93, 63, 30, A),
+    scored(92, "reading", 306, A),
     "-ande",
   ),
 ];
@@ -170,46 +186,44 @@ function order(): string[] {
     .map((row) => row.querySelector("span span")?.textContent ?? "");
 }
 
-describe("each word's score", () => {
+describe("how well each word is built", () => {
   it("is a number from 0 to 100 on the row, said in full for a screen reader", async () => {
     renderApp(ROUTE);
     const row = (await screen.findByText("دانا")).closest("li")!;
-    expect(within(row).getByLabelText("امتیاز ۱۰۰ از ۱۰۰")).toBeInTheDocument();
+    expect(within(row).getByLabelText("ساخت ۹۸ از ۱۰۰")).toBeInTheDocument();
   });
 
-  it("is a dash, never a zero, where nothing was measured", async () => {
-    serve([form("dānā", "دانا", "nam", null, scored(null, null, 15))]);
+  it("is a dash, never a zero, where an older API sent nothing", async () => {
+    serve([form("dānā", "دانا", "nam", null, undefined)]);
     renderApp(ROUTE);
     const row = (await screen.findByText("دانا")).closest("li")!;
     expect(within(row).getByTitle("سنجیده نشده")).toHaveTextContent("—");
-    expect(within(row).queryByText("۰")).toBeNull();
   });
 
-  it("is explained once, under the table, as rough and about poetry", async () => {
+  it("is explained under the table as rough, with the corpus as old poetry", async () => {
     renderApp(ROUTE);
     await screen.findByText("دانا");
     expect(screen.getByText(/بیشترش شعر/)).toBeInTheDocument();
-    expect(screen.getByText(/اندازه‌ای\s+تقریبی/)).toBeInTheDocument();
+    expect(screen.getByText(/سنجشی تقریبی/)).toBeInTheDocument();
   });
 
-  it("gives its two parts behind the evidence, out of 70 and 30", async () => {
+  it("shows both values behind the evidence: texts, and out of 100", async () => {
     renderApp(ROUTE);
     const row = (await screen.findByText("داننده")).closest("li")!;
     await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
     expect(
-      within(row).getByRole("button", { name: /پیکره: ۶۳ از ۷۰/ }),
+      within(row).getByRole("button", { name: /پیکره: ۳۰۶ متن/ }),
     ).toBeInTheDocument();
     expect(
-      within(row).getByRole("button", { name: /دستور: ۳۰ از ۳۰/ }),
+      within(row).getByRole("button", { name: /دستور: ۹۲ از ۱۰۰/ }),
     ).toBeInTheDocument();
   });
 
-  it("says why a weak rule scores low, in the rule's own counts", async () => {
+  it("says why a weak rule builds badly, in the rule's own counts", async () => {
     renderApp(ROUTE);
     const row = (await screen.findByText("زیردانا")).closest("li")!;
     await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
-    const reason = within(row).getByText(/در پیکره نیامده است/);
-    expect(reason).toHaveTextContent(
+    expect(within(row).getByText(/نویسنده آمده است/)).toHaveTextContent(
       /۷٬?۸۳۰ واژه می‌سازد و تنها یکی از آن‌ها در پیکره آمده است/,
     );
   });
@@ -226,13 +240,14 @@ describe("each word's score", () => {
   it("keeps an affix's dash on the affix's side", async () => {
     renderApp(ROUTE);
     const row = (await screen.findByText("زیردانا")).closest("li")!;
-    const chip = within(row).getByText("zir-");
-    expect(chip).toHaveAttribute("dir", "ltr");
+    expect(within(row).getByText("zir-")).toHaveAttribute("dir", "ltr");
   });
 });
 
 describe("the order", () => {
-  it("is by score, highest first", async () => {
+  it("is best-built first, so a good new word stands above a weak known one", async () => {
+    // The project lead's worry: a word the corpus lacks must not sink for
+    // that. وادان is absent and well built; زیردانا is in one text, weakly.
     renderApp(ROUTE);
     await screen.findByText("دانا");
     expect(order()).toEqual(["دانا", "داننده", "رو", "وادان", "زیردانا"]);
@@ -241,11 +256,97 @@ describe("the order", () => {
   it("can be by the texts a word is in, or by the alphabet", async () => {
     renderApp(ROUTE);
     await screen.findByText("دانا");
-    const head = screen.getAllByRole("button", { name: /در پیکره/ })[0]!;
-    await userEvent.click(head);
-    expect(order().slice(0, 3)).toEqual(["رو", "دانا", "داننده"]);
+    await userEvent.click(
+      screen.getAllByRole("button", { name: /در پیکره/ })[0]!,
+    );
+    expect(order()).toEqual(["رو", "دانا", "داننده", "زیردانا", "وادان"]);
     await userEvent.click(screen.getAllByRole("button", { name: /^واژه/ })[0]!);
     expect(order()).toEqual(["دانا", "داننده", "رو", "زیردانا", "وادان"]);
+  });
+});
+
+describe("the order agrees with the server's", () => {
+  it("puts more texts first between equal values, before the older tie-breakers", async () => {
+    // The review of 2026-11-21: with equal build and corpus answers, the
+    // browser put a one-text word above an inflection-shaped word in 100
+    // texts, where the server puts the 100 first.
+    serve([
+      form(
+        "dānāk",
+        "داناک",
+        "nam",
+        attested("reading", 1),
+        scored(98, "reading", 1, A),
+      ),
+      {
+        ...form(
+          "dānāy",
+          "دانای",
+          "nam",
+          attested("reading", 100),
+          scored(98, "reading", 100, A),
+        ),
+        inflection: {
+          base: "دانا",
+          pattern: "ey",
+          label_fa: "صفت + ی",
+          shared_with: [],
+        },
+      },
+    ]);
+    renderApp(ROUTE);
+    await screen.findByText("داناک");
+    expect(order()).toEqual(["دانای", "داناک"]);
+  });
+
+  it("reads an older API's single score as no values, never as an answer", async () => {
+    // The API of the morning sent {value, corpus: number, rule}.
+    const old = {
+      value: 100,
+      corpus: 70,
+      rule: 30,
+      confirmed: false,
+      weakest_rule: null,
+      meaning_mark: 2,
+    };
+    serve([
+      form(
+        "dānā",
+        "دانا",
+        "nam",
+        attested("reading", 2118),
+        old as unknown as FormScore,
+      ),
+    ]);
+    renderApp(ROUTE);
+    await screen.findByText("دانا");
+    await userEvent.click(screen.getByRole("radio", { name: "واژه‌های تازه" }));
+    expect(screen.queryByText("دانا")).toBeNull();
+    await userEvent.click(screen.getByRole("radio", { name: "همهٔ واژه‌ها" }));
+    await userEvent.click(
+      screen.getByRole("radio", { name: "با همین معنا آمده" }),
+    );
+    expect(order()).toEqual(["دانا"]);
+  });
+});
+
+describe("the candidates for new words", () => {
+  it("show only what the corpus lacks under this reading, best-built first", async () => {
+    renderApp(ROUTE);
+    await screen.findByText("دانا");
+    await userEvent.click(screen.getByRole("radio", { name: "واژه‌های تازه" }));
+    expect(order()).toEqual(["رو", "وادان"]);
+    expect(screen.getByText(/خوش‌ساخت‌ترین‌ها اول/)).toBeInTheDocument();
+    // The corpus filter is the view's own now, so it is not offered.
+    expect(screen.queryByRole("radio", { name: "نیامده" })).toBeNull();
+  });
+
+  it("go back to every word", async () => {
+    renderApp(ROUTE);
+    await screen.findByText("دانا");
+    await userEvent.click(screen.getByRole("radio", { name: "واژه‌های تازه" }));
+    await userEvent.click(screen.getByRole("radio", { name: "همهٔ واژه‌ها" }));
+    expect(order()).toHaveLength(5);
   });
 });
 
@@ -262,7 +363,10 @@ describe("the keyboard", () => {
     expect(now[1]).toHaveAttribute("aria-selected", "true");
     expect(now[1]).toHaveFocus();
     await userEvent.keyboard("{Home}");
-    expect(screen.getAllByRole("tab")[0]).toHaveAttribute("aria-selected", "true");
+    expect(screen.getAllByRole("tab")[0]).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
   });
 
   it("chooses a filter with the arrows, as native radio buttons do", async () => {
@@ -275,31 +379,31 @@ describe("the keyboard", () => {
 });
 
 describe("the filters", () => {
-  it("keep a score range, and say how many words are left", async () => {
+  it("keep a range of how well built, and say how many words are left", async () => {
     renderApp(ROUTE);
     await screen.findByText("دانا");
-    await userEvent.click(screen.getByRole("radio", { name: "زیر ۴۰" }));
-    expect(order()).toEqual(["وادان", "زیردانا"]);
+    await userEvent.click(screen.getByRole("radio", { name: "۴۰ تا ۶۹" }));
+    expect(order()).toEqual(["رو", "وادان"]);
     expect(screen.getByRole("status")).toHaveTextContent("۲ واژه");
   });
 
-  it("keep only what the corpus has, or only what it does not", async () => {
+  it("keep the corpus's three answers apart", async () => {
     renderApp(ROUTE);
     await screen.findByText("دانا");
-    await userEvent.click(screen.getByRole("radio", { name: "در پیکره آمده" }));
-    expect(order()).toEqual(["دانا", "داننده", "رو"]);
     await userEvent.click(
-      screen.getByRole("radio", { name: "در پیکره نیامده" }),
+      screen.getByRole("radio", { name: "با همین معنا آمده" }),
     );
-    expect(order()).toEqual(["وادان", "زیردانا"]);
+    expect(order()).toEqual(["دانا", "داننده", "زیردانا"]);
+    await userEvent.click(screen.getByRole("radio", { name: "فقط همین حروف" }));
+    expect(order()).toEqual(["رو"]);
+    await userEvent.click(screen.getByRole("radio", { name: "نیامده" }));
+    expect(order()).toEqual(["وادان"]);
   });
 
   it("combine with the class tab", async () => {
     renderApp(ROUTE);
     await screen.findByText("دانا");
-    await userEvent.click(
-      screen.getByRole("radio", { name: "در پیکره نیامده" }),
-    );
+    await userEvent.click(screen.getByRole("radio", { name: "نیامده" }));
     await userEvent.click(screen.getByRole("tab", { name: /nam/ }));
     expect(order()).toEqual(["وادان"]);
   });
@@ -307,8 +411,8 @@ describe("the filters", () => {
   it("say so when nothing is left, rather than showing an empty table", async () => {
     renderApp(ROUTE);
     await screen.findByText("دانا");
-    await userEvent.click(screen.getByRole("radio", { name: "۷۰ و بیشتر" }));
-    await userEvent.click(screen.getByRole("radio", { name: "در پیکره نیامده" }));
+    await userEvent.click(screen.getByRole("radio", { name: "زیر ۴۰" }));
+    await userEvent.click(screen.getByRole("radio", { name: "نیامده" }));
     expect(
       screen.getByText(/با این گزینه‌ها هیچ واژه‌ای نمی‌ماند/),
     ).toBeInTheDocument();
@@ -320,7 +424,13 @@ describe("the short vowels", () => {
     // DECISIONS 2026-11-21: marks made from the reading, for display only.
     serve([
       {
-        ...form("dānande", "داننده", "karandekarbahr", attested("reading", 306), scored(89, 63, 26, A)),
+        ...form(
+          "dānande",
+          "داننده",
+          "karandekarbahr",
+          attested("reading", 306),
+          scored(92, "reading", 306, A),
+        ),
         form_fa_marked: "دانَنده",
       },
     ]);
@@ -334,4 +444,3 @@ describe("the short vowels", () => {
     expect(await screen.findByText("داننده")).toBeInTheDocument();
   });
 });
-

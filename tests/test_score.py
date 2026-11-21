@@ -1,10 +1,10 @@
-"""The score a built word is shown with, and the order it puts the list in.
+"""The two values a built word is shown with, and the order they put it in.
 
-The project lead's choice of 2026-11-21: one score from 0 to 100 per word, in
-place of the three levels of 2026-11-13 — up to 70 from the corpus and up to
-30 from the chain's weakest rule — so the list can be sorted and filtered by
-it. The API decides it because a deep answer is ranked and paged there
-(``_ranked``); the browser sorts steps 1 and 2 the same way.
+The project lead's choice of 2026-11-21 (second): how well the word is built,
+0 to 100 from its rules alone, and what the corpus says, kept apart — so a
+good word the old poetry never used does not sink for that. The API decides
+both because a deep answer is ranked and paged there (``_ranked``); the
+browser sorts steps 1 and 2 the same way.
 """
 
 from __future__ import annotations
@@ -98,103 +98,89 @@ def _scored(
     )  # type: ignore[arg-type]
 
 
-class TestTheCorpusPart:
-    @pytest.mark.parametrize(
-        ("texts", "points"),
-        [(1, 30), (10, 43), (100, 57), (1000, 70), (50_000, 70)],
-    )
-    def test_the_word_under_its_reading_climbs_from_30_to_70(
-        self, texts: int, points: int
-    ) -> None:
-        assert round(score.corpus_points(_found(Level.READING, texts)) or 0) == points
-
-    def test_letters_nobody_reads_otherwise_count_half(self) -> None:
-        """گفتار: written 4,813 times, no lexicon entry to say how it is read."""
-        letters = _found(Level.SPELLING, 1000, spelling_unlinked=True)
-        assert score.corpus_points(letters) == 35
-
-    def test_letters_the_lexicon_reads_as_another_word_count_nothing(self) -> None:
-        """روی is *Rui*, face: its 31,830 texts are not *ravi*'s.
-
-        The index says so by marking the letters the bank's headword under
-        other readings only (``headword_homograph``).
-        """
-        other = _found(
-            Level.SPELLING, 31_830, other_readings=("Rui",), headword_homograph=True
-        )
-        assert score.corpus_points(other) == 0
-
-    def test_the_same_reading_in_another_case_is_ours(self) -> None:
-        same = _found(Level.SPELLING, 1000, other_readings=("goft",))
-        assert score.corpus_points(same) == 35
-
-    def test_a_recorded_alternate_is_ours(self) -> None:
-        """A recorded alternate is this word, not another one.
-
-        *jehān* is the bank's alternate of *Jahān*, so the index does not mark
-        the letters another word's, and the score must not either — the case
-        the first draft missed by reading ``other_readings`` itself.
-        """
-        alternate = _found(Level.SPELLING, 1000, other_readings=("Jahān",))
-        assert score.corpus_points(alternate) == 35
-
-    def test_an_inflection_shaped_spelling_counts_nothing(self) -> None:
-        """رفتی is "you went"; its texts say nothing about a built word."""
-        letters = _found(Level.SPELLING, 500)
-        assert score.corpus_points(letters, inflected=True) == 0
-
-    def test_a_function_words_count_is_never_credited(self) -> None:
-        keh = _found(Level.SPELLING, 0, function_word="conjunction")
-        assert score.corpus_points(keh) == 0
-
-    def test_the_banks_other_headword_is_never_credited(self) -> None:
-        sarv = _found(Level.SPELLING, 900, headword_homograph=True)
-        assert score.corpus_points(sarv) == 0
-
-    def test_not_written_is_zero_and_not_asked_is_none(self) -> None:
-        assert score.corpus_points(_found(Level.NONE)) == 0
-        assert score.corpus_points(None) is None
-
-
-class TestTheRulePart:
+class TestTheBuildValue:
     @pytest.mark.parametrize(
         ("rate", "points"),
-        [(0.0, 0), (0.0001, 0), (0.001, 10), (0.01, 20), (0.1, 30), (0.31, 30)],
+        [(0.0, 0), (0.0001, 0), (0.001, 33), (0.01, 67), (0.1, 100), (0.31, 100)],
     )
     def test_a_log_scale_from_one_in_ten_thousand_to_one_in_ten(
         self, rate: float, points: int
     ) -> None:
-        assert round(score.rule_points(rate)) == points
+        assert score.build_points(rate) == points
 
     def test_the_weakest_rule_decides(self) -> None:
         """zir- (1 of 7,830) under -ā (748 of 8,337): zir- is the chain's rule."""
         scored = _scored(_found(Level.NONE), ZIRDANA, "zirdānā")
         assert scored.weakest is not None and scored.weakest.rule_id == "V-076"
-        assert round(scored.rule) == 1
+        assert scored.build == 4
+
+    def test_it_is_the_same_whether_the_corpus_has_the_word_or_not(self) -> None:
+        """The point of the split: a good word the poets never used keeps it."""
+        absent = _scored(_found(Level.NONE), DANA)
+        known = _scored(_found(Level.READING, 2118), DANA)
+        assert absent.build == known.build == 98
 
     def test_an_unmeasured_chain_takes_the_middle_measured_rate(self) -> None:
-        """Not measured is never a low score: the median of V-024, V-070, V-076."""
+        """Not measured is never a low value: the median of the three rates."""
         scored = _scored(_found(Level.NONE), (("N-999", "-x"),), "x")
         assert scored.weakest is None
-        assert scored.rule == pytest.approx(score.rule_points(38 / 7835), abs=0.5)
+        assert scored.build == score.build_points(38 / 7835) == 56
+
+    def test_an_unmeasured_step_counts_too_never_skipped(self) -> None:
+        """An unmeasured step counts at the median, never skipped.
+
+        -ā is measured (8.97%), N-999 is not: the chain is no better than the
+        median for its unmeasured step, never the full 98 of -ā alone.
+        """
+        scored = _scored(_found(Level.NONE), (("N-999", "-x"), ("V-024", "-ā")), "x")
+        assert scored.build == score.build_points(38 / 7835) == 56
+        assert scored.weakest is None
 
 
-class TestTheScore:
-    def test_any_word_the_corpus_has_outranks_any_it_does_not(self) -> None:
-        once_weak = _scored(_found(Level.READING, 1), ZIRDANA, "zirdānā").value
-        absent_strong = _scored(_found(Level.NONE), DANA).value
-        assert once_weak is not None and absent_strong is not None
-        assert once_weak >= 30 >= absent_strong
+class TestTheCorpusAnswer:
+    def test_the_word_under_its_reading(self) -> None:
+        assert score.corpus_kind(_found(Level.READING, 2118)) == "reading"
 
-    def test_an_unasked_corpus_gives_no_score(self) -> None:
-        assert _scored(None, DANA).value is None
+    def test_letters_nobody_reads_otherwise_may_be_it(self) -> None:
+        """گفتار: written 4,813 times, no lexicon entry to say how it is read."""
+        letters = _found(Level.SPELLING, 4813, spelling_unlinked=True)
+        assert score.corpus_kind(letters) == "letters"
 
-    def test_it_is_served_with_its_parts_and_as_unconfirmed(self) -> None:
-        served = _scored(_found(Level.READING, 2118), DANA).as_json()
-        assert served["confirmed"] is False
-        assert served["corpus"] == 70 and served["rule"] == 30
-        assert served["value"] == 100
-        assert served["weakest_rule"]["rule_id"] == "V-024"
+    def test_a_recorded_alternate_or_another_case_is_this_word(self) -> None:
+        """*jehān* beside *Jahān*: the index does not mark it another word's."""
+        assert (
+            score.corpus_kind(_found(Level.SPELLING, 9, other_readings=("Jahān",)))
+            == "letters"
+        )
+
+    def test_another_words_letters_are_other(self) -> None:
+        """روی is *Rui*, face; که is the conjunction; رفتی is "you went"."""
+        rui = _found(
+            Level.SPELLING, 31_830, other_readings=("Rui",), headword_homograph=True
+        )
+        keh = _found(Level.SPELLING, 0, function_word="conjunction")
+        assert score.corpus_kind(rui) == "other"
+        assert score.corpus_kind(keh) == "other"
+        assert score.corpus_kind(_found(Level.SPELLING, 500), inflected=True) == "other"
+
+    def test_not_written_and_not_asked(self) -> None:
+        assert score.corpus_kind(_found(Level.NONE)) == "none"
+        assert score.corpus_kind(None) is None
+
+    def test_the_texts_travel_with_it(self) -> None:
+        assert _scored(_found(Level.READING, 306), DANA).texts == 306
+        assert _scored(None, DANA).texts is None
+
+
+class TestWhatIsServed:
+    def test_each_form_carries_both_values_and_each_rule_its_third(self) -> None:
+        served = _form(pack(), _form_of("zirdānā", ZIRDANA), None, _found(Level.NONE))
+        assert served["score"]["build"] == 4
+        assert served["score"]["corpus"] == "none"
+        assert served["score"]["confirmed"] is False
+        assert served["score"]["weakest_rule"]["affix"] == "zir-"
+        assert "value" not in served["score"] and "level" not in served
+        assert [step["built"]["band"] for step in served["paths"][0]] == ["low", "high"]
 
     @pytest.mark.parametrize(
         ("band", "mark"),
@@ -207,56 +193,59 @@ class TestTheScore:
             (None, None),
         ],
     )
-    def test_the_meaning_is_beside_the_score_not_in_it(
+    def test_the_meaning_is_beside_the_values_not_in_them(
         self, band: str | None, mark: int | None
     ) -> None:
         plain = _scored(_found(Level.NONE), DANA)
         banded = _scored(_found(Level.NONE), DANA, typicality_band=band)
         assert banded.meaning_mark == mark
-        assert banded.value == plain.value
-
-
-class TestTheOrder:
-    def test_the_route_ranks_by_score_and_the_weak_chain_sinks(self) -> None:
-        """The weakest rule ranks, not the chain's median.
-
-        zirdānā's chain realises 0.01% and 8.97%, a median of 4.49%; vādān's
-        one rule realises 0.49%. The median put zirdānā first; the weakest rule
-        puts it last.
-        """
-        zirdana = _form_of("zirdānā", ZIRDANA)
-        vadan = _form_of("vādān", (("V-070", "vā-"),))
-        none = _found(Level.NONE)
-        order = [f.latin for f in _ranked([zirdana, vadan], lambda _: none, None)]
-        assert order == ["vādān", "zirdānā"]
-
-    def test_more_texts_rank_higher(self) -> None:
-        many = _form_of("dānā", DANA)
-        few = _form_of("dānande", DANA)
-        counts = {"dānā": 2118, "dānande": 306}
-
-        def found(form: GroupedForm) -> Attestation:
-            return _found(Level.READING, counts[form.latin])
-
-        assert [f.latin for f in _ranked([few, many], found, None)] == [
-            "dānā",
-            "dānande",
-        ]
-
-    def test_no_score_sorts_last(self) -> None:
-        assert sorted([None, 12, 80], key=score.order) == [80, 12, None]
-
-
-class TestWhatIsServed:
-    def test_each_form_carries_its_score_and_each_rule_its_third(self) -> None:
-        served = _form(pack(), _form_of("zirdānā", ZIRDANA), None, _found(Level.NONE))
-        assert served["score"]["value"] == 1
-        assert served["score"]["corpus"] == 0
-        assert served["score"]["weakest_rule"]["affix"] == "zir-"
-        assert "level" not in served
-        assert [step["built"]["band"] for step in served["paths"][0]] == ["low", "high"]
+        assert banded.build == plain.build
 
     def test_an_unmeasured_rule_has_no_third(self) -> None:
         assert _rule_counts("N-999") is None
         assert MEASURED.band("N-999") is None
         assert MEASURED.band("nowhere") is None
+
+
+class TestTheOrder:
+    def test_a_well_built_new_word_comes_before_a_weakly_built_known_one(self) -> None:
+        """The complaint the split answers.
+
+        vādān (absent, vā- 0.49%) used to sit below anything the corpus had;
+        now it sits above zirdānā even when the corpus has zirdānā once.
+        """
+        zirdana = _form_of("zirdānā", ZIRDANA)
+        vadan = _form_of("vādān", (("V-070", "vā-"),))
+        counts = {"zirdānā": _found(Level.READING, 1), "vādān": _found(Level.NONE)}
+        order = [
+            f.latin for f in _ranked([zirdana, vadan], lambda f: counts[f.latin], None)
+        ]
+        assert order == ["vādān", "zirdānā"]
+
+    def test_the_corpus_answer_outranks_the_older_tie_breakers(self) -> None:
+        """The corpus's answer decides before the older keys do.
+
+        Equal build values: letters that may be the word come before a function
+        word's letters, although the function word has more texts — the order
+        the older keys alone would give the other way round.
+        """
+        letters = _form_of("kehin", DANA)
+        keh = _form_of("Keh", DANA)
+        found = {
+            "kehin": _found(Level.SPELLING, 5, spelling_unlinked=True),
+            "Keh": _found(Level.SPELLING, 500, function_word="conjunction"),
+        }
+        ranked = _ranked([keh, letters], lambda f: found[f.latin], None)
+        assert [f.latin for f in ranked] == ["kehin", "Keh"]
+
+    def test_between_equal_build_values_the_corpus_decides(self) -> None:
+        many = _form_of("dānā", DANA)
+        few = _form_of("dānande", DANA)
+        none = _form_of("dānāk", DANA)
+        found = {
+            "dānā": _found(Level.READING, 2118),
+            "dānande": _found(Level.READING, 306),
+            "dānāk": _found(Level.NONE),
+        }
+        ranked = _ranked([none, few, many], lambda f: found[f.latin], None)
+        assert [f.latin for f in ranked] == ["dānā", "dānande", "dānāk"]

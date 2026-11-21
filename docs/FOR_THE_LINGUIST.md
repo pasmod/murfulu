@@ -52,7 +52,7 @@ Every question asked now ends with our proposal and the reason in one sentence.
 | L24 | **half answered** | *var* is the present stem of وشتن (2026-11-11); what the screen shows for دستور remains |
 | L17d | **rewritten** | his twelve groups against the rules' twelve classes; the open point is how کاربهر divides: Dehkhoda marks about thirty of its 1,106 words «ن مف» (پسند، دمید), the done-to participle. Our proposal follows that mark; until he answers, the whole group feeds the doer participle |
 | L2, L3, L25, L28, L17c, L10, L10b, L10c | open | each with our proposal now; L2 re-checked, the verb groups did not move in 1.3.2 |
-| L36 | **open, not blocking** (2026-11-13, reworded 2026-11-21) | the score from 0 to 100 the build screen gives a word, in place of the three levels — the scale and its two weights are ours, built and marked unconfirmed |
+| L36 | **open, not blocking** (2026-11-13, reworded twice 2026-11-21) | two values for a built word, kept apart: how well built (0–100, the weakest rule) and what the corpus says — ours, built and marked unconfirmed |
 | L39 | **open, not blocking** (2026-11-13) | the reading screen's words: «این خوانش نادرست است», «؟», بیت/مصراع/نثر, and how a wrong reading reaches him |
 | L38 | **open, not blocking** (2026-11-13) | four words in ten of a classical text have no reading in the bank — common words such as عشق and خدا, and every inflected form; which of them belong in his bank |
 | L37 | **open, not blocking** (2026-11-13) | «متن» and «نویسنده» in place of «سروده» and «شاعر» wherever a count is shown, now that the corpus holds prose |
@@ -2648,39 +2648,35 @@ recommended on it alone.
 
 ---
 
-## L36. A score for a built word — the scale, and the weight of its two parts
+## L36. Two values for a built word — how well built, and what the corpus says
 
-**Reworded 2026-11-21.** First asked 2026-11-13 about three named levels —
-آشنا، خوش‌ساخت، کم‌پشتوانه — which the project lead then replaced with a score
-(DECISIONS 2026-11-21): the names read as labels a reader had to learn, and a
-list could not be sorted or filtered by them. **In the app's questions as
-L36**, not blocking.
+**Reworded twice on 2026-11-21.** First asked 2026-11-13 about three named
+levels (آشنا، خوش‌ساخت، کم‌پشتوانه); the morning of 2026-11-21 they became one
+score from 0 to 100, up to 70 of it from the corpus; the same day the project
+lead split it (DECISIONS 2026-11-21, second), because an unattested word could
+reach only 30 and the good new words — what the app is for — sank. **In the
+app's questions as L36**, not blocking.
 
-| part | points | how (ours) |
-|---|---|---|
-| corpus | up to 70 | the word under this reading in *n* texts: 30 + 40 · min(1, log10 *n* / 3) — 30 for one text, 43 for ten, 70 for a thousand; the letters only, nothing saying they are another word: half of that; otherwise 0 |
-| rule | up to 30 | the chain's weakest measured rule, rate *r* of its words the corpus has: 30 · clamp((log10 *r* + 4) / 3) — 0 at 1 in 10,000, 30 at 1 in 10; unmeasured counts at the median rate |
+| value | how (ours) |
+|---|---|
+| ساخت, 0–100 | the chain's weakest rule, rate *r* of its words the corpus has: 100 · clamp((log10 *r* + 4) / 3); an unmeasured step counts at the median rate; the same for attested and unattested words |
+| پیکره | the word under this reading in *n* texts; only its letters; another word's letters; not there |
 
-Examples as the question gives them: دانا 100 (2,118 texts); دانگر 22 (not in the
-corpus, *-gar* 139 of 8,339); زیردانا 1 (*zir-* 1 of 7,830). With 70 and 30,
-any word the corpus has under its reading (30 or more) stands above any word it
-does not (30 at most) — the order the levels gave, kept.
+The list sorts by ساخت first; a view «واژه‌های تازه» shows only the words not
+in the corpus under their reading, best-built first. Examples as the question
+gives them: دانا 98 and 2,118 texts; وادان 56, not in the corpus; زیردانا 4
+(*zir-* 1 of 7,830).
 
-**What we did meanwhile**: built it, marked it unconfirmed in the code and in
-what the API serves (`confirmed: false`), and listed the choices for one answer.
-
-**What changes if he rules otherwise**: the weights and the two scales are
-constants at the top of `murfulu/scoring/score.py`; the screen's sentence
-explaining them is `SCORE_SAYS` in `web/src/screens/build/scoring.ts`. Named
-levels again would be a band over the score in the same two files.
+**What changes if he rules otherwise**: the scale is two constants at the top
+of `murfulu/scoring/score.py`; the screen's explanations are in
+`web/src/screens/build/scoring.ts`.
 
 ### The question
 
-1. **A score at all.** Is one number from 0 to 100 right for a reader who is
-   not a linguist, or would he rather see named levels, or the figures alone?
-2. **The weights.** 70 for the corpus and 30 for the rule. A prefix such as
-   *ham-* is weak in classical poetry and ordinary today (هم‌اندیش), which is
-   the price of judging by the corpus (S33, S39).
+1. **Two values.** Are a build value and the corpus's answer, kept apart, right
+   for a reader who is not a linguist — or one mixed score, or named levels?
+2. **The build value.** Is the weakest rule the right measure? A prefix such as
+   *ham-* is weak in classical poetry and ordinary today (هم‌اندیش).
 
 ## L37. «متن» and «نویسنده» for what the corpus counts, now that it holds prose
 
