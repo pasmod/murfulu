@@ -9,8 +9,9 @@ how to cut the work by hand; picks teach the model only one place at a time
 and only at a rebuild, and the metre took about two words in a hundred out
 of the red. The metre test and the project's planning both named a list of
 the most frequent unsure words as the bigger lever, and the project lead
-said to start it. **Built, measured, not deployed** (FINDINGS 2026-11-21,
-*the most frequent unsure words*; `data/behnevis-unsure-v22.md`).
+said to start it. **Built and measured** (FINDINGS 2026-11-21, *the most
+frequent unsure words*; `data/behnevis-unsure-v22.md`); **served since
+2026-11-21** on the project lead's «Ja, ausliefern» (DEPLOY §24).
 
 - **The list** (`tools/measure_unsure_spellings.py`, `behnevis/unsure.py`):
   every text of the corpus read as the reading screen reads it, the metre

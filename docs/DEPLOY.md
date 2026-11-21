@@ -716,3 +716,26 @@ column says «—» and nothing else changes.
 
 The page was viewed on the server through the web container directly; the
 site password was not used.
+
+## 24. The most frequent unsure words, and a reading decided once for every like place — run 2026-11-21
+
+The list of unsure spellings and deciding once for every like place
+(DECISIONS 2026-11-21, *fifth*), on the project lead's word («Ja,
+ausliefern»), from the worktree of `b5a0c30`, the branch on `main` at
+`4ed03cd`, which was what the server ran. No migration, no `.env` change.
+**The rollback is `deploy` from `4ed03cd`**; the list file can stay (nothing
+reads it without this code), or be removed.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options); `md5sum` on the server | only this change's files differ, plus `DEPLOY.md`, older on the server; nothing deleted. Every file this change touches is on the server exactly as in `4ed03cd`, so the metre (§22) and the compound table (§23) are not rolled back; `behnevis-v22.json` and the metre labels are byte for byte the ones measured; `MURFULU_BEHNEVIS_METRE` is not in the `.env`, so the metre stays on |
+| 1 | `/texts` inside the api container, before | Hafez's ghazal 3: metre هزج مثمن سالم, 100 sure, 16 mid, 43 unsure; `/texts/unsure` 404 |
+| 2 | `rsync` of `data/behnevis-unsure-v22.json` alone | 5.8 MB, 2,000 spellings, checksum the same on both sides |
+| 3 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy (1 min 9 s) |
+| 4 | `deploy/server.sh check` | all checks passed, corpus v22; the site answers 401 logged out |
+| 5 | inside the api container, after | ghazal 3 unchanged (the same metre, 100 / 16 / 43); `/texts/unsure` serves 2,000 spellings, است first (220,461 unsure places); `/texts/unsure/بود` lists 143,938, no decisions; `/compound دل` still carries its build values (100, 100, 84, 84) |
+| 6 | the pages, through an SSH tunnel to the web container, headless Chromium at 375 and 1280 px | the list's fifty rows; a spelling opened shows its three reaches (everywhere, after, before one word) inside the screen; ghazal 3 shows 100 / 16 / 43 levels; an unsure word's panel (شیرازی) offers «فقط همین‌جا», «هر جا پس از «ترک»», «هر جا پیش از «به»» and «هر جا که «شیرازی» آمده (۱۳۴ جا)»; nothing scrolls sideways. Nothing was saved |
+
+The site password was not used. No decision exists yet on the server: the
+model reads decisions at its next build (`deploy/server.sh proposals`, then
+`tools/build_behnevis.py`, then `data`).

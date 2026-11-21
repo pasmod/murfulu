@@ -12,9 +12,9 @@ Things we need answered before or during planning. Move each one to
 Built 2026-11-21 (DECISIONS 2026-11-21 *fifth*), not deployed. The project
 lead's calls:
 
-1. **Deploy?** The list, the panel's «برای کجا؟» and the export and build
-   that learn decisions. Nothing on screen changes until a decision is made
-   and the model is rebuilt with it.
+1. ~~Deploy?~~ **Settled 2026-11-21: «Ja, ausliefern»**, served (DEPLOY
+   §24). Nothing on screen changes until a decision is made and the model is
+   rebuilt with it.
 2. **Should a decided reading the bank lacks act before karbon takes it?**
    Today it waits, as a typed reading does (2026-11-14). Of the unsure places
    the 2,000 most frequent spellings hold, about four in ten are words the
