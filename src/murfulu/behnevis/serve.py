@@ -9,6 +9,14 @@ or type one. What the reader picks is collected as a proposal for karbon
 The model file is configured like every other data file
 (``MURFULU_BEHNEVIS_PATH``); without it the screen shows what it showed before,
 every reading of the bank alike.
+
+**The poem's metre** (the project lead's decision of 2026-11-21, DECISIONS):
+where a verse text's metre is known, each verse half's words are weighed
+against it before they are shown (:mod:`murfulu.behnevis.metre`). The labels
+are a file beside the model, ``behnevis-metre-<version>.json`` beside
+``behnevis-<version>.json`` (``tools/extract_metre_lines.py``), so a release
+of another version takes its own. ``MURFULU_BEHNEVIS_METRE=off`` turns the
+step off without removing anything; without the file it is off too.
 """
 
 from __future__ import annotations
@@ -19,13 +27,17 @@ from pathlib import Path
 from typing import Any
 
 from murfulu.behnevis.inflect import Inflector
-from murfulu.behnevis.transcribe import Transcriber, bank_from, key
+from murfulu.behnevis.metre import Metre, patterns
+from murfulu.behnevis.transcribe import Transcriber, Word, bank_from, key
 from murfulu.behnevis.vowels import vocalise_written
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
 
 #: Where the model lives. Never a literal in the code.
 PATH_VARIABLE = "MURFULU_BEHNEVIS_PATH"
+#: ``off`` turns the metre step off; anything else, or nothing, leaves it on
+#: wherever the labels file is there.
+METRE_VARIABLE = "MURFULU_BEHNEVIS_METRE"
 
 #: The levels' lower edges. At 0.9 and above a reading is *sure*; from 0.7
 #: *mid*; below, *unsure*. Measured on held-out data (data/behnevis-eval-v17.md):
@@ -86,12 +98,46 @@ def loaded() -> Transcriber | None:
     return _load(str(model), model.stat().st_mtime, snapshot_id)
 
 
-def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
+def metre_path() -> Path | None:
+    """The metre labels beside the model, if the step is on and the file is there."""
+    if os.environ.get(METRE_VARIABLE, "").strip().lower() == "off":
+        return None
+    model = path()
+    if model is None:
+        return None
+    found = model.with_name(model.name.replace("behnevis-", "behnevis-metre-", 1))
+    return found if found.is_file() and found != model else None
+
+
+@lru_cache(maxsize=2)
+def _metres(table: str, changed: float) -> dict[str, str]:
+    del changed  # the cache key: a file replaced in place is read again
+    import json
+
+    raw = json.loads(Path(table).read_text(encoding="utf-8"))
+    labels = raw["labels"]
+    return {document: labels[i] for document, i in raw["documents"].items()}
+
+
+def metre_of(document_id: str) -> str | None:
+    """The metre label of a text, or None when the step is off or it has none."""
+    table = metre_path()
+    if table is None:
+        return None
+    return _metres(str(table), table.stat().st_mtime).get(document_id)
+
+
+def annotate(
+    units: list[dict[str, Any]], transcriber: Transcriber, metre: str | None = None
+) -> None:
     """Give each counted word of a window its reading, confidence and level.
 
     Sets ``auto`` on the word's dict, read line by line so each word has its
-    neighbours. A note's lines carry no words and are passed over.
+    neighbours. A note's lines carry no words and are passed over. With the
+    text's ``metre`` label, each verse half's words are weighed against it.
     """
+    allowed = patterns(metre) if metre else frozenset()
+    weigher = Metre(functions=frozenset(transcriber.functions)) if allowed else None
     for unit in units:
         # Verse or prose decides how و is read; a unit of unknown kind says nothing.
         verse = {"couplet": True, "half": True, "prose": False}.get(
@@ -100,8 +146,8 @@ def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
         for line in unit.get("lines") or []:
             words = [w for w in line.get("words") or [] if w.get("s")]
             keys = [key(w["s"]) for w in words]
-            for i, word in enumerate(words):
-                read = transcriber.word(
+            reads: list[Word] = [
+                transcriber.word(
                     word["fa"],
                     keys[i],
                     keys[i - 1] if i else None,
@@ -109,6 +155,11 @@ def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
                     verse=verse,
                     first=i == 0,
                 )
+                for i, word in enumerate(words)
+            ]
+            if weigher is not None and verse:
+                reads = _weighed(weigher, reads, allowed)
+            for i, (word, read) in enumerate(zip(words, reads, strict=True)):
                 if read.latin is None:
                     continue
                 word["auto"] = {
@@ -138,3 +189,30 @@ def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
                 marked = vocalise_written(word["fa"], read.latin)
                 if marked != word["fa"]:
                     word["auto"]["fa_marked"] = marked
+
+
+def _weighed(metre: Metre, reads: list[Word], allowed: frozenset[str]) -> list[Word]:
+    """The line's words weighed by the metre, the screen's numbers kept as they mean.
+
+    A reading the model offered without a number (one built from the stems)
+    still shows none: the panel says it carries no estimate. The word's own
+    confidence, which sets its level, is the metre's.
+    """
+    out: list[Word] = []
+    for before, after in zip(reads, metre.weigh(reads, allowed), strict=True):
+        unnumbered = {latin for latin, p in before.candidates if p is None}
+        word = after.word
+        out.append(
+            Word(
+                word.written,
+                word.spelling,
+                word.latin,
+                word.confidence,
+                word.source,
+                tuple(
+                    (latin, None if latin in unnumbered else p)
+                    for latin, p in word.candidates
+                ),
+            )
+        )
+    return out

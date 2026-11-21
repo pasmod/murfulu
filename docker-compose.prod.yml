@@ -83,6 +83,8 @@ services:
       MURFULU_SEMANTIC_PATH: ${MURFULU_SEMANTIC_PATH}
       MURFULU_TYPICALITY_PATH: ${MURFULU_TYPICALITY_PATH}
       MURFULU_BEHNEVIS_PATH: ${MURFULU_BEHNEVIS_PATH:-}
+      # `off` turns the poem's metre off on the reading screen (DEPLOY §20).
+      MURFULU_BEHNEVIS_METRE: ${MURFULU_BEHNEVIS_METRE:-}
     volumes:
       # The lexicon and the measured artefacts. Read-only: we never write to
       # the snapshot, and a server that could would be able to disagree with

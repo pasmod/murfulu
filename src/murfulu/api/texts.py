@@ -193,8 +193,11 @@ def read(
     # The model's reading of each word, when a model is configured.
     transcriber = behnevis.loaded()
     if transcriber is not None:
-        behnevis.annotate(found["units"], transcriber)
-        found["behnevis"] = {"sure": behnevis.SURE, "mid": behnevis.MID}
+        # The poem's metre weighs each verse half's readings, where it is known
+        # and the step is on (DECISIONS 2026-11-21).
+        metre = behnevis.metre_of(document_id)
+        behnevis.annotate(found["units"], transcriber, metre)
+        found["behnevis"] = {"sure": behnevis.SURE, "mid": behnevis.MID, "metre": metre}
     else:
         found["behnevis"] = None
     return found

@@ -15,10 +15,18 @@ first hemistich here is Ganjoor's excerpt, letters compared without signs,
 joiners or punctuation; and only when every section is labelled with one
 metre.
 
-Writes ``data/behnevis-metre-lines-<version>.jsonl`` (not in git: Ganjoor's
-text), one poem per line: id, author, the metre label, and its verse lines
-(hemistichs) as written. Prints what was kept and dropped, by poems and by
-running words. Read-only on Elasticsearch and the cache.
+Writes two files under data/, neither in git (Ganjoor's text and labels):
+
+``behnevis-metre-lines-<version>.jsonl``  one poem per line: id, document id,
+                                          author, the metre label, and its
+                                          verse lines (hemistichs) as written —
+                                          what the evaluation reads
+``behnevis-metre-<version>.json``         document id → metre label, for the
+                                          reading screen (``behnevis.serve``),
+                                          beside ``behnevis-<version>.json``
+
+Prints what was kept and dropped, by poems and by running words. Read-only on
+Elasticsearch and the cache.
 """
 
 from __future__ import annotations
@@ -81,6 +89,8 @@ def main(argv: list[str] | None = None) -> int:
     poems: Counter[str] = Counter()
     words: Counter[str] = Counter()
     all_words = 0
+    labels: dict[str, int] = {}
+    table: dict[str, int] = {}
     out_path = DATA / f"behnevis-metre-lines-{args.version}.jsonl"
     with out_path.open("w", encoding="utf-8") as out:
         for hit in scan(
@@ -117,10 +127,15 @@ def main(argv: list[str] | None = None) -> int:
                 state = "first hemistich differs"
             else:
                 state = "kept"
+                label = metres[poem_id][0]
+                table[str(source["document_id"])] = labels.setdefault(
+                    label, len(labels)
+                )
                 out.write(
                     json.dumps(
                         {
                             "poem": poem_id,
+                            "document_id": source["document_id"],
                             "author": source.get("author") or "",
                             "metre": metres[poem_id][0],
                             "lines": lines,
@@ -141,7 +156,21 @@ def main(argv: list[str] | None = None) -> int:
             f"  {state}: {n:,} documents ({n / total_poems:.1%}), "
             f"{words[state]:,} running words ({words[state] / max(1, total_words):.1%})"
         )
-    print(f"written: {out_path.relative_to(DATA.parent)}")
+    table_path = DATA / f"behnevis-metre-{args.version}.json"
+    table_path.write_text(
+        json.dumps(
+            {
+                "meta": {"corpus_version": args.version, "poems": len(table)},
+                # Each label once; a document names it by its place here.
+                "labels": list(labels),
+                "documents": table,
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    print(f"written: {out_path.relative_to(DATA.parent)}, ", end="")
+    print(f"{table_path.relative_to(DATA.parent)}")
     return 0
 
 

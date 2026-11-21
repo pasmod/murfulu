@@ -1,4 +1,4 @@
-"""The poem's metre as evidence for a word's Behnevis: an experiment, not served.
+"""The poem's metre as evidence for a word's Behnevis.
 
 Classical Persian verse is quantitative: each verse half (hemistich) follows
 the poem's metre, a fixed sequence of short (``U``) and long (``-``)
@@ -257,7 +257,7 @@ def spoken(reading: str, spelling: str = "") -> str:
     *baʔd*); a short vowel ending the word after a long
     one (*samāʔ*); a short vowel before a long one (*ʔālam*). Otherwise the
     ع stands unwritten between the two (*tabiʔat*, *tāʔat*). This is a rule
-    of thumb about the bank's habit (UPSTREAM A18), not its data. A short
+    of thumb about the bank's habit (UPSTREAM A19), not its data. A short
     vowel that ends the
     reading where the spelling ends in ع is the ع as well (*šamʔ*). The
     bank's *gāe* for گاه is *gāh*, and an *ai* or *ei* before a consonant
@@ -629,8 +629,8 @@ class Weighed:
 class Metre:
     """The metre as a switchable step after the transcriber; off unless used.
 
-    Nothing served calls it: ``serve.annotate`` reads words without it, so
-    the reading screen is unchanged until the project lead decides otherwise.
+    The reading screen calls it through ``serve.annotate`` where a verse
+    text's metre is known, unless ``MURFULU_BEHNEVIS_METRE=off``.
     """
 
     licences: Licences = field(default_factory=Licences)

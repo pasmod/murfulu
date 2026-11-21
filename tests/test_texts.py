@@ -379,7 +379,8 @@ def test_a_text_carries_its_levels_when_the_model_is_on(
 
     monkeypatch.setattr(serve, "loaded", _toy_transcriber)
     on = http.get("/texts/fixture:a:1").json()
-    assert on["behnevis"] == {"sure": serve.SURE, "mid": serve.MID}
+    # The fixture's text has no known metre: none is named, none weighs.
+    assert on["behnevis"] == {"sure": serve.SURE, "mid": serve.MID, "metre": None}
     assert on["units"][1]["lines"][0]["words"][0]["auto"]["latin"] == "Del"
     # The model's one reading puts its vowels on the word as written, the
     # ezafe's kasra kept; the word itself stays plain (2026-11-21).
@@ -574,3 +575,93 @@ def test_only_the_newest_save_for_a_place_is_exported():
         ),
     ]
     assert len(tool.latest(twice)) == 3
+
+
+# -- the poem's metre on the screen (2026-11-21) --------------------------------
+
+
+def _verse(*words: str) -> list[dict[str, Any]]:
+    return [
+        {"kind": "couplet", "lines": [{"words": [{"fa": w, "s": w} for w in words]}]}
+    ]
+
+
+def _metre_transcriber() -> Transcriber:
+    from murfulu.behnevis.choice import Answered, ChoiceModel
+    from murfulu.behnevis.letters import LetterModel
+    from murfulu.behnevis.transcribe import bank_from
+
+    pairs = [("بود", "Bud"), ("بود", "bovad"), ("دل", "Del")]
+    return Transcriber(
+        bank=bank_from(pairs),
+        letters=LetterModel.train(pairs),
+        # The marked corpus prefers bovad; the line, read in فعل (U-), holds Bud.
+        choice=ChoiceModel.train([Answered("بود", "bovad")] * 30),
+        functions={"که": ("ke",)},
+        covered={"بود": (30, 0)},
+    )
+
+
+def test_the_metre_moves_a_verse_half_to_the_reading_it_holds():
+    from murfulu.behnevis import serve
+
+    plain = _verse("که", "بود")
+    serve.annotate(plain, _metre_transcriber())
+    assert plain[0]["lines"][0]["words"][1]["auto"]["latin"] == "bovad"
+
+    weighed = _verse("که", "بود")
+    serve.annotate(weighed, _metre_transcriber(), "فعل")
+    auto = weighed[0]["lines"][0]["words"][1]["auto"]
+    assert auto["latin"] == "Bud"
+    assert auto["level"] == serve.level(auto["confidence"])
+
+    # Prose is not weighed, whatever the text's metre.
+    prose = _verse("که", "بود")
+    prose[0]["kind"] = "prose"
+    serve.annotate(prose, _metre_transcriber(), "فعل")
+    assert prose[0]["lines"][0]["words"][1]["auto"]["latin"] == "bovad"
+
+
+def test_a_reading_without_a_number_still_shows_none_after_the_metre():
+    from murfulu.behnevis import serve
+    from murfulu.behnevis.metre import Metre
+
+    before = [
+        serve.Word("که", "که", "ke", 0.9, "function", (("ke", 0.9),)),
+        serve.Word(
+            "بود", "بود", "Bud", 0.4, "inflected", (("Bud", 0.4), ("bovad", None))
+        ),
+    ]
+    after = serve._weighed(Metre(), before, frozenset({"UU-"}))
+    assert after[1].latin == "bovad"
+    assert dict(after[1].candidates)["bovad"] is None
+    assert dict(after[1].candidates)["Bud"] is not None
+
+
+def test_the_metre_labels_sit_beside_the_model_and_can_be_switched_off(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    import json
+
+    from murfulu.behnevis import serve
+
+    model = tmp_path / "behnevis-v99.json"
+    model.write_text("{}", encoding="utf-8")
+    monkeypatch.setenv(serve.PATH_VARIABLE, str(model))
+    assert serve.metre_path() is None  # no labels: no metre
+    assert serve.metre_of("ganjoor:hafez:2132") is None
+
+    table = tmp_path / "behnevis-metre-v99.json"
+    table.write_text(
+        json.dumps(
+            {"labels": ["مفاعیلن مفاعیلن مفاعیلن مفاعیلن"], "documents": {"a:b:1": 0}}
+        ),
+        encoding="utf-8",
+    )
+    assert serve.metre_path() == table
+    assert serve.metre_of("a:b:1") == "مفاعیلن مفاعیلن مفاعیلن مفاعیلن"
+    assert serve.metre_of("a:b:2") is None
+
+    monkeypatch.setenv(serve.METRE_VARIABLE, "off")
+    assert serve.metre_path() is None
+    assert serve.metre_of("a:b:1") is None
