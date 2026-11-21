@@ -2,6 +2,85 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 (fifth) — a reading decided once for every like place, and a list of the most frequent unsure words
+
+The project lead asked whether the reading screen learns from corrections and
+how to cut the work by hand; picks teach the model only one place at a time
+and only at a rebuild, and the metre took about two words in a hundred out
+of the red. The metre test and the project's planning both named a list of
+the most frequent unsure words as the bigger lever, and the project lead
+said to start it. **Built, measured, not deployed** (FINDINGS 2026-11-21,
+*the most frequent unsure words*; `data/behnevis-unsure-v22.md`).
+
+- **The list** (`tools/measure_unsure_spellings.py`, `behnevis/unsure.py`):
+  every text of the corpus read as the reading screen reads it, the metre
+  on as served, and per spelling the running words it shows red; ranked by
+  those, the top 2,000 kept beside the model as `behnevis-unsure-v22.json`
+  (gitignored: it holds karbon's readings) with their readings, their twelve
+  most frequent neighbours on each side and three example places. The
+  counts are kept too (`behnevis-unsure-tally-v22.pickle`, gitignored), so
+  the report can be written again without reading the corpus.
+- **Three kinds of decision**, by what the bank holds: *a choice among its
+  readings* (several), *its one reading, doubted* (one), *missing* (none).
+  The report splits the second once more: where the editions' marks fit
+  another reading (بود: *bovad*, not the bank's *Bud*), the decision is
+  karbon's too.
+- **A decision** (`behnevis/decided.py`) says a spelling reads so
+  **everywhere**, or wherever it stands **after one word**, or **before one
+  word**. It is a feedback record like a pick (`kind: reading_decided`, the
+  scope in `context`), append-only; the newest for a spelling and scope is in
+  force, and one marked `withdrawn` (with `verdict: unsure`) takes it back.
+  `tools/export_reading_proposals.py --jsonl` passes them whole;
+  `tools/build_behnevis.py` keeps those in force whose reading the bank or
+  the function-word list holds, in the model file (`decided`); the rest go
+  on karbon's list with what they were decided for.
+- **How the model reads one**: wherever a decision applies, its reading comes
+  first, at `decided_confidence` 0.95 — *sure* — with the model's other
+  readings offered after it, without a number. The word's own vowel signs
+  overrule it, and a wider decision they allow then holds. The narrower
+  scope wins; between an *after* and a *before* decision that both apply,
+  the newer. The metre fits the line with the decided reading alone and
+  leaves it as decided.
+- **Where a person decides**: in the reading screen's word panel, «برای
+  کجا؟»: only here (a pick, as before), after the same word, before the same
+  word, everywhere — each with the number of places it reaches; and in a
+  list of its own on the reading screen (`/texts?view=unsure`, linked under
+  the opener), where a row opens the readings, the reach (after or before one
+  of the spelling's twelve most frequent neighbours, with their counts),
+  three lines where the model was unsure with the word underlined, how often
+  one reading fits the editions' marks, and the decisions in force, each of
+  which can be taken back. `GET /texts/unsure` and
+  `GET /texts/unsure/{spelling}` serve the list and the decisions.
+- **Nothing on screen changes before the next build**, and the screens say
+  so. A decision is not the pick of the word it was made from: it is not
+  drawn under that word, and `/texts/marked?kind=proposed` leaves decisions
+  out, so one taken back does not linger there.
+- **For the deploy**: `deploy/server.sh data` sends `behnevis-unsure-v22.json`
+  beside the model when it is built; without it the list says it has not been
+  measured, and the panel still saves.
+
+**Decided here, under the working rule, unconfirmed:**
+
+- *0.95 for a decided reading* is an assumption, not measured (OPEN_QUESTIONS
+  S52).
+- *A decided reading the bank lacks waits for karbon*, as a typed reading
+  does (2026-11-14, *a typed reading goes to karbon*) — even where the
+  editions mark it a thousand times. That halves the lever until karbon
+  takes the readings (S52).
+- *The scopes*: everywhere, after one word, before one word — the two
+  neighbours the model already counts. Not "between the same two words".
+- *The Persian words* of the panel and the list are ours (FOR_THE_LINGUIST L51).
+- *The review of 2026-11-21* (three rounds, Codex): withdrawals are exported
+  with their `unsure` verdict; a decision taken back names the one it takes
+  back (`replaces`) and leaves a newer one for the same reach in force; the
+  list's file never takes the model's own name; a decision the signs rule out
+  gives way to a wider one; the metre fits a decided word with its reading
+  alone and returns it unchanged; the tally counts by the level the screen
+  shows, not the rounded number; karbon's list keeps every reach of a
+  reading; the screens keep the newer of two answers by the store's id.
+  — project lead (start the list, decide once for many places); engineering
+  (the kinds, the scopes, the confidence, how a decision is stored and read)
+
 ## 2026-11-21 (fourth) — the compound page gets the build table, with a build value of its own
 
 The project lead asked for the build screen's score on the compound page,

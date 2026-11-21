@@ -5,6 +5,65 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-21 — the most frequent unsure words: a few thousand spellings hold two thirds of the work
+
+The project lead asked how to cut the work by hand on the reading screen. Every
+text of corpus v22 was read as the screen reads it — the served model, the
+text's own signs, و by the verse rule, the poem's metre on — and each word
+the screen shows red (below 0.7, or no reading) counted under its spelling
+(`tools/measure_unsure_spellings.py v22`, `data/behnevis-unsure-v22.md`). **A
+first, rough measurement, not a result**; its limits are in the report.
+
+**How much is left to a person.** 35.6 % (9,101,335) of the 25,532,059
+running words. The metre measurement's sample (verse with a known metre, one
+poem in 50) had 33.2 %; the whole corpus, prose and poems without a label
+included, is a little higher.
+
+**How few spellings hold it.** Ranked by the running words they leave to a
+person:
+
+| the most frequent | hold of what is left to a person | of all running words |
+|---:|---:|---:|
+| 100 | 27.8 % | 9.9 % |
+| 500 | 48.8 % | 17.4 % |
+| 1,000 | 58.7 % | 20.9 % |
+| 2,000 | 68.0 % | 24.2 % |
+| 5,000 | 78.7 % | 28.1 % |
+
+**What deciding them would save**, if each listed spelling's unsure places
+were decided (an upper bound: one decision, or a few by neighbour, is taken
+to fit every place): from 35.6 % left to a person to 28.2 % (the top 100),
+25.0 % (500) and 23.4 % (2,000) at the model's next build, counting the
+choices among the bank's readings and the bank's one reading confirmed; and
+to 25.7 %, 18.3 % and 11.4 % once karbon also holds the readings the rest
+need.
+
+**Why the second number waits on karbon.** Two kinds of spelling need a
+reading the bank does not hold. About four in ten of the listed unsure places
+are spellings with no reading at all (most of them inflected forms the stems
+build — کنم، نباشد — the rest headwords: الله، نور، شمع). And 45
+spellings with one bank reading are marked by the editions for another one:
+بود is *Bud* in the bank, and 1,463 of its 1,464 marked places fit *bovad*;
+نبود, رود, شود, برد, آرد alike — B9's verb forms read as nouns. A decision for
+those goes on karbon's list (DECISIONS 2026-11-14) and changes nothing on
+screen until the bank holds the reading (OPEN_QUESTIONS S52, UPSTREAM B12).
+
+**Would one reading per spelling do?** On the editions' marked places, the
+one reading that fits most often fits about four in five for a choice among
+the bank's readings, nine in ten where the bank holds one or none. Editions
+mark the hard places, so this is pessimistic; but it says a decision
+*everywhere* will read some places wrong, and the screen offers *after* or
+*before one word* where the share is low. The largest single spelling, است
+(220,000 unsure places), has only five marked places to judge by.
+
+**What it means for murfulu.** Deciding is worth more than any further model
+step measured so far: the metre took about two words in a hundred out of the
+red; the 2,000 most frequent spellings, decided, would take up to twelve
+at the next build and twenty-four once karbon holds what they need. Built the
+same day (DECISIONS 2026-11-21 *fifth*).
+
+---
+
 ## 2026-11-21 — a build value for compounds: per second half, on the dictionary's own compounds
 
 The project lead asked for the build screen's score on the compound page, and

@@ -3027,3 +3027,35 @@ where it needs *ammā*. Others are wrong letter guesses (مشکل *moškl*, خص
    (*jaˈfari*), or as the bank mostly does now, with a vowel letter
    (*jaafari*)? The metre step reads the vowel letter as the consonant by a
    rule of ours, unconfirmed.
+
+## L51. Deciding a reading once for every like place: the words, and which words may be decided everywhere
+
+Built 2026-11-21 (DECISIONS 2026-11-21 *fifth*); **not in the app's
+questions**, not blocking.
+
+**What it is.** On the reading screen a reader may now say that a spelling
+reads one way **everywhere**, or wherever it follows one word, or wherever it
+precedes one; at the model's next build every such place is read so. A list
+of the spellings the screen most often leaves to a person goes with it (the
+most frequent: است، بود، سر، خود، کرد، کند، روی، شود).
+
+### The questions
+
+1. **The words on screen**, ours until ruled on: «پرتکرارترین واژه‌های
+   نامطمئن»، «برای کجا؟»، «فقط همین‌جا»، «هر جا پس از «…»»، «هر جا پیش از
+   «…»»، «هر جا که «…» آمده»، «همه‌جا»، «چند خوانش در بانک»، «یک خوانش در
+   بانک»، «در بانک نیست»، «تصمیم گرفته شده»، «پس گرفتن».
+2. **Which frequent words should never be decided everywhere?** A homograph
+   such as است (*ast*, the verb, and *Est* in the bank), سر, گل or کرد reads
+   differently by meaning; the screen offers *after* or *before one word*
+   for those, and shows how often one reading fits the editions' marks. Is
+   there a short list of words a person should always decide by neighbour?
+3. **Verb forms the bank reads as nouns.** بود is *Bud* in the bank, and the
+   editions mark it *bovad* (or, read today, *bud*); شود *Ševed*, رود *Rud*,
+   برد *Bard*. Which reading should a decision give them — the classical
+   *bovad*, *šavad*, or the modern *bud*, *šavad*? (Close to L50.)
+
+**What changes with each answer**: (1) the wording only; (2) a list of
+spellings the screen would not offer «همه‌جا» for; (3) which readings go to
+karbon for the verb forms, and which the model reads them as.
+

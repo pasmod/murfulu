@@ -623,6 +623,36 @@ commonest words of the poetry, exists only as a variant of the hedgehog. A
 screen that picks among a spelling's entries cannot offer a sense that has
 none.
 
+### B12. The readings the reading screen waits for most often, ranked by the running words they would settle
+
+Measured 2026-11-21 on corpus v22, `lexicon-20261111` (karbon 1.3.2) and the
+served model with the metre on (`tools/measure_unsure_spellings.py v22`,
+`data/behnevis-unsure-v22.md`). Every text read as the reading screen reads
+it; a word is *left to a person* below 0.7. Rough, with its limits in the
+report. **Two lists for karbon come out of it**, both ranked by how many
+running words a reading would settle:
+
+1. **Spellings with no reading in the bank**, among the 2,000 that leave the
+   most to a person: about 1,400 spellings and some 2.6 million unsure
+   running words (a tenth of the corpus). Most are inflected forms the stems
+   already build (کنم *konam*, کنی *koni*, نباشد *nabāšad*) — B9's design
+   question — and the rest headwords any dictionary has (الله، نور، شمع،
+   علم، حسن، عاشق، شیخ).
+2. **Spellings whose one bank reading the editions' marks contradict**, 45
+   among the 2,000, some 0.46 million unsure running words: verb forms the
+   bank holds only as nouns, as B9 found — بود *Bud* where 1,463 of 1,464
+   marked places fit *bovad*; نبود *Nabud* (*nabovad*, 285 of 285); رود *Rud*
+   (*ravad*); شود *Ševed* (*šavad*); برد *Bard* (*borad*); آرد *Ārd*
+   (*ārad*).
+
+**How it goes upstream.** Readers' decisions on the reading screen, for a
+reading the bank lacks, already go on karbon's list
+(`tools/export_reading_proposals.py`), now with what each was decided for
+(everywhere, or after or before one word). The ranked list itself is the
+file beside the model (`behnevis-unsure-v22.json`, not in git: it holds
+karbon's readings) and can be sent with the next batch. Not opened; on the
+project lead's word.
+
 ## C — built here, belongs in karbon eventually
 
 ### C1. The nine stem rules exist in both repositories

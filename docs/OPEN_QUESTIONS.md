@@ -5,6 +5,29 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-21 (deciding once for every like place)
+
+### S52. Three choices made under the working rule for decisions, and the deploy
+
+Built 2026-11-21 (DECISIONS 2026-11-21 *fifth*), not deployed. The project
+lead's calls:
+
+1. **Deploy?** The list, the panel's «برای کجا؟» and the export and build
+   that learn decisions. Nothing on screen changes until a decision is made
+   and the model is rebuilt with it.
+2. **Should a decided reading the bank lacks act before karbon takes it?**
+   Today it waits, as a typed reading does (2026-11-14). Of the unsure places
+   the 2,000 most frequent spellings hold, about four in ten are words the
+   bank has no reading for, and some of the largest single ones (بود: the
+   editions mark *bovad* 1,463 times in 1,464, the bank holds *Bud*) are
+   readings the bank lacks: until karbon takes them, deciding them saves
+   nothing on screen. `rules/lexicon_overrides.yaml` could hold such readings
+   here meanwhile, marked unconfirmed — the project lead's call, since it
+   reverses a decision of 2026-11-14.
+3. **0.95 for a decided reading** is set so the screen stops asking; it is not
+   measured. The linguist's timed sample (S47) can measure how often a
+   decision *everywhere* is wrong at a place.
+
 ## Opened 2026-11-21 (the metre)
 
 ### S51. Serve the poem's metre on the reading screen?

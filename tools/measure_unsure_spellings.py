@@ -235,7 +235,7 @@ def report(  # noqa: PLR0913, PLR0915 (one report, many parts)
         "",
         "The kind columns are shares of all running words. For comparison, all",
         f"{len(tally.ranked()):,} spellings with an unsure place hold {red:,}.",
-        f"Of the {len(missing):,} listed spellings *missing from the word bank*, "
+        f"Of the {len(missing):,} listed spellings *missing from the word bank*,",
         f"{sources['inflected']:,} unsure places are inflected forms the bank's",
         f"stems build readings for (*konam*, *nabāšad*) and {sources['letters']:,}",
         "are guesses from the letters (الله، نور، شمع): words karbon lacks.",
