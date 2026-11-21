@@ -2,7 +2,7 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
-## 2026-11-21 — the compound page: one entry at a time, the best-evidenced first
+## 2026-11-21 (third) — the compound page: one entry at a time, the best-evidenced first
 
 The project lead sent the compound page for دل headed «دل Dol» (the local
 copy opened on *Dal*, a tree in a dialect) with دلبر and دلدار under it, both

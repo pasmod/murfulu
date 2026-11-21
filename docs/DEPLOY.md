@@ -635,3 +635,30 @@ backup of step 0.
 
 The pages were viewed on the server through the web container directly; the
 site password was not used.
+
+## 21. The compound page opens on the best-evidenced entry, one entry at a time — run 2026-11-21
+
+The compound page for a spelling with several dictionary entries (دل: the
+heart, a tree, an ailment, an adjective) opens on the entry with the most
+confirmed words and shows one entry at a time with a switch; a second reading
+that is another entry's own is no longer built under the borrower (DECISIONS
+2026-11-21, *the compound page*). On the project lead's word («Yes, deploy
+now»). Run from the worktree of `c61d77f` (on `bb91a0f`) with the host files
+copied there (as §12) and the main checkout's untracked `uv.lock`, so nothing
+else on the server changed. **A dry run of the copy by content came first**,
+because the server had been running the score rework before it was
+committed: from the branch's first base (`d3cb586`) it would have taken that
+rework off the site. After the rebase, the dry run showed only this change's
+twelve files differing. No migration, no data. The rollback is `deploy` from
+`bb91a0f`.
+
+| step | command | what it did |
+|---|---|---|
+| 1 | `rsync -azcn --itemize-changes …` (the `deploy` copy, dry, by content) | 12 files: the compound route, `compounding.py`, the compound screen, their tests, five docs |
+| 2 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy (1 min 17 s) |
+| 3 | `deploy/server.sh check` | all checks passed, corpus v22; the site answers 401 logged out |
+| 4 | inside the api container | `/compound دل`: Del (24 confirmed), Dal, Dol, dall (0 each), 4,685 built each, not 9,370; جنگ opens on Jang; `Dal` asked by its Latin builds 4,685 |
+| 5 | the page, through an SSH tunnel to the web container | at 375 and 1280 px: «دل Del» with the switch and the sentence above it, دِلبَر *delbar* the first row |
+
+The page was viewed on the server through the web container directly; the
+site password was not used.
