@@ -149,6 +149,8 @@ WORDS = [
     },
     # A spelling the bank does not read: counted, no reading.
     {"id": "راه:", "spelling_fa": "راه", "latin": None, "total_count": 3},
+    # A spelling the bank reads one way only.
+    {"id": "نثر:nasr", "spelling_fa": "نثر", "latin": "nasr"},
 ]
 
 
@@ -220,6 +222,34 @@ def test_a_text_is_served_with_its_place_and_its_words(http: TestClient):
     )
     assert body["units"][1]["lines"][0]["words"][0] == {"fa": "دلِ", "s": "دل"}
     assert len(body["words"]["دل"]["readings"]) == 3
+
+
+def test_a_word_read_one_way_is_served_with_its_vowels_and_stays_plain(
+    http: TestClient,
+):
+    """Marks for display only, and only where one reading is shown (2026-11-21)."""
+    body = http.get("/texts/fixture:a:1").json()
+    prose = body["units"][2]["lines"][0]["words"]
+    assert prose[0] == {"fa": "نثر", "s": "نثر", "fa_marked": "نَثر"}
+    # Several readings: marking one would choose it. No reading: nothing to
+    # mark from. Either way the word stays as written.
+    first, second = (line["words"] for line in body["units"][1]["lines"])
+    assert first[0] == {"fa": "دلِ", "s": "دل"}
+    assert second[0] == {"fa": "راه", "s": "راه"}
+    # The spelling stays the key of the readings.
+    assert "نثر" in body["words"] and "نَثر" not in body["words"]
+
+
+def test_a_word_written_with_its_own_marks_keeps_them():
+    from murfulu.behnevis.vowels import vocalise_written
+
+    # A mark inside the word is the source's: never replaced, never added to.
+    assert vocalise_written("مَرد", "mord") == "مَرد"
+    # The ezafe's kasra or hamza after the last letter stays where it was.
+    assert vocalise_written("دلِ", "Del") == "دِلِ"
+    assert vocalise_written("مرد", "mard") == "مَرد"
+    # Nothing to add: the word as written, the very same string.
+    assert vocalise_written("آرام", "ārām") == "آرام"
 
 
 def test_an_unknown_text_is_a_404(http: TestClient):
@@ -351,6 +381,11 @@ def test_a_text_carries_its_levels_when_the_model_is_on(
     on = http.get("/texts/fixture:a:1").json()
     assert on["behnevis"] == {"sure": serve.SURE, "mid": serve.MID}
     assert on["units"][1]["lines"][0]["words"][0]["auto"]["latin"] == "Del"
+    # The model's one reading puts its vowels on the word as written, the
+    # ezafe's kasra kept; the word itself stays plain (2026-11-21).
+    del_, ma, aram = on["units"][1]["lines"][0]["words"]
+    assert (del_["fa"], del_["auto"]["fa_marked"]) == ("دلِ", "دِلِ")
+    assert "fa_marked" not in ma["auto"] and "fa_marked" not in aram["auto"]
     # The readings a pick of which the model learns: the bank's, here.
     auto = on["units"][1]["lines"][0]["words"][0]["auto"]
     assert sorted(auto["known"]) == ["Dal", "Del"]
@@ -399,6 +434,9 @@ def test_a_proposed_reading_is_listed_apart_from_the_marks(http: TestClient):
     assert (row["latin"], row["in_bank"], row["model_latin"]) == ("ārad", False, "Ārd")
     assert (row["unit"], row["line"], row["word"]) == (1, 0, 2)
     assert (row["before"], row["after"]) == ("از", None)
+    # The proposed reading's vowels, beside the plain spelling and word.
+    assert (row["spelling_fa"], row["spelling_fa_marked"]) == ("آرد", "آرَد")
+    assert (row["written"], row["written_marked"]) == ("آرد", "آرَد")
     # … and only for the units of the window it shows.
     window = {"kind": "proposed", "document_id": "fixture:a:1"}
     assert (

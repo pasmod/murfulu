@@ -354,7 +354,9 @@ export function placeSaved(text: Text, rows: Marked[]): Map<string, Saved> {
     if (!unit || !row.latin) continue;
     const at = placeOf(unit, row);
     if (at !== null && !placed.has(at)) {
-      placed.set(at, { latin: row.latin, inBank: row.in_bank === true, id: row.id });
+      const pick: Saved = { latin: row.latin, inBank: row.in_bank === true, id: row.id };
+      if (row.written_marked) pick.marked = row.written_marked;
+      placed.set(at, pick);
     }
   }
   return placed;

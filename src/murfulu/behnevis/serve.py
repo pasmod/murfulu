@@ -20,6 +20,7 @@ from typing import Any
 
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.transcribe import Transcriber, bank_from, key
+from murfulu.behnevis.vowels import vocalise_written
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
 
@@ -132,3 +133,8 @@ def annotate(units: list[dict[str, Any]], transcriber: Transcriber) -> None:
                         )
                     ],
                 }
+                # The word with this reading's short vowels, for display only,
+                # and only where it adds a mark (DECISIONS 2026-11-21).
+                marked = vocalise_written(word["fa"], read.latin)
+                if marked != word["fa"]:
+                    word["auto"]["fa_marked"] = marked

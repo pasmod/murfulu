@@ -106,3 +106,23 @@ class TestTheReviewOf20261121:
 
     def test_the_tatweel_is_not_a_boundary(self) -> None:
         assert vocalise("کـتاب", "ketāb") == "کِـتاب"
+
+
+def test_only_marks_every_shown_pronunciation_agrees_on() -> None:
+    """The marks are the ones every shown pronunciation agrees on.
+
+    برنا is *barnā* or *bornā*: the ب takes nothing, not a zabar that
+    contradicts the second (the review of 2026-11-21).
+    """
+    assert vocalise("برنا", "barnā") == "بَرنا"
+    assert vocalise("برنا", "barnā", ("bornā",)) == "برنا"
+
+
+def test_a_search_hit_is_marked_with_its_variants_in_mind() -> None:
+    from murfulu.api.search import _marked
+
+    hit = _marked(
+        {"spelling_fa": "برنا", "latin": "barnā", "latin_variants": ["bornā"]}
+    )
+    assert hit["spelling_fa_marked"] == "برنا"
+    assert hit["spelling_fa"] == "برنا"

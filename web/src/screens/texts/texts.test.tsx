@@ -16,6 +16,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Marked, Text, TextFound } from "../../api/texts";
 import { renderApp } from "../../test/render";
+import { markedFor } from "./levels";
 import { newest, placeSaved } from "./Reader";
 
 const TEXT: Text = {
@@ -151,6 +152,7 @@ const AUTO: Text = {
               s: "دل",
               auto: {
                 latin: "Del",
+                fa_marked: "دِلِ",
                 confidence: 0.96,
                 level: "sure",
                 source: "choice",
@@ -207,6 +209,43 @@ const AUTO: Text = {
 /** Readings saved for this text before the visit, newest first. */
 let saved: Marked[] = [];
 
+/** The review list of readings marked wrong. */
+let review: Marked[] = [MARKED];
+
+/**
+ * A text with the automatic Behnevis off, where the bank reads نثر one way
+ * only and دل three ways: only نثر is given its short vowels (2026-11-21).
+ */
+const VOWELS: Text = {
+  ...TEXT,
+  document_id: "fixture:c:1",
+  units: [
+    {
+      index: 0,
+      number: 1,
+      kind: "prose",
+      lines: [
+        {
+          position: "prose",
+          words: [
+            { fa: "نثر", s: "نثر", fa_marked: "نَثر" },
+            { fa: "دل", s: "دل" },
+          ],
+        },
+      ],
+    },
+  ],
+  words: {
+    ...TEXT.words,
+    نثر: {
+      readings: [{ id: "نثر:nasr", latin: "nasr", latin_variants: [], groups: [], definition_fa: null }],
+      total_count: 30,
+      doc_count: 20,
+      function_word: null,
+    },
+  },
+};
+
 function answer(url: string): unknown {
   if (url.includes("/texts/marked") && url.includes("kind=proposed")) {
     return { total: saved.length, offset: 0, returned: saved.length, marked: saved };
@@ -214,8 +253,11 @@ function answer(url: string): unknown {
   if (url.includes("/texts/marked") && url.includes("spelling=")) {
     return { total: 1, offset: 0, returned: 1, marked: [EARLIER] };
   }
-  if (url.includes("/texts/marked")) return { total: 1, offset: 0, returned: 1, marked: [MARKED] };
+  if (url.includes("/texts/marked")) {
+    return { total: review.length, offset: 0, returned: review.length, marked: review };
+  }
   if (url.includes("fixture%3Ab%3A1") || url.includes("fixture:b:1")) return AUTO;
+  if (url.includes("fixture%3Ac%3A1") || url.includes("fixture:c:1")) return VOWELS;
   if (url.includes("/texts/")) return TEXT;
   return FOUND;
 }
@@ -223,6 +265,7 @@ function answer(url: string): unknown {
 beforeEach(() => {
   posted = [];
   saved = [];
+  review = [MARKED];
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url: string, init?: RequestInit) => {
@@ -575,6 +618,93 @@ describe("the reading screen", () => {
     await userEvent.keyboard("{ArrowDown}");
     expect(within(here).getByRole("radio", { name: /Dal/ })).toBeChecked();
     expect(within(here).getByRole("button", { name: "ثبت «Dal»" })).toBeEnabled();
+  });
+});
+
+describe("the short vowels on the reading screen", () => {
+  it("marks a word the bank reads one way, and leaves a word of several readings plain", async () => {
+    renderApp(`/texts?text=fixture%3Ac%3A1&unit=0&word=${encodeURIComponent("نثر")}`);
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    // The label, the keys and the sought word stay on the plain spelling.
+    const one = within(text).getByRole("button", { name: /^نثر: nasr$/ });
+    expect(one).toHaveTextContent("نَثر");
+    expect(one).toHaveAttribute("data-sought", "true");
+    const several = within(text).getByRole("button", { name: /^دل:/ });
+    expect(several).toHaveAttribute("data-state", "several");
+    expect(several).toHaveTextContent(/^دل/);
+  });
+
+  it("marks a word with the model's one reading", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    const word = within(text).getByRole("button", { name: /^دلِ: Del، مطمئن/ });
+    expect(word).toHaveTextContent(/^دِلِ/);
+    // No marks sent: as written.
+    expect(within(text).getByRole("button", { name: /^رفتند:/ })).toHaveTextContent(/^رفتند/);
+  });
+
+  it("never shows the model's vowels under another reading picked here", async () => {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
+    const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
+    await userEvent.click(within(here).getByRole("radio", { name: /Dal/ }));
+    await userEvent.click(within(here).getByRole("button", { name: "ثبت «Dal»" }));
+    const word = await within(text).findByRole("button", { name: "دلِ: Dal، ثبت‌شده" });
+    expect(word).toHaveTextContent(/^دلِ/);
+  });
+
+  it("marks a reading saved before the visit with its own vowels", async () => {
+    saved = [
+      {
+        ...MARKED,
+        id: 20,
+        target_id: "دل:Dal",
+        latin: "Dal",
+        written: "دلِ",
+        written_marked: "دَلِ",
+        unit: 0,
+        line: 0,
+        word: 0,
+        in_bank: true,
+      },
+    ];
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    const word = await within(text).findByRole("button", { name: "دلِ: Dal، ثبت‌شده" });
+    expect(word).toHaveTextContent(/^دَلِ/);
+  });
+
+  it("takes the vowels of the reading shown, and none it cannot know", () => {
+    const auto = AUTO.units[0]!.lines[0]!.words![0]!.auto!;
+    expect(markedFor(auto, undefined)).toBe("دِلِ");
+    expect(markedFor(auto, { latin: "Del", inBank: true, id: 1 })).toBe("دِلِ");
+    expect(markedFor(auto, { latin: "Dal", inBank: true, id: 1 })).toBeUndefined();
+    expect(markedFor(auto, { latin: "Dal", inBank: true, id: 1, marked: "دَلِ" })).toBe("دَلِ");
+  });
+
+  it("shows the review list's words with their vowels, or as written", async () => {
+    review = [
+      { ...MARKED, written_marked: "دُلِ", spelling_fa_marked: "دُل" },
+      {
+        ...MARKED,
+        id: 6,
+        target_id: "ما:mo",
+        spelling_fa: "ما",
+        latin: "mo",
+        written: null,
+        note: null,
+      },
+    ];
+    renderApp("/texts");
+    const marks = await screen.findByRole("region", { name: "خوانش‌هایی که علامتِ «نادرست» خورده‌اند" });
+    expect(within(marks).getByText("دُلِ")).toBeInTheDocument();
+    expect(within(marks).getByText("ما")).toBeInTheDocument();
+    // The way back to the line goes on the plain spelling.
+    expect(within(marks).getAllByRole("link", { name: /همان سطر/ })[0]).toHaveAttribute(
+      "href",
+      "/texts?text=fixture%3Aa%3A1&unit=0&word=%D8%AF%D9%84",
+    );
   });
 });
 

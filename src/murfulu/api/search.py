@@ -18,6 +18,7 @@ from typing import Any
 from elasticsearch import ApiError, NotFoundError, TransportError
 from fastapi import APIRouter, HTTPException, Query
 
+from murfulu.behnevis.vowels import vocalise
 from murfulu.search import evidence as all_evidence
 from murfulu.search.citations import find as find_citations
 from murfulu.search.facets import aggregations
@@ -45,7 +46,30 @@ def _client() -> Any:
 
 
 def _hits(response: dict[str, Any]) -> list[dict[str, Any]]:
-    return [hit["_source"] for hit in response["hits"]["hits"]]
+    return [_marked(hit["_source"]) for hit in response["hits"]["hits"]]
+
+
+def _marked(source: dict[str, Any]) -> dict[str, Any]:
+    """A hit with its Persian spelling marked by its reading, beside the plain one.
+
+    For display only (DECISIONS 2026-11-21): ``spelling_fa`` and ``form_fa``
+    stay as they are, and every search, id and link is made from them. A
+    spelling with no reading — the corpus has the letters, the dictionary
+    nothing — gets no marked form.
+    """
+    shown = dict(source)
+    for plain, latin, marked in (
+        ("spelling_fa", "latin", "spelling_fa_marked"),
+        ("form_fa", "form_latin", "form_fa_marked"),
+    ):
+        if shown.get(plain) and shown.get(latin):
+            # Only the marks every pronunciation shown beside it agrees on:
+            # برنا is *barnā* or *bornā* (the review of 2026-11-21).
+            variants = (
+                tuple(shown.get("latin_variants") or ()) if latin == "latin" else ()
+            )
+            shown[marked] = vocalise(shown[plain], shown[latin], variants)
+    return shown
 
 
 def _split(hits: list[dict[str, Any]], affix: str | None) -> dict[str, Any]:
@@ -144,7 +168,7 @@ def word(
     try:
         client = _client()
         found = client.get(index=index, id=word_id)
-        source = dict(found["_source"])
+        source = _marked(found["_source"])
         spelling = source.get("spelling_fa") or source.get("form_fa")
         siblings = _readings_of(client, index, spelling) if spelling else []
         quoted = (

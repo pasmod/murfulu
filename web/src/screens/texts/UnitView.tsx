@@ -15,7 +15,7 @@ import type { AutoReading, TextUnit, TextWord, WordKnown } from "../../api/texts
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { KIND } from "./kinds";
-import { LEVEL_FA, type Saved, percent } from "./levels";
+import { LEVEL_FA, type Saved, markedFor, percent } from "./levels";
 import styles from "./Reader.module.css";
 
 export interface Chosen {
@@ -165,7 +165,9 @@ function WordButton({
       onClick={() => onPress(open)}
     >
       <span className={styles.fa}>
-        {word.fa}
+        {/* The vowels of the bank's one reading, where it has only one; the
+            plain word stays in the label and the keys. */}
+        {word.fa_marked ?? word.fa}
         {word.after ? <span className={styles.after}>{word.after}</span> : null}
       </span>
       <span className={styles.latins}>
@@ -227,7 +229,7 @@ function AutoWord({
       onClick={() => onPress(open)}
     >
       <span className={styles.fa}>
-        {word.fa}
+        {markedFor(auto, mine) ?? word.fa}
         {word.after ? <span className={styles.after}>{word.after}</span> : null}
       </span>
       <span className={styles.latins}>
@@ -245,4 +247,3 @@ function AutoWord({
     </button>
   );
 }
-

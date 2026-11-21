@@ -490,6 +490,87 @@ def test_the_total_is_counted_exactly(
     assert body["total"] == 222_859
 
 
+_MARD = {"id": "مرد:mard", "spelling_fa": "مرد", "latin": "mard"}
+_MORD = {"id": "مرد:mord", "spelling_fa": "مرد", "latin": "mord"}
+#: The letters with no reading: the corpus has them, the dictionary nothing.
+_UNREAD = {"id": "مرد:", "spelling_fa": "مرد", "latin": None}
+
+
+def test_a_search_hit_is_served_with_its_vowels_beside_the_plain_spelling(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+):
+    """Display only (2026-11-21): the plain spelling is what is searched and linked."""
+    from murfulu.api import search as route
+
+    class _Client:
+        def search(self, **kwargs: object) -> dict[str, object]:
+            hits = [{"_source": dict(one)} for one in (_MARD, _MORD, _UNREAD)]
+            return {"hits": {"total": {"value": 3}, "hits": hits}}
+
+    monkeypatch.setattr(route, "_client", lambda: _Client())
+    body = client.get("/search", params={"q": "مرد"}).json()
+    mard, mord, unread = body["string_match_only"]
+    assert (mard["spelling_fa"], mard["spelling_fa_marked"]) == ("مرد", "مَرد")
+    assert (mord["spelling_fa"], mord["spelling_fa_marked"]) == ("مرد", "مُرد")
+    assert mard["id"] == "مرد:mard"
+    assert "spelling_fa_marked" not in unread
+
+
+def test_a_word_and_its_other_readings_are_served_with_their_vowels(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+):
+    from murfulu.api import search as route
+
+    asked: list[dict[str, object]] = []
+
+    class _Client:
+        def get(self, index: str, id: str) -> dict[str, object]:
+            return {"_source": dict(_MARD)}
+
+        def search(self, **kwargs: object) -> dict[str, object]:
+            asked.append(kwargs)
+            hits = [{"_source": dict(one)} for one in (_MARD, _MORD)]
+            return {"hits": {"total": {"value": 2}, "hits": hits}}
+
+    monkeypatch.setattr(route, "_client", lambda: _Client())
+    body = client.get(
+        "/word/مرد:mard", params={"index": "word_types", "citations": 0}
+    ).json()
+    assert (body["word"]["spelling_fa"], body["word"]["spelling_fa_marked"]) == (
+        "مرد",
+        "مَرد",
+    )
+    assert [one["spelling_fa_marked"] for one in body["readings"]] == ["مَرد", "مُرد"]
+    # The other readings are asked for by the plain spelling.
+    assert asked[0]["query"] == {"term": {"spelling_fa": "مرد"}}
+
+
+def test_a_derivation_is_served_with_its_vowels_beside_the_plain_form(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+):
+    from murfulu.api import search as route
+
+    stored = {"id": "رفتار:Raftār", "form_fa": "رفتار", "form_latin": "Raftār"}
+
+    class _Client:
+        def get(self, index: str, id: str) -> dict[str, object]:
+            return {"_source": dict(stored)}
+
+        def search(self, **kwargs: object) -> dict[str, object]:
+            return {"hits": {"total": {"value": 1}, "hits": [{"_source": stored}]}}
+
+    monkeypatch.setattr(route, "_client", lambda: _Client())
+    body = client.get(
+        "/word/رفتار:Raftār", params={"index": "derivations", "citations": 0}
+    ).json()
+    assert (body["word"]["form_fa"], body["word"]["form_fa_marked"]) == (
+        "رفتار",
+        "رَفتار",
+    )
+    # The stored source itself is never changed.
+    assert "form_fa_marked" not in stored
+
+
 def test_the_corpus_centuries_are_the_bounds_the_century_filter_reads(
     client: TestClient, monkeypatch: pytest.MonkeyPatch
 ):

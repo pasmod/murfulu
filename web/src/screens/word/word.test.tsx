@@ -112,6 +112,36 @@ describe("the word screen", () => {
   });
 });
 
+describe("the short vowels", () => {
+  it("are shown on the spelling when the API sends them, and nothing else changes", async () => {
+    vi.stubGlobal(
+      "fetch",
+      answerWith({
+        ...DETAIL,
+        word: { ...DETAIL.word, spelling_fa_marked: "رَوشَنا" },
+        citations: [{ ...DETAIL.citations[0]!, unit: 4 }],
+      }),
+    );
+    renderApp(ROUTE);
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "رَوشَنا" }),
+    ).toBeInTheDocument();
+    // The line it is quoted from goes on the plain spelling.
+    expect(screen.getByRole("link", { name: "در متن ←" })).toHaveAttribute(
+      "href",
+      `/texts?text=ganjoor%3Aferdousi%3A1&unit=4&word=${encodeURIComponent("روشنا")}`,
+    );
+    expect(document.title).toBe("روشنا — مورفولو");
+  });
+
+  it("fall back to the plain spelling when the API sends none", async () => {
+    renderApp(ROUTE);
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "روشنا" }),
+    ).toBeInTheDocument();
+  });
+});
+
 describe("the dispersion chart", () => {
   it("says how much of the evidence it cannot show", async () => {
     // 22 occurrences, 2 of them dated. A chart drawn over 2 and presented as

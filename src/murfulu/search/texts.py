@@ -39,6 +39,7 @@ from typing import Any
 
 from elasticsearch import Elasticsearch
 
+from murfulu.behnevis.vowels import vocalise_written
 from murfulu.corpus.wordtypes import _FOLD, _MARKS, _WORD
 from murfulu.search import harakat
 
@@ -247,6 +248,29 @@ def rule_out(units: list[dict[str, Any]], words: dict[str, dict[str, Any]]) -> N
                     word["against"] = ruled
 
 
+def mark_vowels(units: list[dict[str, Any]], words: dict[str, dict[str, Any]]) -> None:
+    """Give each word the bank reads only one way its short vowels, for display.
+
+    Sets ``fa_marked`` on the word's dict, and only where it adds a mark: a
+    word with several readings stays as written, since marking it would choose
+    one (the project lead's decision of 2026-11-21: marks only where one
+    reading is shown), and so does a word the source wrote with marks of its
+    own. ``fa`` stays as written; the spelling ``s`` is still the key.
+    """
+    for unit in units:
+        for line in unit.get("lines") or []:
+            for word in line.get("words") or []:
+                readings = words.get(word.get("s") or "", {}).get("readings") or []
+                if len(readings) != 1:
+                    continue
+                one = readings[0]
+                marked = vocalise_written(
+                    word["fa"], one["latin"], tuple(one.get("latin_variants") or ())
+                )
+                if marked != word["fa"]:
+                    word["fa_marked"] = marked
+
+
 def _reading(source: dict[str, Any], labels: dict[str, str]) -> dict[str, Any]:
     return {
         "id": source.get("id"),
@@ -379,6 +403,7 @@ def read(
     units, spellings, total = lay_out(source, start, limit)
     words, snapshot = look_up(client, spellings, labels)
     rule_out(units, words)
+    mark_vowels(units, words)
     return {
         "document_id": source.get("document_id", document_id),
         "source_id": source.get("source_id"),

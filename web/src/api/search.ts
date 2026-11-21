@@ -11,6 +11,12 @@ import { get } from "./client";
 export interface WordType {
   id: string;
   spelling_fa: string;
+  /**
+   * The spelling with the short vowels of this reading, for display only
+   * (2026-11-21); searches, ids and links use `spelling_fa`. Absent where
+   * there is no reading.
+   */
+  spelling_fa_marked?: string;
   latin: string | null;
   /**
    * Every other pronunciation the dictionary lists for this reading. برنا is

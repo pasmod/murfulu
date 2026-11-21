@@ -214,6 +214,25 @@ describe("what a hit shows", () => {
     const link = await screen.findByRole("link", { name: /تنکنا/ });
     expect(link).toHaveAttribute("href", expect.stringContaining("/word/"));
   });
+
+  it("shows the short vowels where the API sends them, and links on the plain spelling", async () => {
+    vi.stubGlobal(
+      "fetch",
+      answerWith({
+        ...ANSWER,
+        formed_with_affix: [
+          word("تنکنا:Tonoknā", "تنکنا", "Tonoknā", { spelling_fa_marked: "تُنُکنا" }),
+        ],
+      }),
+    );
+    renderApp("/?q=*n%C4%81");
+    expect(await screen.findByText("تُنُکنا")).toBeInTheDocument();
+    expect(screen.queryByText("تنکنا")).not.toBeInTheDocument();
+    const link = screen.getByRole("link", { name: /تُنُکنا/ });
+    expect(link).toHaveAttribute("href", `/word/${encodeURIComponent("تنکنا:Tonoknā")}`);
+    // A hit the API sent no marks for stays as it is written.
+    expect(screen.getByText("فنا")).toBeInTheDocument();
+  });
 });
 
 describe("the facets", () => {

@@ -173,7 +173,9 @@ def _as_json(reading: Reading, mapping: bank.BankMapping) -> dict[str, Any]:
     return {
         "spelling_fa": reading.spelling_fa,
         # For display only; the bank is searched on the plain spelling.
-        "spelling_fa_marked": vocalise(reading.spelling_fa, reading.latin),
+        "spelling_fa_marked": vocalise(
+            reading.spelling_fa, reading.latin, tuple(reading.latin_variants)
+        ),
         "latin": reading.latin,
         "latin_variants": list(reading.latin_variants),
         "groups": groups,

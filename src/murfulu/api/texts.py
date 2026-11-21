@@ -30,6 +30,7 @@ from sqlalchemy import func, select
 
 from murfulu.api.auth import Caller, Store
 from murfulu.behnevis import serve as behnevis
+from murfulu.behnevis.vowels import vocalise, vocalise_written
 from murfulu.corpus import report
 from murfulu.db.models.review import ExpertFeedback
 from murfulu.lexicon import bank
@@ -72,12 +73,22 @@ def find(
 def _marked(row: ExpertFeedback) -> dict[str, Any]:
     context = row.context or {}
     spelling, _, latin = (row.target_id or "").partition(":")
+    spelling = context.get("spelling_fa") or spelling
+    latin = context.get("latin") or latin
+    written = context.get("written")
     return {
         "id": row.id,
         "target_id": row.target_id,
-        "spelling_fa": context.get("spelling_fa") or spelling,
-        "latin": context.get("latin") or latin,
-        "written": context.get("written"),
+        "spelling_fa": spelling,
+        # The spelling and the word as written with this reading's short
+        # vowels, for display only; the plain ones stay the keys (DECISIONS
+        # 2026-11-21). A source's own marks are never replaced.
+        "spelling_fa_marked": vocalise(spelling, latin) if spelling and latin else None,
+        "latin": latin,
+        "written": written,
+        "written_marked": (
+            vocalise_written(written, latin) if written and latin else None
+        ),
         "document_id": context.get("document_id"),
         "unit": context.get("unit"),
         # Where in the unit, so the reading screen can show a saved pick under

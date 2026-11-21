@@ -342,7 +342,9 @@ def compound(
                 "latin": result.reading.latin,
                 "spelling_fa": result.reading.spelling_fa,
                 "spelling_fa_marked": vocalise(
-                    result.reading.spelling_fa, result.reading.latin
+                    result.reading.spelling_fa,
+                    result.reading.latin,
+                    tuple(result.reading.latin_variants),
                 ),
                 "lexicon_category": result.reading.lexicon_category,
                 "bank_groups": list(result.reading.bank_groups),

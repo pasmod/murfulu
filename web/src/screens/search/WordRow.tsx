@@ -43,7 +43,7 @@ export function WordRow({ word }: WordRowProps) {
   return (
     <li className={styles.row}>
       <Link className={styles.forms} to={`/word/${encodeURIComponent(word.id)}`}>
-        <span className={styles.spelling}>{word.spelling_fa}</span>
+        <span className={styles.spelling}>{word.spelling_fa_marked ?? word.spelling_fa}</span>
         {word.latin ? (
           <>
             <Latin className={styles.latin}>{word.latin}</Latin>

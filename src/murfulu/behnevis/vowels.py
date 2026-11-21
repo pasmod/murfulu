@@ -177,19 +177,11 @@ def _marks_at(
     return frozenset(marks)
 
 
-@lru_cache(maxsize=65_536)
-def vocalise(spelling: str, reading: str) -> str:
-    """The spelling with the short vowels its reading has, or the spelling itself.
+def _agreed(plain: str, reading: str) -> list[frozenset[str]] | None:
+    """The marks every alignment of one reading agrees on, letter by letter.
 
-    The spelling's own characters are kept — joiners, Arabic letter forms —
-    and any marks it already carries are taken off first, so the result says
-    what the reading says and nothing else.
+    ``None`` where the reading does not line up with the letters.
     """
-    plain = "".join(
-        ch
-        for ch in unicodedata.normalize("NFC", spelling)
-        if not unicodedata.combining(ch)
-    )
     latin = latin_key(reading)
     at: list[int] = []
     letters: list[str] = []
@@ -210,11 +202,11 @@ def vocalise(spelling: str, reading: str) -> str:
         at.append(index)
         letters.append(ch.translate(_FOLD))
     if not letters or not latin:
-        return plain
+        return None
     shape = tuple(letters)
     edges = _edges(shape, latin)
     if edges is None:
-        return plain
+        return None
     n = len(shape)
     last = n - 1
     agreed: list[frozenset[str]] = []
@@ -242,6 +234,40 @@ def vocalise(spelling: str, reading: str) -> str:
                     # agreed tashdid with it (the review of 2026-11-21).
                     seen = marks if seen is None else seen & marks
         agreed.append(seen or frozenset())
+    return agreed
+
+
+@lru_cache(maxsize=65_536)
+def vocalise(spelling: str, reading: str, variants: tuple[str, ...] = ()) -> str:
+    """The spelling with the short vowels its reading has, or the spelling itself.
+
+    The spelling's own characters are kept — joiners, Arabic letter forms —
+    and any marks it already carries are taken off first, so the result says
+    what the reading says and nothing else.
+
+    **With the variants the screen shows beside the reading**, only the marks
+    every one of them agrees on: برنا is *barnā* or *bornā*, so its ب takes
+    nothing rather than a zabar that contradicts the second (the review of
+    2026-11-21). A variant that does not line up leaves the word as written.
+    """
+    plain = "".join(
+        ch
+        for ch in unicodedata.normalize("NFC", spelling)
+        if not unicodedata.combining(ch)
+    )
+    agreed = _agreed(plain, reading)
+    for variant in variants:
+        if agreed is None:
+            break
+        other = _agreed(plain, variant)
+        agreed = (
+            None
+            if other is None
+            else [mine & theirs for mine, theirs in zip(agreed, other, strict=True)]
+        )
+    if agreed is None:
+        return plain
+    at = [index for index, ch in enumerate(plain) if ch not in ("ـ", ZWNJ, " ")]
     out = list(plain)
     for position, marks in sorted(zip(at, agreed, strict=True), reverse=True):
         if marks:
@@ -250,6 +276,26 @@ def vocalise(spelling: str, reading: str) -> str:
     # In Unicode's own order (a zabar before a tashdid), so the same word is
     # always the same string, whatever order the marks were put on in.
     return unicodedata.normalize("NFC", "".join(out))
+
+
+def vocalise_written(written: str, reading: str, variants: tuple[str, ...] = ()) -> str:
+    """A word as a text writes it, with its reading's marks, or as written.
+
+    For the reading screen, where a word stands as its source wrote it. **A
+    source's own marks are never replaced**: a word written with a mark inside
+    it is left exactly as written — its marks are evidence, and they are what
+    rules a reading out. Marks written after the last letter (the kasra or the
+    hamza of the ezafe, دلِ، خانهٔ) are kept and put back after the vowels.
+    """
+    text = unicodedata.normalize("NFC", written)
+    end = len(text)
+    while end and unicodedata.combining(text[end - 1]):
+        end -= 1
+    body, tail = text[:end], text[end:]
+    if not body or any(unicodedata.combining(ch) for ch in body):
+        return written
+    marked = vocalise(body, reading, variants)
+    return written if marked == body else unicodedata.normalize("NFC", marked + tail)
 
 
 def strip(text: str) -> str:

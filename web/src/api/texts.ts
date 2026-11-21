@@ -34,6 +34,12 @@ export interface TextFound {
 export interface TextWord {
   /** As written, harakat and all. */
   fa: string;
+  /**
+   * As written, with the short vowels of the bank's one reading, for display
+   * only (2026-11-21). Only on a word the bank reads one way and the source
+   * wrote without marks of its own, and only where it adds a mark.
+   */
+  fa_marked?: string;
   /** The counted spelling; null for what is not a counted word (« a number, a Latin name). */
   s: string | null;
   /** Punctuation written straight after it. */
@@ -55,6 +61,11 @@ export type Level = "sure" | "mid" | "unsure";
 
 export interface AutoReading {
   latin: string;
+  /**
+   * The word as written with this reading's short vowels, for display only
+   * (2026-11-21); absent where it would add no mark.
+   */
+  fa_marked?: string;
   /** 0–1: the model's estimate that this reading is right here. */
   confidence: number;
   level: Level;
@@ -140,8 +151,12 @@ export interface Marked {
   id: number;
   target_id: string | null;
   spelling_fa: string;
+  /** The spelling with this reading's short vowels, for display only. */
+  spelling_fa_marked?: string | null;
   latin: string;
   written: string | null;
+  /** The word as written with this reading's short vowels, for display only. */
+  written_marked?: string | null;
   document_id: string | null;
   unit: number | null;
   /** A proposal's line in its unit and place in the line (sent since 2026-11-14). */

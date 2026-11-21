@@ -111,7 +111,7 @@ export function Word() {
   return (
     <article className={styles.screen}>
       <header className={styles.head}>
-        <h1 className={styles.spelling}>{word.spelling_fa}</h1>
+        <h1 className={styles.spelling}>{word.spelling_fa_marked ?? word.spelling_fa}</h1>
         {word.latin ? (
           <Latin className={styles.latin}>{word.latin}</Latin>
         ) : (

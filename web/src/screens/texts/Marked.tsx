@@ -74,7 +74,11 @@ export function Marked() {
             {rows.map((row) => (
               <li key={row.id} className={styles.mark}>
                 <p className={styles.markHead}>
-                  <span className={styles.markWord}>{row.written ?? row.spelling_fa}</span>
+                  <span className={styles.markWord}>
+                    {row.written != null
+                      ? (row.written_marked ?? row.written)
+                      : (row.spelling_fa_marked ?? row.spelling_fa)}
+                  </span>
                   <Latin className={styles.markLatin}>{row.latin}</Latin>
                   {row.created_at ? (
                     <span className={styles.markDate}>{DAY.format(new Date(row.created_at))}</span>
