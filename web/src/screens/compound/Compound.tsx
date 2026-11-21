@@ -23,7 +23,7 @@ import { useSearchParams } from "react-router-dom";
 
 import { ApiError } from "../../api/client";
 import {
-  compound as fetchCompound,
+  everyCompound,
   type CompoundReading,
   type Compounds,
 } from "../../api/compound";
@@ -40,7 +40,7 @@ import {
 import { SCREENS } from "../../shell/screens";
 import { Suggest } from "../../suggest/Suggest";
 import { wordSource } from "../../suggest/sources";
-import { Pairings } from "./Pairings";
+import { CompoundTable } from "./CompoundTable";
 import styles from "./Compound.module.css";
 
 const SCREEN = SCREENS.find((one) => one.path === "/compound")!;
@@ -122,11 +122,6 @@ export function Compound() {
   // same word twice with the same evidence and no way to tell why. The class
   // is on every row already; this is the Persian for it, from the rule pack.
   const [classes, setClasses] = useState<WordClass[]>([]);
-  // What the list is showing. Opens on what the corpus has — evidence first,
-  // the same order every other screen uses — and the other switch is where a
-  // coiner goes: those are the words nobody has written yet.
-  const [attested, setAttested] = useState(true);
-
   useEffect(() => {
     document.title = `${SCREEN.title} — مورفولو`;
   }, []);
@@ -147,7 +142,9 @@ export function Compound() {
     }
     const stop = new AbortController();
     setError(null);
-    fetchCompound(word, attested, stop.signal)
+    // The best thousand, ranked best built first by the API, and every row
+    // the corpus has; the table filters.
+    everyCompound(word, stop.signal)
       .then(setFound)
       .catch((reason: unknown) => {
         if (reason instanceof DOMException && reason.name === "AbortError") return;
@@ -159,7 +156,7 @@ export function Compound() {
         );
       });
     return () => stop.abort();
-  }, [word, attested]);
+  }, [word]);
 
   const run = useCallback(
     (next: string) => setParams(next ? { word: next } : {}),
@@ -365,53 +362,26 @@ export function Compound() {
             </p>
           ))}
 
-          {/* **The switch to the words nobody has written.** The list was
-              the attested one and nothing said so — دل shows 109 rows out of
-              4,652, and the 4,543 the project exists to produce were not
-              reachable from the screen at all. Asked by the project lead on
-              2026-08-18: *do we only show words in the corpus?* */}
-          {reading.built > 0 ? (
-            <p className={styles.showing}>
-              <button
-                type="button"
-                className={styles.pick}
-                aria-pressed={attested}
-                onClick={() => setAttested(true)}
-              >
-                آنچه در پیکره آمده
-                <span className={styles.pickCount}>
-                  <Num value={reading.attested} />
-                </span>
-              </button>
-              <button
-                type="button"
-                className={styles.pick}
-                aria-pressed={!attested}
-                onClick={() => setAttested(false)}
-              >
-                همه، با واژه‌های نو
-                <span className={styles.pickCount}>
-                  <Num value={reading.built} />
-                </span>
-              </button>
-            </p>
-          ) : null}
-
-          {!attested && reading.pairings.length > 0 ? (
-            <p className={styles.nothing}>
-              واژه‌هایی که در پیکره نیامده‌اند، ساختهٔ همین دستورها هستند. این
-              ابزار برای پیدا کردن همین واژه‌ها ساخته شده است.
-            </p>
-          ) : null}
-
+          {/* **The list is the build screen's table** (2026-11-21): its view
+              switch replaces the two buttons «آنچه در پیکره آمده» and «همه، با
+              واژه‌های نو», and its «پیکره» filter keeps what the first one
+              kept. The table opens on every word, best built first. */}
           {reading.pairings.length > 0 ? (
-            <Pairings rows={reading.pairings} classes={classes} />
-          ) : reading.built > 0 ? (
-            <p className={styles.nothing}>
-              هیچ‌یک از این ترکیب‌ها در پیکره نیامده است. این به آن معنا نیست که
-              نادرست‌اند: پیکره متن‌های کهن است، بیشترش شعر، و واژه‌های تازه در آن
-              نیست.
-            </p>
+            <>
+              {(reading.count ?? reading.pairings.length) > reading.pairings.length ? (
+                <p className={styles.skipped}>
+                  از <Num value={reading.count ?? reading.built} /> ترکیب،{" "}
+                  <Num value={reading.pairings.length} /> تا را نشان می‌دهیم:
+                  خوش‌ساخت‌ترین‌ها و همهٔ آن‌هایی که در پیکره آمده‌اند.
+                </p>
+              ) : null}
+              <CompoundTable
+                key={entryOf(reading)}
+                rows={reading.pairings}
+                classes={classes}
+                idPrefix={`compound-${entryOf(reading)}`}
+              />
+            </>
           ) : null}
         </section>
       ))}

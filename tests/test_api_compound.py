@@ -512,3 +512,111 @@ def test_each_entry_says_what_it_means(client: TestClient) -> None:
     body = client.get("/compound", params={"word": "مرد", "attested": False}).json()
 
     assert _reading(body)["definition_fa"] == "آدمی نرینه. مقابل زن"
+
+
+# --- How well a compound is built (2026-11-21) ------------------------------
+
+
+def test_each_row_carries_the_build_screen_s_two_values(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """«ساخت» from the half's own figures, «پیکره» as the build screen says it.
+
+    The fixture's verbs give مرد the halves رو (*row*) and گو (*gu*); only رو
+    was measured, with 2 compounds out of 4 nouns.
+    """
+    from murfulu.api import compound
+    from murfulu.scoring import compound_heads
+
+    figures = compound_heads.read(
+        {
+            "halves": {"karbon_do": {"رو": ["row"]}},
+            "rules": {
+                rule: {
+                    "fronts": 4,
+                    "stem_classes": ["karbon_do"],
+                    "by_behind": {"رو": {"row": 2}},
+                }
+                for rule in ("V-078", "V-079")
+            },
+        }
+    )
+    monkeypatch.setattr(compound_heads, "loaded", lambda: figures)
+    monkeypatch.setattr(compound, "_asked", lambda pairings: _Corpus())
+    body = client.get("/compound", params={"word": "مرد", "attested": False}).json()
+
+    rows = {
+        (row["rule_id"], row["form_latin"]): row["score"]
+        for reading in body["readings"]
+        for row in reading["pairings"]
+    }
+    measured = rows[("V-078", "mardrow")]
+    assert measured["build"] == 100
+    assert measured["weakest_rule"] == {
+        "rule_id": "V-078",
+        "affix": "رو",
+        "types": 4,
+        "attested": 2,
+    }
+    assert measured["corpus"] == "none"
+    assert measured["confirmed"] is False
+    # Not measured: no value, said as such — never a zero.
+    unmeasured = rows[("V-078", "mardgu")]
+    assert unmeasured["build"] is None
+    assert unmeasured["unmeasured_step"] is True
+    # The corpus answer is the build screen's: *mord*'s rows are confirmed.
+    assert rows[("V-078", "mordrow")]["corpus"] == "reading"
+
+
+def test_without_the_figures_no_row_has_a_value(client: TestClient) -> None:
+    from murfulu.scoring import compound_heads
+
+    compound_heads.loaded.cache_clear()
+    body = client.get("/compound", params={"word": "مرد", "attested": False}).json()
+
+    assert {row["score"]["build"] for row in _reading(body)["pairings"]} == {None}
+    # And the corpus was not asked either, which is not «نیامده».
+    assert {row["score"]["corpus"] for row in _reading(body)["pairings"]} == {None}
+
+
+def test_a_row_with_no_value_ranks_with_the_zeros(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An attested row with no value stays above unattested measured zeros.
+
+    Ranked after every measured row instead, دلم — 12,947 texts, a one-letter
+    half — fell out of the thousand the page asks for. Here رو was measured
+    and made nothing, گو was not measured, and the corpus has only *mardgu*.
+    """
+    from murfulu.api import compound
+    from murfulu.scoring import compound_heads
+
+    class _OnlyMardgu:
+        def look_up(self, form_fa: str, form_latin: str) -> Attestation:
+            if form_latin == "mardgu":
+                return Attestation(
+                    level=Level.READING, corpus_version="test", doc_count=5
+                )
+            return Attestation(level=Level.NONE, corpus_version="test")
+
+    figures = compound_heads.read(
+        {
+            "halves": {"karbon_do": {"رو": ["row"]}},
+            "rules": {
+                rule: {"fronts": 4, "stem_classes": ["karbon_do"], "by_behind": {}}
+                for rule in ("V-078", "V-079")
+            },
+        }
+    )
+    monkeypatch.setattr(compound_heads, "loaded", lambda: figures)
+    monkeypatch.setattr(compound, "_asked", lambda pairings: _OnlyMardgu())
+    body = client.get("/compound", params={"word": "مرد", "attested": False}).json()
+
+    mard = next(one for one in body["readings"] if one["latin"] == "mard")
+    order = [
+        (row["form_latin"], row["score"]["build"])
+        for row in mard["pairings"]
+        if row["form_latin"] in ("mardgu", "mardrow")
+    ]
+    assert order[0] == ("mardgu", None)
+    assert ("mardrow", 0) in order

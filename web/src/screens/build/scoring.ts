@@ -10,7 +10,20 @@
  * filters and sorts. Unconfirmed until the linguist rules (L36).
  */
 
-import type { BuiltForm, FormScore } from "../../api/generate";
+import type { Attestation, FormScore } from "../../api/generate";
+
+/**
+ * What the filters, sorts and cells read of a row: its two values and its
+ * corpus answer. A built word is one; so is a compound (the compound page,
+ * 2026-11-21), whose build value may be null where its half was not measured.
+ */
+export interface Scored {
+  score?: Omit<FormScore, "build"> & { build: number | null };
+  attestation: Pick<
+    Attestation,
+    "level" | "doc_count" | "function_word" | "headword_homograph"
+  > | null;
+}
 
 /** The build value's ceiling, as the API sets it. Said, never computed here. */
 export const BUILD_MAX = 100;
@@ -30,7 +43,7 @@ export const CANDIDATES_SAY =
 export interface Filter {
   key: string;
   label: string;
-  keeps: (form: BuiltForm) => boolean;
+  keeps: (form: Scored) => boolean;
 }
 
 /**
@@ -39,19 +52,21 @@ export interface Filter {
  * the new answer put attested words among the candidates (the review of
  * 2026-11-21); such a form is read from its attestation instead.
  */
-export function hasValues(form: BuiltForm): boolean {
+export function hasValues(form: Scored): boolean {
   const score = form.score as Partial<FormScore> | undefined;
   return (
     !!score &&
-    typeof score.build === "number" &&
+    // A number, or null where a compound's half was not measured (the
+    // compound page, 2026-11-21): its corpus answer is still the API's.
+    (typeof score.build === "number" || score.build === null) &&
     (score.corpus === null || typeof score.corpus === "string")
   );
 }
 
-const build = (form: BuiltForm) => (hasValues(form) ? form.score!.build : null);
+const build = (form: Scored) => (hasValues(form) ? form.score!.build : null);
 
 /** What the corpus says, from the API's answer, or from the attestation of an older API. */
-export function corpusKind(form: BuiltForm): FormScore["corpus"] {
+export function corpusKind(form: Scored): FormScore["corpus"] {
   if (hasValues(form)) return form.score!.corpus;
   const found = form.attestation;
   if (!found) return null;
@@ -110,7 +125,7 @@ export const IN_CORPUS: Filter[] = [
  * such as روه — words that are written already, under this reading or
  * another, and so cannot be offered as new.
  */
-export function isCandidate(form: BuiltForm): boolean {
+export function isCandidate(form: Scored): boolean {
   return corpusKind(form) === "none";
 }
 
@@ -128,7 +143,7 @@ const CORPUS_ORDER: Record<string, number> = {
  * The texts a word's own count rests on — zero where the count is another
  * word's (a function word, the bank's other headword).
  */
-export function creditedTexts(form: BuiltForm): number {
+export function creditedTexts(form: Scored): number {
   const found = form.attestation;
   if (!found || found.function_word || found.headword_homograph) return 0;
   return found.doc_count;
@@ -141,8 +156,9 @@ export function creditedTexts(form: BuiltForm): number {
  * sorted here, a deep answer there. An older API sends no score, and every
  * form then ties here and the old order below decides, as it did before.
  */
-export function buildOrder(form: BuiltForm): number {
+export function buildOrder(form: Scored): number {
   if (!hasValues(form)) return 0;
   const score = form.score!;
-  return -score.build * 10 + (CORPUS_ORDER[score.corpus ?? ""] ?? 4);
+  // No value ranks with the zeros, as the compound route ranks it.
+  return -(score.build ?? 0) * 10 + (CORPUS_ORDER[score.corpus ?? ""] ?? 4);
 }

@@ -905,7 +905,7 @@ function Table({
  * radio role were a tab stop each and ignored the arrows (the review of
  * 2026-11-21).
  */
-function Chips({
+export function Chips({
   legend,
   info = null,
   options,

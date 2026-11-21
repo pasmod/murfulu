@@ -554,8 +554,10 @@ test.describe("compound words", () => {
     await page.goto("/compound?word=%D8%AF%D9%84");
 
     await expect(page.getByText(/ترکیب می‌سازند/).first()).toBeVisible();
-    // دلبر is the best-attested compound of دل in the corpus.
-    await expect(page.getByText(unmarked(/^دلبر$/)).filter({ visible: true }).first()).toBeVisible();
+    // The table opens best built first (2026-11-21): دلدار, whose half «‑دار»
+    // made the most compounds, with its value beside it.
+    await expect(page.getByText(unmarked(/^دلدار$/)).filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByLabel(/^ساخت .+ از ۱۰۰$/).first()).toBeVisible();
 
     const overflow = await page.evaluate(
       () => document.body.scrollWidth - document.body.clientWidth,
@@ -572,12 +574,13 @@ test.describe("compound words", () => {
     test.skip(!answer.ok(), "no API, or no corpus ingested");
 
     await page.goto("/compound?word=%D8%AF%D9%84");
-    // دل has four readings and each folds its own list.
-    const more = page.getByRole("button", { name: /ترکیب دیگر/ }).first();
+    // The build screen's table: fifty rows, and the rest one press away.
+    const more = page.getByRole("button", { name: /واژهٔ دیگر را هم نشان بده/ }).first();
     await expect(more).toBeVisible();
 
-    const before = await page.getByRole("listitem").count();
+    const rows = page.getByRole("tabpanel").getByRole("listitem");
+    const before = await rows.count();
     await more.click();
-    expect(await page.getByRole("listitem").count()).toBeGreaterThan(before);
+    expect(await rows.count()).toBeGreaterThan(before);
   });
 });

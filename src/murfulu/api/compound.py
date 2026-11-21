@@ -34,6 +34,8 @@ from murfulu.corpus import inflection
 from murfulu.generation import WordNotFoundError
 from murfulu.lexicon.store import Lexicon
 from murfulu.rules.pack import RulePack, loaded
+from murfulu.scoring import compound_heads
+from murfulu.scoring import score as scores
 from murfulu.scoring.attestation import Attestation, Index
 from murfulu.search.attested import look_up
 from murfulu.search.indices import connect
@@ -96,6 +98,10 @@ def _evidence(found: Attestation | None) -> dict[str, Any] | None:
         "last_century": found.last_century,
         "unlinked": found.spelling_unlinked,
         "function_word": found.function_word or None,
+        # The bank reads these letters only as other words: دلبر is *delbar*,
+        # so a *dalbar* built on the tree has its letters and none of its
+        # count. The build screen's corpus cell says «به معنای واژه‌ای دیگر».
+        "headword_homograph": found.headword_homograph,
         "wording": found.describe(),
     }
 
@@ -163,6 +169,41 @@ def _asked(pairings: list[compounding.Pairing]) -> Index | None:
         return None
 
 
+def _score(
+    pairing: compounding.Pairing,
+    found: Attestation | None,
+    inflected: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """The row's two values, in the build screen's shape.
+
+    **How well built** is the compounds' own (`scoring.compound_heads`): what
+    this second half has made after this rule's nouns, 0 to 100, or None where
+    it was not measured. **What the corpus says** is the build screen's own
+    answer (`scores.corpus_kind`), so both screens filter and sort alike.
+    """
+    measured = compound_heads.loaded().value(
+        pairing.rule_id, pairing.behind_fa, pairing.behind_latin
+    )
+    return {
+        "build": measured.build if measured else None,
+        "corpus": scores.corpus_kind(found, inflected=inflected is not None),
+        "texts": None if found is None else found.doc_count,
+        "confirmed": scores.CONFIRMED,
+        # The build screen names the rule its value rests on; here it is the
+        # rule and the half: «‑دار» made 73 compounds out of 21,688 nouns.
+        "weakest_rule": None
+        if measured is None
+        else {
+            "rule_id": pairing.rule_id,
+            "affix": pairing.behind_fa,
+            "types": measured.fronts,
+            "attested": measured.confirmed,
+        },
+        "meaning_mark": None,
+        "unmeasured_step": measured is None,
+    }
+
+
 def _row(
     pairing: compounding.Pairing,
     pack: RulePack,
@@ -205,6 +246,7 @@ def _row(
         "role": pairing.role,
         "attestation": _evidence(found),
         "is_attested": _attested(found),
+        "score": _score(pairing, found, inflected),
         # Present only where the letters also read as an inflection. Absent is
         # the ordinary case and means nothing was found, not that nothing was
         # looked for — the analyser runs on every attested row.
@@ -220,29 +262,35 @@ def _row(
 
 
 def _ranked(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Attested first, then by weight of evidence; inflection-shaped rows last.
+    """Best built first, then what the corpus says, then texts: the build order.
 
-    The order follows the one settled for built words: what the corpus has
-    outranks what it does not, then the document count.
+    **The build screen's order** (`scoring.score.order`; the project lead's
+    choice of 2026-11-21): a coiner wants the best-made words whether or not
+    the poets used them, and the corpus column says which are known. It is
+    decided here because the list is paged here: دل builds 4,685 and the page
+    asks for the best thousand. **A row with no value ranks with the zeros**
+    (its half not measured — one letter, as دلم's م): no evidence of being
+    well built, the same as a measured zero for the order, and never below
+    every unattested word. Ranked after the measured zeros, it would fall out
+    of the thousand with دلم's 12,947 texts; the cell still says «—».
 
-    **Only one thing sinks a row: its letters also reading as an inflection.**
-    دلم carries 12,947 documents and is دل plus a possessive, so its number is
-    about a different morphological object and must not put it first. Being
-    already in the dictionary does **not** sink anything — دلبر is a headword
-    *and* is دل + بر, the same word by both routes, and a coiner wants to see
-    it near the top precisely because it proves the pattern works.
-
-    Sinking is what this project does instead of hiding: دلبر and دلم both
-    stay on the list, and the difference between them is on the row.
+    **What used to sink a row still does, through the corpus answer.** دلم
+    carries 12,947 documents and is دل plus a possessive: its corpus answer is
+    «another word's letters», which ranks below a word the corpus has under
+    its reading and above one it lacks. Being already in the dictionary sinks
+    nothing — دلبر is a headword *and* دل + بر.
     """
 
     def key(row: dict[str, Any]) -> tuple[Any, ...]:
-        found = row["attestation"]
+        score = row["score"]
+        built = score["build"]
         return (
-            not row["is_attested"],
-            row["also_an_inflection"] is not None,
-            -(found["doc_count"] if found else 0),
+            -(built or 0),
+            scores.CORPUS_ORDER[score["corpus"]],
+            -(score["texts"] or 0) if score["corpus"] in ("reading", "letters") else 0,
+            built is None,
             row["form_latin"],
+            row["rule_id"],
         )
 
     return sorted(rows, key=key)

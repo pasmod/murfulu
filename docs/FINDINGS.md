@@ -54,10 +54,9 @@ score under 10** (14 more have a one-letter half and no value): most verb
 stems never head a compound in the dictionary. The top of the page reads
 right — دلدار 51, دلگیر 41, دلکش 35, دلبند 35 among
 the attested; دلدان 41, دلوار 38, دلزن 37, دلبار 35 as the best-built new
-words. Whether compounds keep that scale (the same number means the same
-formula on both screens, and compounds read as poorly built) or get one of
-their own (the best half 100) is the project lead's choice (OPEN_QUESTIONS
-S51). Limits: the dictionary's compound label is the evidence, so a pattern
+words. **The project lead chose a scale of its own** (the best half 100;
+DECISIONS 2026-11-21, fourth): on the build screen's, compounds read as poorly
+built. Limits: the dictionary's compound label is the evidence, so a pattern
 the dictionary never lists cannot score; V-078 and V-079 get the same value
 (the doer and the done-to share a pool, L49).
 

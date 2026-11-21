@@ -42,6 +42,15 @@ function pairing(over: Partial<Pairing> = {}): Pairing {
       wording: "در پیکره آمده است",
     },
     is_attested: true,
+    score: {
+      build: 61,
+      corpus: "letters",
+      texts: 2920,
+      confirmed: false,
+      weakest_rule: { rule_id: "V-078", affix: "بر", types: 21688, attested: 6 },
+      meaning_mark: null,
+      unmeasured_step: false,
+    },
     also_an_inflection: null,
     already_a_word: true,
     ...over,
@@ -179,10 +188,12 @@ describe("the same word built two ways", () => {
   it("shows no class rather than a machine id when the API does not serve them", async () => {
     vi.stubGlobal("fetch", answers(TWICE));
     renderApp("/compound?word=%D8%AF%D9%84");
-    // Counted on the Latin, which appears once per row — the Persian is
-    // printed again in the row's own «راه ساخت», where it is the result.
     expect(await screen.findAllByText("dalbar")).toHaveLength(2);
-    expect(screen.queryByText(/karandekarbahr/)).not.toBeInTheDocument();
+    // The rows' class cells stay empty; only the tabs fall back to the id,
+    // as on the build screen.
+    for (const row of screen.getAllByRole("listitem")) {
+      expect(row.textContent).not.toMatch(/karandekarbahr/);
+    }
   });
 });
 
@@ -193,17 +204,23 @@ describe("compound words", () => {
 
   it("shows the compounds the corpus has", async () => {
     renderApp("/compound?word=%D8%AF%D9%84");
-    // Twice each: the row's own word, and the last step of «راه ساخت», where
-    // it is what the two halves make.
-    expect(await screen.findAllByText("دلبر")).toHaveLength(2);
-    expect(screen.getAllByText("دلم")).toHaveLength(2);
+    expect(await screen.findByText("دلبر")).toBeInTheDocument();
+    expect(screen.getByText("دلم")).toBeInTheDocument();
   });
+
+  /** Opens every row's «شواهد». */
+  async function evidence() {
+    for (const button of await screen.findAllByRole("button", { name: "شواهد" })) {
+      await userEvent.click(button);
+    }
+  }
 
   it("says the count is the spelling's, because the corpus cannot hear a vowel", async () => {
     // دلبر is one row in the corpus whether it is read dalbar or dalber, so
     // both readings carry the same figure. Printed bare, one word's evidence
     // looked like two separate findings.
     renderApp("/compound?word=%D8%AF%D9%84");
+    await evidence();
     // The numbers are their own elements, so the sentence is read off the
     // paragraph rather than matched as one text node.
     const said = await screen.findByText(/املای «دلبر» در/);
@@ -225,8 +242,9 @@ describe("compound words", () => {
     // the present stem of بردن — without that a reader cannot check the claim,
     // which is the whole reason they opened the row.
     renderApp("/compound?word=%D8%AF%D9%84");
-    expect(await screen.findAllByText(/از کارواژهٔ بردن/)).not.toHaveLength(0);
-    expect(screen.getAllByText("راه ساخت").length).toBeGreaterThan(0);
+    const [first] = await screen.findAllByRole("button", { name: "راه ساخت" });
+    await userEvent.click(first!);
+    expect(screen.getAllByText(/از کارواژهٔ بردن/)).not.toHaveLength(0);
   });
 
   it("names what was joined to what", async () => {
@@ -238,6 +256,7 @@ describe("compound words", () => {
     // دلم is دل plus a possessive. It is shown, ranked last by the API, and
     // told on rather than dropped.
     renderApp("/compound?word=%D8%AF%D9%84");
+    await evidence();
     expect(
       await screen.findByText(/ضمیر پیوستهٔ اول مفرد/),
     ).toBeInTheDocument();
@@ -245,6 +264,7 @@ describe("compound words", () => {
 
   it("says when the dictionary already holds the compound", async () => {
     renderApp("/compound?word=%D8%AF%D9%84");
+    await evidence();
     expect((await screen.findAllByText(`در ${LEXICON} هست`)).length).toBe(2);
   });
 
@@ -285,17 +305,17 @@ describe("compound words", () => {
     expect(screen.queryByText(/هیچ‌یک از این ترکیب‌ها در پیکره نیامده/)).toBeNull();
   });
 
-  it("offers the words nobody has written, not only the attested ones", async () => {
+  it("asks for every word, best built first, not only the attested ones", async () => {
     // دل builds 4,652 and the corpus has 109. The other 4,543 are what the
-    // project is for, and the screen could not ask for them at all.
+    // project is for; the table's view switch and filter replace the two
+    // buttons that used to choose between them (2026-11-21).
     const fetcher = answers(ANSWER);
     vi.stubGlobal("fetch", fetcher);
     renderApp("/compound?word=%D8%AF%D9%84");
-    await userEvent.click(
-      await screen.findByRole("button", { name: /همه، با واژه‌های نو/ }),
-    );
+    await screen.findByText("دلبر");
     const asked = fetcher.mock.calls.map((call) => String(call[0]));
     expect(asked.some((one) => one.includes("attested=false"))).toBe(true);
+    expect(asked.some((one) => one.includes("limit=1000"))).toBe(true);
   });
 
   it("tells a reader the word is not in the dictionary rather than blaming the server", async () => {
@@ -481,5 +501,225 @@ describe("a spelling that is several entries", () => {
     renderApp("/compound?word=%D8%AF%D9%84");
     await screen.findByRole("heading", { level: 2 });
     expect(screen.queryByRole("group", { name: /مدخل‌های/ })).toBeNull();
+  });
+});
+
+describe("the compound table", () => {
+  /** دل as the API ranks it: best built first. */
+  const RANKED: Compounds = {
+    ...ANSWER,
+    readings: [
+      {
+        ...ANSWER.readings[0]!,
+        latin: "Del",
+        count: 4685,
+        returned: 3,
+        pairings: [
+          pairing({
+            form_fa: "دلدار",
+            form_latin: "deldār",
+            behind: { fa: "دار", latin: "dār", type: "karbon_do", of: { fa: "داشتن", latin: "dāštan" } },
+            score: {
+              build: 100,
+              corpus: "reading",
+              texts: 1724,
+              confirmed: false,
+              weakest_rule: { rule_id: "V-078", affix: "دار", types: 21688, attested: 73 },
+              meaning_mark: null,
+              unmeasured_step: false,
+            },
+            attestation: { ...pairing().attestation!, level: "reading", doc_count: 1724 },
+          }),
+          pairing({
+            form_fa: "دلدان",
+            form_latin: "deldān",
+            is_attested: false,
+            already_a_word: false,
+            behind: { fa: "دان", latin: "dān", type: "karbon_do", of: { fa: "دانستن", latin: "dānestan" } },
+            score: {
+              build: 84,
+              corpus: "none",
+              texts: 0,
+              confirmed: false,
+              weakest_rule: { rule_id: "V-078", affix: "دان", types: 21688, attested: 36 },
+              meaning_mark: null,
+              unmeasured_step: false,
+            },
+            attestation: { ...pairing().attestation!, level: "none", doc_count: 0 },
+          }),
+          pairing({
+            form_fa: "دلم",
+            form_latin: "delm",
+            behind: { fa: "م", latin: "m", type: "karbon_do", of: { fa: "میدن", latin: "midan" } },
+            score: {
+              build: null,
+              corpus: "other",
+              texts: 12947,
+              confirmed: false,
+              weakest_rule: null,
+              meaning_mark: null,
+              unmeasured_step: true,
+            },
+          }),
+        ],
+      },
+    ],
+  };
+
+  beforeEach(() => {
+    vi.stubGlobal("fetch", answers(RANKED));
+  });
+
+  it("shows how well built each compound is, with a dash where it was not measured", async () => {
+    renderApp("/compound?word=%D8%AF%D9%84");
+    expect(await screen.findByLabelText("ساخت ۱۰۰ از ۱۰۰")).toBeInTheDocument();
+    expect(screen.getByLabelText("ساخت ۸۴ از ۱۰۰")).toBeInTheDocument();
+    // دلم's half is one letter: no value, never a zero.
+    expect(screen.getByTitle("سنجیده نشده")).toHaveTextContent("—");
+  });
+
+  it("says behind «شواهد» what the value comes from", async () => {
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const [first] = await screen.findAllByRole("button", { name: "شواهد" });
+    await userEvent.click(first!);
+    const said = screen.getByText(/پس از/).textContent ?? "";
+    expect(said).toMatch(/«‑دار»/);
+    expect(said).toMatch(/۲۱٬۶۸۸ واژه/);
+    expect(said).toMatch(/۷۳ ترکیب ساخته/);
+  });
+
+  it("says when the value was not measured, and why it may not be", async () => {
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const buttons = await screen.findAllByRole("button", { name: "شواهد" });
+    await userEvent.click(buttons[2]!);
+    expect(screen.getByText(/ساختِ این ترکیب سنجیده نشده است/)).toBeInTheDocument();
+  });
+
+  it("keeps only the words the corpus lacks in «واژه‌های تازه»", async () => {
+    renderApp("/compound?word=%D8%AF%D9%84");
+    await screen.findByText("دلدار");
+    await userEvent.click(screen.getByLabelText("واژه‌های تازه"));
+    expect(screen.getByText("دلدان")).toBeInTheDocument();
+    expect(screen.queryByText("دلدار")).toBeNull();
+    expect(screen.queryByText("دلم")).toBeNull();
+  });
+
+  it("filters on the build value as the build screen does", async () => {
+    renderApp("/compound?word=%D8%AF%D9%84");
+    await screen.findByText("دلدار");
+    await userEvent.click(screen.getByLabelText("۷۰ و بیشتر"));
+    expect(screen.getByText("دلدار")).toBeInTheDocument();
+    expect(screen.getByText("دلدان")).toBeInTheDocument();
+    // A row with no value is kept only by «همه».
+    expect(screen.queryByText("دلم")).toBeNull();
+    await userEvent.click(screen.getByLabelText("۴۰ تا ۶۹"));
+    expect(screen.queryByText("دلدار")).toBeNull();
+    expect(screen.queryByText("دلدان")).toBeNull();
+  });
+
+  it("sorts by texts from the head row", async () => {
+    renderApp("/compound?word=%D8%AF%D9%84");
+    await screen.findByText("دلدار");
+    const [byTexts] = screen.getAllByRole("button", { name: /در پیکره/ });
+    await userEvent.click(byTexts!);
+    const words = within(screen.getByRole("tabpanel"))
+      .getAllByRole("listitem")
+      .map((row) => row.querySelector("span span")?.textContent);
+    // The build screen's texts order: دلم's 2,920, دلدار's 1,724, then the
+    // new word with none.
+    expect(words).toEqual(["دلم", "دلدار", "دلدان"]);
+  });
+
+  it("says it shows the best of a longer list, and every attested one", async () => {
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const said = await screen.findByText(/تا را نشان می‌دهیم/);
+    expect(said.textContent).toMatch(/از ۴٬۶۸۵ ترکیب، ۳ تا را نشان می‌دهیم/);
+    expect(said.textContent).toMatch(/همهٔ آن‌هایی که در پیکره آمده‌اند/);
+  });
+
+  it("says a word the corpus lacks is not in it, not that it is in no texts", async () => {
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const buttons = await screen.findAllByRole("button", { name: "شواهد" });
+    await userEvent.click(buttons[1]!);
+    expect(screen.getByText("«دلدان» در پیکره نیامده است")).toBeInTheDocument();
+    expect(screen.queryByText(/املای «دلدان»/)).toBeNull();
+  });
+
+  it("returns to the best-built order for «واژه‌های تازه»", async () => {
+    // Its line promises the best built first; an alphabetical order chosen
+    // before must not carry over (the review of 2026-11-21).
+    renderApp("/compound?word=%D8%AF%D9%84");
+    await screen.findByText("دلدار");
+    // The head row's «واژه» sorts by the alphabet (the phone's «الفبا» is the
+    // same sort, shown only on a phone).
+    await userEvent.click(screen.getByRole("button", { name: "واژه" }));
+    expect(screen.getByRole("button", { name: "واژه" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await userEvent.click(screen.getByLabelText("واژه‌های تازه"));
+    expect(screen.getByRole("button", { name: "واژه" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+  });
+
+  it("names the class on the row, which tells the doer from the done-to on a phone", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation((url: string) => {
+        const path = String(url).replace("/api", "").split("?")[0];
+        const body =
+          path === "/rules"
+            ? {
+                word_classes: [
+                  { name: "karandekarbahr", label_fa: "کارنده‌کاربهر", label_is_traditional: false },
+                ],
+              }
+            : RANKED;
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          statusText: "",
+          json: async () => body,
+        } as Response);
+      }),
+    );
+    renderApp("/compound?word=%D8%AF%D9%84");
+    await screen.findByText("دلدار");
+    const rows = within(screen.getByRole("tabpanel")).getAllByRole("listitem");
+    expect(rows[0]!.textContent).toMatch(/کارنده‌کاربهر/);
+  });
+});
+
+describe("the attested rows beyond the best thousand", () => {
+  it("are added after it, so every word the corpus has stays reachable", async () => {
+    // چادر builds 1,419 rows with a value above zero, and its attested
+    // چادرکشان, at zero, fell outside the thousand (the review of 2026-11-21).
+    const best = pairing({ form_fa: "دلدار", form_latin: "deldār" });
+    const beyond = pairing({ form_fa: "دلکشان", form_latin: "delkešān" });
+    const reading = { ...ANSWER.readings[0]!, entry: 11456, latin: "Del" };
+    const fetcher = vi.fn().mockImplementation((url: string) => {
+      const asked = String(url);
+      const body = asked.includes("/rules")
+        ? { word_classes: [] }
+        : asked.includes("attested=false")
+          ? { ...ANSWER, readings: [{ ...reading, pairings: [best] }] }
+          : { ...ANSWER, readings: [{ ...reading, pairings: [best, beyond] }] };
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        statusText: "",
+        json: async () => body,
+      } as Response);
+    });
+    vi.stubGlobal("fetch", fetcher);
+    renderApp("/compound?word=%D8%AF%D9%84");
+
+    expect(await screen.findByText("دلکشان")).toBeInTheDocument();
+    // Once each: the row both answers hold is not doubled.
+    expect(screen.getAllByText("دلدار")).toHaveLength(1);
+    const asked = fetcher.mock.calls.map((call) => String(call[0]));
+    expect(asked.some((one) => one.includes("limit=0"))).toBe(true);
   });
 });

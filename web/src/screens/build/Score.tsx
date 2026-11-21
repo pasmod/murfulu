@@ -20,10 +20,11 @@ import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { FUNCTION_WORD_HOMOGRAPH } from "../../text/lexicon";
 import { persianNumber } from "../../text/numbers";
+import type { Scored } from "./scoring";
 import styles from "./Score.module.css";
 
 /** How well built: the number and its bar; a dash where nothing was sent. */
-export function ScoreCell({ form }: { form: BuiltForm }) {
+export function ScoreCell({ form }: { form: Scored }) {
   const value = form.score?.build ?? null;
   if (value === null) {
     return (
@@ -48,7 +49,7 @@ export function ScoreCell({ form }: { form: BuiltForm }) {
 }
 
 /** What the corpus has, short enough for a cell. */
-export function CorpusCell({ form }: { form: BuiltForm }) {
+export function CorpusCell({ form }: { form: Scored }) {
   const found = form.attestation;
   if (!found) return <span className={styles.faint}>سنجیده نشده</span>;
   if (found.function_word || found.headword_homograph) {

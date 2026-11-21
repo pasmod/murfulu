@@ -72,6 +72,15 @@ filter is its own. The columns are word, class, ساخت (0–100 with a bar), �
 (texts, or «همین حروف», «به معنای واژه‌ای دیگر», «نیامده»), وند, buttons; the
 filters are ساخت's range and the corpus's three answers.
 
+**The compound screen has the same table (2026-11-21, fourth).** One entry of
+the spelling at a time (the switch above, best-evidenced first), and under it
+the build table with the build screen's own parts: view switch, class tabs,
+the «ساخت» and «پیکره» chips, the sort, fifty rows. The columns are word, class,
+ساخت, در پیکره, «دو نیمه» (the two halves and the rule), buttons; «شواهد» says
+what the value rests on («‑دار» made 73 compounds after 21,688 words) and
+keeps the old row's marks, «راه ساخت» the three steps. «ساخت» here is the
+compounds' own (DECISIONS 2026-11-21, fourth), and its ⓘ says so.
+
 **The table (2026-11-21, direction A of three drafts).** One card: the word
 classes as tabs (همه first, with counts), the chosen class's explanation and
 its traditional name under them, two filters as chips — the score's range

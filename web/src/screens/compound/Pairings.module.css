@@ -173,3 +173,19 @@
   align-self: flex-start;
   margin-block-start: var(--space-3);
 }
+
+/* The row's class on a phone, where the class column is hidden (the build
+   table's grid): V-078 and V-079 write the same letters, and this is what
+   tells their two rows apart. */
+.phoneClass {
+  display: none;
+}
+
+@media (max-width: 59.99rem) {
+  .phoneClass {
+    display: inline;
+    margin-inline-start: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--ink-faint);
+  }
+}

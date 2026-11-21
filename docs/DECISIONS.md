@@ -2,6 +2,40 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 (fourth) — the compound page gets the build table, with a build value of its own
+
+The project lead asked for the build screen's score on the compound page,
+both screens alike; then, once measured that it would be one number for every
+row (a noun's page is built by three rules, none measured since corpus v8),
+chose **«measure a real ساخت first»**, and then **its own scale** (FINDINGS
+2026-11-21, *a build value for compounds*).
+
+- **«ساخت» for a compound is its second half's record**: per slot rule and
+  per half (letters and reading), how many of the rule's words it joined into
+  a word the dictionary labels a compound under exactly the joined reading
+  and the corpus has. `tools/measure_compounding.py --heads` writes it
+  (`data/compound_heads-vN.json`, gitignored and carried by `data` like the
+  productivity figures); `murfulu/scoring/compound_heads.py` reads it
+  (`MURFULU_COMPOUND_HEADS_PATH`).
+- **Its own scale, one for every slot rule**: 100 is the best rate measured
+  («‑دار» after a noun, 73 compounds of 21,688), log scale over the counts
+  against the largest pool; one compound is 16, none is 0. Anchored once, not
+  per rule: V-016 holds 30 confirmed compounds in all and would otherwise give
+  three of them 100. **Not measured is «—», never 0**: a template rule, a
+  one-letter half (ر، ش، م), a stem the run never saw.
+- **The rest is the build screen's**: the corpus answer (`corpus_kind`), the
+  default order (best built, then the corpus, then texts — decided by the API,
+  which pages: the page asks for the best thousand, and a row with no value
+  ranks with the zeros so every attested word stays in it), and the table — view
+  switch, class tabs, the two filters, the sort, fifty rows, the legend. Its
+  parts are shared, not copied: `scoring.ts` and `Score.tsx` take any row with
+  a score and a corpus answer (`Scored`), and `Chips` is exported. The two
+  buttons «آنچه در پیکره آمده» / «همه، با واژه‌های نو» are gone: the view
+  switch and the «پیکره» filter do their work.
+- **Unconfirmed**, like the build screen's values (`confirmed: false`, L36).
+  — project lead (the score here, measure first, own scale); engineering (the
+  measure, one scale for all rules, «—» for unmeasured, the ranking)
+
 ## 2026-11-21 — the poem's metre weighs the reading screen's verse halves
 
 **The project lead's decision, the same day as the proposal below: «Einbauen,

@@ -24,17 +24,6 @@ words a person must settle whatever the metre says; or both. The project
 lead's call; nothing goes to the server before it.
 ## Opened 2026-11-21 (the compound page for دل)
 
-### S51. Which scale for the compound page's build value?
-
-Measured 2026-11-21 (FINDINGS, *a build value for compounds*): per second half,
-how often it joins a noun into a word the dictionary labels a compound and the
-corpus has. On the build screen's scale the best half (دار) reaches 51 and
-97.1% of دل's rows score under 10. **Two ways to show it**, and the order of
-the rows is the same in both: the build screen's scale, so the formula is the
-same on both screens and a compound reads as less well built than most derived
-words; or a scale of its own, the best half of the rule at 100 (دار 100, کش
-75, ساز 60, one confirmed word 16). The project lead's call.
-
 ### S50. The build screen reads a spelling's entries with the same borrowed readings
 
 The compound page now drops a second reading that is another entry's own
