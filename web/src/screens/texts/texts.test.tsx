@@ -18,7 +18,7 @@ import type { Decision, Marked, Text, TextFound, UnsureSpelling } from "../../ap
 import { renderApp, renderWithRouter } from "../../test/render";
 import { markedFor } from "./levels";
 import { newest, placeSaved } from "./Reader";
-import { ExampleLine } from "./Unsure";
+import { ExampleLine } from "./ExampleLine";
 
 const TEXT: Text = {
   document_id: "fixture:a:1",
