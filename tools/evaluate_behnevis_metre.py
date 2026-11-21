@@ -19,10 +19,11 @@ words weighed by the metre, :class:`murfulu.behnevis.metre.Metre`):
    right when its signs fit it. Each wrong reading is put in one of three
    kinds, so the limit of the metre is measured rather than assumed:
 
-   - *presence or length*: a reading the model offered fits the signs and
-     weighs differently from the wrong one — the metre can tell them apart;
-   - *vowel quality*: a reading the model offered fits the signs and
-     behaves the same in any line (*kenār*, *kanār*) — the metre cannot;
+   - *presence or length*: some reading the model offered fits the signs and
+     behaves differently from the wrong one in a line — the metre can prefer
+     it;
+   - *vowel quality*: every reading offered that fits the signs behaves as
+     the wrong one does in any line (*kenār*, *kanār*) — the metre cannot;
    - *not offered*: no reading the model offered fits the signs.
 
 2. **What is left to a person.** Every running word of one poem in
@@ -84,10 +85,11 @@ def kind(word: Word, written: str) -> str | None:
     fitting = [c for c, _ in word.candidates if harakat.fits(written, c) is True]
     if not fitting:
         return "not offered"
-    # The same behaviour fits the same lines at the same costs: no metre can
-    # tell the two apart (*Del*, *Dal*; metre.behaviour).
+    # The same behaviour fits the same lines at the same costs (*Del*, *Dal*;
+    # metre.behaviour): when every reading that fits the signs behaves as the
+    # wrong one does, no metre can prefer any of them to it.
     chosen = behaviour(word.latin, word.spelling) if word.latin else None
-    if chosen is not None and any(
+    if chosen is not None and all(
         behaviour(c, word.spelling) == chosen for c in fitting
     ):
         return "vowel quality"
@@ -341,10 +343,10 @@ def report(  # noqa: PLR0913 (one report, many parts)
         )
     out += [
         "",
-        "*Presence or length*: a reading the model offered fits the signs and",
-        "behaves differently in some line — the metre can tell them apart.",
-        "*Vowel quality*: one fits and behaves the same in every line (*kenār*,",
-        "*kanār*) — no metre can. *Not",
+        "*Presence or length*: some reading the model offered fits the signs",
+        "and behaves differently in a line — the metre can prefer it. *Vowel",
+        "quality*: every reading offered that fits behaves as the wrong one",
+        "does in every line (*kenār*, *kanār*) — no metre can. *Not",
         "offered*: none fits; the metre can only lower the confidence. *Made right*",
         "counts the errors of that kind before that the metre turned right; *newly",
         "wrong* the right readings it turned into errors of that kind.",

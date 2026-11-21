@@ -42,8 +42,9 @@ guessed number of pattern positions, at a high cost — the reading the model
 does not offer.
 
 **How the fit moves a word** (:meth:`Metre.weigh`): each candidate keeps the mass
-the model gave it (a probability for a measured one; a share of what is left
-for one offered without a number), and is weighed by ``2 ** -extra``, where
+the model gave it (a probability for a measured one; for one offered without
+a number a share of what is left, never more than the model's own reading
+has), and is weighed by ``2 ** -extra``, where
 ``extra`` is how much more the best fit of the hemistich costs with that
 candidate than with the word's best option. Readings the model did not offer
 keep their mass at full weight — they might fit — so the metre raises a
@@ -699,21 +700,25 @@ class Metre:
         scale = 1.0 / sum(known) if sum(known) > 1.0 else 1.0
         unknown = sum(1 for _, p in word.candidates if p is None)
         left = max(0.0, 1.0 - sum(known) * scale)
+        latins = [latin for latin, _ in word.candidates]
+        chosen = latins.index(word.latin) if word.latin in latins else None
+        first = word.candidates[chosen][1] if chosen is not None else None
         # A reading offered without a number takes an equal share of what the
-        # numbered ones leave, and so do the readings not offered at all.
+        # numbered ones leave — but never more than the model's own reading
+        # has, so that without the metre's word the order and the confidence
+        # stay as the model made them. What is left over is the share of the
+        # readings not offered at all.
         share = left / (unknown + 1)
+        if first is not None:
+            share = min(share, max(0.0, first) * scale)
+        rest = left - share * unknown
         masses = [
             share if p is None else max(0.0, p) * scale for _, p in word.candidates
         ]
         likely = [self.licences.base ** -(c - lowest) for c in costs[:-1]]
         weighed = [m * f for m, f in zip(masses, likely, strict=True)]
-        total = sum(weighed) + share
-        latins = [latin for latin, _ in word.candidates]
-        extra = (
-            costs[latins.index(word.latin)] - lowest
-            if word.latin in latins
-            else math.nan
-        )
+        total = sum(weighed) + rest
+        extra = costs[chosen] - lowest if chosen is not None else math.nan
         if total <= 0:
             # Every reading offered is ruled out and the model left nothing
             # for others: the line holds none of them, so a person decides.

@@ -323,8 +323,22 @@ def test_a_reading_offered_without_a_number_takes_a_share_of_what_is_left():
     weighed = metre.weigh(words, ["---"])  # del bax-šam; baxšm is no syllable
     moved = weighed[1].word
     assert moved.latin == "baxšam"
-    # 0.6 left: half for baxšam, half for readings not offered.
+    # 0.6 left: half of it would be 0.3, but no more than baxšm's own 0.4 —
+    # 0.3 then; the other 0.3 for readings not offered.
     assert moved.confidence == pytest.approx(0.3 / (0.3 + 0.3))
+
+
+def test_without_the_metres_word_the_model_keeps_its_order():
+    # Dal at 0.1, Del offered without a number: both fit equally, so nothing
+    # moves — the unscored Del may not overtake the model's own reading.
+    metre = Metre()
+    words = [
+        Word("دل", "دل", "Dal", 0.1, "inflected", (("Dal", 0.1), ("Del", None))),
+        Word("من", "من", "man", 0.9, "function", (("man", 0.9),)),
+    ]
+    weighed = metre.weigh(words, ["--"])[0].word
+    assert weighed.latin == "Dal"
+    assert weighed.confidence == pytest.approx(0.1)
 
 
 def test_the_metre_cannot_raise_a_word_with_no_rival():
