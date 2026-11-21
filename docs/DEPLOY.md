@@ -662,3 +662,32 @@ twelve files differing. No migration, no data. The rollback is `deploy` from
 
 The page was viewed on the server through the web container directly; the
 site password was not used.
+
+## 22. The poem's metre on the reading screen — run 2026-11-21
+
+The metre step (DECISIONS 2026-11-21, the project lead's «Einbauen,
+abschaltbar»), from the worktree of the branch `claude/behnevis-metre-558f23`
+rebased on `main` at `2789777`, which was what the server ran. No migration.
+**The rollback is `deploy` from `2789777`; turning the step off is
+`MURFULU_BEHNEVIS_METRE=off` in the server `.env` and the api recreated**
+(`… up -d api`), or removing `data/behnevis-metre-v22.json`.
+
+**A deploy from a worktree needs the gitignored files `deploy` would
+otherwise delete on the server.** The dry run (`rsync -n -c --itemize-changes`
+with `deploy`'s own options) listed `deploy/cloudflared/config.yml` and
+`uv.lock` for deletion until both were copied from the main checkout beside
+`deploy/host.env` and `deploy/ssh_config`; after that it listed only this
+change's files, nothing to delete, and nothing of the other sessions' work.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | the dry run above; `md5sum` on the server | only this change's files differ; `behnevis-v22.json` and the lexicon are byte for byte the ones measured |
+| 1 | `rsync` of `data/behnevis-metre-v22.json` alone | the labels (3.2 MB, 115,443 poems), checksum the same on both sides. Not `data`: this worktree's `data/` does not hold every file `data` sends; `data` sends the labels from now on |
+| 2 | `deploy/server.sh deploy` | api and web rebuilt, api recreated, both healthy (57 s) |
+| 3 | `deploy/server.sh check` | all checks passed, corpus v22; the site answers 401 logged out |
+| 4 | `/texts` inside the api container | Hafez's ghazal 3, metre هزج مثمن سالم: 91 sure, 22 mid, 46 unsure before; **100 sure, 16 mid, 43 unsure** after. Khayyam's رباعی 1: 20 / 1 / 9 before, 18 / 1 / 11 after |
+| 5 | the same, timed | ghazal 3 248 ms a request; a 200-couplet window of the Shahnameh 1.8–2.4 s. Annotating alone, without and with the metre: 29 → 118 ms and 355 → 1,521 ms. The first request after the restart took 10 s, loading the model and the labels |
+
+**Long verse texts are slower**: about 1.2 s more for a 200-couplet window,
+and a رباعی's twelve patterns cost the most per line. The page was not viewed
+in a browser on the server; the levels were read from `/texts`.

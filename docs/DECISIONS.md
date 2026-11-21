@@ -20,9 +20,12 @@ the deploy is clean. Built as proposed (`behnevis/serve.py`, `metre_of`,
   recreated turns it off; removing the file does too (DEPLOY §20).
 - *A reading built from the stems still shows no number* in the word's
   panel; the word's own confidence, which sets its level, is the metre's.
-- *Cost*: about 3 ms a verse half on the Mac, 17 ms for a رباعی's (twelve
-  patterns); a window of 200 couplets of a long masnavi takes about half a
-  second more.
+- *Cost*: measured on the server after the deploy (DEPLOY §22), Hafez's
+  ghazal 3 takes 90 ms more to annotate, a 200-couplet window of the
+  Shahnameh 1.2 s more; a رباعی's twelve patterns cost the most per line.
+- *On the server*: Hafez's ghazal 3 went from 91 sure, 22 mid and 46 unsure
+  to 100, 16 and 43. Khayyam's first رباعی from 20 / 1 / 9 to 18 / 1 / 11 —
+  the metre can lower as well as raise.
 
 ## 2026-11-21 — PROPOSED, decided the same day (above): the poem's metre as a step of the automatic Behnevis
 
