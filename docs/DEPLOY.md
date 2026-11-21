@@ -691,3 +691,28 @@ change's files, nothing to delete, and nothing of the other sessions' work.
 **Long verse texts are slower**: about 1.2 s more for a 200-couplet window,
 and a رباعی's twelve patterns cost the most per line. The page was not viewed
 in a browser on the server; the levels were read from `/texts`.
+
+## 23. The compound page as the build table, with a build value of its own — run 2026-11-21
+
+The compound page's list as the build screen's table, with «ساخت» measured
+for compounds per second half on its own scale (DECISIONS 2026-11-21,
+fourth), on the project lead's word («Ja, beides»: the metre first, then this
+on top). Run from the worktree of `0afc3c7`, the branch rebased on `main` at
+`b8a0453`, which held the metre the server ran. No migration. **The rollback
+is `deploy` from `b8a0453`, then removing the `MURFULU_COMPOUND_HEADS_PATH`
+line from the server `.env`** (the `.env` before this deploy is
+`~/murfulu/.env.bak-compound-heads-20261121`); without the line the «ساخت»
+column says «—» and nothing else changes.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options) | only this change's files differ, plus `DEPLOY.md` and `OPEN_QUESTIONS.md`, which the server held at the older 6cd429c and b940a30; **no file of the metre**; nothing else deleted |
+| 1 | `rsync` of `data/compound_heads-v22.json` alone | 92 KB, checksum the same on both sides. Not `data`: this worktree's `data/` does not hold every file `data` sends |
+| 2 | one line in the server `.env`, after a backup | `MURFULU_COMPOUND_HEADS_PATH=/data/compound_heads-v22.json`; `diff` shows that line and nothing else. `MURFULU_BEHNEVIS_METRE` stays unset, so the metre stays on (§22) |
+| 3 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy (1 min 8 s) |
+| 4 | `deploy/server.sh check` | all checks passed, corpus v22; the site answers 401 logged out |
+| 5 | inside the api container | the figures path is set and the metre switch empty; `/compound دل`: *Del* first, دلدار 100 under its reading, دلگیر 84, دلدان 84 not in the corpus; Hafez's ghazal 3 on `/texts`: metre هزج مثمن سالم, 101 sure, 15 mid, 43 unsure (§22 counted 100 / 16 / 43 with the metre, 91 / 22 / 46 without) |
+| 6 | the page, through an SSH tunnel to the web container | at 375 and 1280 px: the switch, the build table opening on دلدار 100, the class beside each row on the phone |
+
+The page was viewed on the server through the web container directly; the
+site password was not used.
