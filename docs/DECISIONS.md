@@ -2,6 +2,40 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 — choices made overnight, without asking
+
+The project lead asked for the score, the table, the texts and the short
+vowels to be finished and deployed overnight with reasonable decisions and no
+questions («finish it … dont ask any questions. make reasonable decisions»).
+These are the choices engineering made on its own, each with its reason, for
+the project lead to undo if any is wrong:
+
+- **Fifty rows first**, then a button for the rest. The table's rows are a
+  line or two high where the cards were four; fifty is a page to scan.
+- **The score's weights 70 / 30** (above): any word the corpus has under its
+  reading stays above any it does not, as under the levels.
+- **Below 60rem the table becomes two-line rows** with the sorts as chips: the
+  six columns need about 880px, and a tablet in portrait cut off the buttons.
+- **The class tiles became tabs** that narrow the table, with the class's
+  explanation under them; every word is on the table when it opens.
+- **The filter chips are native radio buttons** and the tabs move with the
+  arrow keys: the review found the first draft unreachable by keyboard.
+- **A row's buttons keep one label when open** (شواهد، راه ساخت), the open
+  state in colour: «بستن شواهد» wrapped in the column.
+- **The buttons say the menu's verbs**: بساز، بچسبان، بشکاف, the verbs the
+  linguist approved for the menu (L21); one text helper had made them
+  «ترکیب کن» and «تحلیل کن». The explain screen's title is now «شکافتن واژه»
+  and the affixes screen's «وند از روی معنا», to match.
+- **Short vowels where a word is shown with its reading**: the build table and
+  its heading, the compound rows, the word bank. The word page, search
+  results and the reading screen still show the plain spelling; they are the
+  next step if the marks are kept.
+- **The vowel rule** (above, L48): every unwritten short vowel and the tashdid,
+  never a sokun or a mark on a word's or part's last letter, nothing where the
+  alignments disagree.
+- **L36 reworded and L48 added** to the linguist's questions and loaded with
+  this deploy, both not blocking.
+
 ## 2026-11-21 — the app's own texts are rewritten in plain, relaxed Persian
 
 The project lead read the app and found its own explanatory texts stiff:
