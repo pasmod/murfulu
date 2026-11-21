@@ -331,11 +331,12 @@ describe("the order agrees with the server's", () => {
 });
 
 describe("the candidates for new words", () => {
-  it("show only what the corpus lacks under this reading, best-built first", async () => {
+  it("show only what the corpus lacks altogether, best-built first", async () => {
     renderApp(ROUTE);
     await screen.findByText("دانا");
     await userEvent.click(screen.getByRole("radio", { name: "واژه‌های تازه" }));
-    expect(order()).toEqual(["رو", "وادان"]);
+    // رو is written 5,000 times as letters: written already, so not new.
+    expect(order()).toEqual(["وادان"]);
     expect(screen.getByText(/خوش‌ساخت‌ترین‌ها اول/)).toBeInTheDocument();
     // The corpus filter is the view's own now, so it is not offered.
     expect(screen.queryByRole("radio", { name: "نیامده" })).toBeNull();

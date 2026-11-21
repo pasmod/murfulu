@@ -2663,7 +2663,7 @@ app's questions as L36**, not blocking.
 | پیکره | the word under this reading in *n* texts; only its letters; another word's letters; not there |
 
 The list sorts by ساخت first; a view «واژه‌های تازه» shows only the words not
-in the corpus under their reading, best-built first. Examples as the question
+in the corpus at all, best-built first. Examples as the question
 gives them: دانا 98 and 2,118 texts; وادان 56, not in the corpus; زیردانا 4
 (*zir-* 1 of 7,830).
 

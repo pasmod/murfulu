@@ -53,9 +53,11 @@ v17 locally): the top of the list still holds رَفت، رَوان، رَوِش
 rules are strong; what changes is that a well-made unattested word now stands
 above a weakly made attested one (وادان above زیردانا).
 
-**«واژه‌های تازه»**, a view switch above the class tabs: only the words not in
-the corpus under this reading (absent, letters only, or another word's
-letters), best-built first. Its own corpus filter replaces the general one
+**«واژه‌های تازه»**, a view switch above the class tabs: only the words the
+corpus does not have at all, best-built first. **Not the letters-only ones**
+(engineering's choice): asked for as "not attested under this reading", the
+view opened on رفته, its letters in 4,796 texts, and on روه, another word's
+letters — words written already, which cannot be offered as new. Its own corpus filter replaces the general one
 there. Both values have range filters or a filter of their own and sort from
 the head row. The caveat stays under the table: the corpus is mostly old
 poetry, and both values are rough measures. L36 is reworded for the two values

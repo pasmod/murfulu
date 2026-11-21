@@ -25,7 +25,7 @@ export const CORPUS_SAYS =
 
 /** What the candidates view shows, said above its rows. */
 export const CANDIDATES_SAY =
-  "واژه‌هایی که با همین معنا در پیکره نیامده‌اند، خوش‌ساخت‌ترین‌ها اول. شاید واژهٔ تازهٔ خوبی میانشان باشد.";
+  "واژه‌هایی که در پیکره نیامده‌اند، خوش‌ساخت‌ترین‌ها اول. شاید واژهٔ تازهٔ خوبی میانشان باشد.";
 
 export interface Filter {
   key: string;
@@ -103,12 +103,15 @@ export const IN_CORPUS: Filter[] = [
 ];
 
 /**
- * The candidates for new words: not in the corpus under this reading —
- * absent, or only as letters that may be another word.
+ * The candidates for new words: not in the corpus at all.
+ *
+ * **Not the letters-only words** (DECISIONS 2026-11-21): on رفتن the view
+ * opened on رفته, its letters in 4,796 texts, and on another word's letters
+ * such as روه — words that are written already, under this reading or
+ * another, and so cannot be offered as new.
  */
 export function isCandidate(form: BuiltForm): boolean {
-  const kind = corpusKind(form);
-  return kind !== null && kind !== "reading";
+  return corpusKind(form) === "none";
 }
 
 export type SortKey = "build" | "texts" | "alpha";

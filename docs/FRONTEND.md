@@ -67,7 +67,7 @@ word is in or by the alphabet instead.
 
 **The candidates (2026-11-21, second).** A switch above the class tabs,
 «همهٔ واژه‌ها» / «واژه‌های تازه»: the second shows only the words not in the
-corpus under this reading, best-built first, with a line saying so; its corpus
+corpus at all, best-built first, with a line saying so; its corpus
 filter is its own. The columns are word, class, ساخت (0–100 with a bar), در پیکره
 (texts, or «همین حروف», «به معنای واژه‌ای دیگر», «نیامده»), وند, buttons; the
 filters are ساخت's range and the corpus's three answers.
