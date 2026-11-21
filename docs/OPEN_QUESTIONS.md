@@ -9,6 +9,9 @@ Things we need answered before or during planning. Move each one to
 
 ### S51. Serve the poem's metre on the reading screen?
 
+**Settled 2026-11-21 by the project lead: «Einbauen, abschaltbar»** — built
+in with a switch (DECISIONS 2026-11-21, DEPLOY §20).
+
 Measured 2026-11-21 (FINDINGS, DECISIONS «PROPOSED»): in poems with a known
 metre — seven running words in ten — it takes about two words in a hundred
 out of the red and three out of the level below 0.9, and shows the right

@@ -665,3 +665,25 @@ def test_the_metre_labels_sit_beside_the_model_and_can_be_switched_off(
     monkeypatch.setenv(serve.METRE_VARIABLE, "off")
     assert serve.metre_path() is None
     assert serve.metre_of("a:b:1") is None
+
+
+@pytest.mark.parametrize(
+    "broken",
+    [
+        "{not json",
+        '{"labels": ["x"]}',  # no documents
+        '{"labels": ["x"], "documents": {"a:b:1": 7}}',  # no such label
+        '{"labels": [3], "documents": {"a:b:1": 0}}',  # a label not text
+        "[]",
+    ],
+)
+def test_a_labels_file_that_cannot_be_read_turns_the_metre_off(
+    broken: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    from murfulu.behnevis import serve
+
+    model = tmp_path / "behnevis-v98.json"
+    model.write_text("{}", encoding="utf-8")
+    (tmp_path / "behnevis-metre-v98.json").write_text(broken, encoding="utf-8")
+    monkeypatch.setenv(serve.PATH_VARIABLE, str(model))
+    assert serve.metre_of("a:b:1") is None

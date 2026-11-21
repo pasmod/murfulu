@@ -59,6 +59,7 @@ import re
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field, replace
 from functools import lru_cache
+from typing import NamedTuple
 
 from murfulu.behnevis.letters import latin_key
 from murfulu.behnevis.transcribe import Word
@@ -191,12 +192,12 @@ LONG_VOWELS = frozenset("āiu")
 VOWELS = SHORT_VOWELS | LONG_VOWELS
 
 
-@dataclass(frozen=True)
-class Syllable:
+class Syllable(NamedTuple):
     """A syllable's vowel length and its closing consonants, as counted.
 
     ``n`` is an ``n`` after a long vowel, which the metre does not count
-    (*jān*), kept apart because a following vowel may still take it.
+    (*jān*), kept apart because a following vowel may still take it. A
+    tuple, not a dataclass: the fit hashes it millions of times a page.
     """
 
     long: bool
@@ -214,8 +215,8 @@ class Syllable:
     def joined(self) -> Syllable:
         """The syllable once its last consonant goes to a following vowel."""
         if self.coda:
-            return replace(self, coda=self.coda - 1)
-        return replace(self, n=False)
+            return self._replace(coda=self.coda - 1)
+        return self._replace(n=False)
 
     @property
     def open(self) -> bool:
@@ -424,7 +425,10 @@ class Licences:
 CONSONANT, VOWEL, CONJUNCTION = "consonant", "vowel", "conjunction"
 
 
-def _resolve(last: Syllable, after: str, licences: Licences) -> list[tuple[str, float]]:
+@lru_cache(maxsize=1024)
+def _resolve(
+    last: Syllable, after: str, licences: Licences
+) -> tuple[tuple[str, float], ...]:
     """How a word's last syllable may weigh before what comes after it."""
     found: dict[str, float] = {}
 
@@ -439,7 +443,7 @@ def _resolve(last: Syllable, after: str, licences: Licences) -> list[tuple[str, 
         add(LONG, licences.lengthen)
     if last.open and last.long and after in (VOWEL, CONJUNCTION):
         add(SHORT, licences.shorten)
-    return list(found.items())
+    return tuple(found.items())
 
 
 @dataclass(frozen=True)
@@ -580,14 +584,22 @@ def fit(
         }
         for i in range(len(slots) - 1, -1, -1):
             before: dict[State, float] = {}
+            reached = forward[i]
+            mine = best[i]
             for state, steps in moves[i].items():
+                start = reached[state]
+                least = math.inf
                 for index, new, step in steps:
-                    total = forward[i][state] + step + backward.get(new, math.inf)
-                    if total < best[i][index]:
-                        best[i][index] = total
-                    rest = step + backward.get(new, math.inf)
-                    if rest < before.get(state, math.inf):
-                        before[state] = rest
+                    after = backward.get(new)
+                    if after is None or after == math.inf:
+                        continue
+                    rest = step + after
+                    if start + rest < mine[index]:
+                        mine[index] = start + rest
+                    if rest < least:
+                        least = rest
+                if least < math.inf:
+                    before[state] = least
             backward = before
     return best
 

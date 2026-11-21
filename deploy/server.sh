@@ -168,6 +168,11 @@ EOF
     files=$(sed -nE 's#^MURFULU_[A-Z_]+_PATH=/data/##p' deploy/server.env.example)
     lexicon=$(sed -nE 's#^MURFULU_LEXICON_PATH=/data/##p' deploy/server.env.example)
     extra=$(cd data && ls "$lexicon"-wal "$lexicon"-shm 2>/dev/null || true)
+    # The poems' metre labels sit beside the Behnevis model they go with
+    # (behnevis-metre-v22.json beside behnevis-v22.json): sent when built.
+    behnevis=$(sed -nE 's#^MURFULU_BEHNEVIS_PATH=/data/##p' deploy/server.env.example)
+    metre=${behnevis/behnevis-/behnevis-metre-}
+    [ -z "$behnevis" ] || [ ! -f "data/$metre" ] || extra="$extra $metre"
     (cd data && "${RSYNC[@]}" --info=progress2 $files $extra "$SERVER:$REMOTE_DIR/data/")
     ;;
   deploy)

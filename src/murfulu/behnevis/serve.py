@@ -21,6 +21,8 @@ step off without removing anything; without the file it is off too.
 
 from __future__ import annotations
 
+import json
+import logging
 import os
 from functools import lru_cache
 from pathlib import Path
@@ -32,6 +34,8 @@ from murfulu.behnevis.transcribe import Transcriber, Word, bank_from, key
 from murfulu.behnevis.vowels import vocalise_written
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
+
+_log = logging.getLogger(__name__)
 
 #: Where the model lives. Never a literal in the code.
 PATH_VARIABLE = "MURFULU_BEHNEVIS_PATH"
@@ -112,19 +116,27 @@ def metre_path() -> Path | None:
 @lru_cache(maxsize=2)
 def _metres(table: str, changed: float) -> dict[str, str]:
     del changed  # the cache key: a file replaced in place is read again
-    import json
-
     raw = json.loads(Path(table).read_text(encoding="utf-8"))
     labels = raw["labels"]
-    return {document: labels[i] for document, i in raw["documents"].items()}
+    if not all(isinstance(label, str) for label in labels):
+        raise ValueError("a metre label is not text")
+    return {str(document): labels[i] for document, i in raw["documents"].items()}
 
 
 def metre_of(document_id: str) -> str | None:
-    """The metre label of a text, or None when the step is off or it has none."""
+    """The metre label of a text, or None when the step is off or it has none.
+
+    A labels file that cannot be read is logged and treated as absent: the
+    metre is an addition, and the reading screen must not fail for it.
+    """
     table = metre_path()
     if table is None:
         return None
-    return _metres(str(table), table.stat().st_mtime).get(document_id)
+    try:
+        return _metres(str(table), table.stat().st_mtime).get(document_id)
+    except (OSError, ValueError, KeyError, IndexError, TypeError, AttributeError):
+        _log.warning("metre labels unreadable, metre off: %s", table, exc_info=True)
+        return None
 
 
 def annotate(

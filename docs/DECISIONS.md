@@ -2,7 +2,29 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
-## 2026-11-21 — PROPOSED, not decided: the poem's metre as a step of the automatic Behnevis
+## 2026-11-21 — the poem's metre weighs the reading screen's verse halves
+
+**The project lead's decision, the same day as the proposal below: «Einbauen,
+abschaltbar»** — build it in, with a switch to turn it off, and deploy it if
+the deploy is clean. Built as proposed (`behnevis/serve.py`, `metre_of`,
+`annotate`):
+
+- *Where a verse text's metre is known, each verse half is weighed* before
+  its words are shown; prose, notes and texts without a label are read as
+  before. `/texts` names the label it used (`behnevis.metre`).
+- *The labels are a file beside the model*: `behnevis-metre-v22.json` beside
+  `behnevis-v22.json` (`tools/extract_metre_lines.py`, 115,443 poems), so
+  `release` of another version takes that version's file, and no `.env`
+  line was needed.
+- *The switch*: `MURFULU_BEHNEVIS_METRE=off` in the server `.env` and the api
+  recreated turns it off; removing the file does too (DEPLOY §20).
+- *A reading built from the stems still shows no number* in the word's
+  panel; the word's own confidence, which sets its level, is the metre's.
+- *Cost*: about 3 ms a verse half on the Mac, 17 ms for a رباعی's (twelve
+  patterns); a window of 200 couplets of a long masnavi takes about half a
+  second more.
+
+## 2026-11-21 — PROPOSED, decided the same day (above): the poem's metre as a step of the automatic Behnevis
 
 **Proposed by engineering after the experiment the project lead chose that
 day** (FINDINGS 2026-11-21, `data/behnevis-metre-eval-v22.md`). Nothing is
