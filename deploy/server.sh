@@ -173,6 +173,10 @@ EOF
     behnevis=$(sed -nE 's#^MURFULU_BEHNEVIS_PATH=/data/##p' deploy/server.env.example)
     metre=${behnevis/behnevis-/behnevis-metre-}
     [ -z "$behnevis" ] || [ ! -f "data/$metre" ] || extra="$extra $metre"
+    # So does the list of the most frequent unsure spellings
+    # (behnevis-unsure-v22.json, tools/measure_unsure_spellings.py).
+    unsure=${behnevis/behnevis-/behnevis-unsure-}
+    [ -z "$behnevis" ] || [ ! -f "data/$unsure" ] || extra="$extra $unsure"
     (cd data && "${RSYNC[@]}" --info=progress2 $files $extra "$SERVER:$REMOTE_DIR/data/")
     ;;
   deploy)
@@ -271,9 +275,10 @@ EOF
     ;;
   migrate) remote "cd $REMOTE_DIR && $COMPOSE run --rm api alembic upgrade head" ;;
   proposals)
-    # Readings picked or typed on the reading screen, as JSON lines, into
-    # data/ for the next `tools/build_behnevis.py` (it learns the picks among
-    # the bank's readings). Read-only on the server.
+    # Readings picked or typed on the reading screen, and the readings decided
+    # for every like place of a spelling, as JSON lines, into data/ for the
+    # next `tools/build_behnevis.py` (it learns the picks among the bank's
+    # readings, and keeps the decisions in force). Read-only on the server.
     remote "cd $REMOTE_DIR && $COMPOSE exec -T api python tools/export_reading_proposals.py --jsonl" \
       > data/behnevis-proposals.jsonl
     echo "$(wc -l < data/behnevis-proposals.jsonl) proposals in data/behnevis-proposals.jsonl"

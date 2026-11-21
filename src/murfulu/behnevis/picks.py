@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 
 from murfulu.behnevis.choice import Answered
+from murfulu.behnevis.decided import KIND as DECIDED_KIND
 from murfulu.behnevis.transcribe import key
 
 
@@ -30,6 +31,8 @@ def picks_from(
     found: list[Answered] = []
     for line in path.open(encoding="utf-8"):
         one = json.loads(line)
+        if one.get("kind") == DECIDED_KIND:
+            continue  # a decision for every like place: :mod:`.decided` reads it
         spelling = key(one.get("spelling_fa") or "")
         latin = one.get("latin") or ""
         known = (*functions.get(spelling, ()), *bank.get(spelling, ()))

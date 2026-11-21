@@ -62,7 +62,7 @@ from functools import lru_cache
 from typing import NamedTuple
 
 from murfulu.behnevis.letters import latin_key
-from murfulu.behnevis.transcribe import Word
+from murfulu.behnevis.transcribe import DECIDED, Word
 
 SHORT, LONG = "U", "-"
 OVERLONG = LONG + SHORT
@@ -656,7 +656,13 @@ class Metre:
             last = i == len(words) - 1
             options: list[Option] = []
             counts: list[int] = []
-            for latin, _ in word.candidates:
+            # A person decided this reading (:mod:`.decided`): the line is
+            # fitted with it alone, never with a rival or some other reading.
+            decided = word.source == DECIDED and word.latin is not None
+            offered: Sequence[tuple[str, float | None]] = (
+                [(word.latin or "", word.confidence)] if decided else word.candidates
+            )
+            for latin, _ in offered:
                 plain = shape(latin, word.spelling)
                 found: list[tuple[Shape, float]] = []
                 if plain is not None:
@@ -681,6 +687,9 @@ class Metre:
                         ast=enclitic and key in ("ast", "st"),
                     )
                 )
+            if decided:
+                out.append(Slot(tuple(options), (1, 0)))
+                continue
             if counts:
                 span = (
                     max(1, min(counts) - self.licences.spread),
@@ -702,7 +711,10 @@ class Metre:
         costs = fit(slots, pattern_set, self.licences)
         scanned = scans(slots, pattern_set, self.licences)
         return [
-            self._weigh_one(word, cost, scanned)
+            # A decided word stands as decided; it only shapes its neighbours.
+            Weighed(word, scanned, math.nan)
+            if word.source == DECIDED and word.latin is not None
+            else self._weigh_one(word, cost, scanned)
             for word, cost in zip(words, costs, strict=True)
         ]
 

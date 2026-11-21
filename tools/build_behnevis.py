@@ -17,7 +17,9 @@ none of them in git (they are derived from karbon's data, NOTICE):
 ``behnevis-proposals.jsonl``    read if present: readings picked on the reading
                                 screen, fetched from the server (`deploy/server.sh
                                 proposals`); the picks among the bank's readings
-                                are learned like marked places
+                                are learned like marked places, and the readings
+                                decided for every like place of a spelling are
+                                kept in the model as decisions
 ``behnevis-marked-v17.jsonl``   every marked word of a Persian line, with its
                                 neighbours and author: what the evaluation
                                 hides the signs of and checks the model against
@@ -36,6 +38,7 @@ from pathlib import Path
 from elasticsearch.helpers import scan
 
 from murfulu.behnevis.choice import Answered, ChoiceModel
+from murfulu.behnevis.decided import Decided, decisions_from
 from murfulu.behnevis.folds import MAX_SIGNED_SHARE
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.letters import LetterModel
@@ -182,6 +185,22 @@ def main(argv: list[str] | None = None) -> int:
     # the bank lacks waits for karbon and teaches nothing here.
     proposals = DATA / "behnevis-proposals.jsonl"
     learned = picks_from(proposals, bank, functions) if proposals.exists() else []
+    # Readings decided for every like place of a spelling (2026-11-21): the
+    # ones the bank holds are looked up before the model reads; the others
+    # wait on karbon's list.
+    decided, waiting = (
+        decisions_from(
+            (json.loads(line) for line in proposals.open(encoding="utf-8")),
+            bank,
+            functions,
+        )
+        if proposals.exists()
+        else (Decided(), [])
+    )
+    print(
+        f"decisions for every like place: {len(decided)} learned, "
+        f"{len(waiting)} waiting for karbon"
+    )
     for one in learned:
         answered.append(one)
         covered.setdefault(one.spelling, [0, 0])[0] += 1
@@ -212,6 +231,7 @@ def main(argv: list[str] | None = None) -> int:
         functions=functions,
         covered={k: (v[0], v[1]) for k, v in covered.items()},
         inflected_fit=fitted,
+        decided=decided or None,
     )
     transcriber.save(
         DATA / f"behnevis-{version}.json",
@@ -223,6 +243,7 @@ def main(argv: list[str] | None = None) -> int:
             "marked_fit_none": misses,
             "max_signed_share": MAX_SIGNED_SHARE,
             "quoted_signed_words": quoted,
+            "decided": len(decided),
         },
     )
     with (DATA / f"behnevis-answered-{version}.jsonl").open(

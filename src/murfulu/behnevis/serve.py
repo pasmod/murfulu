@@ -24,13 +24,15 @@ from __future__ import annotations
 import json
 import logging
 import os
+from dataclasses import replace
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from murfulu.behnevis import unsure
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.metre import Metre, patterns
-from murfulu.behnevis.transcribe import Transcriber, Word, bank_from, key
+from murfulu.behnevis.transcribe import DECIDED, Transcriber, Word, bank_from, key
 from murfulu.behnevis.vowels import vocalise_written
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
@@ -100,6 +102,33 @@ def loaded() -> Transcriber | None:
     except Exception:  # no lexicon: the screen goes without, as before
         return None
     return _load(str(model), model.stat().st_mtime, snapshot_id)
+
+
+def unsure_path() -> Path | None:
+    """The list of unsure spellings beside the model, if it was measured.
+
+    ``tools/measure_unsure_spellings.py`` writes it (``behnevis-unsure-v22.json``
+    beside ``behnevis-v22.json``); the decision screen lists it.
+    """
+    model = path()
+    if model is None:
+        return None
+    found = unsure.path_beside(model)
+    return found if found.is_file() and found != model else None
+
+
+@lru_cache(maxsize=2)
+def _unsure(table: str, changed: float) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    del changed  # the cache key: a list measured again is read again
+    return unsure.read(Path(table))
+
+
+def unsure_list() -> tuple[dict[str, Any], list[dict[str, Any]]] | None:
+    """The measured list and what it was measured on, or None without one."""
+    table = unsure_path()
+    if table is None:
+        return None
+    return _unsure(str(table), table.stat().st_mtime)
 
 
 def metre_path() -> Path | None:
@@ -208,10 +237,21 @@ def _weighed(metre: Metre, reads: list[Word], allowed: frozenset[str]) -> list[W
 
     A reading the model offered without a number (one built from the stems)
     still shows none: the panel says it carries no estimate. The word's own
-    confidence, which sets its level, is the metre's.
+    confidence, which sets its level, is the metre's — except where a person
+    decided the reading (:mod:`.decided`): the line is fitted with that
+    reading alone, and it stands as decided.
     """
+    fitted = [
+        replace(word, candidates=((word.latin, word.confidence),))
+        if word.source == DECIDED and word.latin is not None
+        else word
+        for word in reads
+    ]
     out: list[Word] = []
-    for before, after in zip(reads, metre.weigh(reads, allowed), strict=True):
+    for before, after in zip(reads, metre.weigh(fitted, allowed), strict=True):
+        if before.source == DECIDED:
+            out.append(before)
+            continue
         unnumbered = {latin for latin, p in before.candidates if p is None}
         word = after.word
         out.append(

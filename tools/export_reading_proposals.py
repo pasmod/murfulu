@@ -24,6 +24,11 @@ store keeps every record (it is append-only), and this export passes only the
 newest one for each place on, to the model and to karbon alike (the review of
 2026-11-14).
 
+**A reading decided for every like place** (2026-11-21, :mod:`murfulu.behnevis.decided`)
+is passed on whole, with its scope and store id, for the build to keep the
+newest for each spelling and scope; karbon's list takes the decisions in
+force whose reading the bank lacks, with what they were decided for.
+
 Read-only on the database.
 """
 
@@ -38,8 +43,13 @@ from typing import Any
 
 from sqlalchemy import select
 
+from murfulu.behnevis import decided as decisions
 from murfulu.db.models.review import ExpertFeedback
 from murfulu.db.session import session_scope
+
+#: The two kinds of record this export reads: a reading for one word in a
+#: line, and a reading decided for every like place.
+HERE = "reading_here"
 
 
 def gather(
@@ -52,9 +62,26 @@ def gather(
     reading (the review of 2026-11-14).
     """
     found: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
+    in_force = {
+        one.order: one
+        for one in decisions.current(
+            one
+            for one in (
+                decisions.from_record(row.context or {}, row.id)
+                for row in rows
+                if (row.context or {}).get("kind") == decisions.KIND
+            )
+            if one is not None
+        )
+    }
     for row in rows:
         context = row.context or {}
-        if context.get("screen") != "texts" or context.get("kind") != "reading_here":
+        if context.get("screen") != "texts":
+            continue
+        if context.get("kind") == decisions.KIND:
+            if row.id not in in_force:
+                continue  # replaced by a newer decision, or taken back
+        elif context.get("kind") != HERE:
             continue
         spelling = context.get("spelling_fa") or (row.target_id or "").partition(":")[0]
         latin = context.get("latin") or (row.target_id or "").partition(":")[2]
@@ -69,10 +96,22 @@ def gather(
                 "model": context.get("model_latin"),
                 "place": context.get("heading") or context.get("document_id"),
                 "written": context.get("written"),
+                "decided": [],
             },
         )
         entry["times"] += 1
+        if context.get("kind") == decisions.KIND:
+            entry["decided"].append(_reach(in_force[row.id]))
     return found
+
+
+def _reach(one: decisions.Decision) -> str:
+    """What a decision was for, in a few words for karbon's list."""
+    if one.scope == decisions.AFTER_WORD:
+        return f"after {one.word}"
+    if one.scope == decisions.BEFORE_WORD:
+        return f"before {one.word}"
+    return "everywhere"
 
 
 def current_bank() -> Callable[[str, str], bool | None] | None:
@@ -110,19 +149,23 @@ def report(found: dict[str, dict[str, dict[str, Any]]]) -> str:
         "",
         "Each row: a spelling, a reading the bank lacks that readers said is right",
         "in a line, how often, what the automatic Behnevis had read, and one place.",
-        "Proposals only — nothing here was written into the bank.",
+        "*Decided for* says where a reader decided it for every like place:",
+        "everywhere, or after or before one word. Proposals only — nothing here",
+        "was written into the bank.",
         "",
-        "| spelling | proposed | times | model read | written | one place |",
-        "|---|---|---:|---|---|---|",
+        "| spelling | proposed | times | model read | written | one place "
+        "| decided for |",
+        "|---|---|---:|---|---|---|---|",
     ]
     order = sorted(
         found.items(), key=lambda kv: -sum(e["times"] for e in kv[1].values())
     )
     for spelling, readings in order:
         for latin, e in sorted(readings.items(), key=lambda kv: -kv[1]["times"]):
+            reach = "; ".join(e["decided"])
             lines.append(
                 f"| {spelling} | {latin} | {e['times']} | {e['model'] or ''} "
-                f"| {e['written'] or ''} | {e['place'] or ''} |"
+                f"| {e['written'] or ''} | {e['place'] or ''} | {reach} |"
             )
     return "\n".join(lines) + "\n"
 
@@ -160,14 +203,31 @@ def latest(rows: list[Any]) -> list[Any]:
     newest: dict[tuple[Any, ...], int] = {}
     for at, row in enumerate(rows):
         context = row.context or {}
-        if context.get("document_id"):
+        if context.get("document_id") and _here(context):
             newest[(_context(context), _position(context))] = at
     kept = set(newest.values())
     return [
         row
         for at, row in enumerate(rows)
-        if not (row.context or {}).get("document_id") or at in kept
+        if not ((row.context or {}).get("document_id") and _here(row.context or {}))
+        or at in kept
     ]
+
+
+def _good(row: Any) -> bool:
+    """A `good` record, or a decision (taken back with `unsure`)."""
+    context = row.context or {}
+    return row.verdict == "good" or context.get("kind") == decisions.KIND
+
+
+def _here(context: dict[str, Any]) -> bool:
+    """Whether a record is a reading for one word in a line.
+
+    A decision for every like place is not replaced by a later save at the
+    place it was made from: its own scope says what replaces it
+    (:func:`murfulu.behnevis.decided.current`).
+    """
+    return context.get("kind") != decisions.KIND
 
 
 def picks(rows: list[Any]) -> list[dict[str, Any]]:
@@ -175,23 +235,31 @@ def picks(rows: list[Any]) -> list[dict[str, Any]]:
     found = []
     for row in rows:
         context = row.context or {}
-        if context.get("screen") != "texts" or context.get("kind") != "reading_here":
+        kind = context.get("kind")
+        if context.get("screen") != "texts" or kind not in (HERE, decisions.KIND):
             continue
-        found.append(
-            {
-                key: context.get(key)
-                for key in (
-                    "spelling_fa",
-                    "latin",
-                    "in_bank",
-                    "before",
-                    "after",
-                    "written",
-                    "heading",
-                )
+        one = {
+            key: context.get(key)
+            for key in (
+                "spelling_fa",
+                "latin",
+                "in_bank",
+                "before",
+                "after",
+                "written",
+                "heading",
+            )
+        } | {"document_id": context.get("document_id"), "kind": kind}
+        if kind == decisions.KIND:
+            # The build keeps the newest for each spelling and scope: it
+            # needs the scope, whether it was taken back, and the order.
+            one |= {
+                "scope": context.get("scope"),
+                "scope_word": context.get("scope_word"),
+                "withdrawn": bool(context.get("withdrawn")),
+                "id": row.id,
             }
-            | {"document_id": context.get("document_id")}
-        )
+        found.append(one)
     return found
 
 
@@ -208,12 +276,14 @@ def main(argv: list[str] | None = None) -> int:
                 select(ExpertFeedback)
                 .where(
                     ExpertFeedback.target_type == "lexicon_entry",
-                    ExpertFeedback.verdict == "good",
+                    # A decision taken back is stored with `unsure`; every
+                    # other record read here is a `good` one (`_good`).
+                    ExpertFeedback.verdict.in_(("good", "unsure")),
                 )
                 .order_by(ExpertFeedback.id)
             )
         )
-        rows = latest(rows)
+        rows = latest([row for row in rows if _good(row)])
         if args.jsonl:
             for one in picks(rows):
                 sys.stdout.write(json.dumps(one, ensure_ascii=False) + "\n")

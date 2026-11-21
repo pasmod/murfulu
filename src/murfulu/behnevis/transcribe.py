@@ -18,7 +18,7 @@ import json
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import yaml
 
@@ -30,10 +30,16 @@ from murfulu.corpus.wordtypes import normalise
 from murfulu.search import harakat
 from murfulu.search.texts import tokens
 
+if TYPE_CHECKING:
+    from murfulu.behnevis.decided import Decided
+
 #: Where a word's reading came from.
 FUNCTION, BANK, CHOICE, LETTERS, NONE = "function", "bank", "choice", "letters", "none"
 #: A guess from the letters for a word that reads as an inflected form.
 INFLECTED = "inflected"
+#: A reading a person decided for every like place of the spelling
+#: (:mod:`.decided`).
+DECIDED = "decided"
 
 RULES = Path(__file__).resolve().parents[3] / "rules" / "function_word_readings.yaml"
 
@@ -132,6 +138,13 @@ class Transcriber:
     #: How sure the verse rule for و is: *o* inside a verse half, *va* at its
     #: start and in prose. A rule of thumb, not measured, so mid at most.
     conjunction_confidence: float = 0.8
+    #: Readings a person decided for every like place of a spelling
+    #: (:mod:`.decided`), learned at the build from the exported decisions.
+    decided: Decided | None = None
+    #: How sure a decided reading is. **Not measured**: a person's word for
+    #: all like places, set at the *sure* level so the screen stops asking;
+    #: the linguist's timed sample is what can measure it.
+    decided_confidence: float = 0.95
 
     def fitted(self, kind: str) -> float:
         """The measured share of a pattern family's built readings that fit."""
@@ -163,7 +176,55 @@ class Transcriber:
 
         ``use_signs=False`` reads the word as if it carried no vowel signs:
         how the model is measured against the signs it would otherwise use.
+
+        A reading a person decided for this place (:mod:`.decided`) comes
+        first, unless the word's own signs rule it out; the model's other
+        readings follow it without a number, to pick from.
         """
+        read = self._read(
+            written,
+            spelling,
+            before,
+            after,
+            use_signs=use_signs,
+            verse=verse,
+            first=first,
+        )
+        if self.decided is None:
+            return read
+        decided = self.decided.lookup(
+            spelling,
+            before,
+            after,
+            # The word's own signs overrule a decision they rule out.
+            lambda latin: not (use_signs and harakat.fits(written, latin) is False),
+        )
+        if decided is None:
+            return read
+        sure = self.decided_confidence
+        return Word(
+            written,
+            spelling,
+            decided,
+            sure,
+            DECIDED,
+            self._unique(
+                [(decided, sure), *((latin, None) for latin, _ in read.candidates)]
+            ),
+        )
+
+    def _read(
+        self,
+        written: str,
+        spelling: str,
+        before: str | None,
+        after: str | None,
+        *,
+        use_signs: bool = True,
+        verse: bool | None = None,
+        first: bool = False,
+    ) -> Word:
+        """The model's own reading, before any decision (:meth:`word`)."""
         function = self.functions.get(spelling, ())
         if spelling == "و" and verse is not None and {"va", "o"} <= set(function):
             # In verse و is mostly the short *o* bound to the word before it
@@ -344,6 +405,7 @@ class Transcriber:
                     },
                     "letters": self.letters.to_dict(),
                     "choice": self.choice.to_dict(),
+                    "decided": self.decided.to_dict() if self.decided else {},
                 },
                 ensure_ascii=False,
             ),
@@ -358,6 +420,8 @@ class Transcriber:
         inflection: Analyser | None = None,
     ) -> Transcriber:
         """Read a model file back, with the bank (and analyser) it was built beside."""
+        from murfulu.behnevis.decided import Decided  # it reads `key` from here
+
         raw = json.loads(path.read_text(encoding="utf-8"))
         return cls(
             bank=bank,
@@ -370,6 +434,8 @@ class Transcriber:
             inflected_fit={
                 k: (v[0], v[1]) for k, v in raw.get("inflected_fit", {}).items()
             },
+            # A model built before decisions existed has none.
+            decided=Decided.from_dict(raw.get("decided") or {}) or None,
         )
 
 
