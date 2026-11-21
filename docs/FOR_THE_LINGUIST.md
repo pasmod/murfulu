@@ -2968,3 +2968,40 @@ disagree about a mark, the mark is left off.
    up); the linking vowel inside a compound (*maqtuaruzi*); and whether the
    tashdid should also be shown where Behnevis writes a doubled letter single.
 
+
+## L49. دلبر twice: the doer (V-078) and the done-to (V-079)
+
+Raised by the project lead on 2026-11-21, reading the compound page for دل.
+**Not yet in the app's questions** (`rules/questions_fa.yaml`).
+
+V-078 and V-079 take the same two halves — a نام and a کنون‌کاربن — and write
+the same letters; they differ only in what they make: **کارنده‌کاربهر**, the
+doer (the pack's examples: soxanguy, xodaparast, delgir), and
+**کاریده‌کاربهر**, the done-to (delpazir, dastduz, angošnamā). So every noun
+joined to a present stem is built twice, and the compound page shows دلبر
+*delbar* as two rows, one per rule.
+
+**Neither row is a fault of the engine**: both are what the two rules say.
+Whether دلبر *is* both is a judgement about the word, and the dictionary reads
+it one way: «دل بَر. دل برنده. ‖ برندهٔ دل» — the one who takes the heart, the
+doer. دلدار («دل دارنده») and دلربا («دل رباینده») read the same way.
+
+**What we did meanwhile**: nothing. Both rows stay, each labelled with the
+class it builds, so they read as two analyses rather than one word twice
+(OPEN_QUESTIONS S26).
+
+### The question
+
+1. **For a compound the dictionary already holds**, may its gloss decide? A
+   gloss in «…نده» (دل برنده) would make it کارنده‌کاربهر only, and دلبر one
+   row (V-078); a «ن مف» label or a gloss in «…ده» کاریده‌کاربهر only.
+2. **For a new compound**, are both analyses always open, so both rows stay?
+   Or does V-079 need a condition on the noun — where or with what the act is
+   done, as دست in dastduz — that V-078 does not?
+3. If both stay, would a reader rather see **one row naming both classes**
+   («دلبر — کارنده‌کاربهر یا کاریده‌کاربهر») than two rows?
+
+**What changes with each answer**: (1) yes — a held word keeps only the
+analysis its gloss names, which roughly halves the attested rows on the
+compound page; (2) a condition — V-079 builds far fewer words; (3) one row —
+a display change only, nothing the engine builds.

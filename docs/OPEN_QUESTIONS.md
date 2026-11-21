@@ -5,6 +5,24 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-21 (the compound page for دل)
+
+### S50. The build screen reads a spelling's entries with the same borrowed readings
+
+The compound page now drops a second reading that is another entry's own
+(DECISIONS 2026-11-21, *the compound page*): دل's *Dal* and *Dol* no longer
+build the heart's words. **The build screen does not**: `/generate` builds from
+every reading karbon lists (`Reading.all_latin`), so the same 447 readings in
+372 spellings still file another entry's words under them, and its entries
+still stand in karbon's row order. Not changed here because the build screen
+was being reworked in another session (the two values, 2026-11-21); the same
+`compounding.own_readings` and the same evidence measure are ready to reuse.
+
+Also found in passing on the compound page: a row's «در واژه‌نامهٔ کاربن هست»
+is decided on the letters (`already_a_word`), so *dalbar* under the tree says
+the dictionary holds it, when the dictionary holds دلبر as *delbar*. Under the
+heart, where it now sits, it is true.
+
 ## Opened 2026-11-19 (the corrected rules)
 
 ### S48. Deploy the new rule pack with a corpus rebuilt on it, or ahead of one?
@@ -395,7 +413,9 @@ documented one-line bridge command, or leaving it and treating a skipped
 layout test as a known blind spot. Publishing a port is the thing DEPLOY.md is
 most careful about, so this is not a free choice.
 
-**S26. Should two rules that write the same word stay two rows?** Raised by the
+**S26. Should two rules that write the same word stay two rows?** (2026-11-21:
+asked of the linguist as L49, with دلبر, whose dictionary gloss names only the
+doer.) Raised by the
 compound screen showing دلبر three times. Two of those are V-078 and V-079,
 which join the same two parts and differ only in what they build — the doer and
 the done-to — and `compounding.py` keeps both deliberately, because that is

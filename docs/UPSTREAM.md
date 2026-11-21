@@ -335,6 +335,25 @@ productive suffix should carry a flag. The first is a data fault if the stem is
 wrong; the second is B-shaped. Nothing is worked around here — the value is
 carried exactly as karbon has it.
 
+### A18. 447 readings carry another entry's own reading as their second reading
+
+**Measured 2026-11-21** on `lexicon-20261111` (karbon 1.3.2): of 57,944
+readings, 1,703 spellings have more than one entry, and **447 readings in 372
+spellings** list as a `phonemic_variants` value the primary reading of another
+entry with the same letters (compared without case). دل: *Dal* (11452/11453,
+a tree in the Hamadan dialect) and *Dol* (11455, an ailment) both list *Del*,
+which is 11456, the heart. Others: جنگ *Jong* (a young camel) → *Jang* (war);
+سر *Sor* (rice wine) → *Sar*; خرد *Xerad* → *Xard*; گرد *Gerd* and *gord* →
+*gard*; شکر *Šokor* (hedgehog) → *Šekar*, which is also where sugar's only
+reading lives (see B11).
+
+Built from, each such variant filed the other entry's words under the wrong
+headword — the compound page for دل built 9,370 forms on the tree instead of
+4,685. **Built here as a stopgap (C-shaped)**: `compounding.own_readings`
+drops the borrowed variant on the compound page (DECISIONS 2026-11-21). The
+fix belongs in karbon: a variant that is a sibling entry's own reading is
+either that entry or a merge artefact, and should not be listed on both.
+
 ## B — gaps in karbon
 
 ### B1. نهفتن has no present stem
@@ -592,6 +611,17 @@ carries the reading it overrode. When the linguist rules, either the override
 is dropped or this goes upstream as a pull request.
 
 ---
+
+
+### B11. Two common senses have no entry of their own: مهر *mohr* and شکر *šekar* (sugar)
+
+**Measured 2026-11-21** on `lexicon-20261111` while checking homographs. مهر
+has one entry, *Mehr*; *mohr* (a seal) is not in the bank under any spelling.
+شکر has *šekar*, glossed as hunting, and *Šokor*, glossed as hedgehog, which
+lists *Šekkar* and *Šekar* as its second readings — so sugar, one of the
+commonest words of the poetry, exists only as a variant of the hedgehog. A
+screen that picks among a spelling's entries cannot offer a sense that has
+none.
 
 ## C — built here, belongs in karbon eventually
 

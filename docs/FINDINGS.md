@@ -5,6 +5,59 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-21 — a spelling's entries: which one the evidence supports, and readings borrowed from each other
+
+The compound page for دل opened on «دل Dal», a tree in the Hamadan dialect,
+while the words under it were دلبر and دلدار — built on *Del*, the heart.
+Measured on `lexicon-20261111` (karbon 1.3.2) and the local corpus v17.
+
+**Two faults, one on each side.** karbon's entries for دل are *Dal* (11452 and
+11453 collapsed), *Dol* (11455, an ailment, from Borhan), *Del* (11456, the
+heart) and the adjective *dall*; **Dal and Dol both carry *Del* as their second
+reading**, so each built the heart's words as well as its own (9,370 forms
+instead of 4,685). And the page stacked the entries in karbon's row order,
+which ranks nothing. **447 readings in 372 spellings** carry another entry's
+own reading of the same letters this way (compared without case): جنگ's *Jong*
+(a young camel) carries *Jang* (war), سر's *Sor* (rice wine) carries *Sar*,
+خرد's *Xerad* carries *Xard*, شکر's *Šokor* (hedgehog) carries *Šekar*.
+
+**The corpus cannot rank a spelling's entries by itself.** Its counts are the
+spelling's: every reading of دل has the same 148,697 occurrences. Two
+per-reading measures exist, and only one holds up:
+
+| measure | دل | گل | مرد | verdict |
+|---|---|---|---|---|
+| the reading model's answers — places an edition's vowel signs settled the reading (`behnevis-v17.json`) | Del 22 | **Gel 405**, Gol 311 | **mord 160**, Mard 40 | biased: editors mark the *unexpected* reading |
+| words built on the reading that the dictionary holds under exactly that Latin **and** the corpus has | Del 24, others 0 | Gol 5, Gel 1 | Mard 8, mord 0 | used — a proxy for which entry is the word in use, not a frequency |
+
+**The frequent homographs, ranked by the second measure** (first entry first;
+«borrowed» = a second reading removed because another entry owns it):
+
+| spelling | order now | was | note |
+|---|---|---|---|
+| دل | Del 24 · Dal 0 · Dol 0 · dall 0 | Dal first | Dal and Dol borrowed *Del* |
+| جنگ | Jang 1 · Jong 0 | Jong first | Jong borrowed *Jang* |
+| خرد | Xerad 4 · xord 3 · Xard 0 | Xard (black mud) first | Xerad borrowed *Xard* |
+| گور | Gur 3 · gowr 0 | gowr first | Gur is flagged; its words confirm it |
+| سر | Sar 33 · Sor 1 | same | Sor borrowed *Sar* |
+| گرد | Gerd 5 · gord 3 · gard 2 | Gerd · gard · gord | Gerd and gord borrowed *gard* |
+| گل | Gol 5 · Gel 1 | same | Gol's *Gal* is kept: no entry is *Gal* |
+| مرد | Mard 8 · mord 0 | same | |
+| پر | por 49 · Par 7 · per 0 | por · per · Par | |
+| شکر | šekar 7 · Šokor 1 | same | sugar is only a second reading of the hedgehog entry |
+| شیر | šir 20 · Šir 20 | same | lion and milk build the same Latin: **no evidence can choose** |
+| کرم | five entries, all 0 | same | karbon's *Karam* is cabbage; the worm *Kerm* comes last, and nothing measured says otherwise |
+| مهر | one entry, *Mehr* | — | *Mohr* (seal) is not in karbon 1.3.2 |
+
+**What it means.** The page now opens on the best-evidenced entry, shows one
+entry at a time and says why it is first (DECISIONS 2026-11-21, *the compound
+page*). The build screen reads the same entries with the same borrowed
+readings and is not changed yet (OPEN_QUESTIONS S50). The two measures, and
+the bias of the first, apply to any screen that must pick one of a spelling's
+entries.
+
+---
+
 ## 2026-11-21 — short vowels from the reading: four words in five get a mark
 
 Measured while building the marks (DECISIONS 2026-11-21) on
