@@ -5,6 +5,64 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-21 — a build value for compounds: per second half, on the dictionary's own compounds
+
+The project lead asked for the build screen's score on the compound page, and
+then, once it was clear the score could not separate the rows, for a real
+build value measured first. Measured on corpus v22 (`word_types-v22`, 409,955
+spellings) and `lexicon-20261111`.
+
+**Why the build screen's value says nothing here.** It rests on a rule's
+realisation rate, and a noun's whole page is built by three rules: دل's 4,685
+rows are V-078 (1,462), V-079 (1,462) and V-016 (1,761), and V-078 and V-079
+join the same pools. Worse, **no compounding rule is measured on the server**:
+`tools/measure_compounding.py` last ran into the v8 productivity file (V-078:
+28,896,536 built, 26,361 attested); from v9 on, and in v22, they read
+`types_built: 0`. Every row would have shown the median fill.
+
+**What separates the rows is the second half**, which works like a suffix:
+«‑دار» after a noun. So the measure is, per slot rule and per second half (its
+letters *and* reading — کش is *keš* and *koš*), how many of the rule's fronts
+it joins into a word the corpus has. Three runs, each fixing the last:
+
+| counted | top halves (V-078) | verdict |
+|---|---|---|
+| the corpus has the letters | ر 849, ل 473, نه 357, ده 332 | letter coincidence: دختر = دخت + ر |
+| … and the bank reads them as the joined Latin | ر 85, دار 80, م 56, ش 54, دن 41 | stems with no vowel still match: ابر = اب + *r*; *dan* ends every infinitive |
+| … and the dictionary labels the word a compound (صفت مرکب، اسم مرکب — 21,129 of 57,944 readings) | دار 74, گیر 36, دان 36, وار 30, زن 27, کش 24, بند 24, بار 24 | used, with the two fixes below |
+
+The review of that third run found false splits still getting through on
+one-letter halves (دربار as دربا + *r*, باهوش as باهو + *š*, دوتار as دوتا +
+*r*): **one-letter halves are set aside** (آ، ر، ش، ل، م) and give no value. It
+also found a borrowed reading at work (دم's *Dom* lists *Dam*, so دمساز counted
+as a noun's compound): **the entries go through the page's own cleanup**
+(`own_readings`) first. A test that the dictionary's own definitions write the
+boundary («دل بَر.») was tried and dropped: only 54 of 1,847 pairs pass it.
+
+Final run: V-078 926 confirmed pairs over 1,451 halves (by letters and
+reading), 224 of them with at least one; V-080 399 over 154; V-016 (a noun and
+a past stem) only 30 — زاد and بست lead with 3. The file
+(`data/compound_heads-v22.json`, gitignored like the productivity figures)
+lists every half measured, so a half with no count is a measured zero and a
+stem added later is unmeasured. **Known noise among the two-letter halves**:
+ده counts چارده (fourteen), با counts شوربا-like dishes, پا counts چارپا. The
+measure is rough, like every corpus figure here.
+
+**On the build screen's scale** (100 · clamp((log10 *r* + 4) / 3, 0, 1), *r*
+over 21,688 fronts) the best half, دار, reaches 51, and **97.1% of دل's rows
+score under 10** (14 more have a one-letter half and no value): most verb
+stems never head a compound in the dictionary. The top of the page reads
+right — دلدار 51, دلگیر 41, دلکش 35, دلبند 35 among
+the attested; دلدان 41, دلوار 38, دلزن 37, دلبار 35 as the best-built new
+words. Whether compounds keep that scale (the same number means the same
+formula on both screens, and compounds read as poorly built) or get one of
+their own (the best half 100) is the project lead's choice (OPEN_QUESTIONS
+S51). Limits: the dictionary's compound label is the evidence, so a pattern
+the dictionary never lists cannot score; V-078 and V-079 get the same value
+(the doer and the done-to share a pool, L49).
+
+---
+
 ## 2026-11-21 — the poem's metre as a signal for the automatic Behnevis
 
 An experiment on the project lead's choice of the day: does the poem's metre
@@ -71,6 +129,9 @@ three other settings shown beside them (they move the numbers by up to
 three and a half points); without the metre's word a reading keeps the
 model's order and confidence (a test holds it); the debugging looked only at
 training poets' lines.
+
+---
+
 ## 2026-11-21 — a spelling's entries: which one the evidence supports, and readings borrowed from each other
 
 The compound page for دل opened on «دل Dal», a tree in the Hamadan dialect,

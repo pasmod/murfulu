@@ -57,6 +57,7 @@ data/rule_productivity-*.json
 data/corpus_report-*.json
 data/unlinked-*.tsv
 data/semantic-*.json
+data/compound_heads-*.json
 
 # Batch-job output: the derivation dump, the affix map, the sister forms.
 # **Anchored to the repository root on purpose.** Written as `build/` it also

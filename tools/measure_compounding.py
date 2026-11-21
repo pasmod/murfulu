@@ -33,6 +33,22 @@ result is checked against the corpus. So:
 
 Rules whose pools cannot be enumerated say so instead of guessing: N-104 joins
 two free nouns, which is 21,833 against itself.
+
+**Per second half (`--heads`, 2026-11-21).** One rate per rule gives every row
+of the compound page the same build value: a noun's page is built by V-078,
+V-079 and V-016 alone. What separates دلبر from دلدوز is the second half, so
+`--heads` writes, per slot rule and per second half, how many fronts the rule
+joins it to and how many of those words the corpus has — «‑بر» joined to
+every noun, against the corpus. The half works like a suffix here, and its
+rate goes on the build screen's scale (`murfulu.scoring.compound_heads`).
+**Not by spelling, as above**: a pair counts only where the dictionary holds
+the joined word as a compound (صفت مرکب، اسم مرکب) under exactly the joined
+reading and the corpus has its letters (`_heads` says why — by letters alone
+«ر» and «ده» came out on top). That also
+keeps out دلم and سرم, *my heart* and *my head*, which by letters would make
+the one-letter stem م a most productive half. `--index word_types-v22` reads
+the corpus's spellings from that index instead of rebuilding them from the
+Ganjoor dump.
 """
 
 from __future__ import annotations
@@ -42,8 +58,10 @@ import json
 import sys
 import time
 from collections.abc import Iterator
+from dataclasses import dataclass
 from pathlib import Path
 
+from murfulu.compounding import own_readings
 from murfulu.corpus import wordtypes
 from murfulu.corpus.ganjoor import GanjoorCorpus
 from murfulu.engine.affix import CannotApplyError, Word
@@ -51,6 +69,7 @@ from murfulu.engine.compound import Verb, fill, fill_slot
 from murfulu.engine.compound import front_classes as slot_front_classes
 from murfulu.lexicon.bank import is_excluded, word_classes_of
 from murfulu.lexicon.categories import UnmappableCategoryError
+from murfulu.lexicon.entries import Reading
 from murfulu.lexicon.store import Lexicon
 from murfulu.rules.pack import Rule, RulePack, loaded
 
@@ -58,6 +77,16 @@ from murfulu.rules.pack import Rule, RulePack, loaded
 #: something the engine derives rather than something the lexicon holds, so
 #: there is no pool to enumerate.
 STEM_CLASSES = {"karbon_yek": "past", "karbon_do": "present"}
+
+#: What the dictionary writes after a compound's class: صفت مرکب، اسم مرکب.
+#: 21,129 of karbon 1.3.2's 57,944 readings carry it.
+COMPOUND_LABEL = "مرکب"
+
+#: A second half of one letter is not counted: ر، ش، م end too many words.
+#: With the compound label and the reading both required, دربار still came out
+#: as دربا + *r*, باهوش as باهو + *š*, دوتار as دوتا + *r* (the review of
+#: 2026-11-21). Seven verbs have such a stem (میدن's م among them, UPSTREAM A8).
+SHORTEST_HALF = 2
 
 #: Said instead of a number, never beside one.
 NO_POOL = "one side is a derived class, not a word the lexicon holds"
@@ -198,6 +227,161 @@ def _measure_rule(
     }
 
 
+def _corpus_from_index(index: str) -> tuple[set[str], set[str]]:
+    """Every spelling the corpus has, and the corpus versions the index holds."""
+    from elasticsearch.helpers import scan
+
+    from murfulu.search.indices import connect
+
+    found: set[str] = set()
+    versions: set[str] = set()
+    for hit in scan(
+        connect(),
+        index=index,
+        query={"query": {"term": {"population": "corpus"}}},
+        _source=["spelling_fa", "corpus_version"],
+        size=5000,
+    ):
+        source = hit["_source"]
+        versions.add(str(source.get("corpus_version") or ""))
+        spelling = source.get("spelling_fa")
+        if spelling:
+            found.add(wordtypes.normalise(spelling))
+    return found, versions
+
+
+def same_version(asked: str, held: set[str]) -> None:
+    """Stop unless the index holds exactly the corpus version the file will say.
+
+    ``--index word_types-v22`` with the default ``--corpus-version`` wrote v22's
+    figures under the name v8 (the review of 2026-11-21).
+    """
+    if held != {asked}:
+        raise SystemExit(
+            f"the index holds corpus {sorted(held)}, asked to write {asked!r}: "
+            "a figure never moves to another version's name"
+        )
+
+
+@dataclass
+class _Readings:
+    """Every Latin reading the bank has, by spelling, for the per-half count.
+
+    Lower-cased, variants included, spellings normalised as the corpus's are:
+    a capital is a word class showing, not another word.
+    """
+
+    #: Every headword the dictionary labels a compound (صفت مرکب، اسم مرکب):
+    #: spelling → the readings so labelled.
+    words: dict[str, set[str]]
+    #: Fronts, by the class a slot rule asks for: class → spelling → readings.
+    fronts: dict[str, dict[str, set[str]]]
+    #: Verb stems, by slot class (``karbon_do``…): class → spelling → readings.
+    stems: dict[str, dict[str, set[str]]]
+    #: Stems too short to count: see :data:`SHORTEST_HALF`.
+    set_aside: set[str]
+
+
+def _readings(lexicon: Lexicon) -> _Readings:
+    """One pass over the bank, keeping every reading rather than the first.
+
+    Each spelling's entries go through :func:`compounding.own_readings` first,
+    as on the compound page: دم's *Dom* (a noun) lists *Dam*, which is another
+    entry's reading, and without the cleanup it confirmed دمساز and دمدار as
+    a noun's compounds.
+    """
+    words: dict[str, set[str]] = {}
+    fronts: dict[str, dict[str, set[str]]] = {}
+    stems: dict[str, dict[str, set[str]]] = {c: {} for c in STEM_CLASSES}
+    set_aside: set[str] = set()
+    grouped: dict[str, list[Reading]] = {}
+    for reading in lexicon.all_readings():
+        grouped.setdefault(reading.spelling_fa, []).append(reading)
+    for reading in (one for group in grouped.values() for one in own_readings(group)):
+        spelling = wordtypes.normalise(reading.spelling_fa)
+        latins = {one.lower() for one in reading.all_latin if one}
+        if any(COMPOUND_LABEL in (one or "") for one in reading.lexicon_categories):
+            words.setdefault(spelling, set()).update(latins)
+        if is_excluded(reading):
+            continue
+        if reading.is_infinitive and reading.has_both_stems:
+            for name, fa, latin in (
+                ("karbon_yek", reading.past_stem_fa, reading.past_stem_latin),
+                ("karbon_do", reading.present_stem_fa, reading.present_stem_latin),
+            ):
+                if not (fa and latin):
+                    continue
+                stem = wordtypes.normalise(fa)
+                if len(stem) < SHORTEST_HALF:
+                    set_aside.add(stem)
+                    continue
+                stems[name].setdefault(stem, set()).add(latin.lower())
+        try:
+            classes = word_classes_of(reading)
+        except UnmappableCategoryError:
+            continue
+        for name in classes:
+            fronts.setdefault(name, {}).setdefault(spelling, set()).update(latins)
+    return _Readings(words=words, fronts=fronts, stems=stems, set_aside=set_aside)
+
+
+def _heads(rule: Rule, bank: _Readings, corpus: set[str]) -> dict[str, object] | None:
+    """Per second half of one slot rule: fronts it joins, and those confirmed.
+
+    A pair counts only where **the dictionary holds the joined word as a
+    compound (صفت مرکب، اسم مرکب) under exactly the joined reading, and the
+    corpus has its letters**: دلبر is *delbar*, a صفت مرکب, and *del* + *bar*
+    is *delbar*. Each condition was added because the run without it was
+    wrong. By letters alone the shortest stems won: «ر» and «ده» end countless
+    ordinary words (دختر cut as دخت + ر). With the reading but without the
+    label, the stems with no vowel still did: ابر is *abr*, اب + ریدن's *r*;
+    and دنیدن's *dan* ends every infinitive.
+
+    Walks the bank's headwords the corpus has, cut at every point, rather than
+    the 38 million pairs.
+    """
+    if rule.kind != "slot":
+        return None
+    fronts: dict[str, set[str]] = {}
+    for name in slot_front_classes(rule):
+        for spelling, latins in bank.fronts.get(name, {}).items():
+            fronts.setdefault(spelling, set()).update(latins)
+    behinds: dict[str, set[str]] = {}
+    for name in rule.input_types:
+        for spelling, latins in bank.stems.get(name, {}).items():
+            behinds.setdefault(spelling, set()).update(latins)
+    if not fronts or not behinds:
+        return None
+    # Keyed by the half's letters **and** reading: کش is *keš* (کشیدن) and
+    # *koš* (کشتن), and دلکش confirms the first only.
+    confirmed: dict[tuple[str, str], set[str]] = {
+        (behind, latin): set() for behind, latins in behinds.items() for latin in latins
+    }
+    for spelling, readings in bank.words.items():
+        if spelling not in corpus:
+            continue
+        for cut in range(1, len(spelling)):
+            front, behind = spelling[:cut], spelling[cut:]
+            if front not in fronts or behind not in behinds:
+                continue
+            for latin in behinds[behind]:
+                if any(f + latin in readings for f in fronts[front]):
+                    confirmed[(behind, latin)].add(front)
+    # Only the halves with a confirmed word: most stems never head one. Which
+    # halves were measured at all is the file's ``halves``, so an absent one is
+    # a measured zero there and unmeasured anywhere else.
+    by_behind: dict[str, dict[str, int]] = {}
+    for (behind, latin), found in sorted(confirmed.items()):
+        if found:
+            by_behind.setdefault(behind, {})[latin] = len(found)
+    return {
+        "fronts": len(fronts),
+        "stem_classes": [name for name in rule.input_types if name in STEM_CLASSES],
+        "behinds": len(confirmed),
+        "by_behind": by_behind,
+    }
+
+
 def _merge(
     into: Path,
     rows: dict[str, dict[str, object]],
@@ -243,17 +427,80 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--corpus-version", default="v8")
     parser.add_argument("--into", type=Path, help="a rule_productivity file to update")
     parser.add_argument("--out", type=Path, help="write the rows on their own")
+    parser.add_argument(
+        "--heads", type=Path, help="write the per-second-half figures here and stop"
+    )
+    parser.add_argument(
+        "--index", help="read the corpus's spellings from this word_types index"
+    )
     arguments = parser.parse_args(argv)
 
     pack: RulePack = loaded()
     started = time.monotonic()
-    counted = wordtypes.build(GanjoorCorpus())
-    corpus = set(counted.word_types)
+    if arguments.index:
+        corpus, held = _corpus_from_index(arguments.index)
+        same_version(arguments.corpus_version, held)
+    else:
+        counted = wordtypes.build(GanjoorCorpus())
+        corpus = set(counted.word_types)
     spent = time.monotonic() - started
     print(f"corpus         {len(corpus):,} spellings ({spent:,.0f}s)")
 
     with Lexicon.open() as lexicon:
         by_class, verbs = _pools(lexicon)
+        snapshot = lexicon.snapshot_id
+        bank = _readings(lexicon) if arguments.heads else None
+
+    if arguments.heads and bank is not None:
+        heads: dict[str, object] = {}
+        for rule in pack.rules:
+            if not rule.active:
+                continue
+            row = _heads(rule, bank, corpus)
+            if row is None:
+                continue
+            heads[rule.id] = row
+            counts = row["by_behind"]
+            assert isinstance(counts, dict)
+            pairs = sum(n for latins in counts.values() for n in latins.values())
+            print(
+                f"{rule.id:<8} {row['fronts']:>6,} fronts  "
+                f"{row['behinds']:>5,} halves  "
+                f"{pairs:>6,} confirmed pairs"
+            )
+        arguments.heads.write_text(
+            json.dumps(
+                {
+                    "corpus_version": arguments.corpus_version,
+                    "rule_pack_version": pack.version,
+                    "lexicon_snapshot_id": snapshot,
+                    "measured_by": "tools/measure_compounding.py --heads",
+                    "counted": "a pair counts where the dictionary holds the "
+                    "joined word as a compound under the joined reading and the "
+                    "corpus has its letters",
+                    # Every half measured, by stem class: a half listed here
+                    # and absent from a rule's ``by_behind`` found nothing; a
+                    # half not listed was not measured (a stem added since).
+                    "halves": {
+                        name: {
+                            fa: sorted(latins) for fa, latins in sorted(found.items())
+                        }
+                        for name, found in bank.stems.items()
+                    },
+                    "set_aside": {
+                        "halves": sorted(bank.set_aside),
+                        "reason": "a one-letter second half ends too many words "
+                        "to be told from a compound",
+                    },
+                    "rules": heads,
+                },
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ),
+            encoding="utf-8",
+        )
+        print(f"wrote          {arguments.heads}")
+        return 0
     print(
         f"pools          {len(verbs):,} verbs, "
         + ", ".join(f"{len(w):,} {n}" for n, w in sorted(by_class.items()))
