@@ -92,6 +92,30 @@ test.describe("reading a text", () => {
     expect(await sideways(page)).toBeLessThanOrEqual(1);
   });
 
+  test("the most frequent unsure words, and a decision panel, stay inside the screen", async ({
+    page,
+  }) => {
+    const answer = await page.request.get("/api/texts/unsure?size=1");
+    test.skip(!answer.ok(), "no list of unsure spellings served");
+    await page.goto("/texts?view=unsure");
+    const row = page
+      .getByRole("button", { expanded: false })
+      .filter({ hasText: "جای نامطمئن" })
+      .first();
+    await row.click();
+    const panel = page.getByRole("region", { name: /^تصمیم دربارهٔ / });
+    await expect(panel).toBeVisible();
+    await expect(panel.getByRole("group", { name: "برای کجا؟" })).toBeVisible();
+    const box = (await panel.boundingBox())!;
+    const view = page.viewportSize()!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(view.width + 1);
+    // Every row and choice is a touch target.
+    const rowBox = (await row.boundingBox())!;
+    expect(rowBox.height).toBeGreaterThanOrEqual(44);
+    expect(await sideways(page)).toBeLessThanOrEqual(1);
+  });
+
   test("a citation on a word's page opens the text at its line", async ({ page }) => {
     test.skip(!(await units(page, GHAZAL)), "no corpus with units (v17 or later) served");
     const search = await page.request.get(`/api/search?q=${encodeURIComponent("دل")}&size=5`);

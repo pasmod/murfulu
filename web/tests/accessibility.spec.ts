@@ -109,6 +109,19 @@ test.describe("the parts behind a click", () => {
   });
 });
 
+test.describe("the most frequent unsure words", () => {
+  test("the list, with one spelling's decision open", async ({ page }) => {
+    // Measured beside the model (tools/measure_unsure_spellings.py): a model
+    // without its list answers 503, and the screen says so instead.
+    const answer = await page.request.get("/api/texts/unsure?size=1");
+    test.skip(!answer.ok(), "no list of unsure spellings served");
+    await page.goto("/texts?view=unsure");
+    await page.getByRole("button", { expanded: false }).filter({ hasText: "جای نامطمئن" }).first().click();
+    await expect(page.getByRole("region", { name: /^تصمیم دربارهٔ / })).toBeVisible();
+    expect(readable((await audit(page)).violations)).toEqual([]);
+  });
+});
+
 test.describe("what axe cannot check", () => {
   test("every screen is reachable with a keyboard alone", async ({ page }) => {
     await page.goto("/");

@@ -325,3 +325,177 @@ export function headingOf(text: TextHeading): string[] {
     (part): part is string => Boolean(part),
   );
 }
+
+// -- deciding a reading once for every like place (2026-11-21) ----------------
+
+/** How far a decision reaches: everywhere, or after or before one word. */
+export type Scope = "everywhere" | "after_word" | "before_word";
+
+/** What a decision means: a choice among the bank's readings, its one reading doubted, or none. */
+export type UnsureKind = "choice" | "one" | "missing";
+
+/** A neighbour of a listed spelling: the word, its places beside it, and how many of those are unsure. */
+export type Neighbour = [word: string, places: number, unsure: number];
+
+/** One place where the spelling was left to a person, with its line. */
+export interface UnsurePlace {
+  document_id: string;
+  unit: number;
+  line: number;
+  /** The word's place in the line, as the reading screen counts it. */
+  word: number;
+  heading: string;
+  text: string;
+}
+
+/** A reading decided for every like place of a spelling, in force. */
+export interface Decision {
+  id: number;
+  latin: string;
+  scope: Scope;
+  /** The word it follows or precedes, as written; null for everywhere. */
+  scope_word: string | null;
+  in_bank: boolean | null;
+  created_at: string | null;
+}
+
+/** A spelling the reading screen often leaves to a person, as measured over the corpus. */
+export interface UnsureSpelling {
+  rank: number;
+  /** The spelling as the model keys it. */
+  spelling: string;
+  /** Its most frequent written form. */
+  written: string;
+  /** All its running words in the corpus, and those left to a person. */
+  places: number;
+  unsure: number;
+  kind: UnsureKind;
+  /** The readings the bank or the function-word list holds: a decision of one is learned. */
+  known: string[];
+  /** The model's readings at the unsure places, and how often. */
+  read_as: [string, number][];
+  /** The readings the panel offered there, and how often. */
+  offered: [string, number][];
+  /** The words before it (it stands after them) and after it, most unsure places first. */
+  before: Neighbour[];
+  after: Neighbour[];
+  examples: UnsurePlace[];
+  /** The marked corpus read against its readings; null where the editions never marked it. */
+  marked?: { fitted: number; best: number; none: number; reading: string | null } | null;
+  decided?: Decision[];
+}
+
+export interface UnsurePage {
+  meta: {
+    corpus_version: string;
+    words: number;
+    unsure_words: number;
+    metre: boolean;
+    measured: string;
+  };
+  total: number;
+  offset: number;
+  size: number;
+  spellings: UnsureSpelling[];
+}
+
+/** One page of the most frequent unsure spellings, the most places first. */
+export function unsureSpellings(
+  options: { kind?: UnsureKind; offset?: number; size?: number } = {},
+  signal?: AbortSignal,
+): Promise<UnsurePage> {
+  return get<UnsurePage>(
+    "/texts/unsure",
+    { kind: options.kind, offset: options.offset, size: options.size },
+    signal,
+  );
+}
+
+export interface UnsureOne {
+  spelling: string;
+  /** Its entry in the list, or null when it is not among the measured spellings. */
+  listed: UnsureSpelling | null;
+  decided: Decision[];
+}
+
+/** One spelling's place in the list, if any, and the readings decided for it. */
+export function unsureSpelling(spelling: string, signal?: AbortSignal): Promise<UnsureOne> {
+  return get<UnsureOne>(`/texts/unsure/${encodeURIComponent(spelling)}`, {}, signal);
+}
+
+/** A decision as it is sent: the reading, how far it reaches, and whether the bank holds it. */
+export interface Deciding {
+  latin: string;
+  in_bank: boolean;
+  scope: Scope;
+  /** The word it follows or precedes, as written; for everywhere, none. */
+  scope_word: string | null;
+  /** What the model had read, where the decision was made from a line. */
+  model?: AutoReading;
+}
+
+/**
+ * Record that a spelling reads so wherever it stands, or after or before one
+ * word. Append-only, like a pick; the model learns it at its next build,
+ * when the bank holds the reading, and karbon is asked for it otherwise.
+ */
+export function decideReading(
+  spelling: string,
+  decision: Deciding,
+  where: Partial<MarkedWhere> & { corpus_version: string | null },
+): Promise<FeedbackOut> {
+  return leave({
+    category: "linguistic",
+    target_type: "lexicon_entry",
+    target_id: `${spelling}:${decision.latin}`,
+    verdict: "good",
+    note: null,
+    context: {
+      screen: "texts",
+      kind: "reading_decided",
+      spelling_fa: spelling,
+      latin: decision.latin,
+      in_bank: decision.in_bank,
+      scope: decision.scope,
+      scope_word: decision.scope === "everywhere" ? null : decision.scope_word,
+      withdrawn: false,
+      model_latin: decision.model?.latin ?? null,
+      model_confidence: decision.model?.confidence ?? null,
+      written: where.written ?? null,
+      before: where.before ?? null,
+      after: where.after ?? null,
+      document_id: where.document_id ?? null,
+      unit: where.unit ?? null,
+      line: where.line ?? null,
+      word: where.word ?? null,
+      heading: where.heading ?? null,
+    },
+    corpus_version: where.corpus_version,
+  });
+}
+
+/** Take a decision back: the model reads those places itself again. Append-only too. */
+export function withdrawDecision(
+  spelling: string,
+  decision: Decision,
+  corpusVersion: string | null,
+): Promise<FeedbackOut> {
+  return leave({
+    category: "linguistic",
+    target_type: "lexicon_entry",
+    target_id: `${spelling}:${decision.latin}`,
+    verdict: "unsure",
+    note: null,
+    context: {
+      screen: "texts",
+      kind: "reading_decided",
+      spelling_fa: spelling,
+      latin: decision.latin,
+      scope: decision.scope,
+      scope_word: decision.scope_word,
+      withdrawn: true,
+      replaces: decision.id,
+    },
+    corpus_version: corpusVersion,
+  });
+}

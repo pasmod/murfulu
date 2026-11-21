@@ -12,6 +12,8 @@
  *   ?text=ganjoor:hafez:2132           one text
  *   &unit=4&word=دل                    opened at a unit, a citation's word marked
  *   ?view=marked                       the readings marked wrong, for review
+ *   ?view=unsure                       the most frequent unsure spellings, to
+ *                                      decide once for every like place
  */
 
 import { type FormEvent, useEffect, useState } from "react";
@@ -27,6 +29,7 @@ import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
 import { Marked } from "./Marked";
 import { Reader } from "./Reader";
+import { Unsure } from "./Unsure";
 import styles from "./Texts.module.css";
 
 const SCREEN = SCREENS.find((one) => one.path === "/texts")!;
@@ -131,6 +134,8 @@ export function Texts() {
         <Found key={q} q={q} />
       ) : view === "marked" ? (
         <Marked />
+      ) : view === "unsure" ? (
+        <Unsure />
       ) : (
         <>
           <section className={styles.card} aria-labelledby="start">
@@ -149,6 +154,11 @@ export function Texts() {
                 </button>
               ))}
             </div>
+            <p className={styles.hint}>
+              <Link to="/texts?view=unsure">
+                پرتکرارترین واژه‌های نامطمئن را یک بار برای همهٔ جاهایشان تعیین کنید ←
+              </Link>
+            </p>
           </section>
           <Marked />
         </>

@@ -469,7 +469,7 @@ divan as printed. Every citation on a word's page has «در متن ←», which
 the text at that unit with the word underlined and the unit washed in the
 accent, scrolled so that the word itself is in view — a paragraph of prose
 can be taller than the window. Everything is in the address (`?q=`, `?text=&unit=&word=`, `?start=`
-for a long text's next 200 units, `?view=marked`).
+for a long text's next 200 units, `?view=marked`, `?view=unsure`).
 
 **The source line** is author · work · sections · title, then the corpus
 version and the source's name. Author and work are links to their lists.
@@ -523,6 +523,35 @@ for every mark on its spelling, however old. **The marks are reviewed on the
 screen itself** — the list under the opener, or `?view=marked`, fifty at a
 time with the total: the word as written, the reading struck through, the
 text, the note and a way back to the line.
+
+**Deciding once for every like place** (since 2026-11-21, DECISIONS
+2026-11-21 *fifth*). Under the reading and the field, «برای کجا؟» asks how far
+the saved reading holds: «فقط همین‌جا» (the default: a pick for this word in
+this line, as before), «هر جا پس از «…»» and «هر جا پیش از «…»» (the word's
+neighbours in its line), and «هر جا که «…» آمده». Each shows how many places
+it reaches, from the measured list of unsure spellings (`GET
+/texts/unsure/{spelling}`); a spelling outside the list shows the count for
+«everywhere» only. Saved, it is a decision, not this word's pick: the word
+keeps the model's reading, and the panel says the next build reads every
+such place so. A spelling with decisions in force says so at the top of the
+panel; a word whose reading a person decided (`source: decided`, after a
+build) says it is a person's reading, not the program's.
+
+**The most frequent unsure words** (`?view=unsure`, linked under the opener):
+the spellings the screen most often leaves to a person, measured over the
+whole corpus (`tools/measure_unsure_spellings.py`), fifty at a time, filtered
+by kind (several readings in the bank, one, none). A row is a full-width
+button: rank, spelling, «n جای نامطمئن از m», the kind and the program's usual
+reading, and «✓ تصمیم گرفته شده» once one is. It opens a panel: how often one
+reading fits the editions' marked places (with a hint to decide by neighbour
+where it is below 80 %), the readings (the bank's first) or a field, the reach
+(«همه‌جا» or after or before one of the spelling's twelve most frequent
+neighbours, picked from a list with their counts), what will be saved, three
+lines where the program was unsure with the word underlined and «در متن ←»
+(a long paragraph cut to ten words either side), and the decisions in force,
+each with «پس گرفتن». The panel reuses the word panel's choices, so a pick
+looks the same on both. Phone width: everything wraps; nothing scrolls
+sideways (`tests/texts.spec.ts`).
 
 **A note is the source's own words** — in a tazkira, the next poet's name —
 shown in small type under «یادداشت سرچشمه», never split into words and never

@@ -10,14 +10,15 @@
  * Every line here is written for the test; no corpus text.
  */
 
-import { screen, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { Marked, Text, TextFound } from "../../api/texts";
-import { renderApp } from "../../test/render";
+import type { Decision, Marked, Text, TextFound, UnsureSpelling } from "../../api/texts";
+import { renderApp, renderWithRouter } from "../../test/render";
 import { markedFor } from "./levels";
 import { newest, placeSaved } from "./Reader";
+import { ExampleLine } from "./Unsure";
 
 const TEXT: Text = {
   document_id: "fixture:a:1",
@@ -246,7 +247,61 @@ const VOWELS: Text = {
   },
 };
 
+/** The measured list of unsure spellings, and what was decided for دل (2026-11-21). */
+const UNSURE: UnsureSpelling = {
+  rank: 1,
+  spelling: "دل",
+  written: "دل",
+  places: 1000,
+  unsure: 600,
+  kind: "choice",
+  known: ["Dal", "Del", "dall"],
+  read_as: [
+    ["Del", 400],
+    ["Dal", 200],
+  ],
+  offered: [
+    ["Del", 600],
+    ["Dal", 600],
+    ["Dol", 100],
+  ],
+  before: [["ما", 120, 80]],
+  after: [
+    ["رفتند", 50, 40],
+    ["ما", 30, 10],
+  ],
+  examples: [
+    {
+      document_id: "fixture:a:1",
+      unit: 0,
+      line: 0,
+      word: 0,
+      heading: "نویسنده · کتاب · حکایت یکم",
+      text: "دلِ ما",
+    },
+  ],
+  marked: { fitted: 40, best: 24, none: 2, reading: "Del" },
+  decided: [],
+};
+
+let decided: Decision[] = [];
+let listGone = false;
+
 function answer(url: string): unknown {
+  if (url.includes("/texts/unsure/")) {
+    return { spelling: "دل", listed: url.includes("%D8%AF%D9%84") ? UNSURE : null, decided };
+  }
+  if (url.includes("/texts/unsure")) {
+    const missing = url.includes("kind=missing");
+    const rows = missing ? [] : [{ ...UNSURE, decided }];
+    return {
+      meta: { corpus_version: "v22", words: 10000, unsure_words: 3300, metre: true, measured: "2026-11-21" },
+      total: rows.length,
+      offset: 0,
+      size: 50,
+      spellings: rows,
+    };
+  }
   if (url.includes("/texts/marked") && url.includes("kind=proposed")) {
     return { total: saved.length, offset: 0, returned: saved.length, marked: saved };
   }
@@ -266,12 +321,22 @@ beforeEach(() => {
   posted = [];
   saved = [];
   review = [MARKED];
+  decided = [];
+  listGone = false;
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url: string, init?: RequestInit) => {
       if (init?.method === "POST") {
         posted.push(JSON.parse(String(init.body)));
         return { ok: true, status: 201, statusText: "", json: async () => ({ id: 8 }) };
+      }
+      if (listGone && String(url).includes("/texts/unsure?")) {
+        return {
+          ok: false,
+          status: 503,
+          statusText: "",
+          json: async () => ({ detail: "the list of unsure spellings has not been measured" }),
+        };
       }
       return { ok: true, status: 200, statusText: "", json: async () => answer(String(url)) };
     }),
@@ -532,7 +597,8 @@ describe("the reading screen", () => {
     // Typing clears the pick …
     await userEvent.type(field, "Dol");
     expect(dal).not.toBeChecked();
-    expect(within(here).queryAllByRole("radio", { checked: true })).toHaveLength(0);
+    const readings = within(here).getByRole("group", { name: "یکی را برگزینید:" });
+    expect(within(readings).queryAllByRole("radio", { checked: true })).toHaveLength(0);
     expect(within(here).getByText(/ثبت می‌شود/)).toHaveTextContent(/Dol.*نوشتهٔ شما/);
     // … and picking clears what was typed.
     await userEvent.click(within(here).getByRole("radio", { name: /Del/ }));
@@ -778,5 +844,218 @@ describe("where a saved reading belongs", () => {
     const earlier = new Map([["0:0:0", { latin: "Del", inBank: true, id: 8 }]]);
     expect(newest(later, earlier).get("0:0:0")?.latin).toBe("Dal");
     expect(newest(earlier, later).get("0:0:0")?.latin).toBe("Dal");
+  });
+});
+
+describe("deciding a reading once for every like place", () => {
+  async function panelOf(word: RegExp) {
+    renderApp("/texts?text=fixture%3Ab%3A1");
+    const text = await screen.findByRole("region", { name: "نویسنده · کتاب · باب نخست · حکایت یکم" });
+    await userEvent.click(within(text).getByRole("button", { name: word }));
+    return within(text).getByRole("region", { name: "خوانش در این سطر" });
+  }
+
+  it("saves for this line only unless the reader says otherwise", async () => {
+    const here = await panelOf(/^دلِ:/);
+    const reach = within(here).getByRole("group", { name: "برای کجا؟" });
+    expect(within(reach).getByRole("radio", { name: "فقط همین‌جا" })).toBeChecked();
+    await userEvent.click(within(here).getByRole("radio", { name: /Dal/ }));
+    await userEvent.click(within(here).getByRole("button", { name: "ثبت «Dal»" }));
+    await within(here).findByText(/ثبت شد/);
+    expect(posted[0]).toEqual(
+      expect.objectContaining({ context: expect.objectContaining({ kind: "reading_here" }) }),
+    );
+  });
+
+  it("says how many places each reach covers, from the measured list", async () => {
+    const here = await panelOf(/^دلِ:/);
+    const reach = within(here).getByRole("group", { name: "برای کجا؟" });
+    // دلِ here stands before رفتند, at the start of its line.
+    const before = await within(reach).findByRole("radio", { name: /هر جا پیش از «رفتند»/ });
+    await waitFor(() => expect(before.closest("label")).toHaveTextContent("(۵۰ جا)"));
+    expect(within(reach).queryByRole("radio", { name: /پس از/ })).not.toBeInTheDocument();
+    const everywhere = within(reach).getByRole("radio", { name: /هر جا که «دل» آمده/ });
+    expect(everywhere.closest("label")).toHaveTextContent("(۱٬۰۰۰ جا)");
+  });
+
+  it("sends a decision with its reach, and the summary says what it will do", async () => {
+    const here = await panelOf(/^دلِ:/);
+    await userEvent.click(within(here).getByRole("radio", { name: /Del/ }));
+    await userEvent.click(within(here).getByRole("radio", { name: /هر جا پیش از «رفتند»/ }));
+    expect(within(here).getByText(/ثبت می‌شود/)).toHaveTextContent(/هر جا پیش از «رفتند».*همهٔ این جاها/);
+    await userEvent.click(
+      within(here).getByRole("button", { name: "ثبت «Del» برای هر جا پیش از «رفتند»" }),
+    );
+    await within(here).findByText(/برای هر جا پیش از «رفتند» ثبت شد/);
+    expect(posted[0]).toEqual(
+      expect.objectContaining({
+        verdict: "good",
+        target_id: "دل:Del",
+        context: expect.objectContaining({
+          kind: "reading_decided",
+          scope: "before_word",
+          scope_word: "رفتند",
+          latin: "Del",
+          in_bank: true,
+          withdrawn: false,
+          document_id: "fixture:b:1",
+          unit: 0,
+          line: 0,
+          word: 0,
+        }),
+      }),
+    );
+  });
+
+  it("takes a new decision into the panel's list, replacing the one with its reach", async () => {
+    decided = [
+      { id: 30, latin: "Dal", scope: "before_word", scope_word: "رفتند", in_bank: true, created_at: null },
+    ];
+    const here = await panelOf(/^دلِ:/);
+    await within(here).findByText(/برای این املا پیش‌تر تصمیم گرفته شده است/);
+    await userEvent.click(within(here).getByRole("radio", { name: /Del/ }));
+    await userEvent.click(within(here).getByRole("radio", { name: /هر جا پیش از «رفتند»/ }));
+    await userEvent.click(within(here).getByRole("button", { name: /^ثبت «Del»/ }));
+    await within(here).findByText(/ثبت شد/);
+    const inForce = within(here).getByText(/برای این املا پیش‌تر تصمیم گرفته شده است/).parentElement!;
+    expect(inForce).toHaveTextContent(/هر جا پیش از «رفتند»: Del/);
+    expect(inForce).not.toHaveTextContent(/: Dal/);
+  });
+
+  it("names a decision already in force in the panel", async () => {
+    decided = [
+      { id: 30, latin: "Del", scope: "everywhere", scope_word: null, in_bank: true, created_at: null },
+    ];
+    const here = await panelOf(/^دلِ:/);
+    const note = await within(here).findByText(/برای این املا پیش‌تر تصمیم گرفته شده است/);
+    expect(note.parentElement).toHaveTextContent(/همه‌جا: Del/);
+  });
+
+  it("lists the most frequent unsure spellings, with what a decision would reach", async () => {
+    renderApp("/texts?view=unsure");
+    const list = await screen.findByRole("region", { name: "پرتکرارترین واژه‌های نامطمئن" });
+    expect(await within(list).findByText(/واژهٔ متن‌ها/)).toHaveTextContent(
+      "در پیکرهٔ v22، از ۱۰٬۰۰۰ واژهٔ متن‌ها ۳٬۳۰۰ تا (۳۳٪) به شما سپرده می‌شود.",
+    );
+    const row = within(list).getByRole("button", { name: /دل/ });
+    expect(row).toHaveTextContent("۶۰۰ جای نامطمئن از ۱٬۰۰۰");
+    expect(row).toHaveTextContent("چند خوانش در بانک");
+    await userEvent.click(row);
+    const panel = within(list).getByRole("region", { name: "تصمیم دربارهٔ دل" });
+    // The bank's readings first, then what the model offered.
+    expect(
+      within(within(panel).getByRole("group", { name: "این املا را چطور می‌خوانید؟" }))
+        .getAllByRole("radio")
+        .map((one) => (one as HTMLInputElement).value),
+    ).toEqual(["Dal", "Del", "dall", "Dol"]);
+    expect(within(panel).getByText(/در ۶۰٪ آن‌ها جور است/)).toHaveTextContent(/به‌جای «همه‌جا»/);
+    expect(within(panel).getByRole("link", { name: "در متن ←" })).toHaveAttribute(
+      "href",
+      "/texts?text=fixture%3Aa%3A1&unit=0&word=%D8%AF%D9%84",
+    );
+  });
+
+  it("marks the spelling in its example line, and cuts a long one around it", () => {
+    renderWithRouter(<ExampleLine text="یک دلِ دو سه" at={1} spelling="دل" />);
+    expect(screen.getByText("دلِ").tagName).toBe("MARK");
+    const long = Array.from({ length: 40 }, (_, i) => (i === 30 ? "دل" : `w${i}`)).join(" ");
+    renderWithRouter(<ExampleLine text={long} at={30} spelling="دل" />);
+    const line = screen.getByText("دل").parentElement!;
+    expect(line.textContent).toMatch(/^… w20 .* دل .* w39$/);
+    // A place that does not find the spelling marks nothing …
+    renderWithRouter(<ExampleLine text="یک دو" at={1} spelling="دل" />);
+    expect(screen.getByText("یک دو").querySelector("mark")).toBeNull();
+    // … nor a longer word that holds its letters; a token with a space of its
+    // own moves the word one place on.
+    renderWithRouter(<ExampleLine text="A B دلداده دلِ،" at={2} spelling="دل" />);
+    expect(screen.getByText("دلِ،").tagName).toBe("MARK");
+  });
+
+  it("decides a spelling after one word from the list, and takes a decision back", async () => {
+    decided = [
+      { id: 31, latin: "Dal", scope: "everywhere", scope_word: null, in_bank: true, created_at: null },
+    ];
+    renderApp("/texts?view=unsure");
+    const list = await screen.findByRole("region", { name: "پرتکرارترین واژه‌های نامطمئن" });
+    await userEvent.click(await within(list).findByRole("button", { name: /دل/ }));
+    const panel = within(list).getByRole("region", { name: "تصمیم دربارهٔ دل" });
+    await userEvent.click(within(panel).getByRole("radio", { name: "Del" }));
+    await userEvent.selectOptions(within(panel).getByRole("combobox", { name: /پس از: کدام واژه/ }), "ما");
+    expect(within(panel).getByText(/ثبت می‌شود/)).toHaveTextContent(/هر جا پس از «ما» \(۱۲۰ جا\)/);
+    await userEvent.click(within(panel).getByRole("button", { name: "ثبت «Del» برای هر جا پس از «ما»" }));
+    await within(panel).findByText(/برای هر جا پس از «ما» ثبت شد/);
+    expect(posted[0]).toEqual(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          kind: "reading_decided",
+          scope: "after_word",
+          scope_word: "ما",
+          latin: "Del",
+          in_bank: true,
+        }),
+      }),
+    );
+    // The decision in force before is still there, and can be taken back.
+    const earlier = within(panel).getByText(/همه‌جا:/).closest("li")!;
+    await userEvent.click(within(earlier).getByRole("button", { name: "پس گرفتن" }));
+    await waitFor(() => expect(posted).toHaveLength(2));
+    expect(posted[1]).toEqual(
+      expect.objectContaining({
+        verdict: "unsure",
+        context: expect.objectContaining({ withdrawn: true, scope: "everywhere", replaces: 31 }),
+      }),
+    );
+    await waitFor(() => expect(within(panel).queryByText(/همه‌جا: /)).not.toBeInTheDocument());
+  });
+
+  it("filters by the kind of decision, and says when the list is not built", async () => {
+    renderApp("/texts?view=unsure");
+    const list = await screen.findByRole("region", { name: "پرتکرارترین واژه‌های نامطمئن" });
+    await within(list).findByRole("button", { name: /دل/ });
+    await userEvent.click(within(list).getByRole("button", { name: "در بانک نیست" }));
+    await waitFor(() =>
+      expect(within(list).getByText(/املا، از آنکه/)).toHaveTextContent(/^۰ املا/),
+    );
+    expect(within(list).queryByRole("button", { name: /دل/ })).not.toBeInTheDocument();
+  });
+
+  it("says plainly when the list has not been measured", async () => {
+    listGone = true;
+    renderApp("/texts?view=unsure");
+    expect(await screen.findByText("این فهرست هنوز برای این نسخهٔ برنامه ساخته نشده است.")).toBeInTheDocument();
+  });
+
+  it("says a decided reading is a person's, not the model's", async () => {
+    const decidedText: Text = structuredClone(AUTO);
+    const first = decidedText.units[0]!.lines[0]!.words![0]!;
+    first.auto = {
+      ...first.auto!,
+      source: "decided",
+      confidence: 0.95,
+      candidates: [
+        ["Del", 0.95],
+        ["Dal", null],
+      ],
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) => ({
+        ok: true,
+        status: 200,
+        statusText: "",
+        json: async () => (String(url).includes("fixture%3Ab%3A1") ? decidedText : answer(String(url))),
+      })),
+    );
+    const here = await panelOf(/^دلِ:/);
+    expect(within(here).getByText(/کسی برای همهٔ جاهای همانندِ این املا برگزیده است/)).toBeInTheDocument();
+    expect(within(here).queryByText(/این خوانش را برنامه پیشنهاد می‌کند/)).not.toBeInTheDocument();
+  });
+
+  it("is reached from the reading screen's start", async () => {
+    renderApp("/texts");
+    expect(await screen.findByRole("link", { name: /پرتکرارترین واژه‌های نامطمئن/ })).toHaveAttribute(
+      "href",
+      "/texts?view=unsure",
+    );
   });
 });

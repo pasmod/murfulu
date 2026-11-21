@@ -1,0 +1,322 @@
+/* The most frequent unsure spellings, and a decision for every like place
+   (2026-11-21). The panel borrows the word panel's choices, so a pick looks
+   the same on both. */
+.card {
+  composes: card from "../../styles/page.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-lg);
+}
+
+.note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
+}
+
+.kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.kind {
+  composes: chip from "../../styles/controls.module.css";
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  border-block-start: 1px solid var(--line);
+}
+
+.row:first-child {
+  border-block-start: 0;
+}
+
+/* The whole row is the button: a spelling, its counts, its kind. It wraps
+   on a phone rather than pushing the page sideways. */
+.rowButton {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  inline-size: 100%;
+  min-block-size: var(--touch-target);
+  padding: var(--space-2) var(--space-1);
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.rowButton:hover {
+  background: var(--accent-wash);
+}
+
+.rowButton:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.row[data-open] > .rowButton {
+  background: var(--accent-wash);
+}
+
+.rank {
+  min-inline-size: 2.5em;
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.word {
+  font-size: var(--text-lg);
+  min-inline-size: 4em;
+}
+
+.counts {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.kindLabel {
+  font-size: var(--text-xs);
+  padding: 0 var(--space-2);
+  border-radius: 99px;
+  background: var(--paper-sunk);
+  color: var(--ink-soft);
+}
+
+.kindLabel[data-kind="missing"] {
+  background: var(--level-mid-wash);
+  color: var(--level-mid);
+}
+
+.usual {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+.decidedBadge {
+  color: var(--level-sure);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.more {
+  composes: secondary from "../../styles/controls.module.css";
+  align-self: flex-start;
+}
+
+/* ---- the decision ------------------------------------------------------ */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block: var(--space-1) var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-raised);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.step {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.choices {
+  composes: choices from "./WordPanel.module.css";
+}
+
+.choice {
+  composes: choice from "./WordPanel.module.css";
+}
+
+.radio {
+  composes: radio from "./WordPanel.module.css";
+}
+
+.tick {
+  composes: tick from "./WordPanel.module.css";
+}
+
+.typeLabel {
+  composes: typeLabel from "./WordPanel.module.css";
+}
+
+.typeField {
+  composes: typeField from "./WordPanel.module.css";
+}
+
+.scopes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.scopes > legend {
+  padding: 0;
+  margin-block-end: var(--space-1);
+}
+
+.scope {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--touch-target);
+  color: var(--ink);
+}
+
+.scope input[type="radio"] {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.reach {
+  color: var(--ink-faint);
+}
+
+.near {
+  composes: field from "../../styles/controls.module.css";
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.summary {
+  composes: summary from "./WordPanel.module.css";
+}
+
+.summaryLatin {
+  composes: summaryLatin from "./WordPanel.module.css";
+}
+
+/* A long typed reading wraps here rather than widening the panel. */
+.panel [data-latin] {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.decide {
+  composes: propose from "./WordPanel.module.css";
+}
+
+.failed {
+  color: var(--ink);
+}
+
+.done {
+  composes: proposed from "./WordPanel.module.css";
+}
+
+.doneHead {
+  composes: proposedHead from "./WordPanel.module.css";
+}
+
+.again {
+  composes: again from "./WordPanel.module.css";
+}
+
+.decided {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--accent-wash);
+  border-radius: var(--radius-md);
+}
+
+.decisions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.decision {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  color: var(--ink);
+}
+
+.forKarbon {
+  color: var(--ink-soft);
+}
+
+.withdraw {
+  composes: secondary from "../../styles/controls.module.css";
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line {
+  padding-inline-start: var(--space-3);
+  border-inline-start: 2px solid var(--line);
+}
+
+.lineText {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-base);
+}
+
+.lineWhere {
+  margin: 0;
+  color: var(--ink-faint);
+}
+
+/* The spelling in its line: underlined in the accent, as a citation's word
+   is on the word page, not a highlighter's yellow. */
+.hit {
+  background: none;
+  color: var(--accent-strong);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.3em;
+}
