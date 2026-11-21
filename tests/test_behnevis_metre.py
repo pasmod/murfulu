@@ -339,6 +339,11 @@ def test_without_the_metres_word_the_model_keeps_its_order():
     weighed = metre.weigh(words, ["--"])[0].word
     assert weighed.latin == "Dal"
     assert weighed.confidence == pytest.approx(0.1)
+    # Nor may a numbered rival the model ranked below its own reading.
+    words[0] = Word("دل", "دل", "Dal", 0.3, "letters", (("Dal", 0.3), ("Del", 0.5)))
+    weighed = metre.weigh(words, ["--"])[0].word
+    assert weighed.latin == "Dal"
+    assert weighed.confidence == pytest.approx(0.3)
 
 
 def test_the_metre_cannot_raise_a_word_with_no_rival():

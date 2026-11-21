@@ -370,6 +370,9 @@ def behaviour(reading: str, spelling: str = "") -> Behaviour | None:
         return None
     last = found.last
     key = latin_key(reading)
+    # With the ezafe the last consonant opens a syllable of its own, so the
+    # ezafe's shape is part of what a line can see.
+    ezafe = None if key in ("va", "o") else shape(reading, spelling, ezafe=True)
     return (
         found.vowel_first,
         found.body,
@@ -377,6 +380,7 @@ def behaviour(reading: str, spelling: str = "") -> Behaviour | None:
         last.open,
         last.long if last.open else None,
         None if last.open else last.joined().weight(),
+        None if ezafe is None else ezafe.alone(),
         spelling in ENCLITIC_AST and key in ("ast", "st"),
         spelling == "و" and key == "o",
     )
@@ -702,19 +706,21 @@ class Metre:
         left = max(0.0, 1.0 - sum(known) * scale)
         latins = [latin for latin, _ in word.candidates]
         chosen = latins.index(word.latin) if word.latin in latins else None
-        first = word.candidates[chosen][1] if chosen is not None else None
         # A reading offered without a number takes an equal share of what the
-        # numbered ones leave — but never more than the model's own reading
-        # has, so that without the metre's word the order and the confidence
-        # stay as the model made them. What is left over is the share of the
-        # readings not offered at all.
+        # numbered ones leave.
         share = left / (unknown + 1)
-        if first is not None:
-            share = min(share, max(0.0, first) * scale)
-        rest = left - share * unknown
         masses = [
             share if p is None else max(0.0, p) * scale for _, p in word.candidates
         ]
+        if chosen is not None:
+            # No rival weighs more than the model's own reading, so that
+            # without the metre's word the order and the confidence stay as
+            # the model made them (the letter model's beam can give a rival
+            # more than its own first guess).
+            mine = masses[chosen]
+            masses = [m if k == chosen else min(m, mine) for k, m in enumerate(masses)]
+        # What is left over is the share of the readings not offered at all.
+        rest = max(0.0, 1.0 - sum(masses))
         likely = [self.licences.base ** -(c - lowest) for c in costs[:-1]]
         weighed = [m * f for m, f in zip(masses, likely, strict=True)]
         total = sum(weighed) + rest

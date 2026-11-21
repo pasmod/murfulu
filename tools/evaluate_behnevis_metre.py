@@ -24,7 +24,8 @@ words weighed by the metre, :class:`murfulu.behnevis.metre.Metre`):
      it;
    - *vowel quality*: every reading offered that fits the signs behaves as
      the wrong one does in any line (*kenār*, *kanār*) — the metre cannot;
-   - *not offered*: no reading the model offered fits the signs.
+   - *not offered*: no reading the model offered fits the signs — the
+     metre cannot make it right.
 
 2. **What is left to a person.** Every running word of one poem in
    ``--sample`` (by a stable hash of the poem's id), read as the reading screen
@@ -347,7 +348,8 @@ def report(  # noqa: PLR0913 (one report, many parts)
         "and behaves differently in a line — the metre can prefer it. *Vowel",
         "quality*: every reading offered that fits behaves as the wrong one",
         "does in every line (*kenār*, *kanār*) — no metre can. *Not",
-        "offered*: none fits; the metre can only lower the confidence. *Made right*",
+        "offered*: none fits; the metre cannot make it right, though it may",
+        "lower its confidence, or raise it by ruling out rivals. *Made right*",
         "counts the errors of that kind before that the metre turned right; *newly",
         "wrong* the right readings it turned into errors of that kind.",
         "",
