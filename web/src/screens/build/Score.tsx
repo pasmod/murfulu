@@ -53,14 +53,14 @@ export function CorpusCell({ form }: { form: BuiltForm }) {
   const found = form.attestation;
   if (!found) return <span className={styles.faint}>سنجیده نشده</span>;
   if (found.function_word || found.headword_homograph) {
-    return <span className={styles.letters}>واژهٔ دیگری است</span>;
+    return <span className={styles.letters}>به معنای واژه‌ای دیگر</span>;
   }
   if (found.level === "none")
     return <span className={styles.faint}>نیامده</span>;
   if (found.level === "spelling") {
     return (
       <span className={styles.letters}>
-        همین حروف، <Num value={found.doc_count} /> متن
+        همین حروف در <Num value={found.doc_count} /> متن
       </span>
     );
   }
@@ -125,15 +125,15 @@ function ruleSays(score: FormScore): React.ReactNode {
   if (rule.attested === 0) {
     return (
       <>
-        {named} از <Num value={rule.types} /> واژه‌ای که می‌سازد، هیچ‌کدام در
-        پیکره نیست
+        {named} <Num value={rule.types} /> واژه می‌سازد و هیچ‌کدام در پیکره
+        نیامده است
       </>
     );
   }
   if (rate < 0.001) {
     return (
       <>
-        {named} از <Num value={rule.types} /> واژه‌ای که می‌سازد، تنها{" "}
+        {named} <Num value={rule.types} /> واژه می‌سازد و تنها{" "}
         {rule.attested === 1 ? (
           "یکی"
         ) : (
@@ -141,7 +141,7 @@ function ruleSays(score: FormScore): React.ReactNode {
             <Num value={rule.attested} /> تا
           </>
         )}{" "}
-        در پیکره هست
+        از آن‌ها در پیکره آمده است
       </>
     );
   }
@@ -149,7 +149,7 @@ function ruleSays(score: FormScore): React.ReactNode {
   return (
     <>
       {named} از هر <Num value={per} /> واژه‌ای که می‌سازد، حدود{" "}
-      <Num value={Math.max(1, Math.round(rate * per))} /> تا در پیکره هست
+      <Num value={Math.max(1, Math.round(rate * per))} /> تا در پیکره آمده است
     </>
   );
 }
@@ -160,7 +160,7 @@ function corpusSays(form: BuiltForm): React.ReactNode {
   if (!found) return null;
   if (found.function_word) return FUNCTION_WORD_HOMOGRAPH;
   if (found.headword_homograph) {
-    return "این حروف در پیکره هستند، ولی همیشه به معنای واژهٔ دیگری";
+    return "این حروف در پیکره آمده‌اند، ولی همیشه به معنای واژه‌ای دیگر";
   }
   if (found.level === "none") return "در پیکره نیامده است";
   if (found.level === "spelling") {
@@ -168,8 +168,8 @@ function corpusSays(form: BuiltForm): React.ReactNode {
       <>
         همین حروف در <Num value={found.doc_count} /> متن آمده‌اند، ولی شاید
         {form.inflection
-          ? " شکل صرف‌شدهٔ واژهٔ دیگری باشند"
-          : " واژهٔ دیگری باشند"}
+          ? " شکل صرف‌شدهٔ واژه‌ای دیگر باشند"
+          : " واژه‌ای دیگر باشند"}
       </>
     );
   }
@@ -210,15 +210,15 @@ export function ScoreLegend({
 }) {
   return (
     <p className={styles.legend}>
-      پیکره متن‌های کهن فارسی است، بیشترش شعر
+      پیکره متن‌های کهن فارسی است و بیشترش شعر
       {corpusVersion ? (
         <>
           {" "}
           (نسخهٔ <Latin>{corpusVersion}</Latin>)
         </>
       ) : null}
-      . واژه‌ای که در آن نیامده، شاید امروز به کار برود. امتیازها سنجشی
-      تقریبی‌اند، نه داوری دربارهٔ واژه.
+      . واژه‌ای که در آن نیامده، شاید امروز به کار برود. امتیاز فقط اندازه‌ای
+      تقریبی است، نه داوری دربارهٔ واژه.
     </p>
   );
 }

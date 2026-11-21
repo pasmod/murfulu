@@ -101,13 +101,13 @@ describe("when the caller may grade a word", () => {
     const panel = await judgeTheRule();
     // A graded verdict does not fit "this button does nothing", so it is not
     // on screen until the category asks for it.
-    expect(within(panel).queryByText("نیاز به گفت‌وگو")).toBeNull();
+    expect(within(panel).queryByText("باید درباره‌اش حرف بزنیم")).toBeNull();
     await userEvent.click(within(panel).getByRole("button", { name: /داوری زبانی/ }));
-    expect(within(panel).getByText("نیاز به گفت‌وگو")).toBeInTheDocument();
+    expect(within(panel).getByText("باید درباره‌اش حرف بزنیم")).toBeInTheDocument();
 
     // And it goes away again for a category that cannot carry one.
     await userEvent.click(within(panel).getByRole("button", { name: /ایراد برنامه/ }));
-    expect(within(panel).queryByText("نیاز به گفت‌وگو")).toBeNull();
+    expect(within(panel).queryByText("باید درباره‌اش حرف بزنیم")).toBeNull();
   });
 
   it("sends the verdict with the context and no author", async () => {
@@ -121,7 +121,7 @@ describe("when the caller may grade a word", () => {
     const panel = await judgeTheRule();
     await userEvent.click(within(panel).getByRole("button", { name: /داوری زبانی/ }));
     await userEvent.click(
-      within(panel).getByRole("button", { name: "این دستور نباید اینجا اجرا می‌شد" }),
+      within(panel).getByRole("button", { name: "این دستور نباید اینجا به کار می‌رفت" }),
     );
     await userEvent.type(within(panel).getByLabelText(/یادداشت/), "این واژه نیست");
     await userEvent.click(within(panel).getByRole("button", { name: "ثبت" }));
@@ -156,7 +156,7 @@ describe("when the caller may grade a word", () => {
     vi.stubGlobal("fetch", apiReturning({ "/me": EXPERT, "/rules": RULES }));
     renderApp("/rules");
     const panel = await judgeTheRule();
-    expect(within(panel).getByText(/پس نمی‌گردد و ویرایش نمی‌شود/)).toBeInTheDocument();
+    expect(within(panel).getByText(/دیگر پس گرفته یا ویرایش نمی‌شود/)).toBeInTheDocument();
   });
 });
 
@@ -171,7 +171,7 @@ describe("when the API says the caller may not grade a word", () => {
     const panel = await judgeTheRule();
     const graded = within(panel).getByRole("button", { name: /داوری زبانی/ });
     expect(graded).toBeDisabled();
-    expect(within(panel).getByText("تنها برای حساب کارشناس")).toBeInTheDocument();
+    expect(within(panel).getByText("فقط برای حساب کارشناس")).toBeInTheDocument();
   });
 
   it("still lets a bug be reported", async () => {
@@ -211,7 +211,7 @@ describe("about the app itself", () => {
     const panel = await screen.findByRole("dialog");
     expect(within(panel).getByRole("button", { name: /داوری زبانی/ })).toBeDisabled();
     expect(
-      within(panel).getByText("داوری زبانی دربارهٔ خودِ برنامه معنا ندارد"),
+      within(panel).getByText("خودِ برنامه را نمی‌شود از نظر زبانی داوری کرد"),
     ).toBeInTheDocument();
   });
 });

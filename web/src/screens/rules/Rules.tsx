@@ -128,7 +128,7 @@ export function Rules() {
 
       {error ? (
         <p className={styles.trouble} role="status">
-          دستورها خوانده نشد. کمی بعد دوباره بیازمایید.
+          نتوانستیم دستورها را بیاوریم. کمی بعد دوباره امتحان کنید.
         </p>
       ) : null}
 
@@ -137,27 +137,27 @@ export function Rules() {
       {pack ? (
         <>
           <p className={styles.provenance}>
-            <Num value={pack.count} /> دستور، دستورنامهٔ{" "}
+            <Num value={pack.count} /> دستور، از دستورنامهٔ{" "}
             <Latin>{pack.rule_pack_version}</Latin>.{" "}
             {pack.corpus_version ? (
               <>
-                سنجیده بر پیکرهٔ <Latin>{pack.corpus_version}</Latin>.
+                سنجش‌ها بر پایهٔ پیکرهٔ <Latin>{pack.corpus_version}</Latin> است.
               </>
             ) : (
-              "هنوز هیچ سنجشی بر پیکره انجام نشده است."
+              "هنوز هیچ دستوری روی پیکره سنجیده نشده است."
             )}
           </p>
 
           {disagreeing.length > 0 ? (
             <section className={styles.finding} aria-labelledby="finding">
               <h2 id="finding" className={styles.findingTitle}>
-                <Num value={disagreeing.length} /> دستور که سرچشمه و سنجش دربارهٔ
-                آنها یکی نمی‌گویند
+                <Num value={disagreeing.length} /> دستور که دستورنامه و پیکره
+                دربارهٔ آن‌ها یکی نمی‌گویند
               </h2>
               <p className={styles.findingNote}>
-                این یافته است، نه خطا. سرچشمه تنها برای{" "}
+                این یک یافته است، نه خطا. دستورنامه فقط برای{" "}
                 <Num value={affixRules.filter((one) => one.strength).length} />{" "}
-                دستور نیرویی نوشته است.
+                دستور گفته است که چقدر به کار می‌روند.
               </p>
               <ul className={styles.rules}>
                 {disagreeing.map((rule) => (
@@ -197,7 +197,7 @@ export function Rules() {
           </div>
 
           <p className={styles.total} role="status">
-            <Num value={shown.length} /> دستور نشان داده می‌شود.
+            <Num value={shown.length} /> دستور را می‌بینید.
           </p>
 
           <ul className={styles.rules}>
@@ -216,7 +216,7 @@ export function Rules() {
               className={styles.more}
               onClick={() => setWhole(true)}
             >
-              <Num value={folded} /> دستور دیگر — نشان بده
+              <Num value={folded} /> دستور دیگر را هم نشان بده
             </button>
           ) : null}
         </>

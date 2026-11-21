@@ -214,7 +214,7 @@ describe("compound words", () => {
     // ۴٬۶۵۲ built against ۲۲۰ attested. Without the first number the second
     // reads as the whole answer.
     renderApp("/compound?word=%D8%AF%D9%84");
-    const counts = await screen.findByText(/ترکیب بسازد/);
+    const counts = await screen.findByText(/ترکیب می‌سازند/);
     expect(counts.textContent).toMatch(/۴٬۶۵۲/);
     expect(counts.textContent).toMatch(/۲۲۰/);
     expect(counts.textContent).toMatch(/۱٬۷۴۱/);
@@ -278,8 +278,8 @@ describe("compound words", () => {
     };
     vi.stubGlobal("fetch", answers(NOTHING));
     renderApp("/compound?word=%D8%AF%D9%84");
-    expect(await screen.findByText(/هیچ ترکیبی از این واژه ساخته نشد/)).toBeInTheDocument();
-    expect(screen.getByText(/در جای نخست/)).toBeInTheDocument();
+    expect(await screen.findByText(/با این واژه هیچ ترکیبی ساخته نشد/)).toBeInTheDocument();
+    expect(screen.getByText(/در نیمهٔ نخست/)).toBeInTheDocument();
     // The corpus sentence must not appear: nothing was built, so nothing could
     // have been looked for.
     expect(screen.queryByText(/هیچ‌یک از این ترکیب‌ها در پیکره نیامده/)).toBeNull();
@@ -302,7 +302,9 @@ describe("compound words", () => {
     vi.stubGlobal("fetch", answers({ detail: "no entry" }, 404));
     renderApp("/compound?word=%D9%86%DB%8C%D8%B3%D8%AA");
     expect(
-      await screen.findByText(notFound("چیزی نمی‌توان با آن ترکیب کرد.")),
+      await screen.findByText(
+        notFound("نمی‌توانیم آن را با واژهٔ دیگری ترکیب کنیم."),
+      ),
     ).toBeInTheDocument();
   });
 });

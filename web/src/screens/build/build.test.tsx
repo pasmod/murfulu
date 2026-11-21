@@ -268,7 +268,7 @@ describe("the build screen", () => {
     renderApp(ROUTE);
     await showForms();
     await screen.findByText("رفتار");
-    expect(screen.queryByText(/بازبینی‌نشده/)).toBeNull();
+    expect(screen.queryByText(/بازبینی نشده/)).toBeNull();
   });
 
   it("names the rule the figure belongs to, and what it was measured against", async () => {
@@ -315,9 +315,9 @@ describe("the build screen", () => {
     // The sentence says the rule *built a word* from these stems and that word
     // was found — not that the stems were found. Those are different claims,
     // and the first shipped before being caught on 2026-08-18.
-    expect(screen.getByText(/واژه‌ای ساخته که در پیکرهٔ/)).toBeInTheDocument();
+    expect(screen.getByText(/واژه‌هایی ساخته که در پیکرهٔ/)).toBeInTheDocument();
     expect(screen.queryByText(/بن‌هایی که در پیکره یافته‌ایم/)).toBeNull();
-    const said = screen.getByText(/مرکزِ معنایی/).parentElement!;
+    const said = screen.getByText(/بن‌های معمول این دستور/).parentElement!;
     expect(said.textContent).toContain("گل");
     expect(said.textContent).toContain("رو");
     expect(said.textContent).toContain("Yān");
@@ -365,7 +365,7 @@ describe("the build screen", () => {
     renderApp(ROUTE);
     await showForms();
     await screen.findByText("یانی");
-    expect(screen.queryByText(/مرکزِ معنایی/)).toBeNull();
+    expect(screen.queryByText(/معنای معمول این دستور/)).toBeNull();
   });
 
   it("shows the dictionary's own definition, marked as the dictionary's", async () => {
@@ -567,7 +567,7 @@ describe("the build screen", () => {
     renderApp(ROUTE);
     await showForms();
     await screen.findByText("رفتار");
-    expect(screen.queryByText(/چنین هم نوشته/)).toBeNull();
+    expect(screen.queryByText(/این‌طور هم نوشته/)).toBeNull();
   });
 
   it("shows a group's first rows and offers the rest, saying how many", async () => {
@@ -730,7 +730,7 @@ describe("the build screen", () => {
     // Said on the row as another word's, rather than a count, and in full
     // behind the evidence.
     const row = within(group).getByText("که").closest("li")!;
-    expect(within(row).getByText("واژهٔ دیگری است")).toBeInTheDocument();
+    expect(within(row).getByText("به معنای واژه‌ای دیگر")).toBeInTheDocument();
     await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
     expect(within(row).getByText(FUNCTION_WORD_HOMOGRAPH)).toBeInTheDocument();
   });
@@ -949,7 +949,7 @@ describe("the evidence", () => {
     renderApp(ROUTE);
     await showForms();
     await openEvidence("روش", /^پیکره/);
-    expect(screen.getByText(/شمار برای این املاست/)).toBeInTheDocument();
+    expect(screen.getByText(/شمار برای همین حروف است/)).toBeInTheDocument();
   });
 
   it("distinguishes not-checked from not-found", async () => {
@@ -976,7 +976,7 @@ describe("the evidence", () => {
     renderApp(ROUTE);
     await showForms();
     expect(await screen.findByText("سنجیده نشده")).toBeInTheDocument();
-    expect(screen.getByText(/پیکره‌ای در دسترس نبود/)).toBeInTheDocument();
+    expect(screen.getByText(/پیکره در دسترس نبود/)).toBeInTheDocument();
   });
 });
 
@@ -994,7 +994,9 @@ describe("a word the lexicon does not have", () => {
     );
     renderApp(ROUTE);
     expect(
-      await screen.findByText(notFound("نمی‌دانیم از چه ساخته شده است.")),
+      await screen.findByText(
+        notFound("نمی‌دانیم پایه‌اش چیست و نمی‌توانیم از آن واژه بسازیم."),
+      ),
     ).toBeInTheDocument();
   });
 });
@@ -1049,7 +1051,7 @@ describe("the ground under a chain", () => {
     await openEvidence("دشرفتبان", /^دستور/);
     // Names the middle word, says where it was looked for, says who made it —
     // and never that nobody wrote it. FRONTEND.md: never "does not exist".
-    expect(await screen.findByText(/آن را ما ساخته‌ایم/)).toBeInTheDocument();
+    expect(await screen.findByText(/آن را هم ما ساخته‌ایم/)).toBeInTheDocument();
     expect(screen.queryByText(/وجود ندارد/)).toBeNull();
     expect(screen.queryByText(/هیچ‌کس ننوشته/)).toBeNull();
     expect(screen.queryByText(/ساختی روی ساخت/)).toBeNull();
@@ -1061,7 +1063,7 @@ describe("the ground under a chain", () => {
     await showForms();
     await screen.findByText("Navā");
     // An unchecked chain is not a broken one, and gets no warning sentence.
-    expect(screen.queryByText(/پایهٔ میانی/)).toBeNull();
+    expect(screen.queryByText(/خودش در پیکرهٔ/)).toBeNull();
   });
 });
 
@@ -1160,7 +1162,7 @@ describe("how often a chain's rules produce real words", () => {
     // A page must never look like the answer.
     serving([good, nonsense], { count: 17717, returned: 2, has_more: true });
     renderApp(ROUTE);
-    const note = await screen.findByText(/نیرومندترین/);
+    const note = await screen.findByText(/بیشترین شاهد را دارند/);
     // Both numbers in one sentence: what came back, and what was built.
     expect(note.textContent).toMatch(/۲/);
     expect(note.textContent).toMatch(/۱۷٬۷۱۷/);
@@ -1171,7 +1173,7 @@ describe("how often a chain's rules produce real words", () => {
     renderApp(ROUTE);
     await showForms();
     await screen.findByText("hamandišande");
-    expect(screen.queryByText(/نیرومندترین/)).toBeNull();
+    expect(screen.queryByText(/بیشترین شاهد را دارند/)).toBeNull();
   });
 });
 
@@ -1233,10 +1235,10 @@ describe("a form that also reads as an inflection", () => {
     // corpus field.
     await openEvidence("رفتی", /^پیکره/);
     expect(
-      screen.getByText(/شکل صرف‌شدهٔ واژهٔ دیگری باشند/),
+      screen.getByText(/شکل صرف‌شدهٔ واژه‌ای دیگر باشند/),
     ).toBeInTheDocument();
-    expect(screen.getByText(/خوانشِ دیگری هم دارد/)).toBeInTheDocument();
-    expect(screen.getByText(/نمی‌توان گفت کدام است/)).toBeInTheDocument();
+    expect(screen.getByText(/جور دیگری هم می‌شود خواند/)).toBeInTheDocument();
+    expect(screen.getByText(/نمی‌شود گفت کدام منظور است/)).toBeInTheDocument();
     expect(screen.getByText("N-095")).toBeInTheDocument();
   });
 

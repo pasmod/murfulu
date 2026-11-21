@@ -125,7 +125,7 @@ describe("the verses under a built word's figures", () => {
     renderWithRouter(<Signals form={built(found("reading", 2))} corpusVersion="v1" />);
     expect(asked).toHaveLength(0);
     await openCorpus();
-    expect(await screen.findByText(/نه یکی از خوانش‌های آن/)).toBeInTheDocument();
+    expect(await screen.findByText(/به هر خوانشی که باشد/)).toBeInTheDocument();
     const links = await screen.findAllByRole("link", { name: "در متن ←" });
     expect(links).toHaveLength(2);
     expect(links[0]).toHaveAttribute(
@@ -164,7 +164,7 @@ describe("the verses under a built word's figures", () => {
     ).toEqual(["همهٔ نویسندگان (۲۵ متن)", "الف (۲۰)", "پ (۴)", "ب (۱)"]);
     // Ten to a page in a panel.
     expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(10);
-    await userEvent.click(screen.getByRole("button", { name: "صفحهٔ پسین" }));
+    await userEvent.click(screen.getByRole("button", { name: "صفحهٔ بعد" }));
     expect(asked.some((one) => one.get("page") === "1" && one.get("size") === "10")).toBe(true);
 
     await userEvent.selectOptions(filter, "ب");
@@ -179,7 +179,7 @@ describe("the verses under a built word's figures", () => {
     renderWithRouter(<Signals form={built(found("none", 0))} corpusVersion="v1" />);
     await openCorpus();
     expect(screen.getByText(/نیامده است/)).toBeInTheDocument();
-    expect(screen.queryByText(/نه یکی از خوانش‌های آن/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/به هر خوانشی که باشد/)).not.toBeInTheDocument();
     expect(asked).toHaveLength(0);
   });
 
@@ -220,7 +220,7 @@ describe("the verses under a built word's figures", () => {
         <Signals form={built(found("reading", 25), "بستگاه")} corpusVersion="v1" />
       </MemoryRouter>,
     );
-    expect(await screen.findByText(/شاهد املای «بستگاه»/)).toBeInTheDocument();
+    expect(await screen.findByText(/حروف «بستگاه»/)).toBeInTheDocument();
     expect(screen.queryByRole("combobox", { name: "نویسنده" })).not.toBeInTheDocument();
     expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(3);
   });
@@ -239,7 +239,7 @@ describe("the verses under a built word's figures", () => {
       await screen.findByText((_text, node) =>
         Boolean(
           node?.matches("p") &&
-          /این فهرست ۶ متن دارد و شمارش بالا ۵، چون/.test(node.textContent ?? ""),
+          /این فهرست ۶ متن دارد و [^.]*۵\./.test(node.textContent ?? ""),
         ),
       ),
     ).toBeInTheDocument();

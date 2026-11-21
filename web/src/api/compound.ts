@@ -41,6 +41,8 @@ export interface Evidence {
 export interface Pairing {
   form_latin: string;
   form_fa: string;
+  /** With its short vowels, for display only (DECISIONS 2026-11-21). */
+  form_fa_marked?: string;
   word_class: string;
   rule_id: string;
   label_fa: string | null;
@@ -73,6 +75,8 @@ export interface Pairing {
 export interface CompoundReading {
   latin: string;
   spelling_fa: string;
+  /** With its short vowels, for display only (DECISIONS 2026-11-21). */
+  spelling_fa_marked?: string;
   lexicon_category: string | null;
   /** The linguist's word-bank groups, by his names. Empty before karbon 1.3. */
   bank_groups?: string[];

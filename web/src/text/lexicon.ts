@@ -52,13 +52,13 @@ export const POPULATION_CHOICE: Record<string, string> = {
  * is the coverage gap itself, not an error and not a blank. Said the same way
  * on a search row and on a word screen.
  */
-export const NO_READING = `خوانشی در ${LEXICON} نیست`;
+export const NO_READING = `${LEXICON} خوانشی برایش ندارد`;
 
 /** The dictionary's own words, labelled as the dictionary's. */
 export const FROM_LEXICON = `از ${LEXICON}:`;
 
 /** A second pronunciation the dictionary itself lists — برنا is barnā and bornā. */
-export const ALSO_WRITTEN = `${LEXICON} این خوانش را چنین هم نوشته است:`;
+export const ALSO_WRITTEN = `${LEXICON} این خوانش را این‌طور هم نوشته است:`;
 
 /**
  * The letters are, almost always, a function word — که, از, را — so the
@@ -67,17 +67,17 @@ export const ALSO_WRITTEN = `${LEXICON} این خوانش را چنین هم ن�
  * *keh* was being shown with the conjunction's 609,699 occurrences.
  */
 export const FUNCTION_WORD_HOMOGRAPH =
-  "هم‌نویسهٔ یک واژهٔ دستوری: شمار پیکره از آنِ آن واژه است، پس گواهیِ این یکی نامعلوم است.";
+  "این واژه هم‌شکلِ یک واژهٔ دستوری است، مثل «که» یا «از». شمارِ پیکره مالِ آن واژهٔ دستوری است، پس نمی‌دانیم این یکی چند بار آمده است.";
 
 /** The same, short enough for a row. */
-export const FUNCTION_WORD_SHORT = "هم‌نویسهٔ واژهٔ دستوری — گواهی نامعلوم";
+export const FUNCTION_WORD_SHORT = "هم‌شکلِ یک واژهٔ دستوری؛ شمارِ خودش روشن نیست";
 
 /** On the spelling's own document, which carries the count the readings do not. */
 export const FUNCTION_WORD_LETTERS =
-  "این املا در پیکره تقریباً همیشه یک واژهٔ دستوری است؛ این شمار از آنِ همان است.";
+  "این املا در پیکره تقریباً همیشه یک واژهٔ دستوری است، پس این شمار هم مالِ همان است.";
 
 /** The dictionary's own doubt, which a reader is told rather than shielded from. */
-export const NEEDS_REVIEW = `${LEXICON} این خوانش را بازبینی‌نشده نشان کرده است.`;
+export const NEEDS_REVIEW = `${LEXICON} خودش نوشته که این خوانش هنوز بازبینی نشده است.`;
 
 /**
  * The word was not found, so the screen has nothing to work from. Each screen
@@ -85,7 +85,7 @@ export const NEEDS_REVIEW = `${LEXICON} این خوانش را بازبینی‌
  * guess whether they mistyped or whether the tool gave up.
  */
 export function notFound(consequence: string): string {
-  return `این واژه در ${LEXICON} نیست، پس ${consequence}`;
+  return `این واژه در ${LEXICON} نیامده، پس ${consequence}`;
 }
 
 /**

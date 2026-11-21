@@ -73,7 +73,7 @@ test.describe("every text of a spelling", () => {
     await list.getByRole("link", { name: "در متن ←" }).first().click();
     await expect(page).toHaveURL(/\/texts\?text=.*&unit=\d+&word=/);
     await expect(
-      page.getByText(new RegExp(`همان سطرِ شاهدمثالِ «${WORD}»`)),
+      page.getByText(new RegExp(`شاهدمثالِ «${WORD}» از همین سطر است`)),
     ).toBeVisible();
     await expect(page.locator("button[data-sought]").first()).toBeInViewport();
   });
@@ -110,7 +110,7 @@ async function showAll(page: Page) {
     // The radio is drawn as its label, which takes the press.
     await attested.nth(at).check({ force: true });
   }
-  const more = page.getByRole("button", { name: /واژهٔ دیگر — نشان بده/ });
+  const more = page.getByRole("button", { name: /واژهٔ دیگر را هم نشان بده/ });
   while ((await more.count()) > 0) await more.first().click();
 }
 
@@ -146,7 +146,7 @@ test.describe("the verses under a built word's figures", () => {
 
     await row.getByRole("link", { name: "در متن ←" }).first().click();
     await expect(page).toHaveURL(/\/texts\?text=.*&unit=\d+&word=/);
-    await expect(page.getByText(/همان سطرِ شاهدمثالِ «بسمان»/)).toBeVisible();
+    await expect(page.getByText(/شاهدمثالِ «بسمان» از همین سطر است/)).toBeVisible();
     await expect(page.locator("button[data-sought]").first()).toBeInViewport();
   });
 

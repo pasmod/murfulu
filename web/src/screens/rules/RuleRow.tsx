@@ -29,8 +29,8 @@ const BAND_LABEL: Record<string, string> = {
 };
 
 const STRENGTH_LABEL: Record<string, string> = {
-  obligatory: "همیشگی",
-  typical: "بیشتر",
+  obligatory: "همیشه",
+  typical: "بیشتر وقت‌ها",
   occasional: "گاهی",
 };
 
@@ -71,10 +71,10 @@ export function RuleRow({ rule }: { rule: Rule }) {
           {measured?.measured ? (
             <>
               <span className={styles.built}>
-                <Num value={measured.types_built} /> ساخته
+                <Num value={measured.types_built} /> واژه ساخته
               </span>
               <span className={styles.attested}>
-                <Num value={measured.types_attested} /> نوشته‌شده
+                <Num value={measured.types_attested} /> در پیکره
               </span>
               <span className={styles.rateValue}>{rate(measured.realisation_rate)}</span>
             </>
@@ -82,7 +82,7 @@ export function RuleRow({ rule }: { rule: Rule }) {
             <span className={styles.unmeasured}>
               {measured?.unmeasurable_reason
                 ? "سنجیده نشد"
-                : "هنوز سنجشی انجام نشده"}
+                : "هنوز سنجیده نشده"}
             </span>
           )}
         </span>
@@ -97,20 +97,20 @@ export function RuleRow({ rule }: { rule: Rule }) {
       <div className={styles.marks}>
         {rule.strength ? (
           <span className={styles.strength}>
-            سرچشمه: {STRENGTH_LABEL[rule.strength] ?? rule.strength}
+            به گفتهٔ دستورنامه: {STRENGTH_LABEL[rule.strength] ?? rule.strength}
           </span>
         ) : null}
         {measured?.band ? (
           <span className={styles.band}>
-            سنجش: {BAND_LABEL[measured.band] ?? measured.band}
+            سنجش در پیکره: {BAND_LABEL[measured.band] ?? measured.band}
           </span>
         ) : null}
         {measured?.disagrees_with_strength ? (
           <span className={styles.disagrees}>
-            سرچشمه و سنجش یکی نیستند
+            دستورنامه و پیکره یکی نمی‌گویند
           </span>
         ) : null}
-        {!rule.active ? <span className={styles.retired}>بازنشسته</span> : null}
+        {!rule.active ? <span className={styles.retired}>کنار گذاشته</span> : null}
         {rule.needs_expert_check ? (
           <span className={styles.flagged}>نیازمند بررسی</span>
         ) : null}
@@ -209,7 +209,7 @@ export function RuleRow({ rule }: { rule: Rule }) {
           ) : null}
           {measured?.echo_share ? (
             <div>
-              <dt>هم‌سان با ورودی</dt>
+              <dt>ساخته‌هایی که همان واژهٔ آغازین‌اند</dt>
               <dd>{rate(measured.echo_share)}</dd>
             </div>
           ) : null}
@@ -219,12 +219,13 @@ export function RuleRow({ rule }: { rule: Rule }) {
               without a centre says so, because a blank would read as "this
               rule has nothing typical". */}
           <div>
-            <dt>پایه‌های شاخص</dt>
+            <dt>پایه‌های نمونه‌وار</dt>
             <dd>
               {rule.semantic ? (
                 <>
                   <span className={styles.reason}>
-                    میانگین <Num value={rule.semantic.bases} /> پایهٔ نوشته‌شده
+                    از <Num value={rule.semantic.bases} /> پایه‌ای که ساخته‌شان در
+                    پیکره آمده، این‌ها از همه نمونه‌وارترند:
                   </span>
                   {rule.semantic.typical_bases.map((base) => (
                     <span key={base.latin} className={styles.typical}>
@@ -235,7 +236,7 @@ export function RuleRow({ rule }: { rule: Rule }) {
                 </>
               ) : (
                 <span className={styles.reason}>
-                  برای این دستور سنجش معنایی در دست نیست
+                  معنای این دستور هنوز سنجیده نشده است
                 </span>
               )}
             </dd>

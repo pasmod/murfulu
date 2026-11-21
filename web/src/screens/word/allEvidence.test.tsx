@@ -128,7 +128,7 @@ describe("every text of the spelling", () => {
     expect(
       await within(block).findByText(saying(/در .* متن از .* نویسنده آمده است/)),
     ).toHaveTextContent("املای «روشنا» در ۲۱ متن از ۲ نویسنده آمده است، در ۲۹ سطر.");
-    expect(within(block).getByText(/نه یکی از خوانش‌های آن/)).toBeInTheDocument();
+    expect(within(block).getByText(/نمی‌گوییم هر سطر کدام خوانش است/)).toBeInTheDocument();
     const toggle = within(block).getByRole("button", { name: "نشان دادن همهٔ شواهد" });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     expect(within(block).queryByRole("list")).not.toBeInTheDocument();
@@ -165,11 +165,11 @@ describe("every text of the spelling", () => {
   it("pages through the address and asks for the next page by number", async () => {
     renderApp(`${ROUTE}?all=1`);
     const block = await region();
-    await userEvent.click(await within(block).findByRole("button", { name: "صفحهٔ پسین" }));
+    await userEvent.click(await within(block).findByRole("button", { name: "صفحهٔ بعد" }));
     expect(await within(block).findByText(saying(/۲۱–۲۱ از ۲۱ متن/))).toBeInTheDocument();
     expect(await within(block).findByText(/^ب — دیوان/)).toBeInTheDocument();
     expect(asked.some((one) => one.get("page") === "1")).toBe(true);
-    expect(within(block).getByRole("button", { name: "صفحهٔ پسین" })).toBeDisabled();
+    expect(within(block).getByRole("button", { name: "صفحهٔ بعد" })).toBeDisabled();
   });
 
   it("filters by author, most texts first, and counts that author's lines", async () => {
@@ -189,15 +189,15 @@ describe("every text of the spelling", () => {
     renderApp(`${ROUTE}?all=1`);
     const block = await region();
     expect(await within(block).findByText(saying(/۱–۲۰ از ۲۱ متن/))).toBeInTheDocument();
-    expect(within(block).queryByText(saying(/شمارش بالا/))).not.toBeInTheDocument();
+    expect(within(block).queryByText(saying(/شمارِ بالا/))).not.toBeInTheDocument();
   });
 
   it("says in one sentence why its count differs from the word's", async () => {
     serve((body) => ({ ...body, total: 23 }));
     renderApp(`${ROUTE}?all=1`);
     const block = await region();
-    expect(await within(block).findByText(saying(/شمارش بالا/))).toHaveTextContent(
-      /این فهرست ۲۳ متن دارد و شمارش بالا ۲۱، چون/,
+    expect(await within(block).findByText(saying(/شمارِ بالا/))).toHaveTextContent(
+      /این فهرست ۲۳ متن دارد و شمارِ بالا ۲۱\. فرقشان/,
     );
   });
 
@@ -214,7 +214,7 @@ describe("every text of the spelling", () => {
     }));
     renderApp(`${ROUTE}?all=1`);
     const block = await region();
-    expect(await within(block).findByText(/تنها با املایی نزدیک/)).toBeInTheDocument();
+    expect(await within(block).findByText(/با املایی کمی متفاوت آمده/)).toBeInTheDocument();
     expect(within(block).getByRole("link", { name: "در متن ←" })).toHaveAttribute(
       "href",
       `/texts?text=fixture%3A0&unit=3&word=${encodeURIComponent("روشنی")}`,

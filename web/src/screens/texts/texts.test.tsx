@@ -271,7 +271,7 @@ describe("the reading screen", () => {
   it("shows the readings the word's own harakat rule out paler, and says why", async () => {
     const text = await openText();
     const word = within(text).getByRole("button", { name: /^دِل:/ });
-    expect(word).toHaveAccessibleName("دِل: Del؛ اعراب متن با Dal، dall نمی‌خواند");
+    expect(word).toHaveAccessibleName("دِل: Del؛ اعراب متن با Dal، dall جور نیست");
     const pale = within(word)
       .getAllByText(/^(Dal|dall|Del)$/)
       .filter((one) => one.className.includes("ruledOut"))
@@ -280,11 +280,11 @@ describe("the reading screen", () => {
     // The same spelling without signs keeps every reading alike.
     const plain = within(text).getAllByRole("button", { name: /^دلِ:/ })[0]!;
     expect(plain.querySelector("[class*=ruledOut]")).toBeNull();
-    expect(within(text).getByText(/اعرابِ\s+خودِ متن با این خوانش نمی‌خواند/)).toBeInTheDocument();
+    expect(within(text).getByText(/اعرابی\s+که در خود متن آمده با این خوانش جور نیست/)).toBeInTheDocument();
 
     await userEvent.click(word);
     const panel = within(text).getByRole("region", { name: "خوانش‌های دِل" });
-    expect(within(panel).getAllByText("اعرابِ متن با آن نمی‌خواند")).toHaveLength(2);
+    expect(within(panel).getAllByText("با اعراب متن جور نیست")).toHaveLength(2);
   });
 
   it("shows «؟» for a word the bank does not read, and never says it is not a word", async () => {
@@ -306,12 +306,12 @@ describe("the reading screen", () => {
     const text = await openText();
     await userEvent.click(within(text).getAllByRole("button", { name: /^دلِ:/ })[0]!);
     const panel = within(text).getByRole("region", { name: "خوانش‌های دلِ" });
-    expect(panel.textContent).toMatch(/به ۳ گونه می‌خواند/);
-    expect(within(panel).getByText(/گفته نمی‌شود/)).toBeInTheDocument();
+    expect(panel.textContent).toMatch(/۳ خوانش دارد/);
+    expect(within(panel).getByText(/نمی‌گوییم کدام در این سطر درست است/)).toBeInTheDocument();
     // Del was marked before this visit, so only Dal and dall offer the mark.
-    expect(await within(panel).findByText(/نادرست دانسته شده است/)).toBeInTheDocument();
+    expect(await within(panel).findByText(/علامتِ «نادرست» خورده/)).toBeInTheDocument();
     expect(within(panel).getAllByRole("button", { name: "این خوانش نادرست است" })).toHaveLength(2);
-    expect(panel.textContent).toMatch(/۱۴۸٬۶۹۷ بار، در ۶۵٬۸۰۷ متن/);
+    expect(panel.textContent).toMatch(/۱۴۸٬۶۹۷ بار در ۶۵٬۸۰۷ متن/);
     expect(within(panel).getByRole("link", { name: /این واژه در بانک واژه/ })).toHaveAttribute(
       "href",
       "/bank?q=%D8%AF%D9%84&exact=1",
@@ -327,7 +327,7 @@ describe("the reading screen", () => {
 
   it("opens a citation at its line, with the word marked", async () => {
     const text = await openText("/texts?text=fixture%3Aa%3A1&unit=2&word=%D8%AF%D9%84");
-    const unit = within(text).getByText(/همان سطرِ شاهدمثالِ «دل»/).closest("li")!;
+    const unit = within(text).getByText(/شاهدمثالِ «دل» از همین سطر است/).closest("li")!;
     expect(unit).toHaveAttribute("id", "unit-2");
     expect(within(unit).getByRole("button", { name: /^دل:/ })).toHaveAttribute("data-sought", "true");
     expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
@@ -340,7 +340,7 @@ describe("the reading screen", () => {
     const dall = within(panel).getByText("dall").closest("li")!;
     await userEvent.click(within(dall).getByRole("button", { name: "این خوانش نادرست است" }));
     expect(posted).toHaveLength(0);
-    expect(within(dall).getByText(/پاک نمی‌شود/)).toBeInTheDocument();
+    expect(within(dall).getByText(/دیگر نمی‌شود پاکش کرد/)).toBeInTheDocument();
     await userEvent.type(within(dall).getByRole("textbox"), "اینجا dil نیست");
     await userEvent.click(within(dall).getByRole("button", { name: "ثبت کن" }));
     expect(posted).toEqual([
@@ -361,12 +361,12 @@ describe("the reading screen", () => {
         }),
       }),
     ]);
-    expect(await within(dall).findByText(/نادرست دانسته شده است/)).toBeInTheDocument();
+    expect(await within(dall).findByText(/علامتِ «نادرست» خورده/)).toBeInTheDocument();
   });
 
   it("finds texts by their heading and lists the marked readings for review", async () => {
     renderApp("/texts");
-    const marks = await screen.findByRole("region", { name: "خوانش‌هایی که نادرست دانسته شده‌اند" });
+    const marks = await screen.findByRole("region", { name: "خوانش‌هایی که علامتِ «نادرست» خورده‌اند" });
     expect(within(marks).getByText("Dol")).toBeInTheDocument();
     expect(within(marks).getByText("در این بیت دل است")).toBeInTheDocument();
     expect(within(marks).getByRole("link", { name: /همان سطر/ })).toHaveAttribute(
@@ -490,7 +490,7 @@ describe("the reading screen", () => {
     await userEvent.type(field, "Dol");
     expect(dal).not.toBeChecked();
     expect(within(here).queryAllByRole("radio", { checked: true })).toHaveLength(0);
-    expect(within(here).getByText(/ثبت می‌شود/)).toHaveTextContent(/Dol.*نوشته‌شده/);
+    expect(within(here).getByText(/ثبت می‌شود/)).toHaveTextContent(/Dol.*نوشتهٔ شما/);
     // … and picking clears what was typed.
     await userEvent.click(within(here).getByRole("radio", { name: /Del/ }));
     expect(field).toHaveValue("");
@@ -549,7 +549,7 @@ describe("the reading screen", () => {
     expect(within(text).getByRole("button", { name: "رفتند: raftaand، ثبت‌شده" })).toBeInTheDocument();
     await userEvent.click(within(text).getByRole("button", { name: /^دلِ:/ }));
     const here = within(text).getByRole("region", { name: "خوانش در این سطر" });
-    expect(within(here).getByText(/پیش‌تر برای این سطر ثبت شده/)).toHaveTextContent("Dal");
+    expect(within(here).getByText(/پیش‌تر برای این سطر .*ثبت شده است/)).toHaveTextContent("Dal");
   });
 
   it("learns a function word's own reading rather than sending it to karbon", async () => {

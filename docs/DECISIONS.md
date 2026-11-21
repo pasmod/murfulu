@@ -2,6 +2,46 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 — the app's own texts are rewritten in plain, relaxed Persian
+
+The project lead read the app and found its own explanatory texts stiff:
+«Artificial sentences. Fluent, relaxed. The user has to understand what you
+mean.» Every purpose, invitation, hint, tooltip, empty state, error and
+explanation sentence across the screens was rewritten — 277 strings — with
+the meaning and every protective caveat kept (the corpus is old poetry; a
+count may be another word's; a word missing from the corpus is not a wrong
+word). **Not touched**: the linguist's terms and the menu names he ruled on
+(L21), the rule pack's and the dictionary's own sentences, and «متن» /
+«نویسنده» (L37). The before/after list went to the project lead before the
+deploy. Two screen titles follow the menu now (شکافتن واژه، وند از روی معنا),
+and the build buttons say the menu's verbs (بساز، بچسبان، بشکاف). «یافت نشد»
+is gone from the whole app. — project lead (the ask; the wording to be
+approved), engineering (the wording)
+
+## 2026-11-21 — Persian words carry their short vowels, made from the reading
+
+**The project lead's decision of 2026-11-21: «build it directly»**, without
+asking the linguist first. Now that every word has a Behnevis reading, the
+Persian is shown with zabar, zir and pish as Dehkhoda and Moin print them.
+Three conditions came with it:
+
+1. **Search and matching ignore the marks.** Nothing marked is stored or
+   matched: the API serves `form_fa_marked` / `spelling_fa_marked` beside the
+   plain spelling, for display only.
+2. **The marks come from the reading, never by hand**
+   (`murfulu/behnevis/vowels.py`): the letters are lined up with the reading
+   by the letter table the harakat check already uses, and an unwritten short
+   vowel becomes its letter's mark. Where two ways of lining up disagree about
+   a mark, it is left off; a reading that does not line up leaves the word as
+   written.
+3. **The marks a reader needs**: every unwritten short vowel, on ا or ع when
+   they carry it; a zabar before *ow* and *ey*; a tashdid where Behnevis
+   doubles a letter; never a sokun, never a mark on a written long vowel, the
+   last letter of the word or of a part before a joiner, or the silent ه.
+
+**Unconfirmed**: the script is the linguist's. Under the working rule it is
+built now and put to him as L48, not blocking.
+
 ## 2026-11-21 — the build screen gives each word a score from 0 to 100, in a table
 
 **The project lead's choice of 2026-11-21**, replacing the three levels of

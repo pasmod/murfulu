@@ -97,7 +97,7 @@ export function AllEvidence({ spelling, docCount, version }: AllEvidenceProps) {
         همهٔ شواهد
       </h2>
       {summaryFailed && !whole ? (
-        <p className={styles.trouble}>شمار متن‌ها نرسید. کمی بعد دوباره بیازمایید.</p>
+        <p className={styles.trouble}>شمار متن‌ها نرسید. کمی بعد دوباره امتحان کنید.</p>
       ) : !whole ? (
         <Waiting />
       ) : (
@@ -119,12 +119,12 @@ export function AllEvidence({ spelling, docCount, version }: AllEvidenceProps) {
             {current && current.lines === null ? (
               // Counting them means reading every text, which for و is the
               // whole corpus; each text below still says how many it has.
-              <span className={styles.aside}> سطرهای فهرستی به این بلندی شمرده نمی‌شوند.</span>
+              <span className={styles.aside}> در فهرستی به این بلندی، سطرها را نمی‌شماریم.</span>
             ) : null}
           </p>
           <p className={styles.note}>
-            این سطرها شاهد املای «{spelling}»اند، نه یکی از خوانش‌های آن؛ اینکه هر سطر کدام خوانش را
-            می‌خواهد، گفته نمی‌شود.
+            این سطرها جاهایی‌اند که جست‌وجو املای «{spelling}» را در آن‌ها پیدا کرده، به
+            هر خوانشی. اینجا نمی‌گوییم هر سطر کدام خوانش است.
           </p>
           <button
             type="button"

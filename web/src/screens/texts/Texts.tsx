@@ -99,7 +99,7 @@ export function Texts() {
           </button>
         </div>
         <p className={styles.hint}>
-          از شاهدمثال‌های یک واژه، در صفحهٔ همان واژه، هم می‌شود درست به همان سطر رسید.
+          در صفحهٔ هر واژه هم می‌توانید روی یکی از شاهدمثال‌ها بزنید و یک‌راست به همان سطر برسید.
         </p>
       </form>
 
@@ -107,7 +107,7 @@ export function Texts() {
         <>
           {q ? (
             <p className={styles.back}>
-              <Link to={`/texts?q=${encodeURIComponent(q)}`}>→ بازگشت به یافته‌های «{q}»</Link>
+              <Link to={`/texts?q=${encodeURIComponent(q)}`}>→ برگشت به نتیجه‌های «{q}»</Link>
             </p>
           ) : null}
           <Reader
@@ -183,7 +183,7 @@ function Found({ q }: { q: string }) {
   if (error) {
     return (
       <p className={styles.trouble} role="status">
-        متن‌ها خوانده نشدند. کمی بعد دوباره بیازمایید.
+        نتوانستیم فهرست متن‌ها را بیاوریم. کمی بعد دوباره امتحان کنید.
       </p>
     );
   }
@@ -194,7 +194,7 @@ function Found({ q }: { q: string }) {
     <section className={styles.card} aria-labelledby="found">
       <h2 id="found" className={styles.title}>
         {found.total === 0 ? (
-          <>متنی با «{q}» در سرآغازش پیدا نشد.</>
+          <>برای «{q}» متنی پیدا نکردیم.</>
         ) : (
           <>
             <Num value={found.total} /> متن
@@ -203,8 +203,8 @@ function Found({ q }: { q: string }) {
       </h2>
       {found.total === 0 ? (
         <p className={styles.note}>
-          نام نویسنده، کتاب یا بخش را کوتاه‌تر بنویسید؛ هر واژه‌ای که می‌نویسید باید در سرآغاز متن
-          باشد.
+          کوتاه‌تر بنویسید، مثلاً فقط نام نویسنده یا کتاب. هر واژه‌ای که می‌نویسید باید در نام
+          نویسنده، کتاب، بخش یا عنوان متن آمده باشد.
         </p>
       ) : null}
       <ol className={styles.found}>

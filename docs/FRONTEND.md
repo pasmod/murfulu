@@ -78,6 +78,12 @@ measure. The scale and weights are **unconfirmed** until the linguist rules
 (L36). The corpus version is said once under the table and beside every count
 behind the button.
 
+**The short vowels (2026-11-21).** The word in each row, the reading's
+heading, the compound rows and the word bank show the Persian with zabar,
+zir, pish and tashdid made from the reading (`form_fa_marked`,
+`spelling_fa_marked`); the plain spelling stays the key for search, links and
+tests. The rule is unconfirmed (L48).
+
 **The score's parts (2026-11-21).** «شواهد» opens a sentence of reason — what
 the corpus says, then how often the chain's weakest rule makes a word the
 corpus has, as «از هر ۱٬۰۰۰ واژه‌ای که می‌سازد، حدود ۵ تا» — and three fields:

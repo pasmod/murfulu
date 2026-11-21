@@ -97,8 +97,8 @@ export const FIELDS: Field[] = [
     example: "corpus",
     hint: "در متن‌ها آمده، در واژه‌نامه هست، یا ساختهٔ دستور است",
   },
-  { name: "stem1", title: "پیشین‌کاربن", example: "goft", hint: "بن گذشته" },
-  { name: "stem2", title: "کنون‌کاربن", example: "gu", hint: "بن اکنون" },
+  { name: "stem1", title: "پیشین‌کاربن", example: "goft", hint: "بن گذشتهٔ کارواژه" },
+  { name: "stem2", title: "کنون‌کاربن", example: "gu", hint: "بن اکنونِ کارواژه" },
   { name: "affix", title: "وند", example: "-eš", hint: "واژه‌هایی که این وند را دارند" },
   { name: "tag", title: "معنا", example: "ja", hint: "وندهایی که این معنا را می‌رسانند" },
   { name: "rule", title: "دستور", example: "V-010", hint: "ساخته‌شده با این دستور" },
@@ -134,10 +134,10 @@ export const EXAMPLES: { query: string; hint: string }[] = [
   { query: "bar*", hint: "واژه‌هایی که با «بر» شروع می‌شوند" },
   { query: "*raft*", hint: "واژه‌هایی که «رفت» را در خود دارند" },
   { query: "gereft", hint: "درست همین واژه: «گرفت»" },
-  { query: "/g[ou]ft/", hint: "چند شکل با یک الگو: goft یا guft" },
+  { query: "/g[ou]ft/", hint: "چند شکل با هم: goft یا guft" },
   { query: "روش", hint: "با خط فارسی هم می‌شود جست‌وجو کرد" },
   { query: "type:karnam", hint: "همهٔ کارنام‌ها (اسم مصدر)" },
-  { query: "category:مصدر", hint: `آنچه ${LEXICON} «مصدر» نامیده است` },
+  { query: "category:مصدر", hint: `واژه‌هایی که ${LEXICON} «مصدر» نامیده است` },
   { query: "in:corpus", hint: "واژه‌هایی که در متن‌ها آمده‌اند" },
   { query: "stem1:goft", hint: "واژه‌هایی که از پیشین‌کاربن «گفت» ساخته شده‌اند" },
   { query: "stem2:gu", hint: "واژه‌هایی که از کنون‌کاربن «گو» ساخته شده‌اند" },
@@ -151,7 +151,7 @@ export const EXAMPLES: { query: string; hint: string }[] = [
   { query: "century:10-13", hint: "در متن‌های سدهٔ دهم تا سیزدهم آمده" },
   {
     query: "*nā type:nam in:corpus",
-    hint: "چند خواسته با هم: نام‌هایی که با «ـنا» تمام می‌شوند و در متن‌ها آمده‌اند",
+    hint: "چند شرط با هم: نام‌هایی که با «ـنا» تمام می‌شوند و در متن‌ها آمده‌اند",
   },
 ];
 

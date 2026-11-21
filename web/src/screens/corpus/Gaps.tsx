@@ -30,12 +30,12 @@ export function Gaps({ gaps, total }: GapsProps) {
   return (
     <>
       <p className={styles.note}>
-        <Num value={total} /> املا در پیکره هست که در {LEXICON} نیامده است.
-        پرکاربردترین‌هایشان واژه‌های دستوری‌اند — «و»، «ز»، «بر» — و{" "}
+        <Num value={total} /> املا در پیکره آمده که در {LEXICON} مدخل ندارد.
+        پرکاربردترین‌هایشان واژه‌های دستوری‌اند، مانند «و»، «ز» و «بر»، و{" "}
         {/* Not karbon's dictionary but any dictionary of headwords, so the
             ordinary word is the right one here. */}
-        فرهنگی که بر پایهٔ سرواژه‌ها ساخته شده، هیچ‌گاه آنها را در خود ندارد. پس
-        این فهرست، فهرست خطاها نیست؛ خودش یک دستاورد است.
+        فرهنگی که بر پایهٔ سرواژه‌ها ساخته شده، چنین واژه‌هایی را نمی‌آورد. پس
+        این فهرست، فهرست خطاها نیست؛ خودش ارزش دارد.
       </p>
       {/* A box that scrolls has to be reachable by keyboard, or the rows past
           the fold exist for a mouse only. `group` plus a name so a screen
@@ -49,12 +49,12 @@ export function Gaps({ gaps, total }: GapsProps) {
       >
         <table className={styles.table}>
           <caption className={styles.caption}>
-            پرکاربردترین املاهای بی‌مدخل، از پربسامدترین
+            املاهای بی‌مدخل، از پرکاربردترین
           </caption>
           <thead>
             <tr>
               <th scope="col">املا</th>
-              <th scope="col">بسامد</th>
+              <th scope="col">شمار کاربرد</th>
               <th scope="col">شمار متن</th>
               <th scope="col">شمار نویسنده</th>
             </tr>

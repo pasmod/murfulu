@@ -35,8 +35,8 @@ export function Dispersion({ counts, total }: DispersionProps) {
   if (centuries.length === 0) {
     return (
       <p className={styles.none}>
-        هیچ‌یک از <Num value={total} /> کاربرد این واژه تاریخ‌دار نیست، پس
-        نموداری نمی‌توان کشید.
+        هیچ‌یک از <Num value={total} /> کاربرد این واژه تاریخ ندارد، پس
+        نموداری در کار نیست.
       </p>
     );
   }
@@ -52,7 +52,7 @@ export function Dispersion({ counts, total }: DispersionProps) {
   return (
     <figure className={styles.chart}>
       <figcaption className={styles.caption}>
-        کاربرد در گذر سده‌ها
+        در هر سده چند بار آمده
       </figcaption>
 
       <ul className={styles.bars}>
@@ -72,7 +72,7 @@ export function Dispersion({ counts, total }: DispersionProps) {
       </ul>
 
       <table className={styles.reading}>
-        <caption className="visually-hidden">کاربرد در هر سده</caption>
+        <caption className="visually-hidden">در هر سده چند بار آمده</caption>
         <tbody>
           {centuries.map((one) => (
             <tr key={one.century}>

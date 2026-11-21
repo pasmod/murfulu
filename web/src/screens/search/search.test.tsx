@@ -174,7 +174,7 @@ describe("the two groups", () => {
     expect(within(formed).getByText("تنکنا")).toBeInTheDocument();
     expect(within(formed).queryByText("فنا")).not.toBeInTheDocument();
 
-    const merely = screen.getByRole("region", { name: /تنها به این حروف/ });
+    const merely = screen.getByRole("region", { name: /فقط با همین حروف/ });
     expect(within(merely).getByText("فنا")).toBeInTheDocument();
   });
 
@@ -184,8 +184,8 @@ describe("the two groups", () => {
       answerWith({ ...ANSWER, formed_with_affix: [], total: 1 }),
     );
     renderApp("/?q=*n%C4%81");
-    expect(await screen.findByText(/هنوز روشن نیست/)).toBeInTheDocument();
-    expect(screen.getByText(/این با «هیچ‌کدام» یکی نیست/)).toBeInTheDocument();
+    expect(await screen.findByText(/هنوز نمی‌دانیم کدام‌یک/)).toBeInTheDocument();
+    expect(screen.getByText(/این یعنی «نمی‌دانیم»، نه «هیچ‌کدام»/)).toBeInTheDocument();
   });
 
   it("does not split at all when the query asks about no affix", async () => {
@@ -220,7 +220,7 @@ describe("the facets", () => {
   it("count the whole result set and narrow rather than replace", async () => {
     renderApp("/?q=*n%C4%81");
     const panel = await screen.findByRole("complementary", {
-      name: "باریک‌کردن نتیجه",
+      name: "محدود کردن نتیجه‌ها",
     });
     await userEvent.click(within(panel).getByRole("button", { name: /پیکره/ }));
     await waitFor(() => {
@@ -238,7 +238,7 @@ describe("the facets", () => {
     // the reader was never shown the syntax the facet had just written.
     renderApp("/?q=*n%C4%81");
     const panel = await screen.findByRole("complementary", {
-      name: "باریک‌کردن نتیجه",
+      name: "محدود کردن نتیجه‌ها",
     });
     await userEvent.click(within(panel).getByRole("button", { name: /پیکره/ }));
     await waitFor(() => {
@@ -268,9 +268,9 @@ describe("when it goes wrong", () => {
       ),
     );
     renderApp("/?q=poem%3Ax");
-    const trouble = await screen.findByText("این جست‌وجو خوانده نشد.");
+    const trouble = await screen.findByText("این جست‌وجو را نفهمیدیم.");
     expect(trouble).toBeInTheDocument();
-    expect(screen.getByText(/«poem» چیزی نیست که بتوان بر آن جست‌وجو کرد/))
+    expect(screen.getByText(/با «poem» نمی‌شود جست‌وجو کرد/))
       .toBeInTheDocument();
     expect(screen.queryByText(/is not a searchable field/)).not.toBeInTheDocument();
   });
@@ -293,7 +293,7 @@ describe("when it goes wrong", () => {
     // The whole sentence, because `count:1` on its own is also one of the
     // box's examples.
     const advice = await screen.findByText(
-      /بسامد باید عدد باشد، نه «abc».+count:1/,
+      /شمار کاربرد را با عدد بنویسید، نه «abc».+count:1/,
     );
     expect(advice).toBeInTheDocument();
   });
@@ -303,8 +303,8 @@ describe("when it goes wrong", () => {
     // general Persian sentence rather than a precise English one.
     vi.stubGlobal("fetch", answerWith({ detail: "unknown field 'poem'" }, 400));
     renderApp("/?q=poem%3Ax");
-    expect(await screen.findByText("این جست‌وجو خوانده نشد.")).toBeInTheDocument();
-    expect(screen.getByText(/کادر جست‌وجو را پاک کنید و رویش بزنید/)).toBeInTheDocument();
+    expect(await screen.findByText("این جست‌وجو را نفهمیدیم.")).toBeInTheDocument();
+    expect(screen.getByText(/کادر جست‌وجو را خالی کنید و رویش بزنید/)).toBeInTheDocument();
     expect(screen.queryByText(/unknown field/)).not.toBeInTheDocument();
   });
 
@@ -312,7 +312,7 @@ describe("when it goes wrong", () => {
     vi.stubGlobal("fetch", answerWith({ detail: "not built" }, 503));
     renderApp("/?q=*n%C4%81");
     expect(
-      await screen.findByText(/هنوز پیکره‌ای برای جست‌وجو ساخته نشده/),
+      await screen.findByText(/پیکره هنوز برای جست‌وجو آماده نیست/),
     ).toBeInTheDocument();
   });
 
@@ -322,7 +322,7 @@ describe("when it goes wrong", () => {
       answerWith({ ...ANSWER, total: 0, formed_with_affix: [], string_match_only: [] }),
     );
     renderApp("/?q=*zzz");
-    expect(await screen.findByText(/هیچ واژه‌ای با این الگو یافت نشد/)).toBeInTheDocument();
+    expect(await screen.findByText(/هیچ واژه‌ای با این الگو جور درنیامد/)).toBeInTheDocument();
   });
 });
 

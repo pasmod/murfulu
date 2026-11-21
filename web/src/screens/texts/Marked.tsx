@@ -44,27 +44,28 @@ export function Marked() {
   return (
     <section className={styles.card} aria-labelledby="marked">
       <h2 id="marked" className={styles.title}>
-        خوانش‌هایی که نادرست دانسته شده‌اند
+        خوانش‌هایی که علامتِ «نادرست» خورده‌اند
       </h2>
       <p className={styles.note}>
-        هر بار که در متنی «این خوانش نادرست است» زده شود، اینجا می‌آید تا زبان‌شناس بازبینی‌اش
-        کند. خوانش در بانک واژه دست نمی‌خورد؛ علامت برای کاربن فرستاده می‌شود.
+        هر بار کسی در متنی دکمهٔ «این خوانش نادرست است» را بزند، آن خوانش اینجا می‌آید تا
+        زبان‌شناس بازبینی‌اش کند. این علامت چیزی را در بانک واژه تغییر نمی‌دهد؛ فهرستش برای کاربن
+        فرستاده می‌شود.
       </p>
       {failed ? (
         <p className={styles.trouble} role="status">
-          فهرست خوانده نشد. کمی بعد دوباره بیازمایید.
+          نتوانستیم فهرست را بیاوریم. کمی بعد دوباره امتحان کنید.
         </p>
       ) : rows === null ? (
         <Waiting />
       ) : rows.length === 0 ? (
-        <p className={styles.note}>هنوز خوانشی نادرست دانسته نشده است.</p>
+        <p className={styles.note}>هنوز هیچ خوانشی علامتِ «نادرست» نخورده است.</p>
       ) : (
         <>
           <p className={styles.note}>
-            <Num value={total} /> علامت، تازه‌ترین نخست
+            <Num value={total} /> علامت، از تازه‌ترین
             {rows.length < total ? (
               <>
-                ؛ <Num value={rows.length} /> نشان داده شده
+                ؛ اینجا <Num value={rows.length} /> تای آن را می‌بینید
               </>
             ) : null}
             .
@@ -88,7 +89,7 @@ export function Marked() {
                       row.unit != null ? `&unit=${row.unit}` : ""
                     }&word=${encodeURIComponent(row.spelling_fa)}`}
                   >
-                    همان سطر ←
+                    رفتن به همان سطر ←
                   </Link>
                 ) : null}
               </li>

@@ -110,8 +110,8 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
     return (
       <p className={styles.trouble} role="status">
         {error.trouble === "missing"
-          ? "این متن در پیکره‌ای که اکنون خوانده می‌شود نیست. از فهرست، متنی دیگر را باز کنید."
-          : "متن خوانده نشد. کمی بعد دوباره بیازمایید."}
+          ? "این متن در نسخهٔ کنونی پیکره نیست. متن دیگری را از فهرست باز کنید."
+          : "نتوانستیم متن را بیاوریم. کمی بعد دوباره امتحان کنید."}
       </p>
     );
   }
@@ -160,9 +160,9 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
       {text.behnevis ? (
         <div className={styles.legend}>
           <p>
-            زیر هر واژه، خوانشی که برنامه برای همین سطر پیشنهاد می‌کند، و این‌که چقدر به آن
-            مطمئن است. روی واژه بزنید تا خوانش‌های دیگر را ببینید و خوانش درست را برگزینید
-            یا بنویسید.
+            زیر هر واژه، خوانشی آمده که برنامه برای همین سطر پیشنهاد می‌کند. شکلِ آن نشان
+            می‌دهد برنامه چقدر مطمئن است. روی هر واژه بزنید تا خوانش‌های دیگر را ببینید و
+            خوانش درست را برگزینید یا خودتان بنویسید.
           </p>
           <p className={styles.levels}>
             <span>
@@ -175,7 +175,7 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
               <span className={styles.auto} data-level="mid">
                 <Latin>Bode</Latin>
               </span>{" "}
-              کمابیش: {percent(text.behnevis.mid)} تا {percent(text.behnevis.sure)}
+              کمابیش مطمئن: {percent(text.behnevis.mid)} تا {percent(text.behnevis.sure)}
             </span>
             <span>
               <span className={styles.auto} data-level="unsure">
@@ -190,29 +190,33 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
                 </span>
                 <Latin>Del</Latin>
               </span>{" "}
-              ثبت‌شده: خوانشی که برای همین واژه برگزیده یا نوشته شده
+              ثبت‌شده: خوانشی که یک خواننده برای همین واژه برگزیده یا نوشته است
             </span>
           </p>
         </div>
       ) : (
         <div className={styles.legend}>
           <p>
-            زیر هر واژه، خوانش‌هایش در بانک واژه
+            زیر هر واژه، خوانش‌هایی آمده که بانک واژه برایش دارد
             {text.lexicon_snapshot_id ? (
               <>
-                ، نسخهٔ <Latin>{text.lexicon_snapshot_id.split(":")[0] ?? ""}</Latin>
+                {" "}
+                (نسخهٔ <Latin>{text.lexicon_snapshot_id.split(":")[0] ?? ""}</Latin>)
               </>
             ) : null}
-            . روی واژه بزنید تا خوانش‌ها، شمارش در پیکره و پیوندش به بانک واژه را ببینید.
+            . روی هر واژه بزنید تا همهٔ خوانش‌ها، شمار آن در پیکره و پیوندش به بانک واژه را
+            ببینید.
           </p>
           <p>
-            چند خوانش: همه آمده‌اند و هیچ‌کدام پیشنهاد نشده. <span className={styles.unread}>؟</span>{" "}
-            بانک واژه این املا را نمی‌خواند.
+            اگر چند خوانش آمده، همه را بانک واژه دارد و ما هیچ‌کدام را برای این سطر پیشنهاد
+            نمی‌کنیم. <span className={styles.unread}>؟</span> یعنی بانک واژه برای این املا
+            خوانشی ندارد.
           </p>
           {anyRuledOut ? (
             <p>
-              <Latin className={`${styles.latin} ${styles.ruledOut}`}>Tarak</Latin> کم‌رنگ: اعرابِ
-              خودِ متن با این خوانش نمی‌خواند؛ برای نمونه «تُرک» با ضمه.
+              <Latin className={`${styles.latin} ${styles.ruledOut}`}>Tarak</Latin> کم‌رنگ یعنی
+              اعرابی که در خود متن آمده با این خوانش جور نیست؛ مثلاً متن «تُرک» را با ضمه نوشته
+              است.
             </p>
           ) : null}
         </div>
@@ -220,7 +224,7 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
 
       {text.units_total > text.limit ? (
         <p className={styles.window}>
-          واحدهای <Num value={text.start + 1} />–<Num value={last} /> از{" "}
+          بخش‌های <Num value={text.start + 1} /> تا <Num value={last} /> از{" "}
           <Num value={text.units_total} />
         </p>
       ) : null}
@@ -282,14 +286,14 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
       </ol>
 
       {text.units_total > text.limit ? (
-        <nav className={styles.pages} aria-label="پاره‌های متن">
+        <nav className={styles.pages} aria-label="صفحه‌های متن">
           <button
             type="button"
             className={styles.page}
             disabled={text.start === 0}
             onClick={() => onPage(Math.max(0, text.start - WINDOW))}
           >
-            پارهٔ پیشین
+            صفحهٔ قبل
           </button>
           <button
             type="button"
@@ -297,7 +301,7 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
             disabled={last >= text.units_total}
             onClick={() => onPage(text.start + WINDOW)}
           >
-            پارهٔ پسین
+            صفحهٔ بعد
           </button>
         </nav>
       ) : null}

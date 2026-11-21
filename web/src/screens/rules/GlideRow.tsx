@@ -51,7 +51,7 @@ export function GlideRow({ glide }: { glide: Glide }) {
       ) : null}
 
       <div className={styles.marks}>
-        {!glide.active ? <span className={styles.retired}>بازنشسته</span> : null}
+        {!glide.active ? <span className={styles.retired}>کنار گذاشته</span> : null}
       </div>
 
       {/* Why, in Persian. It used to be the badge and nothing more: every

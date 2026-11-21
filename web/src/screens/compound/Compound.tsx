@@ -134,14 +134,14 @@ export function Compound() {
             value={draft}
             onChange={setDraft}
             source={BUILDS}
-            listLabel="واژه‌هایی که با آنها می‌توان ترکیب ساخت"
+            listLabel="واژه‌هایی که می‌شود با آن‌ها ترکیب ساخت"
             onPick={(one) => {
               setDraft(one.word.value);
               run(one.word.value);
             }}
           />
           <button className={styles.submit} type="submit">
-            بترکیب
+            بچسبان
           </button>
         </div>
         {/* Five, not one — each checked against the running API. */}
@@ -168,8 +168,8 @@ export function Compound() {
       {error ? (
         <p className={styles.trouble} role="status">
           {error.trouble === "missing"
-            ? notFound("چیزی نمی‌توان با آن ترکیب کرد.")
-            : "پاسخی از سرور نرسید. کمی بعد دوباره بیازمایید."}
+            ? notFound("نمی‌توانیم آن را با واژهٔ دیگری ترکیب کنیم.")
+            : "سرور جواب نداد. کمی بعد دوباره امتحان کنید."}
         </p>
       ) : null}
 
@@ -193,14 +193,14 @@ export function Compound() {
               Reported for کار on 2026-08-18. */}
           {reading.built > 0 ? (
             <p className={styles.counts}>
-              دستور زبان می‌تواند <Num value={reading.built} /> ترکیب بسازد؛{" "}
-              <Num value={reading.attested} /> تای آن در پیکره آمده است. برای این
-              شمار، <Num value={reading.partners_tried} /> واژهٔ دیگر در جایگاه
-              نیمهٔ دوم آزموده شد.
+              دستورها با این واژه <Num value={reading.built} /> ترکیب می‌سازند و{" "}
+              <Num value={reading.attested} /> تای آن‌ها در پیکره آمده است. برای
+              این کار، <Num value={reading.partners_tried} /> واژهٔ دیگر را در
+              نیمهٔ دوم ترکیب امتحان کردیم.
             </p>
           ) : (
             <p className={styles.counts}>
-              هیچ ترکیبی از این واژه ساخته نشد.
+              با این واژه هیچ ترکیبی ساخته نشد.
             </p>
           )}
 
@@ -213,7 +213,7 @@ export function Compound() {
                   lead did not understand it on 2026-08-18, which settles it.
                   «گفت‌وگو» carries the whole idea: both halves out of گفتن. */}
               {kind === "template"
-                ? `ده دستور از دستورهای ترکیب، هر دو نیمهٔ واژه را از یک کارواژه می‌گیرند — مانند «گفت‌وگو» که هر دو نیمه‌اش از «گفتن» است. «${reading.spelling_fa}» کارواژه نیست، پس آن ده دستور اینجا کاری نمی‌کنند${
+                ? `ده دستور از دستورهای ترکیب هر دو نیمهٔ واژه را از یک کارواژه می‌گیرند، مثل «گفت‌وگو» که هر دو نیمه‌اش از «گفتن» است. «${reading.spelling_fa}» کارواژه نیست، پس این ده دستور اینجا به کار نمی‌آیند${
                     reading.built > 0 ? "؛ آنچه می‌بینید کار شش دستور دیگر است" : ""
                   }.`
                 : /* **The other six, and why they can refuse a perfectly
@@ -222,7 +222,7 @@ export function Compound() {
                      کارنام. Nothing is broken; the front slot's meaning is an
                      open question with the linguist (L18). Both class names
                      come from the rule pack, never from here. */
-                  `شش دستور دیگر در جای نخست ${saying(reading.slot_wants)} می‌خواهند، و «${reading.spelling_fa}» در دستگاه دستوری ${saying(reading.word_classes)} است. پس هیچ‌کدام بر آن کار نمی‌کنند. اینکه این جای نخست باید ${saying(reading.word_classes)} را هم بپذیرد یا نه، پرسشی است که هنوز پاسخ نگرفته.`}
+                  `شش دستور دیگر در نیمهٔ نخست ${saying(reading.slot_wants)} می‌خواهند، ولی «${reading.spelling_fa}» در دستگاه دستوری ${saying(reading.word_classes)} است. پس هیچ‌کدام روی آن کار نمی‌کنند. اینکه نیمهٔ نخست باید ${saying(reading.word_classes)} را هم بپذیرد یا نه، هنوز پرسشی بی‌پاسخ است.`}
             </p>
           ))}
 
@@ -260,9 +260,8 @@ export function Compound() {
 
           {!attested && reading.pairings.length > 0 ? (
             <p className={styles.nothing}>
-              واژه‌هایی که نشانی از آنها در پیکره نیست، ساختهٔ همین دستورهایند و
-              هنوز کسی ننوشته‌شان. این‌ها همان چیزی‌اند که این ابزار برای آن
-              ساخته شده است.
+              واژه‌هایی که در پیکره نیامده‌اند، ساختهٔ همین دستورها هستند. این
+              ابزار برای پیدا کردن همین واژه‌ها ساخته شده است.
             </p>
           ) : null}
 
@@ -270,8 +269,9 @@ export function Compound() {
             <Pairings rows={reading.pairings} classes={classes} />
           ) : reading.built > 0 ? (
             <p className={styles.nothing}>
-              هیچ‌یک از این ترکیب‌ها در پیکره نیامده است. این به معنای نادرست
-              بودن‌شان نیست — پیکره متن‌های کهن است، بیشترش شعر، و واژهٔ نو در آن نیست.
+              هیچ‌یک از این ترکیب‌ها در پیکره نیامده است. این به آن معنا نیست که
+              نادرست‌اند: پیکره متن‌های کهن است، بیشترش شعر، و واژه‌های تازه در آن
+              نیست.
             </p>
           ) : null}
         </section>

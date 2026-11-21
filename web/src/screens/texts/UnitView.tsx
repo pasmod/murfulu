@@ -74,7 +74,7 @@ export function UnitView({
       </span>
       <div className={styles.body}>
         {found !== null ? (
-          <p className={styles.hitNote}>همان سطرِ شاهدمثالِ «{found}»</p>
+          <p className={styles.hitNote}>شاهدمثالِ «{found}» از همین سطر است</p>
         ) : null}
         <div className={verse ? styles.couplet : styles.flow}>
           {unit.lines.map((line, lineIndex) => (
@@ -144,11 +144,11 @@ function WordButton({
   const ruledOut = readings.filter((one) => against.has(one.id));
   const said =
     readings.length === 0
-      ? "خوانشی در بانک واژه نیست"
+      ? "بانک واژه خوانشی برایش ندارد"
       : [
           fitting.map((one) => one.latin).join("، "),
           ruledOut.length > 0
-            ? `اعراب متن با ${ruledOut.map((one) => one.latin).join("، ")} نمی‌خواند`
+            ? `اعراب متن با ${ruledOut.map((one) => one.latin).join("، ")} جور نیست`
             : "",
         ]
           .filter(Boolean)

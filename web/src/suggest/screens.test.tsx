@@ -223,7 +223,7 @@ describe("every search box suggests", () => {
 
   it("meanings: from the list the screen already has, with how many affixes each", async () => {
     renderApp("/affixes");
-    const box = await screen.findByRole("combobox", { name: "میان معناها بگردید" });
+    const box = await screen.findByRole("combobox", { name: "دنبال یک معنا بگردید" });
     await userEvent.type(box, "ا");
     const option = await screen.findByRole("option", { name: /ابزار/ });
     expect(option).toHaveTextContent("۱ وند");

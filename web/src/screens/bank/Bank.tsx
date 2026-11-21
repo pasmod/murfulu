@@ -72,7 +72,7 @@ function Row({ word, labels }: { word: BankWord; labels: BankGroups["stem_labels
   return (
     <li className={styles.word} data-out={!word.in_word_formation || undefined}>
       <p className={styles.head}>
-        <span className={styles.spelling}>{word.spelling_fa}</span>
+        <span className={styles.spelling}>{word.spelling_fa_marked ?? word.spelling_fa}</span>
         <Latin className={styles.latin}>{word.latin}</Latin>
         {word.latin_variants.length > 0 ? (
           <span className={styles.variants}>
@@ -112,7 +112,7 @@ function Row({ word, labels }: { word: BankWord; labels: BankGroups["stem_labels
       {word.in_word_formation ? (
         <p className={styles.actions}>
           <Link to={`/build?word=${encodeURIComponent(word.spelling_fa)}`}>
-            ساختن از این واژه
+            واژه‌سازی با این واژه
           </Link>
         </p>
       ) : null}
@@ -241,22 +241,22 @@ export function Bank(): React.ReactElement {
 
       {groupsError ? (
         <p className={styles.trouble} role="status">
-          گروه‌های بانک واژه خوانده نشدند.{" "}
+          نتوانستیم گروه‌های بانک واژه را بیاوریم.{" "}
           <button type="button" onClick={() => setGroupsAsked((n) => n + 1)}>
-            دوباره
+            دوباره امتحان کنید
           </button>
         </p>
       ) : null}
       {listError ? (
         <p className={styles.trouble} role="status">
-          فهرست واژه‌ها خوانده نشد. کمی بعد دوباره بیازمایید.
+          نتوانستیم فهرست واژه‌ها را بیاوریم. کمی بعد دوباره امتحان کنید.
         </p>
       ) : null}
 
       {groups && !groups.has_bank ? (
         <p className={styles.note}>
-          واژه‌نامه‌ای که برنامه امروز می‌خواند هنوز گروه‌های بانک واژه را ندارد؛ واژه‌ها
-          بی‌گروه نشان داده می‌شوند.
+          واژه‌نامه‌ای که برنامه الان به کار می‌برد هنوز گروه‌بندی بانک واژه را ندارد، پس
+          واژه‌ها را بی‌گروه می‌بینید.
         </p>
       ) : null}
 
@@ -292,8 +292,8 @@ export function Bank(): React.ReactElement {
 
       {chosen && !chosen.in_word_formation ? (
         <p className={styles.note}>
-          واژه‌های این گروه، به خواست زبان‌شناس، فعلاً در واژه‌سازی به کار نمی‌روند، ولی در بانک
-          واژه دیده و جست‌وجو می‌شوند.
+          زبان‌شناس خواسته است واژه‌های این گروه فعلاً در واژه‌سازی به کار نروند. ولی اینجا
+          می‌توانید آن‌ها را ببینید و جست‌وجو کنید.
         </p>
       ) : null}
 
@@ -325,13 +325,13 @@ export function Bank(): React.ReactElement {
 
       {exact ? (
         <p className={styles.note}>
-          تنها خودِ «{query}» نشان داده می‌شود.{" "}
+          فقط خودِ «{query}» را می‌بینید.{" "}
           <button
             type="button"
             className={styles.widen}
             onClick={() => choose({ exact: undefined, page: 1 })}
           >
-            همهٔ واژه‌هایی که این حرف‌ها را دارند
+            همهٔ واژه‌هایی را نشان بده که این حرف‌ها را دارند
           </button>
         </p>
       ) : null}
@@ -342,7 +342,7 @@ export function Bank(): React.ReactElement {
             exact ? (
               "این املا در بانک واژه مدخلی ندارد."
             ) : (
-              "واژه‌ای پیدا نشد."
+              "بانک واژه چیزی برای این جست‌وجو ندارد."
             )
           ) : (
             <>
@@ -370,7 +370,7 @@ export function Bank(): React.ReactElement {
             disabled={pageNumber <= 1}
             onClick={() => choose({ page: pageNumber - 1 })}
           >
-            صفحهٔ پیشین
+            صفحهٔ قبل
           </button>
           <button
             type="button"
@@ -378,7 +378,7 @@ export function Bank(): React.ReactElement {
             disabled={last >= total}
             onClick={() => choose({ page: pageNumber + 1 })}
           >
-            صفحهٔ پسین
+            صفحهٔ بعد
           </button>
         </nav>
       ) : null}

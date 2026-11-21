@@ -129,14 +129,14 @@ export function WordPanel({
         <>
           {readings.length > 1 ? (
             <p className={styles.note}>
-              بانک واژه این املا را به <Num value={readings.length} /> گونه می‌خواند. همه به ترتیب
-              الفبا آمده‌اند؛ اینکه در این سطر کدام درست است، گفته نمی‌شود
+              بانک واژه برای این املا <Num value={readings.length} /> خوانش دارد. همه را به ترتیب
+              الفبا آورده‌ایم و نمی‌گوییم کدام در این سطر درست است
               {anyRuledOut
-                ? "، جز اینکه اعرابِ خودِ متن با خوانش‌های کم‌رنگ نمی‌خواند."
+                ? "؛ فقط می‌دانیم که اعراب خود متن با خوانش‌های کم‌رنگ جور نیست."
                 : "."}
             </p>
           ) : anyRuledOut ? (
-            <p className={styles.note}>اعرابِ خودِ متن با این خوانش نمی‌خواند.</p>
+            <p className={styles.note}>اعرابی که در خود متن آمده با این خوانش جور نیست.</p>
           ) : null}
           <ul className={styles.readings}>
             {readings.map((reading) => (
@@ -157,16 +157,16 @@ export function WordPanel({
       <p className={styles.count}>
         {known?.total_count != null ? (
           <>
-            این املا <Num value={known.total_count} /> بار، در{" "}
+            این املا <Num value={known.total_count} /> بار در{" "}
             <Num value={known.doc_count ?? 0} /> متن از پیکرهٔ{" "}
             <Latin>{corpusVersion ?? "?"}</Latin> آمده است
             {known.function_word
-              ? "؛ بیشترِ این‌ها یک واژهٔ دستوری‌اند و شمار، شمارِ حرف‌هاست."
+              ? "؛ ولی بیشترِ این‌ها یک واژهٔ دستوری با همین املاست، پس این عدد بیشتر شمارِ همان واژهٔ دستوری است."
               : "."}
           </>
         ) : (
           <>
-            شمار این املا در پیکرهٔ <Latin>{corpusVersion ?? "?"}</Latin> در دست نیست.
+            نمی‌دانیم این املا در پیکرهٔ <Latin>{corpusVersion ?? "?"}</Latin> چند بار آمده است.
           </>
         )}
       </p>
@@ -216,10 +216,10 @@ function ReadingRow({
     <li className={styles.reading} data-ruled-out={ruledOut || undefined}>
       <p className={styles.readingHead}>
         <Latin className={styles.latin}>{reading.latin}</Latin>
-        {ruledOut ? <span className={styles.ruledOut}>اعرابِ متن با آن نمی‌خواند</span> : null}
+        {ruledOut ? <span className={styles.ruledOut}>با اعراب متن جور نیست</span> : null}
         {reading.latin_variants.length > 0 ? (
           <span className={styles.variants}>
-            نیز{" "}
+            یا{" "}
             {reading.latin_variants.map((one) => (
               <Latin key={one}>{one}</Latin>
             ))}
@@ -235,8 +235,8 @@ function ReadingRow({
 
       {marked || state === "done" ? (
         <p className={styles.marked} role="status">
-          این خوانش نادرست دانسته شده است و در فهرست بازبینی آمده.{" "}
-          <Link to="/texts?view=marked">فهرست ←</Link>
+          این خوانش علامتِ «نادرست» خورده و به فهرست بازبینی رفته است.{" "}
+          <Link to="/texts?view=marked">دیدن فهرست ←</Link>
         </p>
       ) : state === "idle" ? (
         <button type="button" className={styles.wrong} onClick={() => setState("asking")}>
@@ -252,10 +252,10 @@ function ReadingRow({
         >
           <p className={styles.askLine}>
             <Latin>{reading.latin}</Latin> برای «{spelling}» نادرست است؟ این علامت برای
-            بازبینی زبان‌شناس ثبت می‌شود و پاک نمی‌شود.
+            بازبینی زبان‌شناس ثبت می‌شود و دیگر نمی‌شود پاکش کرد.
           </p>
           <label className={styles.noteLabel}>
-            یادداشت، اگر بخواهید
+            اگر بخواهید، یادداشتی هم بنویسید
             <textarea
               className={styles.noteField}
               value={note}
@@ -266,7 +266,7 @@ function ReadingRow({
           </label>
           {state === "failed" ? (
             <p className={styles.failed} role="status">
-              ثبت نشد. کمی بعد دوباره بیازمایید.
+              ثبت نشد. کمی بعد دوباره امتحان کنید.
             </p>
           ) : null}
           <div className={styles.askActions}>
@@ -359,14 +359,15 @@ function Here({
           {saved ? (
             <p className={styles.savedNote}>
               <span aria-hidden="true">✓ </span>
-              پیش‌تر برای این سطر ثبت شده: <Latin>{saved.latin}</Latin>. اگر خوانش دیگری
-              ثبت کنید، تازه‌ترین به حساب می‌آید.
+              پیش‌تر برای این سطر <Latin>{saved.latin}</Latin> ثبت شده است. اگر خوانش دیگری
+              ثبت کنید، تازه‌ترین ثبت حساب می‌شود.
             </p>
           ) : (
             <p className={styles.note}>
-              این خوانش را برنامه پیشنهاد می‌کند و درصد، برآورد آن از درستی است. اگر خوانش
-              درست چیز دیگری است، یکی را برگزینید یا آن را بنویسید؛ خوانش‌های بی‌درصد را
-              برنامه از ستاک‌های بانک واژه یا از حروف ساخته و نسنجیده است.
+              این خوانش را برنامه پیشنهاد می‌کند و درصدِ کنارش نشان می‌دهد برنامه چقدر آن را
+              درست می‌داند. اگر خوانش درست چیز دیگری است، یکی از گزینه‌ها را برگزینید یا خودتان
+              بنویسید. گزینه‌های بی‌درصد را برنامه از ستاک‌های بانک واژه یا از روی حرف‌ها ساخته و
+              نسنجیده است.
             </p>
           )}
           {/* Native radio buttons: one tab stop, arrow keys move the pick
@@ -402,7 +403,7 @@ function Here({
             })}
           </fieldset>
           <label className={styles.typeLabel}>
-            یا، اگر در میان نیست، بنویسید:
+            اگر در میان این‌ها نیست، خودتان بنویسید:
             <input
               className={styles.typeField}
               dir="ltr"
@@ -420,10 +421,10 @@ function Here({
             {chosen ? (
               <>
                 ثبت می‌شود: <Latin className={styles.summaryLatin}>{chosen}</Latin>
-                {typed.trim() ? " (نوشته‌شده)" : " (برگزیده)"}. {fate(inBank)}
+                {typed.trim() ? " (نوشتهٔ شما)" : " (برگزیدهٔ شما)"}. {fate(inBank)}
               </>
             ) : (
-              "هنوز خوانشی برگزیده یا نوشته نشده است."
+              "هنوز خوانشی برنگزیده یا ننوشته‌اید."
             )}
           </p>
           <button
@@ -442,7 +443,7 @@ function Here({
           </button>
           {state === "failed" ? (
             <p className={styles.failed} role="status">
-              ثبت نشد. کمی بعد دوباره بیازمایید.
+              ثبت نشد. کمی بعد دوباره امتحان کنید.
             </p>
           ) : null}
         </>
@@ -459,6 +460,6 @@ function isInBank(readings: Reading[], latin: string): boolean {
 /** What becomes of a saved reading, in one sentence. */
 function fate(inBank: boolean): string {
   return inBank
-    ? "برنامه این خوانش را می‌شناسد و در به‌روزرسانیِ بعدی آن را برای همین جای متن یاد می‌گیرد."
-    : "این خوانش در بانک واژه نیست؛ برای افزودن به کاربن پیشنهاد می‌شود و برنامه تا آن زمان از آن یاد نمی‌گیرد.";
+    ? "برنامه این خوانش را می‌شناسد و در به‌روزرسانیِ بعدی یاد می‌گیرد که همین جای متن را چنین بخواند."
+    : "این خوانش در بانک واژه نیست. آن را برای افزودن به کاربن پیشنهاد می‌کنیم؛ تا آن وقت برنامه از آن یاد نمی‌گیرد.";
 }

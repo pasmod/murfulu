@@ -51,10 +51,10 @@ const SCREEN = SCREENS.find((one) => one.path === "/questions")!;
 /** What each state is called on screen. */
 const STATE_LABEL: Record<string, string> = {
   open: "در انتظار پاسخ",
-  blocked: "کار را متوقف کرده",
+  blocked: "کار به آن بند است",
   answered: "پاسخ داده شده",
   withdrawn: "پس گرفته شده",
-  deferred: "فعلاً پرسیده نمی‌شود",
+  deferred: "فعلاً کنار گذاشته شده",
 };
 
 /**
@@ -245,7 +245,7 @@ function Card({
         {/* Not when the state badge already says it: a blocked question
             read «کار را متوقف کرده» twice in one row. */}
         {question.blocks_work && question.state === "open" ? (
-          <span className={styles.blocking}>کار را متوقف کرده</span>
+          <span className={styles.blocking}>کار به آن بند است</span>
         ) : null}
       </header>
 
@@ -278,7 +278,7 @@ function Card({
           ) : null}
           {question.rulings > 1 ? (
             <p className={styles.changed}>
-              این پرسش {question.rulings} بار پاسخ داده شده و پاسخ تغییر کرده است.
+              به این پرسش {question.rulings} بار پاسخ داده شده و پاسخ عوض شده است.
             </p>
           ) : null}
         </div>
@@ -295,10 +295,10 @@ function Card({
           question and nothing showed it, so «پس گرفته شده» was a label with no
           account behind it — asked about on 2026-08-20. */}
       {question.state === "withdrawn" && typeof withdrawnBecause === "string" ? (
-        <p className={styles.withdrawn}>پس گرفته شد، چون {withdrawnBecause}</p>
+        <p className={styles.withdrawn}>این پرسش را پس گرفتیم، چون {withdrawnBecause}</p>
       ) : null}
       {question.state === "deferred" && typeof deferredBecause === "string" ? (
-        <p className={styles.withdrawn}>فعلاً پرسیده نمی‌شود، چون {deferredBecause}</p>
+        <p className={styles.withdrawn}>فعلاً این پرسش را کنار گذاشته‌ایم، چون {deferredBecause}</p>
       ) : null}
 
       {mayAnswer && question.state !== "withdrawn" && question.state !== "deferred" ? (
@@ -345,7 +345,7 @@ function Pager({
         onClick={() => onGo(at - 1)}
         disabled={at <= 0}
       >
-        پرسش پیشین
+        پرسش قبلی
       </button>
       <span className={styles.place}>
         پرسش <Num value={at + 1} /> از <Num value={count} />
@@ -447,8 +447,8 @@ export function Questions(): React.ReactElement {
               expert here?*. What matters is whether answering is open. */}
           <p className={styles.summary}>
             {list.answering_as
-              ? "پاسخ دادن برای شما باز است."
-              : "پرسش‌ها را می‌بینید، ولی پاسخ دادن برای شما باز نیست."}
+              ? "می‌توانید به پرسش‌ها پاسخ دهید."
+              : "پرسش‌ها را می‌بینید، ولی نمی‌توانید به آن‌ها پاسخ دهید."}
           </p>
 
           <ul className={styles.tallies}>
@@ -492,7 +492,7 @@ export function Questions(): React.ReactElement {
             <p className={styles.empty}>
               {only === "waiting"
                 ? "هیچ پرسشی بی‌پاسخ نمانده است."
-                : `هیچ پرسشی در «${chosen.label}» نیست.`}
+                : `در «${chosen.label}» هنوز پرسشی نیست.`}
             </p>
           )}
         </>

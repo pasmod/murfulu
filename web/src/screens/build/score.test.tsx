@@ -189,7 +189,7 @@ describe("each word's score", () => {
     renderApp(ROUTE);
     await screen.findByText("دانا");
     expect(screen.getByText(/بیشترش شعر/)).toBeInTheDocument();
-    expect(screen.getByText(/سنجشی تقریبی/)).toBeInTheDocument();
+    expect(screen.getByText(/اندازه‌ای\s+تقریبی/)).toBeInTheDocument();
   });
 
   it("gives its two parts behind the evidence, out of 70 and 30", async () => {
@@ -210,7 +210,7 @@ describe("each word's score", () => {
     await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
     const reason = within(row).getByText(/در پیکره نیامده است/);
     expect(reason).toHaveTextContent(
-      /از ۷٬?۸۳۰ واژه‌ای که می‌سازد، تنها یکی در پیکره هست/,
+      /۷٬?۸۳۰ واژه می‌سازد و تنها یکی از آن‌ها در پیکره آمده است/,
     );
   });
 
@@ -310,7 +310,28 @@ describe("the filters", () => {
     await userEvent.click(screen.getByRole("radio", { name: "۷۰ و بیشتر" }));
     await userEvent.click(screen.getByRole("radio", { name: "در پیکره نیامده" }));
     expect(
-      screen.getByText(/هیچ واژه‌ای با این گزینه‌ها نیست/),
+      screen.getByText(/با این گزینه‌ها هیچ واژه‌ای نمی‌ماند/),
     ).toBeInTheDocument();
   });
 });
+
+describe("the short vowels", () => {
+  it("are shown on the word, from the API, while the plain spelling stays the key", async () => {
+    // DECISIONS 2026-11-21: marks made from the reading, for display only.
+    serve([
+      {
+        ...form("dānande", "داننده", "karandekarbahr", attested("reading", 306), scored(89, 63, 26, A)),
+        form_fa_marked: "دانَنده",
+      },
+    ]);
+    renderApp(ROUTE);
+    expect(await screen.findByText("دانَنده")).toBeInTheDocument();
+    expect(screen.queryByText("داننده")).toBeNull();
+  });
+
+  it("fall back to the plain spelling when an older API sends none", async () => {
+    renderApp(ROUTE);
+    expect(await screen.findByText("داننده")).toBeInTheDocument();
+  });
+});
+

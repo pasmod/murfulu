@@ -142,7 +142,7 @@ export function FormRow({
     <li className={styles.row}>
       <div className={styles.cells}>
         <span className={styles.word}>
-          <span className={styles.fa}>{form.form_fa}</span>
+          <span className={styles.fa}>{form.form_fa_marked ?? form.form_fa}</span>
           <Latin className={styles.latin}>{form.form_latin}</Latin>
         </span>
         <span className={styles.wordClass}>{className}</span>

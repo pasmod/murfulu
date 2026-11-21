@@ -37,21 +37,21 @@ import { Results } from "./Results";
  */
 const UNREADABLE: Record<string, (facts: Record<string, string>) => string> = {
   "unknown-field": (facts) =>
-    `«${facts.name}» چیزی نیست که بتوان بر آن جست‌وجو کرد. کادر جست‌وجو را پاک کنید و رویش بزنید تا ببینید بر چه چیزهایی می‌شود جست‌وجو کرد.`,
+    `با «${facts.name}» نمی‌شود جست‌وجو کرد. کادر جست‌وجو را خالی کنید و رویش بزنید تا ببینید با چه چیزهایی می‌شود.`,
   "no-value": (facts) =>
-    `پس از «${facts.name}:» چیزی نوشته نشده است. برای نمونه: ${facts.name}:x`,
+    `بعد از «${facts.name}:» چیزی ننوشته‌اید. مثلاً: ${facts.name}:x`,
   "bad-count": (facts) =>
-    `بسامد باید عدد باشد، نه «${facts.value}». برای نمونه: count:1 یا count:>10`,
+    `شمار کاربرد را با عدد بنویسید، نه «${facts.value}». مثلاً count:1 یا count:>10`,
   "bad-century": (facts) =>
-    `سده باید عدد یا بازه باشد، نه «${facts.value}». برای نمونه: century:10 یا century:10-13`,
+    `سده را با یک عدد یا دو عدد بنویسید، نه «${facts.value}». مثلاً century:10 یا century:10-13`,
   "century-backwards": (facts) =>
-    `در «${facts.value}» سدهٔ آغاز از سدهٔ پایان بزرگ‌تر است. جای دو عدد را عوض کنید.`,
+    `در «${facts.value}» سدهٔ اول دیرتر از سدهٔ دوم است. جای دو عدد را عوض کنید.`,
   "two-patterns": (facts) =>
-    `دو الگو با هم آمده است: «${facts.first}» و «${facts.second}». تنها یکی را نگه دارید.`,
+    `دو الگو با هم نوشته‌اید: «${facts.first}» و «${facts.second}». فقط یکی را نگه دارید.`,
   "only-stars": () =>
-    "الگویی که تنها ستاره است همه‌چیز را می‌گیرد. چند حرف هم بنویسید، مثلاً *nā",
-  "unbalanced-quotes": () => "گیومه‌ای بسته نشده است.",
-  empty: () => "جست‌وجو خالی است.",
+    "ستاره به‌تنهایی همهٔ واژه‌ها را می‌آورد. چند حرف هم کنارش بنویسید، مثلاً *nā",
+  "unbalanced-quotes": () => "یک گیومه را باز کرده‌اید و نبسته‌اید.",
+  empty: () => "چیزی ننوشته‌اید.",
 };
 
 /** What went wrong, said in a way that tells the reader what to do next. */
@@ -59,24 +59,24 @@ function trouble(error: ApiError): { title: string; advice: string } {
   if (error.trouble === "unreadable-query") {
     const said = error.reason ? UNREADABLE[error.reason.code] : undefined;
     return {
-      title: "این جست‌وجو خوانده نشد.",
+      title: "این جست‌وجو را نفهمیدیم.",
       // An API that has not been updated yet, or a fault this list has no
       // sentence for, still says *something* — and a general sentence in
       // Persian is better than a precise one in English.
       advice: said
         ? said(error.reason!.facts)
-        : "چیزی در این جست‌وجو خوانده نشد. کادر جست‌وجو را پاک کنید و رویش بزنید تا نمونه‌های درست را ببینید.",
+        : "کادر جست‌وجو را خالی کنید و رویش بزنید تا نمونه‌هایی را ببینید که کار می‌کنند.",
     };
   }
   if (error.trouble === "not-built") {
     return {
-      title: "هنوز پیکره‌ای برای جست‌وجو ساخته نشده است.",
-      advice: "پس از اجرای درون‌ریزی پیکره، این صفحه کار خواهد کرد.",
+      title: "پیکره هنوز برای جست‌وجو آماده نیست.",
+      advice: "وقتی متن‌های پیکره وارد شوند، این صفحه کار می‌کند.",
     };
   }
   return {
-    title: "پاسخی از سرور نرسید.",
-    advice: "کمی بعد دوباره بیازمایید.",
+    title: "سرور جواب نداد.",
+    advice: "کمی بعد دوباره امتحان کنید.",
   };
 }
 
@@ -155,7 +155,7 @@ export function Search() {
       {result ? (
         <div className={styles.answer}>
           <p className={styles.total} role="status">
-            <Num value={result.total} /> واژه یافت شد.
+            <Num value={result.total} /> واژه پیدا شد.
           </p>
           <div className={styles.columns}>
             <Results result={result} affix={affixOf(query)} />

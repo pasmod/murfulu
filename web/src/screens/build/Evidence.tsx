@@ -53,8 +53,8 @@ export function Evidence({ attestation }: { attestation: Attestation | null }) {
         // is, or a borrowed count reads as a measured one.
         <span className={styles.caveat}>
           {attestation.unlinked
-            ? ` — شمار برای این املاست؛ ${LEXICON} خوانشی برایش ندارد`
-            : ` — شمار برای این املاست؛ به‌گونهٔ ${attestation.other_readings.join(" یا ")} خوانده می‌شود`}
+            ? ` — شمار برای همین حروف است، و ${LEXICON} خوانشی برایشان ندارد`
+            : ` — شمار برای همین حروف است، که ${attestation.other_readings.join(" یا ")} هم خوانده می‌شوند`}
         </span>
       )}
     </span>

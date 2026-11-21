@@ -17,8 +17,8 @@ const SCREENS = [
   { path: "/", heading: "جست‌وجو" },
   { path: "/build", heading: "ساخت واژه" },
   { path: "/compound", heading: "واژه‌های ترکیبی" },
-  { path: "/affixes", heading: "وندها بر پایهٔ معنا" },
-  { path: "/explain", heading: "تحلیل ساخت" },
+  { path: "/affixes", heading: "وند از روی معنا" },
+  { path: "/explain", heading: "شکافتن واژه" },
   { path: "/rules", heading: "دستورهای واژه‌سازی" },
   { path: "/corpus", heading: "پیکره" },
   { path: "/texts", heading: "خواندن متن" },
@@ -26,6 +26,18 @@ const SCREENS = [
   // itself worth laying out correctly.
   { path: "/word/روش:Raveš", heading: "واژه" },
 ];
+
+
+/**
+ * A pattern that matches whether or not the short-vowel marks are on the
+ * Persian letters: the app shows دِلبَر for دلبر since 2026-11-21, marks made
+ * from the reading for display only.
+ */
+function unmarked(pattern: RegExp): RegExp {
+  const marks = "[\\u064B-\\u0652]*";
+  const source = pattern.source.replace(/[\u0600-\u06FF]/g, (letter) => letter + marks);
+  return new RegExp(source, pattern.flags);
+}
 
 test.describe("every screen", () => {
   for (const screen of SCREENS) {
@@ -131,11 +143,11 @@ test.describe("a real search", () => {
     await page.goto("/?q=*n%C4%81");
     await expect(page.getByRole("region", { name: /ساخته‌شده با/ })).toBeVisible();
     await expect(
-      page.getByRole("region", { name: /تنها به این حروف/ }),
+      page.getByRole("region", { name: /فقط با همین حروف/ }),
     ).toBeVisible();
 
     // The counts are Persian numerals, everywhere.
-    const total = page.getByText(/واژه یافت شد/);
+    const total = page.getByText(/واژه پیدا شد/);
     await expect(total).toBeVisible();
     await expect(total).not.toHaveText(/[0-9]/);
 
@@ -219,7 +231,7 @@ test.describe("a real build", () => {
 
     await page.goto("/build?word=%D8%B1%D9%81%D8%AA%D9%86&depth=2");
     await expect(
-      page.getByRole("heading", { level: 2, name: /از «رفتن» .+ واژه ساخته می‌شود/ }).first(),
+      page.getByRole("heading", { level: 2, name: unmarked(/از «رفتن» .+ واژه ساخته می‌شود/) }).first(),
     ).toBeVisible();
     await expect(page.getByRole("heading", { level: 2 }).first()).toContainText("raftan");
 
@@ -232,7 +244,7 @@ test.describe("a real build", () => {
     await karnam.click();
 
     // رفتار is what the whole project walks through, and it is attested.
-    await expect(page.getByText("رفتار").first()).toBeVisible();
+    await expect(page.getByText(unmarked(/^رفتار$/)).filter({ visible: true }).first()).toBeVisible();
 
     const overflow = await page.evaluate(
       () => document.body.scrollWidth - document.body.clientWidth,
@@ -405,7 +417,7 @@ test.describe("the rule pack", () => {
 
     // The count and the bases both come from the artefact. The screen adds
     // the heading and nothing else.
-    await expect(row.getByText("پایه‌های شاخص")).toBeVisible();
+    await expect(row.getByText("پایه‌های نمونه‌وار")).toBeVisible();
     const first = withCentre.semantic.typical_bases[0];
     await expect(row.getByText(first.fa, { exact: true }).first()).toBeVisible();
 
@@ -485,7 +497,7 @@ test.describe("the rule families", () => {
     await page.goto("/rules?family=V");
     // The count sentence is the honest place to read this: with the family
     // field missing it said zero while 81 rules matched.
-    await expect(page.getByText(/دستور نشان داده می‌شود/)).toBeVisible();
+    await expect(page.getByText(/دستور را می‌بینید/)).toBeVisible();
     await expect(page.getByText("V-001").first()).toBeVisible();
   });
 });
@@ -540,9 +552,9 @@ test.describe("compound words", () => {
 
     await page.goto("/compound?word=%D8%AF%D9%84");
 
-    await expect(page.getByText(/ترکیب بسازد/).first()).toBeVisible();
+    await expect(page.getByText(/ترکیب می‌سازند/).first()).toBeVisible();
     // دلبر is the best-attested compound of دل in the corpus.
-    await expect(page.getByText("دلبر").first()).toBeVisible();
+    await expect(page.getByText(unmarked(/^دلبر$/)).filter({ visible: true }).first()).toBeVisible();
 
     const overflow = await page.evaluate(
       () => document.body.scrollWidth - document.body.clientWidth,

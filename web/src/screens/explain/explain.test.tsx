@@ -140,7 +140,7 @@ describe("taking a word apart", () => {
   it("says the accounts were rebuilt, which is why they are here", async () => {
     renderApp("/explain?word=Ravandegi");
     expect(
-      await screen.findByText(/یک املا می‌تواند از چند راه ساخته شده باشد/),
+      await screen.findByText(/یک املا ممکن است از چند راه ساخته شده باشد/),
     ).toBeInTheDocument();
   });
 
@@ -209,7 +209,7 @@ describe("when nothing rebuilds the word", () => {
       await screen.findByText(/راهی برای ساختن این واژه پیدا نشد/),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/این به معنای نادرست بودن واژه نیست/),
+      screen.getByText(/این به آن معنا نیست که واژه نادرست است/),
     ).toBeInTheDocument();
   });
 
@@ -248,7 +248,7 @@ describe("when the word is written in Persian script", () => {
     vi.stubGlobal("fetch", answers({ detail: "not in the lexicon" }, 400));
     renderApp("/explain?word=%DA%AF%D9%81%D8%AA%D8%A7%D8%B1");
     expect(await screen.findByText(/به بهنویس بنویسید/)).toBeInTheDocument();
-    expect(screen.queryByText(/این به معنای نادرست بودن واژه نیست/)).toBeNull();
+    expect(screen.queryByText(/این به آن معنا نیست که واژه نادرست است/)).toBeNull();
   });
 });
 
@@ -264,7 +264,7 @@ describe("what `rebuilt` does and does not claim", () => {
     await screen.findByRole("heading", { name: /راه ممکن/ });
     expect(document.querySelector('[data-value="19839"]')).toBeInTheDocument();
     expect(
-      screen.getByText(/این پایه در پیکره نوشته نشده است/),
+      screen.getByText(/این پایه در پیکره نیامده است/),
     ).toBeInTheDocument();
   });
 
@@ -272,7 +272,7 @@ describe("what `rebuilt` does and does not claim", () => {
     vi.stubGlobal("fetch", answers(EXPLAINED));
     renderApp("/explain?word=Ravandegi");
     expect(
-      await screen.findByText(/از روی املا معلوم نمی‌شود/),
+      await screen.findByText(/از روی املا نمی‌شود فهمید/),
     ).toBeInTheDocument();
   });
 });
@@ -302,7 +302,7 @@ describe("when the search does not finish", () => {
     // simple" is not the reason, and giving a reason that is not the reason is
     // the same failure S11 fixed on the Persian-script branch.
     expect(screen.queryByText(/راهی برای ساختن این واژه پیدا نشد/)).toBeNull();
-    expect(screen.queryByText(/بیشتر واژه‌ها ساخته نشده‌اند/)).toBeNull();
+    expect(screen.queryByText(/بیشتر واژه‌ها از چیزی ساخته نشده‌اند/)).toBeNull();
   });
 
   it("still calls a real refusal a refusal", async () => {

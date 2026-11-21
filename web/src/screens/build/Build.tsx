@@ -460,8 +460,8 @@ export function Build() {
       {error ? (
         <p className={styles.trouble} role="status">
           {error.trouble === "missing"
-            ? notFound("نمی‌دانیم از چه ساخته شده است.")
-            : "پاسخی از سرور نرسید. کمی بعد دوباره بیازمایید."}
+            ? notFound("نمی‌دانیم پایه‌اش چیست و نمی‌توانیم از آن واژه بسازیم.")
+            : "سرور جواب نداد. کمی بعد دوباره امتحان کنید."}
         </p>
       ) : null}
 
@@ -482,7 +482,7 @@ export function Build() {
               apart. */}
           <h2 id={`reading-${reading.latin}`} className={styles.readingTitle}>
             <span>
-              از «{reading.spelling_fa}» <Num value={reading.count} /> واژه
+              از «{reading.spelling_fa_marked ?? reading.spelling_fa}» <Num value={reading.count} /> واژه
               ساخته می‌شود
             </span>{" "}
             <Latin className={styles.readingLatin}>{reading.latin}</Latin>
@@ -573,7 +573,7 @@ export function Build() {
 
           {reading.truncated ? (
             <p className={styles.note}>
-              این فهرست کوتاه شده است؛ همهٔ آنچه ساخته شد نشان داده نشده.
+              این فهرست کوتاه شده است و همهٔ واژه‌های ساخته‌شده را نشان نمی‌دهد.
             </p>
           ) : null}
 
@@ -582,16 +582,16 @@ export function Build() {
               shows the strongest of them — so it says both numbers. */}
           {reading.has_more && reading.returned ? (
             <p className={styles.note}>
-              نیرومندترین <Num value={reading.returned} /> واژه از{" "}
-              <Num value={reading.count} /> واژه‌ای که ساخته شد نشان داده شده
-              است، به ترتیب شواهد.
+              از <Num value={reading.count} /> واژه‌ای که ساخته شد، اینجا{" "}
+              <Num value={reading.returned} /> واژه را می‌بینید: آن‌هایی که
+              بیشترین شاهد را دارند.
             </p>
           ) : null}
 
           {reading.count === 0 ? (
             <p className={styles.note}>
-              هیچ دستوری بر این واژه کار نمی‌کند. گونهٔ آن در {LEXICON} نگاشته
-              نشده است.
+              هیچ دستوری روی این واژه کار نمی‌کند: {LEXICON} گونهٔ آن را ننوشته
+              است.
             </p>
           ) : null}
 
@@ -623,7 +623,7 @@ export function Build() {
               شواهد از پیکرهٔ <Latin>{built.corpus_version}</Latin>.
             </>
           ) : (
-            "پیکره‌ای در دسترس نبود، پس هیچ واژه‌ای سنجیده نشده است."
+            "پیکره در دسترس نبود، پس هیچ واژه‌ای سنجیده نشد."
           )}
         </p>
       ) : null}
@@ -826,13 +826,13 @@ function Table({
         </div>
       ) : (
         <p id={`words-${idPrefix}`} className={styles.empty}>
-          هیچ واژه‌ای با این گزینه‌ها نیست. یکی از آن‌ها را بردارید.
+          با این گزینه‌ها هیچ واژه‌ای نمی‌ماند. یکی از آن‌ها را بردارید.
         </p>
       )}
 
       {held > 0 ? (
         <button type="button" className={styles.more} onClick={onWhole}>
-          <Num value={held} /> واژهٔ دیگر — نشان بده
+          <Num value={held} /> واژهٔ دیگر را هم نشان بده
         </button>
       ) : null}
 

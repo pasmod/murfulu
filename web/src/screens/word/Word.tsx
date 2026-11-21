@@ -89,8 +89,8 @@ export function Word() {
         <h1>واژه</h1>
         <p className={styles.trouble}>
           {error.trouble === "missing"
-            ? "این واژه در پیکرهٔ کنونی نیست."
-            : "پاسخی از سرور نرسید. کمی بعد دوباره بیازمایید."}
+            ? "این واژه در نسخهٔ کنونی پیکره نیامده است."
+            : "سرور جواب نداد. کمی بعد دوباره امتحان کنید."}
         </p>
         <Link to="/">بازگشت به جست‌وجو</Link>
       </article>
@@ -154,7 +154,7 @@ export function Word() {
             خوانش‌های دیگر همین املا
           </h2>
           <p className={styles.note}>
-            یک املا می‌تواند چند واژه باشد. اینها یکی نمی‌شوند.
+            حروفشان با این واژه یکی است، ولی هر کدام واژهٔ جدایی است.
           </p>
           <ul className={styles.readings}>
             {others.map((one) => (
@@ -183,7 +183,7 @@ export function Word() {
         {word.function_word && word.latin ? null : (
           <dl className={styles.stats}>
             <div>
-              <dt>همه‌ٔ کاربردها</dt>
+              <dt>چند بار آمده</dt>
               <dd>
                 <Num value={word.total_count ?? 0} />
               </dd>
@@ -202,7 +202,7 @@ export function Word() {
             </div>
             {word.first_century != null && word.last_century != null ? (
               <div>
-                <dt>از سده</dt>
+                <dt>سده‌ها</dt>
                 <dd>
                   {persianCentury(word.first_century)} تا{" "}
                   <Num value={word.last_century} />
@@ -220,8 +220,8 @@ export function Word() {
         )}
 
         <p className={styles.version}>
-          این شمارش‌ها تنها برای نسخهٔ{" "}
-          <Latin>{word.corpus_version ?? "?"}</Latin> پیکره درست است.
+          این شمارها فقط برای نسخهٔ{" "}
+          <Latin>{word.corpus_version ?? "?"}</Latin> پیکره است.
         </p>
       </section>
 
@@ -231,7 +231,7 @@ export function Word() {
         </h2>
         {detail.citations.length === 0 ? (
           <p className={styles.note}>
-            سطری برای نشان‌دادن پیدا نشد. این به معنای نبودن واژه نیست.
+            سطری برای نشان دادن نداریم. این به آن معنا نیست که واژه در پیکره نیامده.
           </p>
         ) : (
           <ul className={styles.citations}>

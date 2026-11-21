@@ -46,9 +46,10 @@ export function Dating({ report }: DatingProps) {
         <strong className={styles.figure}>
           {PERCENT.format(undatedShare)}
         </strong>{" "}
-        از متن‌ها تاریخ ندارند — <Num value={report.documents_without_century} />{" "}
-        از <Num value={report.documents} />. نمودار پراکندگی در صفحهٔ واژه بر
-        همان بخشِ تاریخ‌دار استوار است، پس نبودِ ستون به معنای نبودِ واژه نیست.
+        از متن‌ها تاریخ ندارند: <Num value={report.documents_without_century} />{" "}
+        از <Num value={report.documents} />. نمودار پراکندگی در صفحهٔ هر واژه فقط
+        متن‌های تاریخ‌دار را می‌شمارد؛ پس اگر ستونی کوتاه است یا نیست، دلیل
+        نمی‌شود که واژه در آن دوره به کار نمی‌رفته است.
       </p>
 
       {report.documents_without_author > 0 ? (
@@ -60,17 +61,17 @@ export function Dating({ report }: DatingProps) {
 
       {missing.length > 0 ? (
         <p className={styles.line}>
-          <Num value={missing.length} /> نویسنده در جدول سده‌ها نیست، پس هرچه
-          نوشته‌اند بی‌تاریخ می‌ماند.
+          سدهٔ <Num value={missing.length} /> نویسنده را در جدول نداریم، پس
+          هیچ‌کدام از متن‌هایشان تاریخ ندارد.
         </p>
       ) : null}
 
       {stale.length > 0 ? (
         <div className={styles.fault}>
           <p className={styles.line}>
-            <Num value={stale.length} /> مدخلِ جدول سده‌ها به نویسنده‌ای اشاره
-            می‌کند که در این پیکره نیست. چنین مدخلی هیچ متنی را تاریخ‌دار
-            نمی‌کند و از بیرون دقیقاً مانند مدخلی به نظر می‌رسد که کار می‌کند.
+            <Num value={stale.length} /> سطر از جدول سده‌ها نویسنده‌ای را نام
+            می‌برد که در این پیکره با این نام نیامده. چنین سطری به هیچ متنی تاریخ
+            نمی‌دهد، ولی ظاهرش درست مثل سطرهای سالم است.
           </p>
           <ul className={styles.slugs}>
             {stale.slice(0, NAMED).map((slug) => (
@@ -81,7 +82,7 @@ export function Dating({ report }: DatingProps) {
           </ul>
           {stale.length > NAMED ? (
             <p className={styles.line}>
-              و <Num value={stale.length - NAMED} /> مدخل دیگر.
+              و <Num value={stale.length - NAMED} /> سطر دیگر.
             </p>
           ) : null}
         </div>

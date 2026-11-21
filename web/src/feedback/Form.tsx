@@ -28,17 +28,17 @@ const CATEGORIES: { key: Category; label: string; hint: string }[] = [
   {
     key: "linguistic",
     label: "داوری زبانی",
-    hint: "این واژه درست ساخته شده است یا نه.",
+    hint: "آیا این واژه درست ساخته شده است؟",
   },
-  { key: "data", label: "داده", hint: "شمار، خوانش یا مدخلی نادرست است." },
+  { key: "data", label: "داده", hint: "یک شمار، خوانش یا مدخل درست نیست." },
   { key: "bug", label: "ایراد برنامه", hint: "چیزی کار نمی‌کند." },
 ];
 
 const VERDICTS: { key: Verdict; label: string }[] = [
-  { key: "good", label: "درست و به‌کار‌آمدنی" },
-  { key: "possible", label: "درست ساخته، ولی نامأنوس" },
-  { key: "wrong", label: "این دستور نباید اینجا اجرا می‌شد" },
-  { key: "unsure", label: "نیاز به گفت‌وگو" },
+  { key: "good", label: "درست است و به کار می‌آید" },
+  { key: "possible", label: "درست ساخته شده، ولی ناآشناست" },
+  { key: "wrong", label: "این دستور نباید اینجا به کار می‌رفت" },
+  { key: "unsure", label: "باید درباره‌اش حرف بزنیم" },
 ];
 
 export interface FormProps {
@@ -88,7 +88,7 @@ export function Form({ subject, account, where, onDone }: FormProps) {
       setError(
         reason instanceof ApiError && reason.trouble === "not-allowed"
           ? "این حساب اجازهٔ داوری زبانی ندارد."
-          : "بازخورد ثبت نشد. کمی بعد دوباره بیازمایید.",
+          : "بازخورد ثبت نشد. کمی بعد دوباره امتحان کنید.",
       );
     } finally {
       setSending(false);
@@ -98,13 +98,13 @@ export function Form({ subject, account, where, onDone }: FormProps) {
   return (
     <form className={styles.form} onSubmit={submit}>
       <fieldset className={styles.fieldset}>
-        <legend className={styles.legend}>دربارهٔ چه می‌گویید؟</legend>
+        <legend className={styles.legend}>بازخوردتان دربارهٔ چیست؟</legend>
         <div className={styles.choices}>
           {CATEGORIES.map((one) => {
             const barred = one.key === "linguistic" && !gradeable;
             const why = judgeable
-              ? "تنها برای حساب کارشناس"
-              : "داوری زبانی دربارهٔ خودِ برنامه معنا ندارد";
+              ? "فقط برای حساب کارشناس"
+              : "خودِ برنامه را نمی‌شود از نظر زبانی داوری کرد";
             return (
               <button
                 key={one.key}
@@ -172,8 +172,8 @@ export function Form({ subject, account, where, onDone }: FormProps) {
           {sending ? "در حال ثبت…" : "ثبت"}
         </button>
         <p className={styles.forever}>
-          بازخورد ثبت‌شده پس نمی‌گردد و ویرایش نمی‌شود؛ این مجموعه سنجهٔ
-          ارزیابی است.
+          بازخوردی که ثبت شد دیگر پس گرفته یا ویرایش نمی‌شود، چون این بازخوردها
+          معیار سنجیدن برنامه‌اند.
         </p>
       </div>
     </form>

@@ -163,10 +163,10 @@ describe("what the source does not say", () => {
   it("shows the untagged affixes apart, and says they are not meaningless", async () => {
     renderApp("/affixes");
     const silent = await screen.findByRole("region", {
-      name: /سرچشمه معنایی برایشان ننوشته/,
+      name: /دستورنامه معنایی برایشان ننوشته/,
     });
     expect(within(silent).getByText("-vār")).toBeInTheDocument();
-    expect(within(silent).getByText(/بی‌معنا بودن آنها نیست/)).toBeInTheDocument();
+    expect(within(silent).getByText(/این وندها بی‌معنا نیستند/)).toBeInTheDocument();
   });
 
   it("says when an affix has no example recorded", async () => {
@@ -191,7 +191,7 @@ describe("the rules that build no word with an affix", () => {
   it("keeps them out of the list of affixes", async () => {
     renderApp("/affixes");
     const silent = await screen.findByRole("region", {
-      name: /سرچشمه معنایی برایشان ننوشته/,
+      name: /دستورنامه معنایی برایشان ننوشته/,
     });
     expect(within(silent).getByText("-vār")).toBeInTheDocument();
     expect(within(silent).queryByText("‒")).toBeNull();
@@ -217,7 +217,7 @@ describe("the rules that build no word with an affix", () => {
   it("counts the two groups apart, so neither number is inflated", async () => {
     renderApp("/affixes");
     const silent = await screen.findByRole("region", {
-      name: /سرچشمه معنایی برایشان ننوشته/,
+      name: /دستورنامه معنایی برایشان ننوشته/,
     });
     const joined = screen.getByRole("region", { name: /وندی ندارند/ });
     // The fixture has four untagged entries: one affix and three that are not.

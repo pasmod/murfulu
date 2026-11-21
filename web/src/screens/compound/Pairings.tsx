@@ -74,7 +74,7 @@ export function Pairings({
         {shown.map((row, index) => (
           <li key={`${row.form_fa}-${row.rule_id}-${index}`} className={styles.row}>
             <div className={styles.word}>
-              <span className={styles.fa}>{row.form_fa}</span>
+              <span className={styles.fa}>{row.form_fa_marked ?? row.form_fa}</span>
               <Latin>{row.form_latin}</Latin>
             </div>
 
@@ -125,7 +125,7 @@ export function Pairings({
                     <span className={styles.stepIs}>{wordFor(row.word_class)}</span>
                   ) : null}
                   <span className={styles.stepSays}>
-                    این دو، بی‌آنکه چیزی میانشان بیاید
+                    این دو کنار هم، بی‌هیچ چیزی میانشان
                   </span>
                 </li>
               </ol>
@@ -158,8 +158,8 @@ export function Pairings({
 
             {row.also_an_inflection ? (
               <p className={styles.warning}>
-                هم‌چنین خوانده می‌شود: {row.also_an_inflection.base} +{" "}
-                {row.also_an_inflection.label_fa} — پس این شمار شاید از آنِ این
+                این حروف را این‌طور هم می‌شود خواند: {row.also_an_inflection.base}{" "}
+                + {row.also_an_inflection.label_fa}؛ پس شاید این شمار از آنِ این
                 ترکیب نباشد.
               </p>
             ) : null}
@@ -177,7 +177,7 @@ export function Pairings({
           className={styles.more}
           onClick={() => setAll(true)}
         >
-          <Num value={folded} /> ترکیب دیگر
+          <Num value={folded} /> ترکیب دیگر را هم نشان بده
         </button>
       ) : null}
     </>

@@ -31,7 +31,7 @@ export function Placeholder({ screen }: PlaceholderProps) {
       <div className={styles.empty}>
         <p className={styles.invitation}>{screen.invitation}</p>
         <p className={styles.pending}>
-          این صفحه هنوز ساخته نشده است. کار {screen.task}.
+          این صفحه هنوز آماده نیست. در فهرست کارهای ما شمارهٔ {screen.task} است.
         </p>
       </div>
     </article>

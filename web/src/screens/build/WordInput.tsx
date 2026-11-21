@@ -85,7 +85,7 @@ export function WordInput({ value, depth, depths, busy, onBuild }: WordInputProp
           onChange={setDraft}
           source={WORDS}
           openOnFocus
-          listLabel="واژه‌هایی که از آنها می‌توان ساخت"
+          listLabel="واژه‌هایی که می‌شود از آن‌ها واژه ساخت"
           onPick={(one) => {
             setDraft(one.word);
             onBuild(one.word, depth);

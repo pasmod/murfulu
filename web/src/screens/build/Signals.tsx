@@ -60,7 +60,7 @@ function shown(
   if (field === "corpus") {
     const found = form.attestation;
     if (found?.function_word || found?.headword_homograph)
-      return { mark: "واژهٔ دیگری است", said: "واژهٔ دیگری است" };
+      return { mark: "به معنای واژه‌ای دیگر", said: "به معنای واژه‌ای دیگر" };
     if (found?.level === "none") return { mark: "نیامده", said: "نیامده" };
   }
   const score = form.score;
@@ -96,21 +96,21 @@ function CorpusDetail({ form }: { form: BuiltForm }) {
           linguist's. Ranked down, never removed. */}
       {form.inflection ? (
         <p className={styles.caution}>
-          این املا خوانشِ دیگری هم دارد: {form.inflection.label_fa} از{" "}
+          این املا را جور دیگری هم می‌شود خواند: {form.inflection.label_fa} از{" "}
           <span dir="rtl">{form.inflection.base}</span>.{" "}
           {form.inflection.shared_with.length > 0 ? (
             <>
-              همین حرف‌ها را دستورِ واژه‌سازی هم می‌نویسد (
+              همین حروف را دستور واژه‌سازی هم می‌سازد (
               {form.inflection.shared_with.map((id, index) => (
                 <span key={id}>
                   {index > 0 ? "، " : ""}
                   <Latin>{id}</Latin>
                 </span>
               ))}
-              )، پس از روی املا نمی‌توان گفت کدام است.
+              )، پس از روی املا نمی‌شود گفت کدام منظور است.
             </>
           ) : (
-            "هیچ دستورِ واژه‌سازی این حرف‌ها را نمی‌نویسد."
+            "هیچ دستور واژه‌سازی این حروف را نمی‌سازد."
           )}
         </p>
       ) : null}
@@ -154,13 +154,13 @@ function RuleDetail({
     <>
       {counted.length ? (
         <>
-          <p>این واژه با این دستورها ساخته شده:</p>
+          <p>این واژه با این دستورها ساخته شده است:</p>
           <ul className={styles.list}>
             {counted.map((one) => (
               <li key={one.rule_id}>
                 <Latin>{one.rule_id}</Latin> — <Num value={one.types} /> واژه
-                ساخته، <Num value={one.attested} /> تای آن‌ها در پیکرهٔ{" "}
-                <Latin>{one.corpus_version}</Latin> پیدا شد.
+                می‌سازد و <Num value={one.attested} /> تای آن‌ها در پیکرهٔ{" "}
+                <Latin>{one.corpus_version}</Latin> آمده است.
               </li>
             ))}
           </ul>
@@ -176,14 +176,15 @@ function RuleDetail({
           {middle ? (
             <>
               <Latin>{form.form_latin}</Latin> از <Latin>{middle}</Latin> ساخته
-              شده است، و <Latin>{middle}</Latin> در پیکرهٔ{" "}
-              <Latin>{corpusVersion ?? "?"}</Latin> نیامده است — آن را ما
-              ساخته‌ایم. پس این واژه دو گام از متنی که خوانده‌ایم دور است.
+              شده است، و <Latin>{middle}</Latin> خودش در پیکرهٔ{" "}
+              <Latin>{corpusVersion ?? "?"}</Latin> نیامده است؛ آن را هم ما
+              ساخته‌ایم. پس این واژه دو گام با متن‌های پیکره فاصله دارد.
             </>
           ) : (
             <>
-              پایهٔ میانی این واژه در پیکرهٔ <Latin>{corpusVersion ?? "?"}</Latin>{" "}
-              نیامده است — آن را ما ساخته‌ایم.
+              واژه‌ای که این واژه از آن ساخته شده، خودش در پیکرهٔ{" "}
+              <Latin>{corpusVersion ?? "?"}</Latin> نیامده است؛ آن را هم ما
+              ساخته‌ایم.
             </>
           )}
         </p>
@@ -211,9 +212,10 @@ function MeaningDetail({
     <>
       <p>
         دستور <Latin>{semantic.rule_id}</Latin> از{" "}
-        <Num value={semantic.bases_measured} /> بن واژه‌ای ساخته که در پیکرهٔ{" "}
-        <Latin>{corpusVersion ?? "?"}</Latin> پیدا شده است. نزدیک‌ترین‌های آن
-        بن‌ها به مرکزِ معنایی این دستور:
+        <Num value={semantic.bases_measured} /> بن واژه‌هایی ساخته که در پیکرهٔ{" "}
+        <Latin>{corpusVersion ?? "?"}</Latin> آمده‌اند. از میان آن بن‌ها، این‌ها از
+        همه بیشتر به بن‌های معمول این دستور می‌مانند. درصد کنار هر کدام اندازهٔ
+        این همانندی است، و آخر از همه بن همین واژه آمده است:
       </p>
       <p className={styles.bases}>
         {semantic.typical.slice(0, 5).map((one, at) => (

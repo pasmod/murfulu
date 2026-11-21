@@ -135,14 +135,14 @@ export function Builder({ query, searched, onChange }: BuilderProps) {
       <div className={styles.rows}>
         <p className={styles.row}>
           <label className={styles.label} htmlFor="build-pattern">
-            الگوی حرفی
+            حروف واژه
           </label>
           <span className={styles.controls}>
             <span className={styles.picker}>
               <select
                 className={styles.select}
                 id="build-pattern-mode"
-                aria-label="جور الگو"
+                aria-label="جای این حروف در واژه"
                 value={mode}
                 onChange={(event) => {
                   setMode(event.target.value);

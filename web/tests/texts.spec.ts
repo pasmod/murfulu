@@ -82,7 +82,7 @@ test.describe("reading a text", () => {
     await several.click();
     const panel = page.getByRole("region", { name: /^خوانش‌های / });
     await expect(panel).toBeVisible();
-    await expect(panel.getByText(/گفته نمی‌شود/)).toBeVisible();
+    await expect(panel.getByText(/نمی‌گوییم کدام در این سطر درست است/)).toBeVisible();
     const wrong = panel.getByRole("button", { name: "این خوانش نادرست است" });
     expect(await wrong.count()).toBeGreaterThan(1);
     const box = (await panel.boundingBox())!;
@@ -100,7 +100,7 @@ test.describe("reading a text", () => {
     await page.goto(`/word/${encodeURIComponent(id)}`);
     await page.getByRole("link", { name: "در متن ←" }).first().click();
     await expect(page).toHaveURL(/\/texts\?text=.*&unit=\d+&word=/);
-    await expect(page.getByText(/همان سطرِ شاهدمثالِ «دل»/)).toBeVisible();
+    await expect(page.getByText(/شاهدمثالِ «دل» از همین سطر است/)).toBeVisible();
     // The word itself is in view, not merely its unit: a paragraph of prose
     // can be taller than the window.
     await expect(page.locator("button[data-sought]").first()).toBeInViewport();

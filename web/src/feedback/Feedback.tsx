@@ -88,7 +88,7 @@ export function Feedback() {
 
           {stage === "unreachable" ? (
             <p className={styles.trouble} role="alert">
-              انبارِ بازخورد در دسترس نیست. کمی بعد دوباره بیازمایید.
+              الان نمی‌توانیم بازخورد بگیریم. کمی بعد دوباره امتحان کنید.
             </p>
           ) : null}
 

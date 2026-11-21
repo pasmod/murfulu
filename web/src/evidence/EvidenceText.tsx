@@ -49,11 +49,11 @@ export function EvidenceText({
       </p>
       {text.held === "near" ? (
         <p className={styles.near}>
-          این متن واژه را تنها با املایی نزدیک دارد که شمارش جدا می‌شمارد.
+          در این متن، واژه با املایی کمی متفاوت آمده که شمارش آن را جدا حساب می‌کند.
         </p>
       ) : text.held === "none" ? (
         <p className={styles.near}>
-          جست‌وجو این متن را یافت، ولی شمارش در هیچ سطرش این واژه را نمی‌یابد.
+          جست‌وجو این متن را آورد، ولی شمارش در هیچ‌یک از سطرهایش این واژه را نمی‌بیند.
         </p>
       ) : null}
       {lines.length > 0 ? (
@@ -72,7 +72,7 @@ export function EvidenceText({
           onClick={() => setWhole(!whole)}
         >
           {whole ? (
-            "تنها چند سطر نخست"
+            "فقط چند سطر اول"
           ) : (
             <>
               همهٔ <Num value={text.lines.length} /> سطر

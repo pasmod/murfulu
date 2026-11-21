@@ -33,6 +33,8 @@ export interface BankGroups {
 /** One word of the bank, one reading of one spelling. */
 export interface BankWord {
   spelling_fa: string;
+  /** With its short vowels, for display only (DECISIONS 2026-11-21). */
+  spelling_fa_marked?: string;
   latin: string;
   latin_variants: string[];
   groups: { key: string; label_fa: string }[];

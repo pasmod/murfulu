@@ -109,9 +109,9 @@ describe("the builder", () => {
     // It was folded behind «ساختن جست‌وجو» and a reader had to know to press
     // it. The project lead asked for the filters visible on 2026-08-18.
     renderApp("/");
-    expect(screen.getByLabelText("جور الگو")).toBeVisible();
+    expect(screen.getByLabelText("جای این حروف در واژه")).toBeVisible();
     expect(screen.getByLabelText("این واژه از کجاست")).toBeVisible();
-    expect(screen.getByLabelText("جور بسامد")).toBeVisible();
+    expect(screen.getByLabelText("بیشتر، کمتر یا درست همین شمار")).toBeVisible();
     // And the box is still the one clear action beside them.
     expect(screen.getByRole("button", { name: "جست‌وجو" })).toBeVisible();
   });
@@ -168,10 +168,10 @@ describe("the builder", () => {
   it("writes a pattern in the shape that was chosen", async () => {
     renderApp("/");
     await openBuilder();
-    await userEvent.type(screen.getByLabelText("الگوی حرفی"), "nā");
+    await userEvent.type(screen.getByLabelText("حروف واژه"), "nā");
     expect(box()).toHaveValue("*nā");
 
-    await userEvent.selectOptions(screen.getByLabelText("جور الگو"), "starts");
+    await userEvent.selectOptions(screen.getByLabelText("جای این حروف در واژه"), "starts");
     expect(box()).toHaveValue("nā*");
   });
 
@@ -208,7 +208,7 @@ describe("the builder", () => {
   it("does not run the search on every keystroke", async () => {
     renderApp("/");
     await openBuilder();
-    await userEvent.type(screen.getByLabelText("الگوی حرفی"), "nā");
+    await userEvent.type(screen.getByLabelText("حروف واژه"), "nā");
     const searches = vi
       .mocked(fetch)
       .mock.calls.filter((call) => String(call[0]).includes("/search"));
@@ -252,11 +252,11 @@ describe("the number fields", () => {
     // and left to right. Filled with what the search covers when nothing is
     // asked, so the reader only moves them.
     renderApp("/");
-    await waitFor(() => expect(field("سده از")).toHaveValue("۴"));
-    expect(field("سده تا")).toHaveValue("۱۴");
-    expect(field("بسامد در پیکره")).toHaveValue("۰");
-    expect(screen.getByLabelText("جور بسامد")).toHaveValue("gt");
-    for (const name of ["سده از", "سده تا", "بسامد در پیکره"]) {
+    await waitFor(() => expect(field("از سدهٔ")).toHaveValue("۴"));
+    expect(field("تا سدهٔ")).toHaveValue("۱۴");
+    expect(field("چند بار در پیکره آمده")).toHaveValue("۰");
+    expect(screen.getByLabelText("بیشتر، کمتر یا درست همین شمار")).toHaveValue("gt");
+    for (const name of ["از سدهٔ", "تا سدهٔ", "چند بار در پیکره آمده"]) {
       expect(field(name)).toHaveAttribute("dir", "rtl");
     }
     // Shown is not written: a search that asks nothing of them stays open
@@ -266,70 +266,70 @@ describe("the number fields", () => {
 
   it("writes a century range once the reader moves one end, from the corpus's own range", async () => {
     renderApp("/");
-    await waitFor(() => expect(field("سده از")).toHaveValue("۴"));
-    await userEvent.clear(field("سده از"));
-    await userEvent.type(field("سده از"), "۱۰");
+    await waitFor(() => expect(field("از سدهٔ")).toHaveValue("۴"));
+    await userEvent.clear(field("از سدهٔ"));
+    await userEvent.type(field("از سدهٔ"), "۱۰");
     expect(box()).toHaveValue("century:10-14");
-    expect(field("سده از")).toHaveValue("۱۰");
+    expect(field("از سدهٔ")).toHaveValue("۱۰");
   });
 
   it("takes the century away again when the range is the whole corpus", async () => {
     renderApp("/?q=century%3A10-14");
-    await waitFor(() => expect(field("سده از")).toHaveValue("۱۰"));
-    await userEvent.clear(field("سده از"));
-    await userEvent.type(field("سده از"), "4");
+    await waitFor(() => expect(field("از سدهٔ")).toHaveValue("۱۰"));
+    await userEvent.clear(field("از سدهٔ"));
+    await userEvent.type(field("از سدهٔ"), "4");
     expect(box()).toHaveValue("");
   });
 
   it("never writes a range that runs backwards while it is being retyped", async () => {
     renderApp("/?q=century%3A4-12");
-    await waitFor(() => expect(field("سده تا")).toHaveValue("۱۲"));
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "1");
+    await waitFor(() => expect(field("تا سدهٔ")).toHaveValue("۱۲"));
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "1");
     // «۴ تا ۱» is not a query; the box keeps the last one that was.
-    expect(field("سده تا")).toHaveValue("۱");
+    expect(field("تا سدهٔ")).toHaveValue("۱");
     expect(box()).not.toHaveValue("century:4-1");
-    await userEvent.type(field("سده تا"), "3");
+    await userEvent.type(field("تا سدهٔ"), "3");
     expect(box()).toHaveValue("century:4-13");
   });
 
   it("writes a frequency from either keyboard's digits, and shows them in Persian", async () => {
     renderApp("/");
-    await userEvent.clear(field("بسامد در پیکره"));
-    await userEvent.type(field("بسامد در پیکره"), "10");
+    await userEvent.clear(field("چند بار در پیکره آمده"));
+    await userEvent.type(field("چند بار در پیکره آمده"), "10");
     expect(box()).toHaveValue("count:>10");
-    expect(field("بسامد در پیکره")).toHaveValue("۱۰");
+    expect(field("چند بار در پیکره آمده")).toHaveValue("۱۰");
   });
 
   it("keeps the caret where the reader typed, so a digit in the middle stays there", async () => {
     renderApp("/?q=count%3A%3E123");
-    await waitFor(() => expect(field("بسامد در پیکره")).toHaveValue("۱۲۳"));
-    await userEvent.type(field("بسامد در پیکره"), "45", {
+    await waitFor(() => expect(field("چند بار در پیکره آمده")).toHaveValue("۱۲۳"));
+    await userEvent.type(field("چند بار در پیکره آمده"), "45", {
       initialSelectionStart: 1,
       initialSelectionEnd: 1,
     });
-    expect(field("بسامد در پیکره")).toHaveValue("۱۴۵۲۳");
+    expect(field("چند بار در پیکره آمده")).toHaveValue("۱۴۵۲۳");
     expect(box()).toHaveValue("count:>14523");
   });
 
   it("keeps an exact frequency exact while its figure is retyped", async () => {
     renderApp("/?q=count%3A10");
-    await waitFor(() => expect(field("بسامد در پیکره")).toHaveValue("۱۰"));
-    await userEvent.clear(field("بسامد در پیکره"));
-    await userEvent.type(field("بسامد در پیکره"), "20");
+    await waitFor(() => expect(field("چند بار در پیکره آمده")).toHaveValue("۱۰"));
+    await userEvent.clear(field("چند بار در پیکره آمده"));
+    await userEvent.type(field("چند بار در پیکره آمده"), "20");
     expect(box()).toHaveValue("count:20");
-    expect(screen.getByLabelText("جور بسامد")).toHaveValue("eq");
+    expect(screen.getByLabelText("بیشتر، کمتر یا درست همین شمار")).toHaveValue("eq");
   });
 
   it("drops the frequency when the field is left empty", async () => {
     renderApp("/?q=count%3A10");
-    await waitFor(() => expect(field("بسامد در پیکره")).toHaveValue("۱۰"));
-    await userEvent.clear(field("بسامد در پیکره"));
+    await waitFor(() => expect(field("چند بار در پیکره آمده")).toHaveValue("۱۰"));
+    await userEvent.clear(field("چند بار در پیکره آمده"));
     // What is submitted is what the field shows: no frequency.
     expect(box()).toHaveValue("");
     await userEvent.tab();
-    expect(field("بسامد در پیکره")).toHaveValue("۰");
-    expect(screen.getByLabelText("جور بسامد")).toHaveValue("gt");
+    expect(field("چند بار در پیکره آمده")).toHaveValue("۰");
+    expect(screen.getByLabelText("بیشتر، کمتر یا درست همین شمار")).toHaveValue("gt");
   });
 
   it("lets the century filter go when there is no corpus range and an end is emptied", async () => {
@@ -345,8 +345,8 @@ describe("the number fields", () => {
       ),
     );
     renderApp("/?q=century%3A10-13");
-    await waitFor(() => expect(field("سده از")).toHaveValue("۱۰"));
-    await userEvent.clear(field("سده از"));
+    await waitFor(() => expect(field("از سدهٔ")).toHaveValue("۱۰"));
+    await userEvent.clear(field("از سدهٔ"));
     expect(box()).toHaveValue("");
   });
 
@@ -363,16 +363,16 @@ describe("the number fields", () => {
       ),
     );
     renderApp("/?q=century%3A10-13");
-    await waitFor(() => expect(field("سده تا")).toHaveValue("۱۳"));
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "14{Enter}");
+    await waitFor(() => expect(field("تا سدهٔ")).toHaveValue("۱۳"));
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "14{Enter}");
     await waitFor(() =>
       expect(
         vi.mocked(fetch).mock.calls.some((call) => String(call[0]).includes("century%3A10-14")),
       ).toBe(true),
     );
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "15");
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "15");
     expect(box()).toHaveValue("century:10-15");
   });
 
@@ -389,14 +389,14 @@ describe("the number fields", () => {
       ),
     );
     renderApp("/?q=century%3A10-13");
-    await waitFor(() => expect(field("سده تا")).toHaveValue("۱۳"));
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "1");
-    await userEvent.clear(field("سده تا"));
+    await waitFor(() => expect(field("تا سدهٔ")).toHaveValue("۱۳"));
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "1");
+    await userEvent.clear(field("تا سدهٔ"));
     await userEvent.tab();
     expect(box()).toHaveValue("");
-    expect(field("سده تا")).toHaveValue("");
-    expect(field("سده تا")).not.toHaveAttribute("aria-invalid");
+    expect(field("تا سدهٔ")).toHaveValue("");
+    expect(field("تا سدهٔ")).not.toHaveAttribute("aria-invalid");
   });
 
   it("shows the search's figure when the search changes under a focused field", async () => {
@@ -409,54 +409,54 @@ describe("the number fields", () => {
       </>,
       "/?q=count%3A10",
     );
-    await waitFor(() => expect(field("بسامد در پیکره")).toHaveValue("۱۰"));
-    await userEvent.clear(field("بسامد در پیکره"));
-    await userEvent.type(field("بسامد در پیکره"), "20{Enter}");
+    await waitFor(() => expect(field("چند بار در پیکره آمده")).toHaveValue("۱۰"));
+    await userEvent.clear(field("چند بار در پیکره آمده"));
+    await userEvent.type(field("چند بار در پیکره آمده"), "20{Enter}");
     await waitFor(() =>
       expect(
         vi.mocked(fetch).mock.calls.some((call) => String(call[0]).includes("count%3A20")),
       ).toBe(true),
     );
-    expect(field("بسامد در پیکره")).toHaveFocus();
+    expect(field("چند بار در پیکره آمده")).toHaveFocus();
     // A click that leaves the focus where it is, as the browser's Back does.
     fireEvent.click(screen.getByRole("button", { name: "back" }));
     await waitFor(() => expect(box()).toHaveValue("count:10"));
-    expect(field("بسامد در پیکره")).toHaveValue("۱۰");
+    expect(field("چند بار در پیکره آمده")).toHaveValue("۱۰");
   });
 
   it("holds an end that runs the range backwards until the other end is moved", async () => {
     // «۱۰ تا ۱۳» to «۴ تا ۹», upper end first: the «۹» is no range yet.
     renderApp("/?q=century%3A10-13");
-    await waitFor(() => expect(field("سده از")).toHaveValue("۱۰"));
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "9");
+    await waitFor(() => expect(field("از سدهٔ")).toHaveValue("۱۰"));
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "9");
     // Emptied, the end stood for the corpus's last century; «۱۰ تا ۹» is
     // not written.
     expect(box()).toHaveValue("century:10-14");
     await userEvent.tab();
-    expect(field("سده تا")).toHaveValue("۹");
-    expect(field("سده تا")).toHaveAttribute("aria-invalid", "true");
-    expect(screen.getByText("سدهٔ آغاز از سدهٔ پایان بزرگ‌تر است.")).toBeVisible();
+    expect(field("تا سدهٔ")).toHaveValue("۹");
+    expect(field("تا سدهٔ")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByText("سدهٔ اول دیرتر از سدهٔ دوم است.")).toBeVisible();
     // The form will not run a search while the range on screen is no search.
-    expect((field("سده تا") as HTMLInputElement).validity.valid).toBe(false);
-    expect(field("سده تا").closest("form")!.checkValidity()).toBe(false);
-    await userEvent.clear(field("سده از"));
-    await userEvent.type(field("سده از"), "4");
+    expect((field("تا سدهٔ") as HTMLInputElement).validity.valid).toBe(false);
+    expect(field("تا سدهٔ").closest("form")!.checkValidity()).toBe(false);
+    await userEvent.clear(field("از سدهٔ"));
+    await userEvent.type(field("از سدهٔ"), "4");
     expect(box()).toHaveValue("century:4-9");
-    expect(field("سده تا")).not.toHaveAttribute("aria-invalid");
-    expect(screen.queryByText("سدهٔ آغاز از سدهٔ پایان بزرگ‌تر است.")).toBeNull();
+    expect(field("تا سدهٔ")).not.toHaveAttribute("aria-invalid");
+    expect(screen.queryByText("سدهٔ اول دیرتر از سدهٔ دوم است.")).toBeNull();
   });
 
   it("holds both ends while the range still runs backwards", async () => {
     renderApp("/?q=century%3A11-13");
-    await waitFor(() => expect(field("سده از")).toHaveValue("۱۱"));
-    await userEvent.clear(field("سده از"));
-    await userEvent.type(field("سده از"), "18");
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "17");
-    expect(field("سده از")).toHaveValue("۱۸");
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "19");
+    await waitFor(() => expect(field("از سدهٔ")).toHaveValue("۱۱"));
+    await userEvent.clear(field("از سدهٔ"));
+    await userEvent.type(field("از سدهٔ"), "18");
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "17");
+    expect(field("از سدهٔ")).toHaveValue("۱۸");
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "19");
     expect(box()).toHaveValue("century:18-19");
   });
 
@@ -470,12 +470,12 @@ describe("the number fields", () => {
     );
     await userEvent.clear(box());
     await userEvent.type(box(), "count:10{Enter}");
-    await waitFor(() => expect(field("بسامد در پیکره")).toHaveValue("۱۰"));
-    await userEvent.clear(field("بسامد در پیکره"));
+    await waitFor(() => expect(field("چند بار در پیکره آمده")).toHaveValue("۱۰"));
+    await userEvent.clear(field("چند بار در پیکره آمده"));
     fireEvent.click(screen.getByRole("button", { name: "back" }));
     await waitFor(() => expect(box()).toHaveValue("bar*"));
-    expect(screen.getByLabelText("جور بسامد")).toHaveValue("gt");
-    await userEvent.type(field("بسامد در پیکره"), "5");
+    expect(screen.getByLabelText("بیشتر، کمتر یا درست همین شمار")).toHaveValue("gt");
+    await userEvent.type(field("چند بار در پیکره آمده"), "5");
     expect(box()).toHaveValue("bar* count:>5");
   });
 
@@ -487,27 +487,27 @@ describe("the number fields", () => {
       </>,
       "/",
     );
-    await waitFor(() => expect(field("سده تا")).toHaveValue("۱۴"));
-    await userEvent.click(field("سده از"));
-    await userEvent.clear(field("سده از"));
-    await userEvent.type(field("سده از"), "10");
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "13{Enter}");
+    await waitFor(() => expect(field("تا سدهٔ")).toHaveValue("۱۴"));
+    await userEvent.click(field("از سدهٔ"));
+    await userEvent.clear(field("از سدهٔ"));
+    await userEvent.type(field("از سدهٔ"), "10");
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "13{Enter}");
     await waitFor(() => expect(box()).toHaveValue("century:10-13"));
     fireEvent.click(screen.getByRole("button", { name: "back" }));
-    await waitFor(() => expect(field("سده از")).toHaveValue("۴"));
+    await waitFor(() => expect(field("از سدهٔ")).toHaveValue("۴"));
     // Only the upper end is moved: the lower stays the corpus's own.
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "12");
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "12");
     expect(box()).toHaveValue("century:4-12");
   });
 
   it("reads a range written in Persian digits, and edits it", async () => {
     renderApp("/?q=century%3A%DB%B1%DB%B0-%DB%B1%DB%B3");
-    await waitFor(() => expect(field("سده از")).toHaveValue("۱۰"));
-    expect(field("سده تا")).toHaveValue("۱۳");
-    await userEvent.clear(field("سده از"));
-    await userEvent.type(field("سده از"), "11");
+    await waitFor(() => expect(field("از سدهٔ")).toHaveValue("۱۰"));
+    expect(field("تا سدهٔ")).toHaveValue("۱۳");
+    await userEvent.clear(field("از سدهٔ"));
+    await userEvent.type(field("از سدهٔ"), "11");
     expect(box()).toHaveValue("century:11-13");
   });
 
@@ -525,21 +525,21 @@ describe("the number fields", () => {
       ),
     );
     renderApp("/");
-    expect(field("سده از")).toHaveValue("");
-    await userEvent.type(field("سده از"), "10");
+    expect(field("از سدهٔ")).toHaveValue("");
+    await userEvent.type(field("از سدهٔ"), "10");
     expect(box()).toHaveValue("century:10");
     // One century is a range of one: the other end shows it too.
-    expect(field("سده تا")).toHaveValue("۱۰");
-    await userEvent.clear(field("سده تا"));
-    await userEvent.type(field("سده تا"), "13");
+    expect(field("تا سدهٔ")).toHaveValue("۱۰");
+    await userEvent.clear(field("تا سدهٔ"));
+    await userEvent.type(field("تا سدهٔ"), "13");
     expect(box()).toHaveValue("century:10-13");
   });
 
   it("leaves the frequency out of the query while it says «بیش از ۰»", async () => {
     renderApp("/?q=count%3A%3E5");
-    await waitFor(() => expect(field("بسامد در پیکره")).toHaveValue("۵"));
-    await userEvent.clear(field("بسامد در پیکره"));
-    await userEvent.type(field("بسامد در پیکره"), "۰");
+    await waitFor(() => expect(field("چند بار در پیکره آمده")).toHaveValue("۵"));
+    await userEvent.clear(field("چند بار در پیکره آمده"));
+    await userEvent.type(field("چند بار در پیکره آمده"), "۰");
     expect(box()).toHaveValue("");
   });
 });

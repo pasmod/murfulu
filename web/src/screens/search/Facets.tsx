@@ -122,7 +122,7 @@ export function Facets({ facets, query, onNarrow }: FacetsProps) {
   if (shown.length === 0) return null;
 
   return (
-    <aside className={styles.facets} aria-label="باریک‌کردن نتیجه">
+    <aside className={styles.facets} aria-label="محدود کردن نتیجه‌ها">
       {shown.map((panel) => (
         <Panel
           key={panel.name}

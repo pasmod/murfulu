@@ -150,14 +150,16 @@ describe("the finding", () => {
 
   it("calls a disagreement a finding, not an error", async () => {
     renderApp("/rules");
-    expect(await screen.findByText(/این یافته است، نه خطا/)).toBeInTheDocument();
+    expect(await screen.findByText(/این یک یافته است، نه خطا/)).toBeInTheDocument();
   });
 
   it("shows what the source said and what was measured, side by side", async () => {
     renderApp("/rules");
     const finding = await screen.findByRole("region", { name: /یکی نمی‌گویند/ });
-    expect(within(finding).getByText(/سرچشمه: بیشتر/)).toBeInTheDocument();
-    expect(within(finding).getByText(/سنجش: بالا/)).toBeInTheDocument();
+    expect(
+      within(finding).getByText(/به گفتهٔ دستورنامه: بیشتر وقت‌ها/),
+    ).toBeInTheDocument();
+    expect(within(finding).getByText(/در پیکره: بالا/)).toBeInTheDocument();
   });
 });
 
@@ -180,7 +182,7 @@ describe("measured and unmeasurable", () => {
 
   it("says which corpus version the numbers belong to", async () => {
     renderApp("/rules");
-    expect(await screen.findByText(/سنجیده بر پیکرهٔ/)).toBeInTheDocument();
+    expect(await screen.findByText(/سنجش‌ها بر پایهٔ پیکرهٔ/)).toBeInTheDocument();
   });
 
   it("says plainly when nothing has been measured at all", async () => {
@@ -190,7 +192,7 @@ describe("measured and unmeasurable", () => {
     );
     renderApp("/rules");
     expect(
-      await screen.findByText(/هنوز هیچ سنجشی بر پیکره انجام نشده است/),
+      await screen.findByText(/هنوز هیچ دستوری روی پیکره سنجیده نشده است/),
     ).toBeInTheDocument();
   });
 });
@@ -234,7 +236,7 @@ describe("the length of the list", () => {
   it("opens at a readable length and says how many are folded", async () => {
     vi.stubGlobal("fetch", answers(many(60)));
     renderApp("/rules");
-    await screen.findByText(saying(/۶۰ دستور نشان داده می‌شود/));
+    await screen.findByText(saying(/۶۰ دستور را می‌بینید/));
     expect(listed()).toBe(20);
 
     await userEvent.click(screen.getByRole("button", { name: /۴۰ دستور دیگر/ }));
@@ -244,7 +246,7 @@ describe("the length of the list", () => {
 
   it("offers nothing to open when the list already fits", async () => {
     renderApp("/rules");
-    await screen.findByText(saying(/۴ دستور نشان داده می‌شود/));
+    await screen.findByText(saying(/۴ دستور را می‌بینید/));
     expect(screen.queryByRole("button", { name: /دستور دیگر/ })).toBeNull();
   });
 
@@ -254,7 +256,7 @@ describe("the length of the list", () => {
     // the reader did not choose.
     vi.stubGlobal("fetch", answers(many(60)));
     renderApp("/rules");
-    await screen.findByText(saying(/۶۰ دستور نشان داده می‌شود/));
+    await screen.findByText(saying(/۶۰ دستور را می‌بینید/));
     await userEvent.click(screen.getByRole("button", { name: /۴۰ دستور دیگر/ }));
     expect(listed()).toBe(60);
 
@@ -266,10 +268,10 @@ describe("the length of the list", () => {
 describe("narrowing", () => {
   it("filters by family", async () => {
     renderApp("/rules");
-    await screen.findByText(saying(/۴ دستور نشان داده می‌شود/));
+    await screen.findByText(saying(/۴ دستور را می‌بینید/));
     await userEvent.click(screen.getByRole("button", { name: "نام" }));
     expect(
-      await screen.findByText(saying(/۱ دستور نشان داده می‌شود/)),
+      await screen.findByText(saying(/۱ دستور را می‌بینید/)),
     ).toBeInTheDocument();
   });
 
@@ -279,10 +281,10 @@ describe("narrowing", () => {
     // members — while build results name G-10 and G-11 with nowhere to look
     // them up.
     renderApp("/rules");
-    await screen.findByText(saying(/۴ دستور نشان داده می‌شود/));
+    await screen.findByText(saying(/۴ دستور را می‌بینید/));
     await userEvent.click(screen.getByRole("button", { name: "میانجی" }));
     expect(
-      await screen.findByText(saying(/۱ دستور نشان داده می‌شود/)),
+      await screen.findByText(saying(/۱ دستور را می‌بینید/)),
     ).toBeInTheDocument();
     expect(screen.getByText("G-03")).toBeInTheDocument();
   });
@@ -323,9 +325,9 @@ describe("a glide rule", () => {
     // The three things the affix row prints about a measurement. The glide's
     // own Persian explanation ends in «ساخته می‌شود», so the count label is
     // matched as the whole of its element rather than as a substring.
-    expect(within(row).queryByText(/^سنجش:/)).toBeNull();
-    expect(within(row).queryByText("هنوز سنجشی انجام نشده")).toBeNull();
-    expect(within(row).queryByText(/نوشته‌شده/)).toBeNull();
+    expect(within(row).queryByText(/^سنجش در پیکره:/)).toBeNull();
+    expect(within(row).queryByText("هنوز سنجیده نشده")).toBeNull();
+    expect(within(row).queryByText(/واژه ساخته$/)).toBeNull();
   });
 });
 
@@ -352,7 +354,7 @@ describe("the semantic centre of a rule", () => {
     const toggles = await screen.findAllByRole("button", { name: "جزئیات" });
     await userEvent.click(toggles[0]!);
     expect(
-      screen.getAllByText("برای این دستور سنجش معنایی در دست نیست").length,
+      screen.getAllByText("معنای این دستور هنوز سنجیده نشده است").length,
     ).toBeGreaterThan(0);
   });
 });
@@ -384,7 +386,7 @@ describe("why a rule was retired", () => {
     vi.stubGlobal("fetch", answers(RETIRED));
     renderApp("/rules");
     const row = (await screen.findByText("N-090")).closest("li")!;
-    expect(within(row).getByText("بازنشسته")).toBeInTheDocument();
+    expect(within(row).getByText("کنار گذاشته")).toBeInTheDocument();
     expect(
       within(row).getByText("واژه‌سازی نیست: این کسرهٔ اضافه است."),
     ).toBeInTheDocument();
@@ -398,7 +400,7 @@ describe("why a rule was retired", () => {
     vi.stubGlobal("fetch", answers(RETIRED));
     renderApp("/rules");
     const row = (await screen.findByText("N-091")).closest("li")!;
-    expect(within(row).getByText("بازنشسته")).toBeInTheDocument();
+    expect(within(row).getByText("کنار گذاشته")).toBeInTheDocument();
     expect(within(row).queryByText(/Retired for a reason/)).toBeNull();
   });
 });

@@ -112,7 +112,7 @@ describe("the word bank screen", () => {
     renderApp("/bank");
     const loan = (await screen.findByText("آبجو")).closest("li")!;
     expect(within(loan).getByText("در واژه‌سازی به کار نمی‌رود")).toBeInTheDocument();
-    expect(within(loan).queryByRole("link", { name: "ساختن از این واژه" })).not.toBeInTheDocument();
+    expect(within(loan).queryByRole("link", { name: "واژه‌سازی با این واژه" })).not.toBeInTheDocument();
     expect(within(loan).getByText("نوشابه‌ای از جو…")).toBeInTheDocument();
   });
 

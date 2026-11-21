@@ -32,9 +32,9 @@ export function Results({ result, affix }: ResultsProps) {
   if (result.total === 0) {
     return (
       <div className={styles.none} role="status">
-        <p className={styles.noneTitle}>هیچ واژه‌ای با این الگو یافت نشد.</p>
+        <p className={styles.noneTitle}>هیچ واژه‌ای با این الگو جور درنیامد.</p>
         <p className={styles.noneAdvice}>
-          الگوی دیگری بیازمایید، یا الگو را کوتاه‌تر کنید.
+          الگوی دیگری امتحان کنید، یا چند حرف از آن کم کنید.
         </p>
       </div>
     );
@@ -58,8 +58,8 @@ export function Results({ result, affix }: ResultsProps) {
             </ul>
           ) : (
             <p className={styles.unknown}>
-              هنوز روشن نیست کدام‌یک از این واژه‌ها با این وند ساخته شده‌اند. این
-              با «هیچ‌کدام» یکی نیست.
+              هنوز نمی‌دانیم کدام‌یک از این واژه‌ها با این وند ساخته شده‌اند. این
+              یعنی «نمی‌دانیم»، نه «هیچ‌کدام».
             </p>
           )}
         </section>
@@ -69,7 +69,7 @@ export function Results({ result, affix }: ResultsProps) {
         <h2 className={styles.groupTitle} id="matched">
           {affix ? (
             <>
-              تنها به این حروف ختم می‌شوند
+              فقط با همین حروف تمام می‌شوند
               <span className={styles.groupCount}>
                 <Num value={merely.length} />
               </span>
@@ -92,8 +92,8 @@ export function Results({ result, affix }: ResultsProps) {
 
       {result.returned < result.total ? (
         <p className={styles.more}>
-          <Num value={result.returned} /> از <Num value={result.total} /> نشان
-          داده شده است.
+          از <Num value={result.total} /> واژه، <Num value={result.returned} /> تا را
+          اینجا می‌بینید.
         </p>
       ) : null}
     </div>

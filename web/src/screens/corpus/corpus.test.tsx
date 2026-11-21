@@ -100,7 +100,7 @@ describe("the corpus screen", () => {
   it("says which corpus version is being served", async () => {
     renderApp("/corpus");
     const block = await screen.findByRole("region", {
-      name: "نسخه‌ای که به کار می‌رود",
+      name: "نسخه‌هایی که الان به کار می‌روند",
     });
     expect(within(block).getAllByText("v1")).toHaveLength(3);
   });
@@ -132,7 +132,7 @@ describe("the corpus screen", () => {
   it("states what the evidence does not cover", async () => {
     renderApp("/corpus");
     const block = await screen.findByRole("region", {
-      name: "آنچه شواهد نمی‌پوشاند",
+      name: "کاستی‌های شواهد",
     });
     // Three quarters of the poems carry no date, and the dispersion chart on
     // the word screen rests on the rest.
@@ -146,11 +146,11 @@ describe("the corpus screen", () => {
   it("counts the poets with no century without printing the empty slug", async () => {
     renderApp("/corpus");
     const block = await screen.findByRole("region", {
-      name: "آنچه شواهد نمی‌پوشاند",
+      name: "کاستی‌های شواهد",
     });
     // Three entries, one of which is the empty slug: it is a real gap and
     // stays in the count, but there is nothing to print.
-    const said = within(block).getByText(/نویسنده در جدول سده‌ها نیست/);
+    const said = within(block).getByText(/نویسنده را در جدول نداریم/);
     expect(said.querySelector("[data-value]")).toHaveAttribute("data-value", "2");
   });
 
@@ -184,7 +184,7 @@ describe("the words the screen uses for itself", () => {
     // which. The project lead's finding: the names do not say what they do.
     renderApp("/corpus");
     const block = await screen.findByRole("region", {
-      name: "نسخه‌ای که به کار می‌رود",
+      name: "نسخه‌هایی که الان به کار می‌روند",
     });
     for (const name of ["متن‌ها", "واژه‌گونه‌ها", "ساخته‌ها"]) {
       expect(
@@ -196,13 +196,13 @@ describe("the words the screen uses for itself", () => {
   it("explains a store in plain words when the mark is opened", async () => {
     renderApp("/corpus");
     const block = await screen.findByRole("region", {
-      name: "نسخه‌ای که به کار می‌رود",
+      name: "نسخه‌هایی که الان به کار می‌روند",
     });
     await userEvent.click(
       within(block).getByRole("button", { name: "ساخته‌ها چیست؟" }),
     );
     expect(screen.getByRole("tooltip")).toHaveTextContent(
-      /ما با دستورهای واژه‌سازی ساخته‌ایم/,
+      /خودمان با دستورهای واژه‌سازی ساخته‌ایم/,
     );
   });
 
@@ -235,7 +235,7 @@ describe("when the report is about another corpus version", () => {
     );
     renderApp("/corpus");
     expect(
-      await screen.findByText(/تنها برای نسخهٔ خودش درست است/),
+      await screen.findByText(/فقط برای نسخهٔ خودش درست است/),
     ).toBeInTheDocument();
   });
 });
@@ -248,7 +248,7 @@ describe("when no ingest has been reported", () => {
     );
     renderApp("/corpus");
     expect(
-      await screen.findByText(/عددِ ساختگی بدتر از نبودِ عدد است/),
+      await screen.findByText(/عددِ ساختگی از نبودِ عدد بدتر است/),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("region", { name: `پوشش ${LEXICON}` }),
@@ -261,7 +261,7 @@ describe("when the search index is not there", () => {
     vi.stubGlobal("fetch", answerWith({ detail: "not built" }, 503));
     renderApp("/corpus");
     expect(
-      await screen.findByText(/پس از نخستین درون‌ریزی اینجا پر می‌شود/),
+      await screen.findByText(/وقتی نخستین پیکره بارگذاری شود، این صفحه پر می‌شود/),
     ).toBeInTheDocument();
   });
 });

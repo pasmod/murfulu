@@ -51,7 +51,7 @@ export function EvidenceList({
   docCount,
   version,
   glance,
-  figures = "شمارش بالا",
+  figures = "شمارِ بالا",
   onChoose,
   onPage,
 }: EvidenceListProps) {
@@ -67,21 +67,21 @@ export function EvidenceList({
     <div className={styles.list}>
       {!sameVersion ? (
         <p className={styles.note}>
-          این فهرست از نسخهٔ <Latin>{whole.corpus_version ?? ""}</Latin> پیکره است و {figures} از
+          این فهرست از نسخهٔ <Latin>{whole.corpus_version ?? ""}</Latin> پیکره است، ولی {figures} از
           نسخهٔ <Latin>{version ?? ""}</Latin>.
         </p>
       ) : docCount !== undefined && whole.total !== docCount ? (
         <p className={styles.note}>
-          این فهرست <Num value={whole.total} /> متن دارد و {figures} <Num value={docCount} />، چون
-          جست‌وجوی متن‌ها چند حرف را که شمارش جدا می‌شمارد یکی می‌گیرد، مانند آ و ا یا ۀ و ه، و چند
-          واژه را جور دیگری از هم جدا می‌کند.
+          این فهرست <Num value={whole.total} /> متن دارد و {figures} <Num value={docCount} />. فرقشان
+          از اینجاست که جست‌وجوی متن‌ها برخی حرف‌ها را یکی می‌گیرد، مثل «آ» و «ا» یا «ۀ» و «ه»، ولی
+          شمارش آنها را جدا می‌شمارد. مرز برخی واژه‌ها را هم هر کدام جور دیگری می‌گذارد.
         </p>
       ) : null}
 
       <AuthorFilter evidence={whole} chosen={chosen} onChoose={onChoose} />
 
       {found.summaryFailed ? (
-        <p className={styles.trouble}>شمار این فهرست نرسید. کمی بعد دوباره بیازمایید.</p>
+        <p className={styles.trouble}>شمار این فهرست نرسید. کمی بعد دوباره امتحان کنید.</p>
       ) : current ? (
         <p className={styles.count} role="status">
           {matching === 0 ? (
@@ -100,7 +100,7 @@ export function EvidenceList({
       ) : null}
 
       {found.pageFailed ? (
-        <p className={styles.trouble}>این صفحه نرسید. کمی بعد دوباره بیازمایید.</p>
+        <p className={styles.trouble}>این صفحه نرسید. کمی بعد دوباره امتحان کنید.</p>
       ) : shown ? (
         <ol className={styles.texts}>
           {shown.texts.map((text) => (
@@ -119,7 +119,7 @@ export function EvidenceList({
             disabled={page <= 1}
             onClick={() => onPage(page - 1)}
           >
-            صفحهٔ پیشین
+            صفحهٔ قبل
           </button>
           <button
             type="button"
@@ -127,7 +127,7 @@ export function EvidenceList({
             disabled={last >= matching}
             onClick={() => onPage(page + 1)}
           >
-            صفحهٔ پسین
+            صفحهٔ بعد
           </button>
         </nav>
       ) : null}

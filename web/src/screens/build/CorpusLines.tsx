@@ -82,7 +82,7 @@ function Lines({
   }, [spelling]);
 
   if (failed) {
-    return <p className={list.trouble}>سطرها نرسیدند. کمی بعد دوباره بیازمایید.</p>;
+    return <p className={list.trouble}>نتوانستیم سطرها را بیاوریم. کمی بعد دوباره امتحان کنید.</p>;
   }
   if (!first || first.spelling !== spelling) return <Waiting />;
 
@@ -101,7 +101,7 @@ function Lines({
 
   return (
     <div className={styles.lines}>
-      <p className={list.note}>این سطرها شاهد املای «{spelling}»اند، نه یکی از خوانش‌های آن.</p>
+      <p className={list.note}>در این سطرها حروف «{spelling}» آمده است، به هر خوانشی که باشد.</p>
       {/* One button in one place, above the list either way: replacing it
           as the list opens would drop the reader's focus on the page. */}
       {toggle}
@@ -147,7 +147,7 @@ function Whole({
 }) {
   const found = useEvidence(spelling, choice, { open: true, size: PAGE });
   if (found.summaryFailed && !found.whole) {
-    return <p className={list.trouble}>شمار متن‌ها نرسید. کمی بعد دوباره بیازمایید.</p>;
+    return <p className={list.trouble}>شمار متن‌ها نرسید. کمی بعد دوباره امتحان کنید.</p>;
   }
   if (!found.whole) return <Waiting />;
   return (

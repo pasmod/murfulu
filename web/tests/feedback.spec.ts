@@ -58,7 +58,7 @@ test.describe("the feedback button", () => {
 
     const panel = page.getByRole("dialog");
     await expect(
-      panel.getByRole("group", { name: "دربارهٔ چه می‌گویید؟" }),
+      panel.getByRole("group", { name: "بازخوردتان دربارهٔ چیست؟" }),
     ).toBeVisible();
 
     // Nothing to type a credential into, under any of the words this app has

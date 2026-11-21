@@ -174,7 +174,7 @@ export function Affixes() {
 
       {error ? (
         <p className={styles.trouble} role="status">
-          دستورها خوانده نشد. کمی بعد دوباره بیازمایید.
+          نتوانستیم دستورها را بیاوریم. کمی بعد دوباره امتحان کنید.
         </p>
       ) : null}
 
@@ -183,7 +183,7 @@ export function Affixes() {
       {data ? (
         <>
           <label className={styles.filterLabel} htmlFor="meaning">
-            میان معناها بگردید
+            دنبال یک معنا بگردید
           </label>
           <Suggest
             id="meaning"
@@ -230,7 +230,7 @@ export function Affixes() {
           </p>
 
           <p className={styles.total} role="status">
-            <Num value={shown.length} /> معنا از <Num value={data.count} />.
+            <Num value={shown.length} /> معنا از <Num value={data.count} /> معنا.
           </p>
 
           <ul className={styles.meanings}>
@@ -242,11 +242,11 @@ export function Affixes() {
           {silent.length > 0 ? (
             <section className={styles.silent} aria-labelledby="silent">
               <h2 id="silent" className={styles.silentTitle}>
-                وندهایی که سرچشمه معنایی برایشان ننوشته است
+                وندهایی که دستورنامه معنایی برایشان ننوشته است
               </h2>
               <p className={styles.silentNote}>
-                <Num value={silent.length} /> وند. این به معنای بی‌معنا بودن
-                آنها نیست؛ دستورنامه دربارهٔ آنها چیزی نگفته است.
+                <Num value={silent.length} /> وند. این وندها بی‌معنا نیستند؛ فقط
+                دستورنامه دربارهٔ معنایشان چیزی نگفته است.
               </p>
               <ul className={styles.silentList}>
                 {silent.map((one) => (
@@ -273,10 +273,10 @@ export function Affixes() {
                 دستورهایی که وندی ندارند
               </h2>
               <p className={styles.silentNote}>
-                <Num value={joined.length} /> دستور. اینها واژه را با وند
-                نمی‌سازند: دو واژه را به هم می‌پیوندند، یا گونهٔ واژه را
-                دگرگون می‌کنند بی‌آنکه چیزی بیفزایند. نمونه، خواناترین چیز
-                دربارهٔ آنهاست.
+                <Num value={joined.length} /> دستور. این‌ها با وند واژه
+                نمی‌سازند: یا دو واژه را به هم می‌چسبانند، یا بی‌آنکه چیزی اضافه
+                کنند، گونهٔ واژه را عوض می‌کنند. نمونه‌هایشان بهتر از هر توضیحی
+                نشان می‌دهند چه می‌کنند.
               </p>
               <ul className={styles.joinedList}>
                 {joined.map((one) => (

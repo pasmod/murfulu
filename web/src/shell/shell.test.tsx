@@ -89,7 +89,7 @@ describe("every screen", () => {
       // reader would do here. A built one shows the thing itself — the word
       // detail screen leads with the word, not with a description of itself —
       // so this follows the marker rather than a list that would go stale.
-      const pending = screen.queryByText(/این صفحه هنوز ساخته نشده است/);
+      const pending = screen.queryByText(/این صفحه هنوز آماده نیست/);
       if (pending) {
         expect(screen.getByText(one.purpose)).toBeInTheDocument();
         expect(screen.getByText(one.invitation)).toBeInTheDocument();

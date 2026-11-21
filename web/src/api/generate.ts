@@ -71,6 +71,12 @@ export interface Attestation {
 export interface BuiltForm {
   form_latin: string;
   form_fa: string;
+  /**
+   * The same letters with the short vowels the reading has (زبر، زیر، پیش),
+   * for display only; everything matches on the plain spelling (DECISIONS
+   * 2026-11-21). Absent from an older API.
+   */
+  form_fa_marked?: string;
   word_class: string;
   depth: number;
   semantic_tags: string[];
@@ -209,6 +215,8 @@ export interface FormScore {
 export interface Reading {
   latin: string;
   spelling_fa: string;
+  /** With its short vowels, for display only (DECISIONS 2026-11-21). */
+  spelling_fa_marked?: string;
   lexicon_category: string | null;
   /** The linguist's word-bank groups, by his names. Empty before karbon 1.3. */
   bank_groups?: string[];

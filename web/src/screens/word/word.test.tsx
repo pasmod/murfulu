@@ -147,7 +147,7 @@ describe("the dispersion chart", () => {
     );
     renderApp(ROUTE);
     expect(
-      await screen.findByText(saying(/هیچ‌یک از .* کاربرد این واژه تاریخ‌دار نیست/)),
+      await screen.findByText(saying(/هیچ‌یک از .* کاربرد این واژه تاریخ ندارد/)),
     ).toBeInTheDocument();
   });
 });
@@ -157,7 +157,7 @@ describe("when the word is not there", () => {
     vi.stubGlobal("fetch", answerWith({ detail: "no word" }, 404));
     renderApp(ROUTE);
     expect(
-      await screen.findByText("این واژه در پیکرهٔ کنونی نیست."),
+      await screen.findByText("این واژه در نسخهٔ کنونی پیکره نیامده است."),
     ).toBeInTheDocument();
   });
 });

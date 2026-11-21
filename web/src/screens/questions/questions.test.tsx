@@ -147,13 +147,13 @@ describe("the questions screen", () => {
   it("marks a question that is stopping work", async () => {
     serve(answer({ questions: [question({ blocks_work: true, state: "blocked" })] }));
     renderApp("/questions");
-    expect(await screen.findAllByText("کار را متوقف کرده")).not.toHaveLength(0);
+    expect(await screen.findAllByText("کار به آن بند است")).not.toHaveLength(0);
   });
 
   it("tells a reader they cannot answer, before they write one", async () => {
     serve(answer({ answering_as: null }));
     renderApp("/questions");
-    expect(await screen.findByText(/پاسخ دادن برای شما باز نیست/)).toBeInTheDocument();
+    expect(await screen.findByText(/نمی‌توانید به آن‌ها پاسخ دهید/)).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "ثبت پاسخ" })).toBeNull();
   });
 
@@ -198,7 +198,7 @@ describe("the questions screen", () => {
       await screen.findByRole("button", { name: /پاسخ داده شده/ }),
     );
     expect(await screen.findByText("بله.")).toBeInTheDocument();
-    expect(screen.getByText(/پاسخ تغییر کرده/)).toBeInTheDocument();
+    expect(screen.getByText(/پاسخ عوض شده/)).toBeInTheDocument();
   });
 
   it("counts the questions by state, and each count is the filter", async () => {
@@ -243,7 +243,7 @@ describe("the questions screen", () => {
     );
     renderApp("/questions");
     expect(await screen.findByText("L1")).toBeInTheDocument();
-    for (const gone of [/همهٔ پرسش‌ها/, /کار را متوقف کرده/, /پس گرفته شده/, /فعلاً پرسیده نمی‌شود/]) {
+    for (const gone of [/همهٔ پرسش‌ها/, /کار به آن بند است/, /پس گرفته شده/, /فعلاً کنار گذاشته شده/]) {
       expect(screen.queryByRole("button", { name: gone })).toBeNull();
     }
     expect(screen.getByRole("button", { name: /بی‌پاسخ/ }).textContent).toMatch(/۱/);
@@ -266,7 +266,7 @@ describe("the questions screen", () => {
     );
     renderApp("/questions?q=L2");
     expect(await screen.findByText("L2")).toBeInTheDocument();
-    expect(screen.getByText(/پس گرفته شد، چون/)).toBeInTheDocument();
+    expect(screen.getByText(/این پرسش را پس گرفتیم، چون/)).toBeInTheDocument();
   });
 
   it("shows one question at a time, and says which one", async () => {
@@ -300,7 +300,7 @@ describe("the questions screen", () => {
     await userEvent.click(screen.getAllByRole("button", { name: "پرسش بعدی" })[0]!);
     expect(await screen.findByText("L2")).toBeInTheDocument();
 
-    await userEvent.click(screen.getAllByRole("button", { name: "پرسش پیشین" })[0]!);
+    await userEvent.click(screen.getAllByRole("button", { name: "پرسش قبلی" })[0]!);
     expect(await screen.findByText("L1")).toBeInTheDocument();
   });
 
@@ -312,7 +312,7 @@ describe("the questions screen", () => {
     );
     renderApp("/questions");
     await screen.findByText("L1");
-    expect(screen.getAllByRole("button", { name: "پرسش پیشین" })[0]!).toBeDisabled();
+    expect(screen.getAllByRole("button", { name: "پرسش قبلی" })[0]!).toBeDisabled();
 
     await userEvent.click(screen.getAllByRole("button", { name: "پرسش بعدی" })[0]!);
     await screen.findByText("L2");
@@ -356,7 +356,7 @@ describe("the questions screen", () => {
     renderApp("/questions");
     await screen.findByText("L1");
     await userEvent.type(
-      screen.getByPlaceholderText("پاسخ خود را به فارسی بنویسید."),
+      screen.getByPlaceholderText("پاسختان را به فارسی بنویسید."),
       "بله، همان است.",
     );
     await userEvent.click(screen.getByRole("button", { name: "ثبت پاسخ" }));

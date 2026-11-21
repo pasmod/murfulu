@@ -9,7 +9,7 @@ import type { Level } from "../../api/texts";
 /** What each level is called, for the label and the legend. */
 export const LEVEL_FA: Record<Level, string> = {
   sure: "مطمئن",
-  mid: "کمابیش",
+  mid: "کمابیش مطمئن",
   unsure: "نامطمئن",
 };
 

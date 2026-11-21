@@ -71,7 +71,7 @@ export function Answer({
     } catch (failed: unknown) {
       setTrouble(
         failed instanceof ApiError && failed.trouble === "not-allowed"
-          ? "این حساب اجازهٔ پاسخ دادن ندارد."
+          ? "با این حساب نمی‌توانید پاسخ دهید."
           : failed instanceof Error
             ? failed.message
             : String(failed),
@@ -113,7 +113,7 @@ export function Answer({
               className={styles.clearChoice}
               onClick={() => setChosen(null)}
             >
-              برداشتن گزینه
+              پاک کردن انتخاب
             </button>
           ) : null}
         </fieldset>
@@ -127,7 +127,7 @@ export function Answer({
             : "پاسخ"}
         {offers ? (
           <span className={styles.hint}>
-            می‌توانید تنها گزینه‌ای را برگزینید، تنها بنویسید، یا هر دو.
+            می‌توانید فقط یک گزینه را برگزینید، فقط بنویسید، یا هر دو را.
           </span>
         ) : null}
         <textarea
@@ -138,7 +138,7 @@ export function Answer({
           placeholder={
             offers
               ? "هر چه می‌خواهید دربارهٔ این پرسش بنویسید."
-              : "پاسخ خود را به فارسی بنویسید."
+              : "پاسختان را به فارسی بنویسید."
           }
         />
       </label>
@@ -150,7 +150,7 @@ export function Answer({
             checked={reverses}
             onChange={(e) => setReverses(e.currentTarget.checked)}
           />
-          این پاسخ، پاسخ پیشین را نقض می‌کند
+          این پاسخ با پاسخ قبلی فرق دارد و جای آن را می‌گیرد
         </label>
       ) : null}
 

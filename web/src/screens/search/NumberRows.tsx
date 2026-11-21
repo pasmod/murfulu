@@ -16,7 +16,7 @@ import { COUNTS, getTerm, setTerm } from "./syntax";
 import styles from "./Builder.module.css";
 
 /** A range typed backwards, in the search's own words for it (Search.tsx). */
-const BACKWARDS = "سدهٔ آغاز از سدهٔ پایان بزرگ‌تر است.";
+const BACKWARDS = "سدهٔ اول دیرتر از سدهٔ دوم است.";
 
 export interface NumberRowsProps {
   query: string;
@@ -176,14 +176,14 @@ export function NumberRows({ query, searched, onChange }: NumberRowsProps) {
     <>
       <p className={styles.row}>
         <label className={styles.label} htmlFor="build-count">
-          بسامد در پیکره
+          چند بار در پیکره آمده
         </label>
         <span className={styles.controls}>
           <span className={styles.picker}>
             <select
               className={styles.select}
               id="build-count-operator"
-              aria-label="جور بسامد"
+              aria-label="بیشتر، کمتر یا درست همین شمار"
               value={countOperator}
               onChange={(event) => writeCount(event.target.value, countValue)}
             >
@@ -217,7 +217,7 @@ export function NumberRows({ query, searched, onChange }: NumberRowsProps) {
             className={styles.number}
             resetOn={searched}
             id="build-century-from"
-            aria-label="سده از"
+            aria-label="از سدهٔ"
             aria-invalid={pending.low !== undefined || undefined}
             invalid={pending.low !== undefined ? BACKWARDS : undefined}
             aria-describedby={backwards ? "build-century-backwards" : undefined}
@@ -232,7 +232,7 @@ export function NumberRows({ query, searched, onChange }: NumberRowsProps) {
             className={styles.number}
             resetOn={searched}
             id="build-century-to"
-            aria-label="سده تا"
+            aria-label="تا سدهٔ"
             aria-invalid={pending.high !== undefined || undefined}
             invalid={pending.high !== undefined ? BACKWARDS : undefined}
             aria-describedby={backwards ? "build-century-backwards" : undefined}

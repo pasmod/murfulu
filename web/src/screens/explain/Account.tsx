@@ -39,13 +39,13 @@ export function Account({ account, form }: { account: Analysis; form: string }) 
       {evidence ? (
         <p className={styles.evidence}>
           {evidence.level === "none" ? (
-            <>این پایه در پیکره نوشته نشده است.</>
+            <>این پایه در پیکره نیامده است.</>
           ) : evidence.function_word ? (
             <>این پایه: {FUNCTION_WORD_SHORT}.</>
           ) : (
             <>
-              این پایه در <Num value={evidence.doc_count} /> سند آمده است
-              {evidence.level === "spelling" ? " — شمار برای این املاست" : null}.
+              این پایه در <Num value={evidence.doc_count} /> متن آمده است
+              {evidence.level === "spelling" ? " — شمار برای همین حروف است" : null}.
             </>
           )}
         </p>
