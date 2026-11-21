@@ -1011,3 +1011,30 @@ only *Xir* (خَیْر), قوم only *Qum* (قَوْم), اهل only *Ohl* (اَ
 **Waiting for the linguist** (FOR_THE_LINGUIST L40) before it goes to the
 karbon maintainer: which of these the bank should hold is his to say.
 
+
+### A19. ع is written with a vowel letter, so a reading does not say how many syllables its word has
+
+Measured 2026-11-21 on `lexicon-20261111` (karbon 1.3.2), while weighing
+readings against the poem's metre (`murfulu/behnevis/metre.py`, FINDINGS
+2026-11-21). **Of the 2,161 readings whose spelling has an ع, 1,170 have two
+vowels side by side**, and only 5 write ع with Behnevis's mark `ˈ`
+(چهارطبع `čahārtabˈ`, طبع‌فریب `tabˈfarib`). Most of the others write a vowel
+letter where the ع stands: جعفری `jaafari` (*jaˈfari*), جماعت‌خانه
+`jamāatxāne`, خوش‌عاقبت `xošaāqebat`, معرکه‌گیر `maarakahgire`, عالی‌همت
+`aālihemt`, شریعتمدار `šariatmadār`.
+
+**Why it matters here.** Persian has no two vowels side by side inside a word,
+so `jaafari` reads as four syllables, *ja-a-fa-ri*, where the word has three,
+*jaˈ-fa-ri*; `jamāatxāne`, written the same way, has its vowels right and the
+ع unwritten between them (*jamāˈatxāne*). A reader of the syllables cannot
+tell the two apart. The metre step reads such a vowel as the ع it stands for, by a
+rule of thumb (`spoken()`: of two short vowels the second, before one
+consonant; a short vowel ending the word after a long one; a short vowel
+before a long one), which is a guess about karbon's intent, not its data;
+943 of the 2,161 readings are read differently by it. The letter model learns
+from the bank, so its guesses carry the same habit into the text (عالم
+`aālam`, معلوم `maalum`, شمع `šama`).
+
+**The request.** Write ع (and the hamza) with `ˈ` throughout, as the five
+readings above do, so a reading says how many syllables its word has. A9's
+`-āe` for ـاه is the same kind of fault for ه.

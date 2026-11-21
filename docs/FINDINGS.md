@@ -5,6 +5,72 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-21 — the poem's metre as a signal for the automatic Behnevis
+
+An experiment on the project lead's choice of the day: does the poem's metre
+make the automatic Behnevis surer, so that fewer words on the reading screen
+need a person? Built in `src/murfulu/behnevis/metre.py`, measured by
+`tools/evaluate_behnevis_metre.py v22` (`data/behnevis-metre-eval-v22.md`).
+**Rough first measurements on poetry, not results**; nothing served changed.
+"Right" below means what the evaluation has always meant by it: the word's
+own vowel signs fit the reading — the marked letters checked, not the whole
+reading.
+
+**Seven running words in ten have a metre.** Corpus v22 carries none, so
+Ganjoor's labels were joined by poem id and kept only where the first verse
+half agrees and every section has the one label: 115,443 poems, **18.2 M of
+the 25.5 M running words (71.2 %)**. Of the 133,142 documents, 3.8 % were
+dropped because their first verse half differs from Ganjoor's poem of that id
+— the corpus snapshot is older, as Sokhan's metre study found — and 6.2 %
+have no single label (both printed by `tools/extract_metre_lines.py`).
+
+**What the metre does, on the hard words** (8,980 marked words of 36
+held-out poets, every sign of the line hidden): right overall 46.2 % → 51.0 %;
+at 0.9 or more, 23.8 % → 25.5 % of the words, of them right 68.4 % → 71.4 %
+(95 % sure of at least 56.3 % → 61.9 %, drawing poets again). At 0.95 it is
+worse: 77.8 % → 75.7 % right, with more words above it. By where the reading
+came from: a single bank reading 38 % → 47 % right (among them بود, *Bud* in
+the bank and *bovad* from the stems), inflected forms 54 % → 61 %, letter
+guesses 37 % → 42 %, choices among the bank's readings 62.5 % → 63.8 %.
+
+**What is left to a person** (one poem in 50, 400,495 running words, read as
+the screen reads them): below 0.7 (red) 35.0 % → 33.2 %; below 0.9 47.8 % →
+44.6 %. Projected onto all 18.2 M words with a metre — assuming the sample
+stands for them — about 330,000 fewer red words and 580,000 fewer below 0.9.
+The letter guesses move most: red 57 % → 49 %.
+
+**The limit, measured.** Of the 4,834 wrong readings before, 39.5 % were of
+presence or length (some reading offered fits the signs and behaves
+differently in a line, so the metre can prefer it), 23.3 % of vowel quality
+(every reading offered that fits behaves as the wrong one does: *kenār*,
+*kanār*), 37.2 % not offered at all. The metre made 525 of the 1,911 presence
+or length errors right (27 %) and turned 91 right readings wrong. **Six
+errors in ten are out of the metre's reach as the model offers its
+readings**: the vowel's quality, and the readings it never offers, which
+the metre cannot make right (it may lower such a word's confidence, or raise
+a wrong one's by ruling out its rivals).
+
+**Three things the metre showed about the data.**
+
+- *The bank writes ع with a vowel letter* (*jaafari*, *aālam*): counted on
+  `lexicon-20261111`, 1,170 of the 2,161 readings whose spelling has an ع
+  have two vowel letters side by side (UPSTREAM A19). Some of those stand
+  for the ع itself, and the reading then has a syllable too many (*jaafari*,
+  four for three); others for a vowel after it (*jamāatxāne*), which is
+  right. The metre step tells the two apart by a rule of thumb (`spoken()`).
+- *Classical forms are not offered*: بگذر *bogzar*, نتوان *natvān*, اما *ammā*
+  — the bank and the stems give the modern ones (FOR_THE_LINGUIST L50).
+- *Wrong letter guesses stand out*: مشکل *moškl* is no syllable at all, and
+  خصم *xasam* and روشن *ravešn* did not fit the lines they stood in; the
+  metre takes such readings' confidence.
+
+**How it was kept honest.** Poets held out as in the existing evaluation
+(the same fold, now `behnevis/folds.py`; `data/behnevis-eval-v22.md` is
+unchanged byte for byte); the licences' costs set before measuring, with
+three other settings shown beside them (they move the numbers by up to
+three and a half points); without the metre's word a reading keeps the
+model's order and confidence (a test holds it); the debugging looked only at
+training poets' lines.
 ## 2026-11-21 — a spelling's entries: which one the evidence supports, and readings borrowed from each other
 
 The compound page for دل opened on «دل Dal», a tree in the Hamadan dialect,

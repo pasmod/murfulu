@@ -3005,3 +3005,25 @@ class it builds, so they read as two analyses rather than one word twice
 analysis its gloss names, which roughly halves the attested rows on the
 compound page; (2) a condition — V-079 builds far fewer words; (3) one row —
 a display change only, nothing the engine builds.
+## L50. Readings the metre asks for: classical forms the bank does not hold
+
+Found 2026-11-21 while weighing the automatic Behnevis against the poem's
+metre (FINDINGS 2026-11-21); **not in the app's questions**, not blocking.
+An experiment only: nothing on the reading screen changed.
+
+**What we saw.** Where a verse half does not fit its metre with any reading
+the model offers, the word to blame is often one whose classical reading the
+bank does not hold: بگذر is read *begozar* (three syllables) where the verse
+needs *bogzar* (two); نتوان *natavān* where it needs *natvān*; اما *amā*
+where it needs *ammā*. Others are wrong letter guesses (مشکل *moškl*, خصم
+*xasam*), which the metre rightly takes the confidence from.
+
+### The question
+
+1. Should the reading screen offer a verse form beside the modern one where
+   the metre needs it (*bogzar* beside *begozar*), and should such forms go
+   to the bank, or stay a layer of ours for verse only?
+2. How should Behnevis write ع inside a word (UPSTREAM A19): always with `ˈ`
+   (*jaˈfari*), or as the bank mostly does now, with a vowel letter
+   (*jaafari*)? The metre step reads the vowel letter as the consonant by a
+   rule of ours, unconfirmed.

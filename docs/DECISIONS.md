@@ -2,6 +2,47 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 — PROPOSED, not decided: the poem's metre as a step of the automatic Behnevis
+
+**Proposed by engineering after the experiment the project lead chose that
+day** (FINDINGS 2026-11-21, `data/behnevis-metre-eval-v22.md`). Nothing is
+served; the decision and any deploy are the project lead's.
+
+**What would be built.** The reading screen would weigh each verse half's
+words against its poem's metre before showing them, with the step built and
+measured here (`behnevis/metre.py`, `Metre.weigh`): a reading the line
+cannot hold loses its confidence, a rival it rules out gives its share to
+the readings that fit. Two things it needs that the server lacks: the metre
+label per poem (a small table from Ganjoor's labels, joined as
+`tools/extract_metre_lines.py` joins them, or a field of `documents` at the
+next corpus build) and a switch beside `MURFULU_BEHNEVIS_PATH`, off by
+default, so the screen is unchanged until it is turned on.
+
+**What it would bring, measured on v22** (rough, on poetry; "right" means
+the word's own signs fit the reading). About two words in a hundred fewer
+below 0.7 in poems with a metre (35.0 % → 33.2 %), three fewer below 0.9
+(47.8 % → 44.6 %), and the reading shown right more often: on the held-out
+poets' hard marked words 46.2 % → 51.0 % overall, 68.4 % → 71.4 % at 0.9 or
+more. **Against it**: at 0.95 the accuracy falls (77.8 % → 75.7 %), so 0.95
+should not be a level while it is on; and six errors in ten are of a kind
+the metre cannot turn right, so it is a small step, not the remedy for the
+red.
+
+**Decided here, under the working rule, for the experiment only:**
+
+- *The metre is Ganjoor's label*, joined by poem id and kept only where the
+  first verse half agrees, every section labelled alike.
+- *The licences are those of Sokhan's metre catalogue* (first فعلاتن long,
+  last فعلن as فع لن, every فعلن in متدارک, قلب in the two catalogue metres,
+  the رباعی's twelve patterns), not the handbooks' broader ones, which let
+  wrong readings fit too.
+- *Their costs were set before measuring* (`Licences()`): ezafe and a long
+  final short vowel 0.5, a short final long vowel 1, another reading 3; each
+  unit halves a candidate's weight.
+- *The metre only raises a confidence by ruling out a named rival*; readings
+  the model never offered keep their share at full weight.
+- *A vowel letter the bank writes for ع is read as the consonant* by a rule
+  of thumb (`spoken()`, UPSTREAM A19), unconfirmed (FOR_THE_LINGUIST L50).
 ## 2026-11-21 (third) — the compound page: one entry at a time, the best-evidenced first
 
 The project lead sent the compound page for دل headed «دل Dol» (the local

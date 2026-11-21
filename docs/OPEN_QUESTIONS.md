@@ -5,6 +5,20 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-21 (the metre)
+
+### S51. Serve the poem's metre on the reading screen?
+
+Measured 2026-11-21 (FINDINGS, DECISIONS «PROPOSED»): in poems with a known
+metre — seven running words in ten — it takes about two words in a hundred
+out of the red and three out of the level below 0.9, and shows the right
+reading more often; it makes 0.95 less trustworthy. Six errors in ten are of
+a kind it cannot turn right (vowel quality, readings never offered).
+**Options:** build it in, switchable, at the next model rebuild
+(engineering's proposal); keep it an experiment and turn first to the most
+frequent unsure words, the option set aside that day, which goes at the
+words a person must settle whatever the metre says; or both. The project
+lead's call; nothing goes to the server before it.
 ## Opened 2026-11-21 (the compound page for دل)
 
 ### S50. The build screen reads a spelling's entries with the same borrowed readings
