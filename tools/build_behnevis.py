@@ -36,6 +36,7 @@ from pathlib import Path
 from elasticsearch.helpers import scan
 
 from murfulu.behnevis.choice import Answered, ChoiceModel
+from murfulu.behnevis.folds import MAX_SIGNED_SHARE
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.letters import LetterModel
 from murfulu.behnevis.picks import picks_from
@@ -52,13 +53,6 @@ from murfulu.search.indices import connect
 from murfulu.search.texts import _source_line, _units, tokens
 
 DATA = Path(__file__).resolve().parents[1] / "data"
-
-#: A line where more than this share of the words carry signs is taken as a
-#: quotation — in Ganjoor mostly Arabic, which editions vowel throughout — and
-#: not learned from: its «مِن» is not the Persian *man*, and counting it made a
-#: single bank reading look wrong two times in three (the first build,
-#: 2026-11-14). Persian lines carry a sign on a word here and there.
-MAX_SIGNED_SHARE = 0.3
 
 
 def main(argv: list[str] | None = None) -> int:

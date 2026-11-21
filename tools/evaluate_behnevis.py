@@ -23,11 +23,11 @@ from __future__ import annotations
 
 import argparse
 import json
-import zlib
 from collections import Counter
 from pathlib import Path
 
-from murfulu.behnevis.choice import Answered, ChoiceModel, ranked
+from murfulu.behnevis.choice import Answered, ranked
+from murfulu.behnevis.folds import fold_model, held_out
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.letters import LetterModel, latin_key, shape
 from murfulu.behnevis.stats import (
@@ -163,11 +163,6 @@ def certainty(
     return lines
 
 
-def held_out(name: str, every: int) -> bool:
-    """One in ``every`` by a stable hash, so a rerun holds out the same."""
-    return zlib.crc32(name.encode()) % every == 0
-
-
 def main(argv: list[str] | None = None) -> int:
     """Run the three measurements and print the report."""
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
@@ -216,42 +211,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # 1. marked words, one poet in five held out --------------------------------
     test = [m for m in marked if held_out(m["author"], 5)]
-    # People's picks on the reading screen are already among the answers the
-    # build saved (by_person), split by poet like the rest; counted once.
-    people = [a for a in answered if a.by_person]
-    train_answered = [a for a in answered if not held_out(a.author, 5)]
-    covered: dict[str, list[int]] = {}
-    for m in marked:
-        if held_out(m["author"], 5):
-            continue
-        candidates = list(
-            dict.fromkeys(
-                (*model.functions.get(m["spelling"], ()), *bank.get(m["spelling"], ()))
-            )
-        )
-        if not candidates:
-            continue
-        verdicts = [harakat.fits(m["written"], c) for c in candidates]
-        if not any(verdicts) and not all(v is False for v in verdicts):
-            continue  # the signs cannot judge these readings
-        fits = any(verdicts)
-        covered.setdefault(m["spelling"], [0, 0])[0 if fits else 1] += 1
-    for a in people:
-        if not held_out(a.author, 5):
-            covered.setdefault(a.spelling, [0, 0])[0] += 1
-    fold = Transcriber(
-        bank=bank,
-        letters=model.letters,
-        choice=ChoiceModel.train(train_answered),
-        covered={k: (v[0], v[1]) for k, v in covered.items()},
-        inflection=inflection,
-        inflector=inflector,
-        # Measured on the training poets only, as the build measures it on all.
-        inflected_fit=inflector.measure(
-            (m for m in marked if not held_out(m["author"], 5)),
-            lambda spelling: bool(bank.get(spelling) or model.functions.get(spelling)),
-        ),
-    )
+    fold = fold_model(model, bank, inflection, inflector, marked, answered)
     results = []
     for m in test:
         word = fold.word(
