@@ -613,3 +613,25 @@ backup of step 0.
 directly (the site password was not used). Not viewed: the compound screen
 and the word bank with their marks, and the other screens' new texts beyond
 the served-file check.
+
+## 20. Two values in place of one score, the new-words view, and the short vowels everywhere — run 2026-11-21
+
+The build screen's two values (how well built, 0–100, and what the corpus
+says), the «واژه‌های تازه» view, and the short vowels on the search, word and
+reading screens (DECISIONS 2026-11-21, second), on the project lead's word
+(«Yes, deploy»). Run from `main` at `843bd94`. No migration, no data. The
+rollback is `deploy` from `d3cb586`, with L36's wording as it was in the
+backup of step 0.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | `pg_dump` on the server | `data/backups/db-before-two-values-20261121.dump`, 13 tables, read back with `pg_restore -l` |
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy |
+| 2 | `deploy/server.sh questions` | dry run: L36 reworded (5 options), 15 unchanged, L21 kept (answered) |
+| 3 | `deploy/server.sh questions --apply` | the same, written; a second dry run shows 16 unchanged |
+| 4 | `deploy/server.sh check` | all checks passed, corpus v22; the site answers 401 logged out |
+| 5 | inside the api container | `/generate رفتن` at two steps: 594 forms, each `score` with `build`, `corpus`, `texts` and no `value`; 12 under their reading, 529 not in the corpus, 59 built 70 or better |
+| 6 | the pages, through an SSH tunnel to the web container | at 1280 and 390 px: the build table, the «واژه‌های تازه» view (529 words, رَوِگی and the like at the top), the search for رفتار and its word page headed رَفتار |
+
+The pages were viewed on the server through the web container directly; the
+site password was not used.
