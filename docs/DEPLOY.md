@@ -587,3 +587,29 @@ rollback is `deploy` from `d57e2bc`.
 | 4 | grep in the web container's served files | «با این تمام شود» present; «می‌نویسد:» gone |
 
 The page itself was not viewed logged in on the server.
+
+## 19. The score, the table, the plain-Persian texts and the short vowels — run 2026-11-21
+
+The build screen's score from 0 to 100 in a table that sorts and filters
+(direction A), the rewritten interface texts across the screens, and the short
+vowels on Persian words (DECISIONS 2026-11-21), on the project lead's word to
+finish and deploy overnight. Run from `main` at `37f8634`. No migration, no
+data: the score reads the productivity figures already on the server. The
+rollback is `deploy` from `4af4cfa`, and the questions as they were are in the
+backup of step 0.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | `pg_dump` on the server | `data/backups/db-before-score-20261121.dump`, 13 tables, read back with `pg_restore -l` |
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy (1 min 9 s) |
+| 2 | `deploy/server.sh questions` | dry run: L48 added (5 options), L36 reworded (5 options), 14 unchanged, L21 kept (answered) |
+| 3 | `deploy/server.sh questions --apply` | the same, written; a second dry run shows 16 unchanged and nothing to do |
+| 4 | `deploy/server.sh check` | all checks passed, corpus v22; the site answers 401 logged out |
+| 5 | inside the api container | `/generate رفتن` at two steps: 594 forms, each with `score` and `form_fa_marked` and no `level`; رَفت 100 (70 + 30); 9 at 70 or more, 17 from 40 to 69, 568 below 40 |
+| 6 | the web container's served files | «بچسبان» and «شکافتن واژه» present; «تنها به این حروف» gone |
+| 7 | the pages, through an SSH tunnel to the web container | the build table for رفتن at 1280 and 390 px wide, one row's evidence open: score, parts out of 70 and 30, marked words, no row cut off |
+
+**The pages were viewed on the server this time**, through the web container
+directly (the site password was not used). Not viewed: the compound screen
+and the word bank with their marks, and the other screens' new texts beyond
+the served-file check.
