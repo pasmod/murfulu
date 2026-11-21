@@ -164,7 +164,7 @@ export function FormRow({
             aria-expanded={showing}
             onClick={() => setShowing((was) => !was)}
           >
-            {showing ? "بستن شواهد" : "شواهد"}
+            شواهد
           </button>
 
           <button
@@ -173,7 +173,7 @@ export function FormRow({
             aria-expanded={open}
             onClick={() => setOpen((was) => !was)}
           >
-            {open ? "بستن راه ساخت" : "راه ساخت"}
+            راه ساخت
             {form.paths.length > 1 ? (
               <span className={styles.paths}>
                 <Num value={form.paths.length} /> راه

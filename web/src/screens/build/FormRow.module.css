@@ -127,6 +127,14 @@
   color: var(--accent);
   cursor: pointer;
   font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+/* Open is said by the colour and by aria-expanded, not by a longer label:
+   «بستن شواهد» wrapped to two lines in the table's button column. */
+.toggle[aria-expanded="true"] {
+  background: var(--accent-wash);
+  color: var(--accent-strong);
 }
 
 .toggle:hover {
