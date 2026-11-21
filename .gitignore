@@ -72,5 +72,8 @@ data/compound_heads-*.json
 /data/behnevis-counts-*.json
 # the poems' metre labels, from Ganjoor (tools/extract_metre_lines.py)
 /data/behnevis-metre-v*.json
+# the most frequent unsure spellings with karbon's readings (tools/measure_unsure_spellings.py)
+/data/behnevis-unsure-v*.json
+/data/behnevis-unsure-tally-*.pickle
 # readings picked on the reading screen, fetched from the server
 /data/behnevis-proposals.jsonl
