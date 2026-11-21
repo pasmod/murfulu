@@ -7,7 +7,7 @@
  * mention of the four thousand it came from is a different claim entirely.
  */
 
-import { screen } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -306,5 +306,180 @@ describe("compound words", () => {
         notFound("نمی‌توانیم آن را با واژهٔ دیگری ترکیب کنیم."),
       ),
     ).toBeInTheDocument();
+  });
+});
+
+describe("a spelling that is several entries", () => {
+  /** دل as the dictionary has it: the heart, a tree, an ailment. */
+  const HEART = {
+    ...ANSWER.readings[0]!,
+    latin: "Del",
+    entry: 11456,
+    definition_fa: "قلب و فؤاد. (آنندراج). قلب که جسمی است گوشتی",
+    confirmed: 24,
+    pairings: [pairing({ form_latin: "delbar", front: { fa: "دل", latin: "Del", type: "nam" } })],
+  };
+  const TREE = {
+    ...ANSWER.readings[0]!,
+    latin: "Dal",
+    entry: 11452,
+    definition_fa: "در همدان اِشَنَک را گویند، که نوعی صنوبر است",
+    confirmed: 0,
+  };
+  const AILMENT = {
+    ...ANSWER.readings[0]!,
+    latin: "Dol",
+    entry: 11455,
+    definition_fa: "(از برهان) گرهی چند که در امعاء و شکم از قبض",
+    confirmed: 0,
+  };
+  const SEVERAL: Compounds = { ...ANSWER, readings: [HEART, TREE, AILMENT] };
+
+  /** The paragraph above the buttons, read whole: its numbers are their own elements. */
+  async function saying() {
+    return (await screen.findByText(/مدخل جدا دارد|مدخل\s*پیدا شد/)).textContent ?? "";
+  }
+
+  it("opens on the first entry the API sends and shows only that one", async () => {
+    // دل stacked all four entries, the tree first, so a reader met «دل Dal»
+    // and the heart's words three cards down. Reported on 2026-11-21.
+    vi.stubGlobal("fetch", answers(SEVERAL));
+    renderApp("/compound?word=%D8%AF%D9%84");
+    expect(await screen.findByRole("heading", { level: 2 })).toHaveTextContent("Del");
+    expect(screen.getAllByRole("heading", { level: 2 })).toHaveLength(1);
+    expect(screen.getByText(/قلب که جسمی است گوشتی/)).toBeInTheDocument();
+    expect(screen.getByText("delbar")).toBeInTheDocument();
+  });
+
+  it("offers the other entries, each with the few words that tell it apart", async () => {
+    vi.stubGlobal("fetch", answers(SEVERAL));
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const entries = await screen.findByRole("group", { name: "مدخل‌های «دل»" });
+    const buttons = within(entries).getAllByRole("button");
+    // The ailment's definition opens with its source in brackets, which says
+    // nothing about the word and is skipped.
+    expect(buttons.map((one) => one.textContent)).toEqual([
+      "Delقلب و فؤاد",
+      "Dalدر همدان اِشَنَک را…",
+      "Dolگرهی چند که در…",
+    ]);
+    expect(buttons[0]).toHaveAttribute("aria-pressed", "true");
+
+    await userEvent.click(buttons[1]!);
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Dal");
+    expect(screen.getByText(/نوعی صنوبر است/)).toBeInTheDocument();
+    expect(within(entries).getAllByRole("button")[1]).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+  });
+
+  it("tells apart two entries that share their Latin", async () => {
+    // Asked by *Allākolang*, the lexicon returns الاکلنگ (a seesaw) and الا
+    // کلنگ (beetles). Chosen by the Latin, the second could never be opened.
+    const SEESAW = { ...TREE, latin: "Allākolang", spelling_fa: "الاکلنگ", entry: 1 };
+    const BEETLES = {
+      ...TREE,
+      latin: "Allākolang",
+      spelling_fa: "الا کلنگ",
+      entry: 2,
+      definition_fa: "سوسک‌هایی که تاول آورند",
+    };
+    vi.stubGlobal("fetch", answers({ ...SEVERAL, readings: [SEESAW, BEETLES] }));
+    renderApp("/compound?word=All%C4%81kolang");
+    const entries = await screen.findByRole("group", { name: "مدخل‌های «Allākolang»" });
+    // Two spellings, one entry each: the sentence counts what the search
+    // matched, not entries of one spelling, and each button names its spelling.
+    expect(await saying()).toMatch(/برای «Allākolang» در واژه‌نامهٔ کاربن ۲ مدخل پیدا شد/);
+    expect(within(entries).getAllByRole("button")[1]).toHaveTextContent("الا کلنگ");
+    await userEvent.click(within(entries).getAllByRole("button")[1]!);
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("الا کلنگ");
+    expect(within(entries).getAllByRole("button")[1]).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+  });
+
+  it("says why the first entry is first, with the number", async () => {
+    vi.stubGlobal("fetch", answers(SEVERAL));
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const said = await saying();
+    expect(said).toMatch(/۳ مدخل جدا دارد/);
+    expect(said).toMatch(
+      /اول آن یکی آمده که ۲۴ واژهٔ ساخته از آن هم در همین واژه‌نامه هست و هم در پیکره/,
+    );
+  });
+
+  it("says where the evidence ties at the top, without calling the whole order the dictionary's", async () => {
+    // شیر's lion and milk build the same Latin, so their counts are equal —
+    // and both still stand above an entry with none.
+    vi.stubGlobal(
+      "fetch",
+      answers({
+        ...SEVERAL,
+        readings: [{ ...HEART, confirmed: 20 }, { ...TREE, confirmed: 20 }, AILMENT],
+      }),
+    );
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const said = await saying();
+    expect(said).toMatch(/از هر کدام ۲۰ واژهٔ ساخته/);
+    expect(said).toMatch(/میان آن‌ها پیکره داوری نمی‌کند/);
+    expect(said).not.toMatch(/ترتیب واژه‌نامه/);
+  });
+
+  it("says the order is the dictionary's when no entry has any evidence", async () => {
+    vi.stubGlobal(
+      "fetch",
+      answers({ ...SEVERAL, readings: [{ ...HEART, confirmed: 0 }, TREE] }),
+    );
+    renderApp("/compound?word=%D8%AF%D9%84");
+    expect(await saying()).toMatch(/ترتیبشان همان ترتیب واژه‌نامه است/);
+  });
+
+  it("says nothing about evidence the corpus did not give", async () => {
+    // A corpus that did not answer is not a corpus that found nothing.
+    vi.stubGlobal(
+      "fetch",
+      answers({ ...SEVERAL, readings: [{ ...HEART, confirmed: null }, TREE] }),
+    );
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const said = await saying();
+    expect(said).not.toMatch(/اول آن|داوری|ترتیب واژه‌نامه/);
+  });
+
+  it("opens the entry the address names, so one can be linked to", async () => {
+    vi.stubGlobal("fetch", answers(SEVERAL));
+    renderApp("/compound?word=%D8%AF%D9%84&entry=11455");
+    expect(await screen.findByRole("heading", { level: 2 })).toHaveTextContent("Dol");
+  });
+
+  it("opens the first entry when the address names none of them", async () => {
+    vi.stubGlobal("fetch", answers(SEVERAL));
+    renderApp("/compound?word=%D8%AF%D9%84&entry=999");
+    expect(await screen.findByRole("heading", { level: 2 })).toHaveTextContent("Del");
+  });
+
+  it("forgets the chosen entry when another word is asked for", async () => {
+    const fetcher = answers(SEVERAL);
+    vi.stubGlobal("fetch", fetcher);
+    renderApp("/compound?word=%D8%AF%D9%84&entry=11455");
+    await screen.findByRole("heading", { level: 2 });
+    const box = screen.getByLabelText("واژه‌ای بنویسید");
+    await userEvent.clear(box);
+    await userEvent.type(box, "سر{Enter}");
+    const asked = fetcher.mock.calls.map((call) => String(call[0]));
+    expect(asked.some((one) => one.includes(encodeURIComponent("سر")))).toBe(true);
+    // The stub answers every word with the same three entries, so a choice
+    // that survived would still show the ailment; a fresh word opens on the first.
+    await waitFor(() =>
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Del"),
+    );
+  });
+
+  it("shows no switch for a spelling that is one entry", async () => {
+    vi.stubGlobal("fetch", answers(ANSWER));
+    renderApp("/compound?word=%D8%AF%D9%84");
+    await screen.findByRole("heading", { level: 2 });
+    expect(screen.queryByRole("group", { name: /مدخل‌های/ })).toBeNull();
   });
 });

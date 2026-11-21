@@ -2,6 +2,56 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-21 — the compound page: one entry at a time, the best-evidenced first
+
+The project lead sent the compound page for دل headed «دل Dol» (the local
+copy opened on *Dal*, a tree in a dialect) with دلبر and دلدار under it, both
+built on *Del*, the heart. Three choices, in `murfulu/compounding.py`,
+`murfulu/api/compound.py` and the compound screen (FINDINGS 2026-11-21):
+
+- **A second reading that is another entry's own goes to that entry.** karbon
+  gives دل's *Dal* and *Dol* the second reading *Del*; built from, it filed
+  the heart's words under the tree and the ailment too. `own_readings` drops
+  such a variant (compared without case, as the corpus check compares) from
+  the entry that borrows it, compared against every entry with the same
+  letters (fetched by spelling, so a lookup by Latin is cleaned too) and
+  never across spellings; the owning entry still builds the same letters and
+  Latin. A variant no other entry has (گل's *Gal*) is kept. Compound page
+  only; the build screen is S50. The fault is karbon's (UPSTREAM A18); this is
+  the stopgap.
+- **The entries are ranked by evidence, never by karbon's row order.** The
+  measure is the number of words built on the reading that the dictionary
+  holds under exactly that Latin and the corpus has (`confirmed`, per form):
+  Del 24, the other three 0. It is a proxy — compounds the dictionary spells
+  on this reading — not a frequency of the base word, which the corpus cannot
+  give, since its counts are the spelling's. **It comes before karbon's `needs_review`
+  flag**, because a flagged reading whose own compounds the dictionary spells
+  that way is confirmed by the dictionary itself — the same reasoning that
+  settled بلند (2026-08-13, *sarboland*); گور now opens on *Gur* (the grave,
+  flagged, 3) rather than *gowr* (0). Ties, including no evidence at all,
+  keep the old order: unflagged, then karbon's confidence, then row order.
+  The reading model's counts were measured and rejected for this: they count
+  where an edition's vowel signs settled a reading, editors mark the
+  unexpected one, and they put *mord* before *Mard* and *Gel* before *Gol*.
+- **One entry at a time, with a switch; not separate pages.** The page showed
+  every entry as a stacked card, so the reader met the first and the heart
+  three cards down. Now it shows the first, with a row of buttons above —
+  each entry's Latin and the first words of its definition («Del قلب و فؤاد»,
+  «Dal در همدان اِشَنَک را…») — and a sentence saying why the first is first
+  («اول آن یکی آمده که ۲۴ واژهٔ ساخته از آن هم در همین واژه‌نامه هست و هم در
+  پیکره»), or that the corpus cannot choose (شیر). The open entry's definition
+  is shown under its heading, as on the build screen. **A switch rather than
+  pages** because the reader typed a spelling, not an entry: one address per
+  spelling keeps every entry one tap away, and `?entry=11455` (karbon's row
+  id; the Latin cannot name an entry, *Allākolang* is two) names one for a
+  link. A spelling with one entry shows no switch. The sentence has three
+  forms: one entry leads (with its number); several tie at the top (شیر), and
+  the corpus cannot choose between them; none has any, and the order is the
+  dictionary's. **A corpus that did not answer gives no number at all**
+  (`confirmed` null), never a zero, and then no sentence. — project lead (the
+  report, the evidence-not-row-order rule); engineering (the measure, the
+  switch)
+
 ## 2026-11-21 (second) — the short vowels on every screen that shows a word with its reading
 
 The project lead approved putting the marks wherever a Persian word stands

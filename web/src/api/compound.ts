@@ -81,6 +81,22 @@ export interface CompoundReading {
   /** The linguist's word-bank groups, by his names. Empty before karbon 1.3. */
   bank_groups?: string[];
   needs_review: boolean;
+  /**
+   * Which dictionary entry this is (karbon's first row id). The Latin cannot
+   * name one: *Allākolang* is both الاکلنگ and الا کلنگ. Null for a word added
+   * by an override, which has no row.
+   */
+  entry?: number | null;
+  /** The dictionary's own words for this entry: what tells دل the heart from دل the tree. */
+  definition_fa?: string | null;
+  /**
+   * How many words built on this reading the dictionary holds under exactly
+   * this reading **and** the corpus has. The API puts the reading with the
+   * most first: دل's *Del* has 24, its *Dal* and *Dol* none. Null when the
+   * corpus did not answer, which is not a zero; absent from an API older than
+   * 2026-11-21.
+   */
+  confirmed?: number | null;
   /** Everything the rules can join to this word. */
   built: number;
   /** How many of them the corpus has. */
@@ -104,6 +120,7 @@ export interface Compounds {
   rule_pack_version: string;
   lexicon_snapshot_id: string;
   showing: string;
+  /** The entries written this way, the best-evidenced first. */
   readings: CompoundReading[];
 }
 

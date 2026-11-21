@@ -248,6 +248,59 @@ def _ranked(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(rows, key=key)
 
 
+def _confirmed(rows: list[dict[str, Any]], asked: bool) -> int | None:
+    """How many of a reading's words the dictionary and the corpus both confirm.
+
+    None when the corpus could not be asked: *not measured* must not read as a
+    measured zero, which would say the corpus cannot tell the entries apart.
+
+    A row counts when the corpus has its letters **and** the dictionary holds
+    them under exactly the Latin this reading built (attestation level
+    ``reading``): دلبر is *delbar* in the dictionary, so it confirms *Del*, and
+    the same letters built on *Dal* do not. Counted per form, not per row:
+    V-078 and V-079 writing the same دلبر is one word.
+
+    **This is the only per-reading evidence the corpus can give.** Its counts
+    are the spelling's — every reading of دل has the same 148,697 — so they
+    cannot tell the heart from the tree. The reading model's counts
+    (`data/behnevis-v17.json`) were measured and set aside for this: they count
+    the places where an edition's vowel signs settled a reading, and editors
+    mark the unexpected reading, so they put *mord* before *Mard* (160 to 40)
+    and *Gel* before *Gol* (405 to 311).
+    """
+    if not asked:
+        return None
+    return len(
+        {
+            (row["form_fa"], row["form_latin"])
+            for row in rows
+            if row["is_attested"]
+            and row["attestation"] is not None
+            and row["attestation"]["level"] == "reading"
+        }
+    )
+
+
+def _leading(readings: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """The reading with the most confirmed words first.
+
+    دل opened on *Dal*, a tree in the Hamadan dialect, because karbon lists it
+    first; *Del*, the heart, came third. The words built on each reading that
+    the dictionary and the corpus both confirm are the evidence this route has
+    for which entry to open on: 24 for *Del*, none for the other three (corpus
+    v17). **A proxy, not a frequency**: it counts compounds the
+    dictionary spells on this reading and the corpus has, not how often the
+    base itself is used, which the corpus cannot say (its counts are the
+    spelling's).
+
+    **An order, never a filter** — the settled rule for readings (DECISIONS
+    2026-08-13). Ties, which include every reading with no evidence at all,
+    keep the order `generation.ordered` gave: the unflagged reading first,
+    then karbon's confidence, then its row order.
+    """
+    return sorted(readings, key=lambda reading: -(reading["confirmed"] or 0))
+
+
 def _distinct(pairings: list[compounding.Pairing]) -> list[compounding.Pairing]:
     """Drop pairings that are the same join by the same rule.
 
@@ -349,6 +402,22 @@ def compound(
                 "lexicon_category": result.reading.lexicon_category,
                 "bank_groups": list(result.reading.bank_groups),
                 "needs_review": result.reading.needs_review,
+                # Which dictionary entry this is: karbon's first row id. The
+                # Latin is not enough to name one — asked by *Allākolang*, the
+                # lexicon returns الاکلنگ (a seesaw) and الا کلنگ (beetles).
+                "entry": (
+                    result.reading.source_entry_ids[0]
+                    if result.reading.source_entry_ids
+                    else None
+                ),
+                # What tells دل the heart from دل the tree when both are on
+                # the page: the dictionary's own words, as the build screen
+                # shows them.
+                "definition_fa": result.reading.definition_fa,
+                # Why this reading stands where it does (`_leading`).
+                # A reading that built nothing has nothing to ask about: zero,
+                # measured. Only a corpus that did not answer leaves it unknown.
+                "confirmed": _confirmed(rows, asked=corpus is not None or not pairings),
                 # The three numbers that make the shown list readable: what was
                 # built, what the corpus has, and how many partners were tried.
                 # A list of forty means nothing without the 3,071 behind it.
@@ -386,5 +455,5 @@ def compound(
         "rule_pack_version": pack.version,
         "lexicon_snapshot_id": snapshot,
         "showing": "attested" if attested else "everything built",
-        "readings": readings,
+        "readings": _leading(readings),
     }

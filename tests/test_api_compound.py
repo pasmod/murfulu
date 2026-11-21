@@ -21,6 +21,9 @@ import pytest
 from fastapi.testclient import TestClient
 
 from murfulu.api.app import app
+from murfulu.compounding import own_readings
+from murfulu.lexicon.entries import Reading
+from murfulu.scoring.attestation import Attestation, Level
 
 
 @pytest.fixture
@@ -349,3 +352,163 @@ def test_a_template_reports_the_half_it_actually_used(client: TestClient) -> Non
     # past stem — never the present one.
     assert negated["behind"]["latin"] == "raft"
     assert negated["behind"]["latin"] in negated["form_latin"].lower()
+
+
+# --- A spelling that is several entries (2026-11-21) ------------------------
+
+
+def _entry(latin: str, *variants: str, spelling: str = "دل", row: int = 0) -> Reading:
+    return Reading(
+        spelling_fa=spelling,
+        spelling_normalized=spelling,
+        latin=latin,
+        latin_variants=variants,
+        lexicon_categories=("اسم ذات",),
+        source_entry_ids=(row,) if row else (),
+    )
+
+
+def test_a_second_reading_that_is_another_entry_s_goes_to_that_entry() -> None:
+    """دل's tree and ailment both carried *Del*, the heart's own reading.
+
+    Built from, it filed دلبر and دلدار under the tree and the ailment as well
+    as under the heart. The heart still has it; the borrowers do not.
+    """
+    tree, ailment, heart = own_readings(
+        [_entry("Dal", "Del"), _entry("Dol", "Del"), _entry("Del")]
+    )
+
+    assert tree.all_latin == ("Dal",)
+    assert ailment.all_latin == ("Dol",)
+    assert heart.all_latin == ("Del",)
+
+
+def test_a_second_reading_no_other_entry_has_is_kept() -> None:
+    """گل's *Gol* also reads *Gal*, and no other entry is *Gal*: a real alternative."""
+    flower, clay = own_readings([_entry("Gol", "Gal"), _entry("Gel")])
+
+    assert flower.all_latin == ("Gol", "Gal")
+    assert clay.all_latin == ("Gel",)
+
+
+def test_another_entry_s_reading_is_recognised_whatever_its_case() -> None:
+    """گرد's *Gerd* carried *Gard*, and *gard* (dust) is its own entry.
+
+    A capital is a word class showing, not another word — the rule the corpus
+    check follows — so the two are the same reading.
+    """
+    around, dust = own_readings([_entry("Gerd", "Gard"), _entry("gard")])
+
+    assert around.all_latin == ("Gerd",)
+    assert dust.all_latin == ("gard",)
+
+
+def test_a_lookup_by_latin_is_cleaned_against_every_entry_with_those_letters() -> None:
+    """Asked for *Dal* by its Latin, the lexicon returns the tree alone.
+
+    The heart that owns *Del* is not among what came back, so it has to be
+    looked up by the spelling to be seen — or the tree keeps the heart's words.
+    """
+    tree = _entry("Dal", "Del", row=11452)
+    heart = _entry("Del", row=11456)
+
+    (cleaned,) = own_readings([tree], {"دل": [tree, heart]})
+
+    assert cleaned.all_latin == ("Dal",)
+
+
+def test_entries_with_other_letters_are_not_compared() -> None:
+    """*Čoquk* is چغوک, and چقوک's *Čaquk* lists *Čoquk*: that is چقوک's own.
+
+    A lookup by Latin returned both, and comparing across spellings took the
+    variant away and halved چقوک's words (10,572 to 5,286).
+    """
+    sparrow = _entry("Čoquk", spelling="چغوک", row=1)
+    other = _entry("Čaquk", "Čoquk", spelling="چقوک", row=2)
+
+    kept = own_readings([sparrow, other])
+
+    assert kept[1].all_latin == ("Čaquk", "Čoquk")
+
+
+class _Corpus:
+    """A corpus that confirms every form built on *mord* and has nothing else."""
+
+    def look_up(self, form_fa: str, form_latin: str) -> Attestation:
+        if form_latin.startswith("mord"):
+            return Attestation(
+                level=Level.READING, corpus_version="test", total_count=3, doc_count=2
+            )
+        return Attestation(level=Level.NONE, corpus_version="test")
+
+
+def test_the_reading_whose_words_are_confirmed_comes_first(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The fixture lists مرد as *mard* then *mord*; the evidence says *mord*.
+
+    دل opened on *Dal*, a tree in a dialect, because karbon lists it first. The
+    words built on a reading that the dictionary holds under exactly that
+    reading and the corpus has are the evidence for which entry leads.
+    """
+    from murfulu.api import compound
+
+    monkeypatch.setattr(compound, "_asked", lambda pairings: _Corpus())
+    body = client.get("/compound", params={"word": "مرد"}).json()
+
+    assert [one["latin"] for one in body["readings"]] == ["mord", "mard"]
+    first, second = body["readings"]
+    assert second["confirmed"] == 0
+    # Per form, not per row: V-078 and V-079 writing the same letters with the
+    # same Latin are one word, however many rows they make.
+    forms = {
+        (row["form_fa"], row["form_latin"])
+        for row in first["pairings"]
+        if row["attestation"]["level"] == "reading"
+    }
+    assert first["confirmed"] == len(forms) > 0
+    assert len(first["pairings"]) > first["confirmed"]
+
+
+def test_a_corpus_that_does_not_answer_is_not_a_measured_zero(
+    client: TestClient,
+) -> None:
+    """No corpus in the tests: nothing moves, and nothing claims it was measured.
+
+    A zero here would let the screen say the corpus cannot tell the entries
+    apart, when nobody asked it.
+    """
+    body = client.get("/compound", params={"word": "مرد", "attested": False}).json()
+
+    assert [one["latin"] for one in body["readings"]] == ["mard", "mord"]
+    assert {one["confirmed"] for one in body["readings"]} == {None}
+
+
+def test_the_ranking_does_not_depend_on_the_page(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Counted on every row built, before the list is filtered and paged."""
+    from murfulu.api import compound
+
+    monkeypatch.setattr(compound, "_asked", lambda pairings: _Corpus())
+    whole = client.get("/compound", params={"word": "مرد", "limit": 0}).json()
+    one_row = client.get("/compound", params={"word": "مرد", "limit": 1}).json()
+
+    assert [r["confirmed"] for r in one_row["readings"]] == [
+        r["confirmed"] for r in whole["readings"]
+    ]
+    assert [r["latin"] for r in one_row["readings"]] == ["mord", "mard"]
+
+
+def test_each_entry_is_named_by_its_dictionary_row(client: TestClient) -> None:
+    """The Latin cannot name an entry: *Allākolang* is two words."""
+    body = client.get("/compound", params={"word": "مرد", "attested": False}).json()
+
+    assert [one["entry"] for one in body["readings"]] == [7, 8]
+
+
+def test_each_entry_says_what_it_means(client: TestClient) -> None:
+    """With two entries a tap apart, the definition is what tells them apart."""
+    body = client.get("/compound", params={"word": "مرد", "attested": False}).json()
+
+    assert _reading(body)["definition_fa"] == "آدمی نرینه. مقابل زن"

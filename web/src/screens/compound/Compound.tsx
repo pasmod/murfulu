@@ -22,11 +22,21 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { ApiError } from "../../api/client";
-import { compound as fetchCompound, type Compounds } from "../../api/compound";
+import {
+  compound as fetchCompound,
+  type CompoundReading,
+  type Compounds,
+} from "../../api/compound";
 import { wordClasses, type WordClass } from "../../api/generate";
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
-import { notFound, wordGroup } from "../../text/lexicon";
+import {
+  FROM_LEXICON,
+  LEXICON,
+  notFound,
+  wasCut,
+  wordGroup,
+} from "../../text/lexicon";
 import { SCREENS } from "../../shell/screens";
 import { Suggest } from "../../suggest/Suggest";
 import { wordSource } from "../../suggest/sources";
@@ -41,9 +51,63 @@ const BUILDS = wordSource({ builds: true });
 /** Nouns that make compounds. Checked against the API, never guessed. */
 const EXAMPLES = ["دل", "آب", "سر", "دست", "کار"];
 
+/**
+ * The first few words of the dictionary's definition, enough to tell two
+ * entries apart on a button: «قلب و فؤاد» against «در همدان اِشَنَک را…».
+ * A bracket at the very start is the source or the part of speech — آهن opens
+ * «(از پهلوی آسین) گوهری کانی…» — and is skipped; then the text is cut at the
+ * first full stop, semicolon, colon, bracket or comma.
+ */
+function gloss(definition: string | null | undefined, words = 4): string {
+  const opening = (definition ?? "").replace(/^(\s*\([^)]*\))+/, "");
+  const first = opening.split(/[.؛:()،]/)[0]?.trim() ?? "";
+  const said = first.split(/\s+/).filter(Boolean);
+  return said.length > words ? `${said.slice(0, words).join(" ")}…` : said.join(" ");
+}
+
+/** One entry, in the address and as a key: karbon's row id where there is one. */
+function entryOf(reading: CompoundReading): string {
+  return reading.entry != null
+    ? String(reading.entry)
+    : `${reading.spelling_fa}:${reading.latin}`;
+}
+
+/**
+ * Why the first entry is first, from the number of each entry's words the
+ * dictionary and the corpus both confirm (`confirmed`, ranked by the API).
+ *
+ * - `lead`: the first has more than any other.
+ * - `tied`: the first few have the same number, above zero — شیر's lion and
+ *   milk build the same Latin, so nothing measured separates them, though
+ *   both stand above an entry with none.
+ * - `none`: no entry has any; the order is the dictionary's.
+ *
+ * Null where it was not measured (an older API, or a corpus that did not
+ * answer): a sentence about evidence nobody looked at would be false.
+ */
+type Why =
+  | { kind: "lead"; count: number }
+  | { kind: "tied"; count: number }
+  | { kind: "none" };
+
+function whyFirst(readings: CompoundReading[]): Why | null {
+  if (readings.some((one) => one.confirmed == null)) return null;
+  const [first, second] = readings.map((one) => one.confirmed as number);
+  if (first === undefined || second === undefined) return null;
+  if (first > second) return { kind: "lead", count: first };
+  if (first > 0) return { kind: "tied", count: first };
+  return { kind: "none" };
+}
+
 export function Compound() {
   const [params, setParams] = useSearchParams();
   const word = params.get("word") ?? "";
+  // **Which of a spelling's entries is showing.** دل is four entries in the
+  // dictionary — the heart, a tree, an ailment and an adjective — and the page
+  // stacked all four, the tree first, so the reader met «دل Dal» and the
+  // heart's own words three cards down. One entry at a time now, the
+  // best-evidenced first, with the others one tap away and in the address.
+  const chosen = params.get("entry");
   const [draft, setDraft] = useState(word);
   // In an effect, not during the render: the router navigates inside a
   // transition and a render-time adjustment can be discarded when the
@@ -101,6 +165,11 @@ export function Compound() {
     (next: string) => setParams(next ? { word: next } : {}),
     [setParams],
   );
+
+  const readings = found?.readings ?? [];
+  const shown = readings.find((one) => entryOf(one) === chosen) ?? readings[0];
+  const why = whyFirst(readings);
+  const oneSpelling = new Set(readings.map((one) => one.spelling_fa)).size === 1;
 
   /** Class ids as the reader's own words: `karnam` → «کارنام». */
   const saying = (names: string[]) => {
@@ -173,9 +242,69 @@ export function Compound() {
         </p>
       ) : null}
 
-      {found?.readings.map((reading) => (
+      {readings.length > 1 && shown ? (
+        <div
+          className={styles.entries}
+          role="group"
+          aria-label={`مدخل‌های «${oneSpelling ? shown.spelling_fa : word}»`}
+        >
+          <p className={styles.entriesSay}>
+            {/* One spelling, several entries — دل — or a Latin that matched
+                entries of different spellings: *Allākolang* is الاکلنگ and
+                الا کلنگ, one entry each, and «الاکلنگ ۲ مدخل دارد» was false. */}
+            {oneSpelling ? (
+              <>
+                «{shown.spelling_fa}» در {LEXICON} <Num value={readings.length} />{" "}
+                مدخل جدا دارد.
+              </>
+            ) : (
+              <>
+                برای «{word}» در {LEXICON} <Num value={readings.length} /> مدخل
+                پیدا شد.
+              </>
+            )}{" "}
+            {why?.kind === "lead" ? (
+              <>
+                اول آن یکی آمده که <Num value={why.count} /> واژهٔ ساخته از آن هم
+                در همین واژه‌نامه هست و هم در پیکره.
+              </>
+            ) : why?.kind === "tied" ? (
+              <>
+                اول آن‌هایی آمده‌اند که از هر کدام <Num value={why.count} /> واژهٔ
+                ساخته هم در همین واژه‌نامه هست و هم در پیکره؛ میان آن‌ها پیکره
+                داوری نمی‌کند.
+              </>
+            ) : why?.kind === "none" ? (
+              "هیچ‌یک از واژه‌های ساخته از این مدخل‌ها هم در واژه‌نامه و هم در پیکره نیامده، پس ترتیبشان همان ترتیب واژه‌نامه است."
+            ) : null}
+          </p>
+          <p className={styles.showing}>
+            {readings.map((one) => (
+              <button
+                key={entryOf(one)}
+                type="button"
+                className={styles.pick}
+                aria-pressed={one === shown}
+                onClick={() =>
+                  setParams({ word, entry: entryOf(one) }, { replace: true })
+                }
+              >
+                {oneSpelling ? null : (
+                  <span className={styles.entrySpelling}>{one.spelling_fa}</span>
+                )}
+                <Latin>{one.latin}</Latin>
+                {gloss(one.definition_fa) ? (
+                  <span className={styles.gloss}>{gloss(one.definition_fa)}</span>
+                ) : null}
+              </button>
+            ))}
+          </p>
+        </div>
+      ) : null}
+
+      {(shown ? [shown] : []).map((reading) => (
         <section
-          key={`${reading.latin}-${reading.lexicon_category ?? ""}`}
+          key={entryOf(reading)}
           className={styles.reading}
           aria-labelledby={`reading-${reading.latin}`}
         >
@@ -185,6 +314,16 @@ export function Compound() {
               <span className={styles.category}>{wordGroup(reading)}</span>
             ) : null}
           </h2>
+
+          {/* The dictionary's words, as the build screen shows them: with two
+              entries a tap apart, this is what says which one is open. */}
+          {reading.definition_fa ? (
+            <p className={styles.definition}>
+              <span className={styles.definitionLabel}>{FROM_LEXICON}</span>{" "}
+              {reading.definition_fa}
+              {wasCut(reading.definition_fa) ? "…" : ""}
+            </p>
+          ) : null}
 
           {/* **A zero gets a reason, not a count.** «دستور زبان می‌تواند ۰
               ترکیب بسازد؛ ۰ تای آن در پیکره آمده است. برای این شمار، ۱٬۷۴۱

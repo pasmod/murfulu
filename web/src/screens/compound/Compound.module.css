@@ -51,6 +51,43 @@
   composes: chipCount from "../../styles/controls.module.css";
 }
 
+/* A spelling's entries, one button each: دل the heart, the tree, the
+   ailment. The few words of definition are what tell them apart. */
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.entriesSay {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  max-inline-size: var(--measure);
+  margin: 0;
+}
+
+.entrySpelling {
+  margin-inline-end: var(--space-2);
+}
+
+.gloss {
+  margin-inline-start: var(--space-2);
+  color: var(--ink-faint);
+  font-weight: normal;
+}
+
+.definition {
+  font-size: var(--text-base);
+  color: var(--ink);
+  line-height: 1.7;
+  max-inline-size: var(--measure);
+}
+
+.definitionLabel {
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
 .reading {
   composes: card from "../../styles/page.module.css";
   display: flex;

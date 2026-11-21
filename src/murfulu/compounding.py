@@ -26,7 +26,7 @@ Elasticsearch.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from murfulu.engine.affix import CannotApplyError, Word
 from murfulu.engine.compound import Filler, Verb, fill, fill_slot, parts_used
@@ -353,8 +353,70 @@ def from_word(
     One result per reading, never a merged pile — the same rule `/generate`
     follows, and for the same reason: مرد is *mard* and *mord*.
     """
-    readings = _readings_for(lexicon, word)
+    readings = _own(lexicon, _readings_for(lexicon, word))
     return [from_reading(pack, reading, partners) for reading in ordered(readings)]
+
+
+def _own(lexicon: Lexicon, readings: list[Reading]) -> list[Reading]:
+    """`own_readings` against every entry written with the same letters.
+
+    Not only against what the lookup returned: asked for *Dal* by its Latin,
+    the lexicon returns the tree alone, and the heart that owns *Del* has to
+    be fetched to be seen.
+    """
+    siblings = {
+        spelling: lexicon.by_spelling(spelling)
+        for spelling in {reading.spelling_fa for reading in readings}
+    }
+    return own_readings(readings, siblings)
+
+
+def own_readings(
+    readings: list[Reading], siblings: dict[str, list[Reading]] | None = None
+) -> list[Reading]:
+    """Each reading with only the second readings that are its own.
+
+    karbon lists a second reading on some entries that is **another entry's own
+    reading of the same letters**. دل is four entries — *Dal* (a tree, in the
+    Hamadan dialect), *Dol* (an ailment), *Del* (the heart) and the adjective
+    *dall* — and the first two both carry *Del* as their second reading. Built
+    from, it filed دلبر and دلدار under the tree and the ailment as well as
+    under the heart, and the page opened on the tree. Measured on karbon 1.3.2:
+    447 readings in 372 spellings carry another entry's reading this way.
+
+    Such a variant is dropped from the reading that borrows it. The entry whose
+    reading it is still builds those letters with that Latin, because a
+    compound drops the front's capital; where the two entries are of different
+    classes, only the owner's rules build them now. Compared without case, as
+    the corpus check compares (*nami* is *Nami*). A second reading that no
+    other entry has — آبرو's *Ābrov* — is kept.
+
+    **Only entries with the same letters count.** A lookup by Latin can return
+    two spellings — *Čoquk* is چغوک, and چقوک's *Čaquk* lists *Čoquk* as its
+    second reading — and that variant is چقوک's own, not چغوک's. ``siblings``
+    maps a spelling to every entry written that way; without it, the readings
+    passed in are their own siblings.
+    """
+    kept = []
+    for reading in readings:
+        group = (siblings or {}).get(reading.spelling_fa) or [
+            one for one in readings if one.spelling_fa == reading.spelling_fa
+        ]
+        others = {one.latin.lower() for one in group if _entry(one) != _entry(reading)}
+        variants = tuple(
+            one for one in reading.latin_variants if one.lower() not in others
+        )
+        kept.append(
+            reading
+            if variants == reading.latin_variants
+            else replace(reading, latin_variants=variants)
+        )
+    return kept
+
+
+def _entry(reading: Reading) -> tuple[str, str, tuple[int, ...]]:
+    """What makes a reading one dictionary entry, whichever lookup returned it."""
+    return (reading.spelling_fa, reading.latin, reading.source_entry_ids)
 
 
 def from_two_words(
@@ -377,8 +439,8 @@ def from_two_words(
     reach V-017, V-019, V-043 and V-047, the four rules that join *two
     different* verbs and were unreachable by any route.
     """
-    fronts = _readings_for(lexicon, word)
-    behinds = _readings_for(lexicon, partner)
+    fronts = _own(lexicon, _readings_for(lexicon, word))
+    behinds = _own(lexicon, _readings_for(lexicon, partner))
 
     results = []
     for reading in ordered(fronts):
