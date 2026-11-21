@@ -908,8 +908,9 @@ describe("deciding a reading once for every like place", () => {
   });
 
   it("takes a new decision into the panel's list, replacing the one with its reach", async () => {
+    // Saved before: an older store id than the one the save gets back (8).
     decided = [
-      { id: 30, latin: "Dal", scope: "before_word", scope_word: "رفتند", in_bank: true, created_at: null },
+      { id: 3, latin: "Dal", scope: "before_word", scope_word: "رفتند", in_bank: true, created_at: null },
     ];
     const here = await panelOf(/^دلِ:/);
     await within(here).findByText(/برای این املا پیش‌تر تصمیم گرفته شده است/);

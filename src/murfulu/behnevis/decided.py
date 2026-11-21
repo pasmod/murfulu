@@ -53,6 +53,9 @@ class Decision:
     word: str | None
     #: The store's id: the larger, the newer.
     order: int
+    #: A decision taken back names the one it takes back: it takes back that
+    #: one only, never a newer one for the same reach saved meanwhile.
+    replaces: int | None = None
 
     @property
     def reach(self) -> tuple[str, str, str | None]:
@@ -81,20 +84,32 @@ def from_record(context: dict[str, Any], order: int) -> Decision | None:
         return None
     else:
         word = key(word)
-    return Decision(spelling, latin, scope, word, order)
+    replaces = context.get("replaces") if withdrawn else None
+    return Decision(
+        spelling,
+        latin,
+        scope,
+        word,
+        order,
+        replaces if isinstance(replaces, int) else None,
+    )
 
 
 def current(decisions: Iterable[Decision]) -> list[Decision]:
-    """The decisions in force: the newest per spelling and scope, none taken back."""
+    """The decisions in force: the newest per spelling and scope, none taken back.
+
+    Read in the store's order. A decision taken back that names the one it
+    takes back clears its reach only while that one is still the newest there;
+    one that names none (or an older record) clears the reach.
+    """
     newest: dict[tuple[str, str, str | None], Decision] = {}
-    for one in decisions:
+    for one in sorted(decisions, key=lambda d: d.order):
         held = newest.get(one.reach)
-        if held is None or one.order > held.order:
+        if one.latin is not None:
             newest[one.reach] = one
-    return sorted(
-        (one for one in newest.values() if one.latin is not None),
-        key=lambda one: -one.order,
-    )
+        elif held is not None and (one.replaces is None or one.replaces == held.order):
+            del newest[one.reach]
+    return sorted(newest.values(), key=lambda one: -one.order)
 
 
 @dataclass

@@ -27,7 +27,7 @@
  * Once saved, the word in the text shows it with a check mark.
  */
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -332,6 +332,9 @@ function Here({
   // The spelling in the measured list (how many places a decision reaches)
   // and the decisions in force. Without them the panel still saves.
   const [about, setAbout] = useState<UnsureOne | null>(null);
+  // Decisions saved from this panel: an answer that arrives after one of them
+  // is merged with them, never put in their place.
+  const mine = useRef<Decision[]>([]);
   const chosen = typed.trim() || picked;
   const busy = state === "sending";
   // Held by the bank (a variant too: رخ is *rex*, and *rox* as well) or by
@@ -343,7 +346,15 @@ function Here({
   useEffect(() => {
     const stop = new AbortController();
     unsureSpelling(spelling, stop.signal)
-      .then(setAbout)
+      .then((found) =>
+        setAbout({
+          ...found,
+          decided: mine.current.reduce(
+            (all, one) => replacing(all, one),
+            found.decided ?? [],
+          ),
+        }),
+      )
       .catch(() => undefined);
     return () => stop.abort();
   }, [spelling]);
@@ -386,6 +397,7 @@ function Here({
           in_bank: inBank,
           created_at: done.created_at,
         };
+        mine.current = [...mine.current, now];
         setAbout((was) =>
           was ? { ...was, decided: replacing(was.decided ?? [], now) } : { spelling, listed: null, decided: [now] },
         );

@@ -80,6 +80,21 @@ def test_the_newest_decision_for_a_spelling_and_scope_is_in_force():
     ]
 
 
+def test_taking_back_one_decision_leaves_a_newer_one_for_the_same_reach():
+    rows = [
+        Decision("بود", "Bud", EVERYWHERE, None, 1),
+        Decision("بود", "bovad", EVERYWHERE, None, 2),
+        # Taken back from a screen that still showed the first: it names it.
+        Decision("بود", None, EVERYWHERE, None, 3, replaces=1),
+    ]
+    assert [(d.latin, d.order) for d in current(rows)] == [("bovad", 2)]
+    # Naming the one in force takes it back.
+    rows.append(Decision("بود", None, EVERYWHERE, None, 4, replaces=2))
+    assert current(rows) == []
+    record = _record(None, EVERYWHERE, withdrawn=True) | {"replaces": 2}
+    assert from_record(record, 5) == Decision("بود", None, EVERYWHERE, None, 5, 2)
+
+
 def test_the_narrower_scope_wins_and_between_two_the_newer():
     decided = Decided.of(
         [
@@ -433,6 +448,7 @@ def test_a_decision_taken_back_reaches_the_export_and_two_reaches_stay_two():
     )
     assert not tool._good(pick)
     rows = tool.picks(tool.latest([first, second, back]))
+    assert [r["replaces"] for r in rows] == [None, None, None]
     learned, waiting = decisions_from(rows, {"بود": ("bovad",)}, {})
     assert learned.lookup("بود", "که", None) is None
     assert learned.lookup("بود", None, "از") == "bovad"

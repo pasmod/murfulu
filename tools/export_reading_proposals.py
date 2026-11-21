@@ -257,6 +257,7 @@ def picks(rows: list[Any]) -> list[dict[str, Any]]:
                 "scope": context.get("scope"),
                 "scope_word": context.get("scope_word"),
                 "withdrawn": bool(context.get("withdrawn")),
+                "replaces": context.get("replaces"),
                 "id": row.id,
             }
         found.append(one)

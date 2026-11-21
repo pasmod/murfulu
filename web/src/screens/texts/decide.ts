@@ -68,7 +68,13 @@ export function sameReach(one: Decision, scope: Scope, word: string | null): boo
   return one.scope === scope && keyOf(one.scope_word ?? "") === keyOf(word ?? "");
 }
 
-/** The decisions in force once `now` is saved: it replaces the one with its reach. */
+/**
+ * The decisions in force once `now` is known: it replaces the one with its
+ * reach — unless that one is newer by the store's id, as when two saves for
+ * one reach come back in the other order (the review of 2026-11-21).
+ */
 export function replacing(decisions: Decision[], now: Decision): Decision[] {
-  return [now, ...decisions.filter((one) => !sameReach(one, now.scope, now.scope_word))];
+  const held = decisions.find((one) => sameReach(one, now.scope, now.scope_word));
+  if (held && held.id > now.id) return decisions;
+  return [now, ...decisions.filter((one) => one !== held)];
 }

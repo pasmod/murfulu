@@ -55,6 +55,7 @@ export function Unsure() {
   useEffect(() => {
     const stop = new AbortController();
     generation.current += 1;
+    setLoading(false);
     setPage(null);
     setRows([]);
     setError(null);
@@ -152,7 +153,10 @@ export function Unsure() {
                     setRows((now) => (now.length === offset ? [...now, ...next.spellings] : now));
                   })
                   .catch(() => undefined)
-                  .finally(() => setLoading(false));
+                  // Only the current list's request frees its button.
+                  .finally(() => {
+                    if (generation.current === asked) setLoading(false);
+                  });
               }}
             >
               بیشتر
