@@ -29,6 +29,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Query
 
 from murfulu import compounding
+from murfulu.behnevis.vowels import vocalise
 from murfulu.corpus import inflection
 from murfulu.generation import WordNotFoundError
 from murfulu.lexicon.store import Lexicon
@@ -173,6 +174,8 @@ def _row(
     return {
         "form_latin": pairing.latin,
         "form_fa": pairing.fa,
+        # For display only; matching stays on form_fa (DECISIONS 2026-11-21).
+        "form_fa_marked": vocalise(pairing.fa, pairing.latin),
         "word_class": pairing.word_class,
         "rule_id": pairing.rule_id,
         "label_fa": getattr(rule, "label_fa", None),
@@ -338,6 +341,9 @@ def compound(
             {
                 "latin": result.reading.latin,
                 "spelling_fa": result.reading.spelling_fa,
+                "spelling_fa_marked": vocalise(
+                    result.reading.spelling_fa, result.reading.latin
+                ),
                 "lexicon_category": result.reading.lexicon_category,
                 "bank_groups": list(result.reading.bank_groups),
                 "needs_review": result.reading.needs_review,

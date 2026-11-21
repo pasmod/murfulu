@@ -26,6 +26,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Query
 
 from murfulu import generation
+from murfulu.behnevis.vowels import vocalise
 from murfulu.engine.affix import Step
 from murfulu.engine.dedupe import GroupedForm
 from murfulu.lexicon.store import Lexicon
@@ -345,6 +346,9 @@ def _form(
     return {
         "form_latin": form.latin,
         "form_fa": form.fa,
+        # The same letters with the short vowels the reading has, for display
+        # only; everything matches on form_fa (DECISIONS 2026-11-21).
+        "form_fa_marked": vocalise(form.fa, form.latin),
         "word_class": form.word_class,
         "depth": form.depth,
         "semantic_tags": list(form.semantic_tags),
@@ -855,6 +859,9 @@ def generate(
             {
                 "latin": result.reading.latin,
                 "spelling_fa": result.reading.spelling_fa,
+                "spelling_fa_marked": vocalise(
+                    result.reading.spelling_fa, result.reading.latin
+                ),
                 "lexicon_category": result.reading.lexicon_category,
                 "bank_groups": list(result.reading.bank_groups),
                 # The dictionary's own doubt about this reading. 31.5% of the

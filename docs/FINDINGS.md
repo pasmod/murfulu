@@ -5,6 +5,29 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-21 — short vowels from the reading: four words in five get a mark
+
+Measured while building the marks (DECISIONS 2026-11-21) on
+`lexicon-20261111`: **47,559 of 57,944 readings (82.1 %) get at least one
+mark** from their Behnevis. The rest write their vowels already (دانا، خواب) or
+do not line up with their letters — ا with a hamza above (تأثیر *taˈsir*) is
+the commonest, because the letter table has no hamza on alef.
+
+Two choices the letters leave open had to be made one way, or the marks came
+out wrong: a vowel before a silent ا or ع that starts a part of the word, or
+before a silent ه, belongs to that letter (هَم‌اَندیشَنده, not a zabar on the
+م; کَپّه‌دوز, not a zir on the پ), and an unwritten *o* or *e* before و or ی
+read *w* or *y* is the diphthong (نَو, not a pish on the ن). A silent ع
+inside a part is left unmarked: *lal* may be لَعل or لعَل.
+
+**Every alignment counts, and each mark is agreed on its own.** The review
+found the first draft exponential on a reading that does not line up (1.2 s
+for twelve words) and wrong where a word has more than 64 alignments; it now
+works out reachable positions from both ends, and the whole bank takes 3.3 s.
+A tashdid all alignments agree on survives a vowel they dispute (دَرّه‌ام).
+
+---
+
 ## 2026-11-21 — a score in place of the levels, and how the words spread on it
 
 Measured while replacing the build screen's levels with a score (DECISIONS

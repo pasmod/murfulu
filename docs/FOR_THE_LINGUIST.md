@@ -34,6 +34,7 @@ questions, row by row:
 | L45 | **new** | the infixes -na-/-nā- and nā- on a stem (nāšenās, nāšāyest) are gone; on purpose? |
 | L46 | **new** | the new result classes Čonyāftekārbahr and Āyākārbahr: which rules take them |
 | L47 | **new** | rows 209–211 need a Šomār, and the bank has no numeral group; they build nothing yet |
+| L48 | **new, not blocking** (2026-11-21) | which short-vowel marks the app puts on Persian words — made from the reading, for display only; our rule is every unwritten short vowel and the tashdid, never a sokun |
 
 The rest of the table below stands as it was.
 
@@ -2938,4 +2939,36 @@ and row 73 itself writes the base of *dahgān* as Barnām.
 fed by no group, so the three rows build nothing. Opening them on every برنام
 would build *xubom* and *xubtā* from every adjective. **Our proposal:** a
 numeral group in the bank (one to ten, twenty, a hundred, a thousand…).
+
+## L48. Which short-vowel marks on the Persian words
+
+Built 2026-11-21 on the project lead's word, without asking first (DECISIONS
+2026-11-21); **in the app's questions as L48**, not blocking. The script is
+the linguist's, so the rule is marked unconfirmed.
+
+**What the app does.** Every Persian word that has a reading is shown with
+zabar, zir and pish made from that reading (`murfulu/behnevis/vowels.py`):
+the letters are lined up with the Behnevis, and a short vowel the script does
+not write becomes its letter's mark. Search, matching and counting use the
+plain spelling; the marks are display only. Measured on `lexicon-20261111`:
+47,559 of 57,944 readings (82.1 %) get at least one mark; the rest are words
+whose vowels the script writes, or readings that do not line up with their
+letters, which are shown as written.
+
+**Our rule**: every unwritten short vowel (رَفتار، گُفتار), on ا or ع when they
+carry it (اَندیشه، عَلی); a zabar before *ow* and *ey* (نَو، پَیوَند); a tashdid
+where Behnevis doubles a letter (مُعَلِّم); **no** sokun, no mark on a written
+long vowel, none on the last letter of the word or of a part before a joiner
+(a zir there reads as the ezafe), none for the silent ه of *-e* (خانه،
+کَپّه‌دوز). Where the letters line up with the reading in two ways that
+disagree about a mark, the mark is left off.
+
+### The question
+
+1. **How many marks.** This rule; every letter, sokun included; or only where
+   the plain spelling has two readings?
+2. **The hard cases**, if he has a view: Arabic loans whose hamza Behnevis
+   writes (*taˈsir* تأثیر is shown unmarked, because ا with hamza does not line
+   up); the linking vowel inside a compound (*maqtuaruzi*); and whether the
+   tashdid should also be shown where Behnevis writes a doubled letter single.
 

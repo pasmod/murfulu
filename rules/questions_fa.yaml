@@ -28,7 +28,8 @@
 # short), L44 (Kāridekārbahr left in three rows after the rename), L45 (na-
 # and nā- dropped), L46 (two new result classes) and L47 (no numeral group).
 #
-# **Two questions do not block work: L36** (2026-11-13, reworded 2026-11-21),
+# **Three questions do not block work: L48** (2026-11-21), which short-vowel
+# marks the app puts on Persian words, made from each word's reading. **And L36** (2026-11-13, reworded 2026-11-21),
 # the score from 0 to 100 the build screen gives a word, which replaced the
 # three named levels the question first asked about. It is built and marked
 # unconfirmed under the working rule, and the project lead asked for the
@@ -498,6 +499,41 @@ questions:
       - id: other_way
         text_fa: >-
           راه دیگری درست است و آن را در جعبهٔ متن می‌نویسم.
+      - id: unsure
+        text_fa: نمی‌دانم و باید بیشتر بررسی کنم.
+        settles: false
+
+  - reference: L48
+    blocks_work: false
+    question_en: >-
+      The app now puts zabar, zir and pish on the Persian words, made from each
+      word's Behnevis reading and shown only for display. Which marks: every
+      unwritten short vowel (our rule), every letter with the sokun as well, or
+      only where the plain spelling is ambiguous?
+    question_fa: |
+      برنامه اکنون روی واژه‌های فارسی زبر، زیر و پیش می‌گذارد، همان‌گونه که دهخدا و معین می‌گذارند. این نشانه‌ها از خوانش به‌نویسیِ هر واژه ساخته می‌شوند، نه با دست، تا دو خط همیشه یک چیز را بگویند. جست‌وجو و سنجش همیشه بر خودِ واژهٔ بی‌نشانه انجام می‌شود و نشانه‌ها تنها برای نمایش‌اند. قاعدهٔ نشانه‌گذاری را ما گذاشته‌ایم و هنوز به تأیید شما نرسیده است:
+      روی هر حرفی که پس از آن واکه‌ای کوتاه می‌آید که در خط نوشته نمی‌شود، زبر، زیر یا پیش می‌گذاریم، مانند رَفتار (Raftār) و گُفتار (Goftār). اگر خودِ «ا» یا «ع» واکهٔ کوتاه را دارد، نشانه روی همان می‌آید، مانند اَندیشه (andiše) و عَلی (Ali).
+      پیش از «و» و «ی» که ow و ey خوانده می‌شوند زبر می‌گذاریم، مانند نَو (now) و پَیوَند (peyvand).
+      جایی که به‌نویسی حرفی را دو بار می‌نویسد، تشدید می‌گذاریم، مانند مُعَلِّم (moˈallem).
+      ساکن نمی‌گذاریم. روی واکه‌های بلند که در خط نوشته می‌شوند نشانه نمی‌گذاریم. حرف پایانی واژه، و حرف پایانی هر پاره پیش از نیم‌فاصله، نشانه نمی‌گیرد، چون زیرِ آنجا کسرهٔ اضافه خوانده می‌شود؛ «ه»ِ پایانی که e خوانده می‌شود هم نشانه نمی‌گیرد، مانند خانه (xāne) و کَپّه‌دوز (kappeduz).
+
+      پرسش: آیا این اندازه از نشانه‌گذاری درست است، یا باید همهٔ حرف‌ها، ساکن‌ها هم، نشانه بگیرند، یا تنها جاهایی که واژهٔ بی‌نشانه را می‌توان به دو گونه خواند؟
+
+      پیشنهاد ما: گزینهٔ نخست، چون همهٔ واکه‌های کوتاه را نشان می‌دهد و ساکن‌ها، که خواننده بی‌نشانه هم درست می‌خواند، چشم را خسته نمی‌کنند.
+    choices:
+      - id: keep
+        suggested: true
+        text_fa: >-
+          همین اندازه بماند: واکه‌های کوتاه و تشدید، بی ساکن.
+      - id: full
+        text_fa: >-
+          همهٔ حرف‌ها نشانه بگیرند، ساکن‌ها هم.
+      - id: fewer
+        text_fa: >-
+          تنها جاهایی نشانه بگیرند که واژهٔ بی‌نشانه را می‌توان به دو گونه خواند.
+      - id: none
+        text_fa: >-
+          روی واژه‌های فارسی نشانه گذاشته نشود؛ به‌نویسیِ کنار آن‌ها بس است.
       - id: unsure
         text_fa: نمی‌دانم و باید بیشتر بررسی کنم.
         settles: false

@@ -28,6 +28,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 
+from murfulu.behnevis.vowels import vocalise
 from murfulu.corpus.wordtypes import normalise
 from murfulu.generation import bases_of
 from murfulu.lexicon import bank
@@ -171,6 +172,8 @@ def _as_json(reading: Reading, mapping: bank.BankMapping) -> dict[str, Any]:
     verb = reading.is_infinitive
     return {
         "spelling_fa": reading.spelling_fa,
+        # For display only; the bank is searched on the plain spelling.
+        "spelling_fa_marked": vocalise(reading.spelling_fa, reading.latin),
         "latin": reading.latin,
         "latin_variants": list(reading.latin_variants),
         "groups": groups,
