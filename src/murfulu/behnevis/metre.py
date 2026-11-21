@@ -26,7 +26,7 @@ Three parts:
    long vowel open is long, anything heavier is overlong (``-U``). An ``n``
    after a long vowel is not counted (*jān* is long, not overlong). The last
    syllable's weight waits for the next word.
-3. :func:`fit` and :func:`apply` — the readings of a whole hemistich against
+3. :func:`fit` and :meth:`Metre.weigh` — the readings of a whole hemistich against
    its patterns, with the licences a reader of the poem allows (below), and
    from that a new order and confidence for each word.
 
@@ -37,10 +37,11 @@ consonant before a word that starts with a vowel may join that vowel (*vasl*:
 conjunction *o* always joins; است after a vowel may lose its *a*
 (*xāne-st*); an ezafe *-e* / *-ye* may follow a word (cost); a word-final
 short vowel may count long (cost); a word-final long vowel before a vowel may
-count short (cost); and, for each word, *some other reading* of a guessed
-number of syllables, at a high cost — the reading the model does not offer.
+count short (cost); and, for each word, *some other reading* taking a
+guessed number of pattern positions, at a high cost — the reading the model
+does not offer.
 
-**How the fit moves a word** (:func:`apply`): each candidate keeps the mass
+**How the fit moves a word** (:meth:`Metre.weigh`): each candidate keeps the mass
 the model gave it (a probability for a measured one; a share of what is left
 for one offered without a number), and is weighed by ``2 ** -extra``, where
 ``extra`` is how much more the best fit of the hemistich costs with that
@@ -63,6 +64,9 @@ from murfulu.behnevis.transcribe import Word
 
 SHORT, LONG = "U", "-"
 OVERLONG = LONG + SHORT
+
+#: Spellings of است that may lose their *a* after a vowel.
+ENCLITIC_AST = frozenset({"است", "ست"})
 
 # -- 1. the metre's patterns ---------------------------------------------------
 
@@ -248,8 +252,8 @@ def spoken(reading: str, spelling: str = "") -> str:
     for شمع. A Persian word has no two vowels side by side, so where the
     reading has two and the spelling an ع, one of them may be the ع — a
     consonant (a glottal stop) to the metre: of two short vowels the second,
-    where it would close a syllable (*jaʔfari*, *raʔdnāk*; not before a
-    doubled letter, *moʔallem*); a short vowel ending the word after a long
+    where it would close a syllable before one consonant (*jaʔfari*,
+    *baʔd*); a short vowel ending the word after a long
     one (*samāʔ*); a short vowel before a long one (*ʔālam*). Otherwise the
     ع stands unwritten between the two (*tabiʔat*, *tāʔat*). This is a rule
     of thumb about the bank's habit (UPSTREAM A18), not its data. A short
@@ -277,10 +281,11 @@ def spoken(reading: str, spelling: str = "") -> str:
             run += ch
         end = i + 2 + len(run) == len(chars)
         if first in SHORT_VOWELS and second in SHORT_VOWELS:
-            # jaʔfari, baʔd, raʔdnāk: the ع closes a syllable — unless a
-            # doubled letter follows, where it opens one (moʔallem).
-            closes = len(run) == 1 or (len(run) == 2 and run[0] != run[1] and not end)
-            if closes or (not run and end):
+            # jaʔfari, baʔd: the ع closes a syllable. Before two consonants
+            # it is left alone: it opens one before a doubled letter
+            # (moʔallem) and in a compound (āšofte-ʔaqli), and the rare
+            # raʔdnāk is missed.
+            if len(run) == 1 or (not run and end):
                 chars[i + 1] = GLOTTAL
                 ayn -= 1
         elif first in LONG_VOWELS and second in SHORT_VOWELS and not run and end:
@@ -345,6 +350,37 @@ def shape(reading: str, spelling: str = "", ezafe: bool = False) -> Shape | None
     return Shape(vowel_first, body, syllables[-1])
 
 
+#: What decides how a reading behaves in any line (:func:`behaviour`).
+Behaviour = tuple[object, ...]
+
+
+def behaviour(reading: str, spelling: str = "") -> Behaviour | None:
+    """Everything the metre can see of a reading, in any line.
+
+    Two readings with the same behaviour fit the same lines at the same
+    costs, so no metre can tell them apart: *Del* and *Dal*, *Jur* and
+    *Jowr* (both overlong, both long once a vowel takes the last
+    consonant). *ju* and *Jav* differ: before a vowel *Jav* may lose its *v*
+    to it and turn short. *ast* and *Est* differ for است: only *ast* may
+    lose its *a* after a vowel.
+    """
+    found = shape(reading, spelling)
+    if found is None:
+        return None
+    last = found.last
+    key = latin_key(reading)
+    return (
+        found.vowel_first,
+        found.body,
+        last.weight(),
+        last.open,
+        last.long if last.open else None,
+        None if last.open else last.joined().weight(),
+        spelling in ENCLITIC_AST and key in ("ast", "st"),
+        spelling == "و" and key == "o",
+    )
+
+
 def weights(reading: str, spelling: str = "") -> str | None:
     """A reading's weights on its own (``U-`` for *bovad*), or None."""
     found = shape(reading, spelling)
@@ -373,8 +409,8 @@ class Licences:
     other: float = 3.0
     #: How much less likely each unit of cost makes a candidate: 2 ** -cost.
     base: float = 2.0
-    #: How far a word's *other reading* may differ in syllables from its
-    #: candidates.
+    #: How many pattern positions a word's *other reading* may take beyond
+    #: those its candidates take (an overlong syllable takes two).
     spread: int = 1
 
 
@@ -584,10 +620,6 @@ class Weighed:
     extra: float
 
 
-#: Spellings of است that may lose their *a* after a vowel.
-ENCLITIC_AST = frozenset({"است", "ست"})
-
-
 @dataclass
 class Metre:
     """The metre as a switchable step after the transcriber; off unless used.
@@ -661,7 +693,7 @@ class Metre:
         """One word's candidates weighed by how well the line holds each."""
         lowest = min(costs)
         if not word.candidates or lowest == math.inf:
-            return Weighed(word, scanned, 0.0)
+            return Weighed(word, scanned, math.nan)
         known = [max(0.0, p) for _, p in word.candidates if p is not None]
         # Numbers that add up past one are read as shares of one.
         scale = 1.0 / sum(known) if sum(known) > 1.0 else 1.0

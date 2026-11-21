@@ -15,6 +15,7 @@ from murfulu.behnevis.metre import (
     Option,
     Slot,
     Syllable,
+    behaviour,
     fit,
     patterns,
     scans,
@@ -98,7 +99,7 @@ def test_a_following_vowel_takes_the_last_consonant():
         ("jamāat", "جماعت", "U--"),
         ("taaāli", "تعالی", "U--"),  # ta-ʔā-li
         ("moaāšarat", "معاشرت", "U-U-"),  # mo-ʔā-ša-rat
-        ("raadnāk", "رعدناک", "-U-U"),  # raʔd-nāk
+        ("āšofteaqli", "آشفته‌عقلی", "--U--"),  # āš-of-te-ʔaq-li: the vowel stays
         ("baad", "بعد", "-U"),  # baʔd
         ("moallem", "معلم", "U--"),  # mo-ʔal-lem: before a doubled letter
         ("bitāati", "بی‌طاعتی", "--U-"),  # bi-tā-ʔa-ti
@@ -423,3 +424,68 @@ def test_numbers_past_one_are_read_as_shares():
     weighed = metre.weigh(words, ["U-"])[0].word
     assert weighed.latin == "bovad"
     assert weighed.confidence == pytest.approx(1.0)  # 0.45 of 0.45 + 0.45 * 0
+
+
+@pytest.mark.parametrize(
+    ("first", "second", "spelling", "same"),
+    [
+        ("Del", "Dal", "دل", True),  # the vowel's quality: no metre sees it
+        ("kenār", "kanār", "کنار", True),
+        ("Jur", "Jowr", "جور", True),  # both overlong, both long when joined
+        ("Bud", "bovad", "بود", False),
+        ("ju", "Jav", "جو", False),  # before a vowel Jav may turn short
+        ("ast", "Est", "است", False),  # only ast may lose its a
+    ],
+)
+def test_what_a_metre_can_tell_apart(
+    first: str, second: str, spelling: str, same: bool
+):
+    assert (behaviour(first, spelling) == behaviour(second, spelling)) is same
+
+
+def test_the_cost_of_the_models_own_reading_is_unknown_when_it_is_not_offered():
+    metre = Metre()
+    words = [Word("دل", "دل", "other", 0.8, "bank", (("del", 0.2),))]
+    assert math.isnan(metre.weigh(words, ["-"])[0].extra)
+    words = [Word("دل", "دل", None, 0.0, "none", ())]
+    assert math.isnan(metre.weigh(words, ["-"])[0].extra)
+
+
+def _extractor():  # noqa: ANN202 (a tool, loaded from its file)
+    import importlib.util
+    import sys
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "tools" / "extract_metre_lines.py"
+    spec = importlib.util.spec_from_file_location("extract_metre_lines", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["extract_metre_lines"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_a_poem_is_kept_only_when_every_section_has_the_one_metre(tmp_path):  # noqa: ANN001
+    import gzip
+    import json
+
+    def section(rhythm: str | None) -> dict:  # type: ignore[type-arg]
+        return {"ganjoorMetre": {"rhythm": rhythm} if rhythm else None}
+
+    poems = [
+        {"id": 1, "excerpt": "الف", "mainSections": [section("A"), section("A")]},
+        {"id": 2, "excerpt": "ب", "mainSections": [section("A"), section(None)]},
+        {"id": 3, "excerpt": "پ", "mainSections": [section("A"), section("B")]},
+        {"id": 4, "excerpt": "ت", "mainSections": []},
+    ]
+    (tmp_path / "cat").mkdir()
+    with gzip.open(tmp_path / "cat" / "1.json.gz", "wt", encoding="utf-8") as out:
+        json.dump({"cat": {"poems": poems}}, out)
+    assert _extractor().ganjoor_metres(tmp_path) == {1: ("A", "الف")}
+
+
+def test_the_first_hemistich_is_compared_by_its_letters_alone():
+    letters_only = _extractor().letters_only
+    assert letters_only("برخیزْ بتا، بیا") == letters_only("برخیز  بتا بیا")
+    assert letters_only("آب") == letters_only("اب")
+    assert letters_only("برخیز") != letters_only("بنشین")

@@ -21,9 +21,8 @@ words weighed by the metre, :class:`murfulu.behnevis.metre.Metre`):
 
    - *presence or length*: a reading the model offered fits the signs and
      weighs differently from the wrong one — the metre can tell them apart;
-   - *vowel quality*: a reading the model offered fits the signs and has
-     the same syllables, its last one too (*kenār*, *kanār*) — the metre
-     cannot;
+   - *vowel quality*: a reading the model offered fits the signs and
+     behaves the same in any line (*kenār*, *kanār*) — the metre cannot;
    - *not offered*: no reading the model offered fits the signs.
 
 2. **What is left to a person.** Every running word of one poem in
@@ -48,7 +47,7 @@ from typing import Any
 from murfulu.behnevis.choice import Answered
 from murfulu.behnevis.folds import MAX_SIGNED_SHARE, fold_model, held_out
 from murfulu.behnevis.inflect import Inflector
-from murfulu.behnevis.metre import Licences, Metre, patterns, shape
+from murfulu.behnevis.metre import Licences, Metre, behaviour, patterns
 from murfulu.behnevis.stats import cluster_lower_bound
 from murfulu.behnevis.transcribe import Transcriber, Word, bank_from, key
 from murfulu.corpus.inflection import Analyser, held_from
@@ -85,10 +84,12 @@ def kind(word: Word, written: str) -> str | None:
     fitting = [c for c, _ in word.candidates if harakat.fits(written, c) is True]
     if not fitting:
         return "not offered"
-    # The same shape — the same syllables, the same last one — behaves the
-    # same in every line: no metre can tell the two apart (*Del*, *Dal*).
-    chosen = shape(word.latin, word.spelling) if word.latin else None
-    if chosen is not None and any(shape(c, word.spelling) == chosen for c in fitting):
+    # The same behaviour fits the same lines at the same costs: no metre can
+    # tell the two apart (*Del*, *Dal*; metre.behaviour).
+    chosen = behaviour(word.latin, word.spelling) if word.latin else None
+    if chosen is not None and any(
+        behaviour(c, word.spelling) == chosen for c in fitting
+    ):
         return "vowel quality"
     return "presence or length"
 
@@ -341,8 +342,8 @@ def report(  # noqa: PLR0913 (one report, many parts)
     out += [
         "",
         "*Presence or length*: a reading the model offered fits the signs and",
-        "has other syllables — the metre can tell them apart. *Vowel quality*:",
-        "one fits and has the same syllables, its last one too (*kenār*,",
+        "behaves differently in some line — the metre can tell them apart.",
+        "*Vowel quality*: one fits and behaves the same in every line (*kenār*,",
         "*kanār*) — no metre can. *Not",
         "offered*: none fits; the metre can only lower the confidence. *Made right*",
         "counts the errors of that kind before that the metre turned right; *newly",
