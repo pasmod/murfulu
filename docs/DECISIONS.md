@@ -17,7 +17,7 @@ the deploy is clean. Built as proposed (`behnevis/serve.py`, `metre_of`,
   `release` of another version takes that version's file, and no `.env`
   line was needed.
 - *The switch*: `MURFULU_BEHNEVIS_METRE=off` in the server `.env` and the api
-  recreated turns it off; removing the file does too (DEPLOY §20).
+  recreated turns it off; removing the file does too (DEPLOY §22).
 - *A reading built from the stems still shows no number* in the word's
   panel; the word's own confidence, which sets its level, is the metre's.
 - *Cost*: measured on the server after the deploy (DEPLOY §22), Hafez's
