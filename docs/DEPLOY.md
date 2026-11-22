@@ -809,3 +809,34 @@ Not checked on the server: a word's panel, and giving or taking back a
 confirmation (both checked on the local run before, against a throwaway
 store). The star's count differs from the local run's 74 because the server
 reads with the v22 model.
+
+## 27. A spelling's count in plain words, and the corpus lines under «شواهد» on both tables — run 2026-11-22
+
+The clearer corpus cell and the lines (DECISIONS 2026-11-22, *third*), on the
+project lead's word («آره، منتشر کن»), from the main checkout at `64626be`,
+one commit on `d264fc5` — §26's record, docs only, on `e281c42`, which was
+what the server ran. The interface only: no migration, no `.env` change, no
+data file. **The rollback is `deploy` from `d264fc5`**; nothing is saved by
+the change, so nothing in the database needs undoing.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options) | 19 files differ: this change's 16, and `DEPLOY.md`, `FOR_THE_LINGUIST.md` and `OPEN_QUESTIONS.md`, older on the server; nothing deleted |
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy (33 s) |
+| 2 | `deploy/server.sh check` | all checks passed, corpus v22, `lexicon-20261111`; the site answers 401 logged out |
+| 3 | the served script, through an SSH tunnel to the web container | holds «شاید واژه‌ای دیگر با همین املا» and no longer «همین حروف در» |
+| 4 | the pages, through the same tunnel, at 375 px | the compound page for دل opens on دلدار (ساخت 100), and its «شواهد» lists three texts under the sentences, the word marked, each line with «در متن ←»; the build page for رفتن shows رو with «۱۰٬۵۴۷ متن · شاید واژه‌ای دیگر با همین املا», and its «شواهد» opens with «پیکره» open and three texts under the figures; nothing scrolls sideways. Nothing was saved |
+| 5 | the public address, logged out | 401 on `/` and on `/compound` |
+
+The site password was not used. Not looked at on the server: the whole list
+behind «نشان دادن همهٔ شواهد», the chip's ⓘ, and the desktop width (all
+three on the local run before). The compound page's first answer after the
+restart took more than fifteen seconds; the next took 1.3 s (`limit=0`).
+
+**Two browser tests fail against the Mac's stack, with this change and
+without it** (run on an untouched copy of `d264fc5` to be sure): the compound
+table's «ساخت» value (`layout.spec.ts`; the Mac's api has no
+`MURFULU_COMPOUND_HEADS_PATH`, so every compound's score is null there) and
+the reading screen's panel for a word with several readings
+(`texts.spec.ts`; cause not looked into). Each fails at both widths, so
+four runs; the rest of the suite passed or skipped.

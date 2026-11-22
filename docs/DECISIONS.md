@@ -7,8 +7,9 @@ Settled choices, with the reason. Append; do not rewrite history.
 The project lead read «همین حروف در ۱۶۵ متن» in the «در پیکره» column, could
 not tell what it meant, and asked for clearer wording and for the evidence to
 be visible in that part of the screen too. Two choices, in the interface only
-— no API change, no new data. **Not served yet**: on this machine, the unit
-tests green, looked at against the local stack at desktop and phone width.
+— no API change, no new data. **Served since 2026-11-22** on the project
+lead's «آره، منتشر کن» (DEPLOY §27); before that, the unit tests green and
+both tables looked at against the local stack at desktop and phone width.
 
 - **The cell.** A count that is only the spelling's (`level: spelling`) reads
   «۱۶۵ متن» and under it, smaller, «شاید واژه‌ای دیگر با همین املا» (one line
