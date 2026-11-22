@@ -15,7 +15,7 @@ import type { AutoReading, TextUnit, TextWord, WordKnown } from "../../api/texts
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { KIND } from "./kinds";
-import { LEVEL_FA, type Saved, markedFor, percent } from "./levels";
+import { LEVEL_FA, NOT_IN_BANK, type Saved, inBank, markedFor, percent } from "./levels";
 import styles from "./Reader.module.css";
 
 export interface Chosen {
@@ -195,6 +195,13 @@ function WordButton({
  * typed (direction A, 2026-11-14). A reading saved for this word stands in
  * its place, with a check mark and its own colour, so a reader sees what is
  * done (the project lead, 2026-11-14).
+ *
+ * **A reading the bank does not hold carries a star before it** (the project
+ * lead, 2026-11-22: show which readings are karbon's, the recorded ones) —
+ * the linguist's mark for a form that is not attested. The star marks what
+ * is left to record, so a text all of whose readings are the bank's shows
+ * none. It follows the reading in the markup: the page runs right to left,
+ * so that is where a Latin form's left side is.
  */
 function AutoWord({
   word,
@@ -213,18 +220,26 @@ function AutoWord({
   panelId: string;
   onPress: (open: boolean) => void;
 }) {
+  const held = inBank(auto, mine ? mine.latin : auto.latin);
+  const star = held ? null : (
+    <span className={styles.star} aria-hidden="true">
+      *
+    </span>
+  );
   return (
     <button
       type="button"
       className={styles.word}
       data-level={mine ? "mine" : auto.level}
+      data-held={held ? undefined : "no"}
       data-sought={sought || undefined}
       aria-expanded={open}
       aria-controls={open ? panelId : undefined}
       aria-label={
-        mine
+        (mine
           ? `${word.fa}: ${mine.latin}، ثبت‌شده`
-          : `${word.fa}: ${auto.latin}، ${LEVEL_FA[auto.level]} (${percent(auto.confidence)})`
+          : `${word.fa}: ${auto.latin}، ${LEVEL_FA[auto.level]} (${percent(auto.confidence)})`) +
+        (held ? "" : `، ${NOT_IN_BANK}`)
       }
       onClick={() => onPress(open)}
     >
@@ -239,9 +254,13 @@ function AutoWord({
               ✓
             </span>
             <Latin>{mine.latin}</Latin>
+            {star}
           </span>
         ) : (
-          <Latin className={`${styles.latin} ${styles.auto}`}>{auto.latin}</Latin>
+          <span className={`${styles.latin} ${styles.auto}`}>
+            <Latin>{auto.latin}</Latin>
+            {star}
+          </span>
         )}
       </span>
     </button>

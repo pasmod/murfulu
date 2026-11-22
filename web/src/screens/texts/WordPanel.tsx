@@ -41,7 +41,7 @@ import {
 import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { Here } from "./Here";
-import type { Saved } from "./levels";
+import { type Saved, inBank } from "./levels";
 import styles from "./WordPanel.module.css";
 
 export interface WordPanelProps {
@@ -117,6 +117,22 @@ export function WordPanel({
           onSaved={onSaved}
           total={known?.total_count ?? null}
         />
+      ) : null}
+
+      {/* The star under the word, in words (2026-11-22): the reading shown
+          for this line is not one the bank holds. */}
+      {auto && !inBank(auto, saved ? saved.latin : auto.latin) ? (
+        <p className={styles.note}>
+          <span aria-hidden="true">* </span>
+          خوانشِ <Latin>{saved ? saved.latin : auto.latin}</Latin> در بانک واژه (کاربن) ثبت
+          نشده است
+          {saved
+            ? "."
+            : auto.source === "function"
+              ? "؛ برنامه این واژهٔ دستوری را چنین می‌خواند."
+              : "؛ برنامه آن را خودش ساخته است."}{" "}
+          <Link to="/texts?view=karbon">خوانش‌هایی که کاربن ندارد ←</Link>
+        </p>
       ) : null}
 
       {readings.length === 0 ? (

@@ -25,6 +25,7 @@ import { Latin } from "../../text/Latin";
 import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
 import { type Saved, percent } from "./levels";
+import { lineText } from "./lines";
 import { UnitView, type Chosen } from "./UnitView";
 import { WordPanel } from "./WordPanel";
 import styles from "./Reader.module.css";
@@ -193,6 +194,17 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
               ثبت‌شده: خوانشی که یک خواننده برای همین واژه برگزیده یا نوشته است
             </span>
           </p>
+          <p>
+            <span className={styles.auto}>
+              <Latin>konam</Latin>
+              <span className={styles.star} aria-hidden="true">
+                *
+              </span>
+            </span>{" "}
+            ستاره یعنی این خوانش در بانک واژه (کاربن) ثبت نشده است: برنامه آن را خودش ساخته یا
+            خواننده‌ای نوشته است. خوانشِ بی‌ستاره در بانک واژه هست.{" "}
+            <Link to="/texts?view=karbon">خوانش‌هایی که کاربن ندارد ←</Link>
+          </p>
         </div>
       ) : (
         <div className={styles.legend}>
@@ -272,6 +284,7 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
                       corpus_version: text.corpus_version,
                       line: open.line,
                       word: open.word,
+                      line_text: lineText(one.lines[open.line]?.words ?? []),
                       ...neighbours(one.lines[open.line]?.words ?? [], open.word),
                     }}
                     marked={marks}

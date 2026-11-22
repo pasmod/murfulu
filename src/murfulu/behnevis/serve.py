@@ -37,7 +37,14 @@ from typing import Any
 from murfulu.behnevis import suggest, unsure
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.metre import Metre, patterns
-from murfulu.behnevis.transcribe import DECIDED, Transcriber, Word, bank_from, key
+from murfulu.behnevis.transcribe import (
+    DECIDED,
+    Transcriber,
+    Word,
+    bank_from,
+    key,
+    load_function_readings,
+)
 from murfulu.behnevis.vowels import vocalise_written
 from murfulu.corpus.inflection import Analyser, held_from
 from murfulu.lexicon.store import Lexicon
@@ -109,6 +116,35 @@ def loaded() -> Transcriber | None:
     except Exception:  # no lexicon: the screen goes without, as before
         return None
     return _load(str(model), model.stat().st_mtime, snapshot_id)
+
+
+@lru_cache(maxsize=2)
+def _bank(snapshot_id: str) -> dict[str, tuple[str, ...]]:
+    del snapshot_id  # the cache key: a new lexicon is read again
+    with Lexicon.open() as lexicon:
+        return bank_from(
+            (r.spelling_fa, latin)
+            for r in lexicon.all_readings()
+            for latin in r.all_latin
+            if latin
+        )
+
+
+def held() -> tuple[dict[str, tuple[str, ...]], dict[str, tuple[str, ...]]] | None:
+    """The bank's readings and the function-word list's, or None without a lexicon.
+
+    The model's own where one is configured, so the list for karbon draws the
+    line where the reading screen does; else read from the lexicon.
+    """
+    transcriber = loaded()
+    if transcriber is not None:
+        return transcriber.bank, transcriber.functions
+    try:
+        with Lexicon.open() as lexicon:
+            snapshot_id = lexicon.snapshot_id
+    except Exception:  # no lexicon
+        return None
+    return _bank(snapshot_id), load_function_readings()
 
 
 def unsure_path() -> Path | None:
@@ -275,6 +311,10 @@ def annotate(
                             )
                         )
                     ],
+                    # The readings the bank itself holds — karbon's, the
+                    # recorded ones: the screen marks any other reading it
+                    # shows as not in the bank (2026-11-22).
+                    "bank": list(transcriber.bank.get(keys[i], ())),
                 }
                 # The word with this reading's short vowels, for display only,
                 # and only where it adds a mark (DECISIONS 2026-11-21).

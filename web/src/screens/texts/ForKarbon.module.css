@@ -1,0 +1,184 @@
+/* The readings the bank lacks, for the linguist to confirm (2026-11-22).
+   One row per spelling and reading; a confirmed row carries a green edge and
+   a check mark, never colour alone. */
+.card {
+  composes: card from "../../styles/page.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-lg);
+}
+
+.note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.trouble {
+  composes: trouble from "../../styles/page.module.css";
+}
+
+.states {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.state {
+  composes: chip from "../../styles/controls.module.css";
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--line-strong);
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.groupCount {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block: var(--space-3);
+  padding-inline: var(--space-3) 0;
+  border-block-start: 1px solid var(--line);
+  border-inline-start: 3px solid transparent;
+}
+
+.row:first-child {
+  border-block-start: 0;
+}
+
+.row[data-confirmed] {
+  border-inline-start-color: var(--level-sure);
+}
+
+/* The word, its reading and what is known of it; it wraps on a phone rather
+   than pushing the page sideways. */
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+}
+
+.word {
+  font-size: var(--text-lg);
+  color: var(--ink);
+}
+
+.latin {
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+.badge {
+  padding: 0 var(--space-2);
+  border-radius: 99px;
+  background: var(--paper-sunk);
+  color: var(--ink-soft);
+  font-size: var(--text-xs);
+}
+
+.times {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.fact {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line {
+  padding-inline-start: var(--space-3);
+  border-inline-start: 2px solid var(--line);
+}
+
+.lineText {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-base);
+}
+
+.where {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+/* The word in its line: underlined in the accent, as a citation's word is on
+   the word page, not a highlighter's yellow. */
+.hit {
+  background: none;
+  color: var(--accent-strong);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.3em;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.confirm {
+  composes: primary from "../../styles/controls.module.css";
+}
+
+.back {
+  composes: secondary from "../../styles/controls.module.css";
+}
+
+.done {
+  color: var(--level-sure);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.failed {
+  color: var(--level-unsure);
+  font-size: var(--text-sm);
+}
+
+.more {
+  composes: secondary from "../../styles/controls.module.css";
+  align-self: flex-start;
+}

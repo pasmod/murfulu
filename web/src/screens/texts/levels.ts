@@ -13,6 +13,20 @@ export const LEVEL_FA: Record<Level, string> = {
   unsure: "نامطمئن",
 };
 
+/**
+ * Whether the bank holds this reading of the word (2026-11-22): karbon's
+ * readings are the recorded ones, and any other reading the screen shows —
+ * a function word's, one built from the stems, a guess from the letters, one
+ * a reader typed — is marked as not in the bank. An older API that does not
+ * say what the bank holds marks nothing.
+ */
+export function inBank(auto: AutoReading, latin: string): boolean {
+  return auto.bank === undefined || auto.bank.includes(latin);
+}
+
+/** What the mark means, for a label read aloud. */
+export const NOT_IN_BANK = "در بانک واژه نیست";
+
 /** A share as Persian digits with «٪». */
 export function percent(share: number): string {
   return `${Math.round(share * 100).toLocaleString("fa-IR")}٪`;

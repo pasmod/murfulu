@@ -14,6 +14,8 @@
  *   ?view=marked                       the readings marked wrong, for review
  *   ?view=unsure                       the most frequent unsure spellings, to
  *                                      decide once for every like place
+ *   ?view=karbon                       the readings the bank lacks, for the
+ *                                      linguist to confirm and karbon to take
  */
 
 import { type FormEvent, useEffect, useState } from "react";
@@ -27,6 +29,7 @@ import { MOST, searchFor } from "../../suggest/searchFor";
 import { textSource } from "../../suggest/sources";
 import { Num } from "../../text/Num";
 import { Waiting } from "../../text/Waiting";
+import { ForKarbon } from "./ForKarbon";
 import { Marked } from "./Marked";
 import { Reader } from "./Reader";
 import { Unsure } from "./Unsure";
@@ -136,6 +139,8 @@ export function Texts() {
         <Marked />
       ) : view === "unsure" ? (
         <Unsure />
+      ) : view === "karbon" ? (
+        <ForKarbon />
       ) : (
         <>
           <section className={styles.card} aria-labelledby="start">
@@ -157,6 +162,11 @@ export function Texts() {
             <p className={styles.hint}>
               <Link to="/texts?view=unsure">
                 پرتکرارترین واژه‌های نامطمئن را یک بار برای همهٔ جاهایشان تعیین کنید ←
+              </Link>
+            </p>
+            <p className={styles.hint}>
+              <Link to="/texts?view=karbon">
+                خوانش‌هایی که کاربن ندارد را ببینید و تأیید کنید ←
               </Link>
             </p>
           </section>

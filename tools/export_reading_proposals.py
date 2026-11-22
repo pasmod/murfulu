@@ -2,6 +2,7 @@
 
     python tools/export_reading_proposals.py > proposals.md          # for karbon
     python tools/export_reading_proposals.py --jsonl > picks.jsonl   # for the model
+    python tools/export_reading_proposals.py --confirmed > issue.md  # the linguist's
 
 On the reading screen a reader may pick another of a word's readings, or type
 one, where the automatic Behnevis was unsure (direction A, 2026-11-14). Each
@@ -29,6 +30,13 @@ is passed on whole, with its scope and store id, for the build to keep the
 newest for each spelling and scope; karbon's list takes the decisions in
 force whose reading the bank lacks, with what they were decided for.
 
+**Only what the linguist confirmed** (``--confirmed``; the project lead,
+2026-11-22, :mod:`murfulu.behnevis.proposed`) is the text of one karbon issue:
+the readings confirmed on the reading screen's list for karbon, in two parts —
+spellings the bank lacks altogether, and readings it lacks for a spelling it
+holds — each with what the bank has, what it was decided for and an example.
+It needs the lexicon, to say which of the two a reading is.
+
 Read-only on the database.
 """
 
@@ -44,12 +52,16 @@ from typing import Any
 from sqlalchemy import select
 
 from murfulu.behnevis import decided as decisions
+from murfulu.behnevis import proposed
+from murfulu.behnevis.proposed import HERE, latest
 from murfulu.db.models.review import ExpertFeedback
 from murfulu.db.session import session_scope
 
-#: The two kinds of record this export reads: a reading for one word in a
-#: line, and a reading decided for every like place.
-HERE = "reading_here"
+# The kinds of record this export reads — a reading for one word in a line
+# (`HERE`), a reading decided for every like place, and the linguist's
+# confirmation — and which records count (`latest`) live in
+# :mod:`murfulu.behnevis.proposed`, shared with the reading screen's list.
+_good = proposed.good
 
 
 def gather(
@@ -114,14 +126,12 @@ def _reach(one: decisions.Decision) -> str:
     return "everywhere"
 
 
-def current_bank() -> Callable[[str, str], bool | None] | None:
-    """Whether the current bank holds a reading, or None without a lexicon.
-
-    A function word's own reading counts as held (و *o*, به *be*): the model
-    learns a pick of it, and karbon is not asked for it.
-    """
+def bank_and_functions() -> (
+    tuple[dict[str, tuple[str, ...]], dict[str, tuple[str, ...]]] | None
+):
+    """The current bank and the function-word list, or None without a lexicon."""
     try:
-        from murfulu.behnevis.transcribe import bank_from, key, load_function_readings
+        from murfulu.behnevis.transcribe import bank_from, load_function_readings
         from murfulu.lexicon.store import Lexicon
 
         with Lexicon.open() as lexicon:
@@ -131,13 +141,36 @@ def current_bank() -> Callable[[str, str], bool | None] | None:
                 for latin in r.all_latin
                 if latin
             )
-    except Exception:  # no lexicon here: the saved flag decides
+    except Exception:  # no lexicon here
         return None
-    functions = load_function_readings()
+    return bank, load_function_readings()
+
+
+def snapshot_id() -> str | None:
+    """Which lexicon the bank was read from, for the issue's first line."""
+    try:
+        from murfulu.lexicon.store import Lexicon
+
+        with Lexicon.open() as lexicon:
+            return lexicon.snapshot_id
+    except Exception:  # no lexicon here
+        return None
+
+
+def current_bank() -> Callable[[str, str], bool | None] | None:
+    """Whether the current bank holds a reading, or None without a lexicon.
+
+    A function word's own reading counts as held (و *o*, به *be*): the model
+    learns a pick of it. Where the bank lacks it, it is on the linguist's
+    list for karbon all the same (:func:`murfulu.behnevis.proposed.waiting`).
+    """
+    found = bank_and_functions()
+    if found is None:
+        return None  # the saved flag decides
+    bank, functions = found
 
     def held(spelling: str, latin: str) -> bool:
-        k = key(spelling)
-        return latin in bank.get(k, ()) or latin in functions.get(k, ())
+        return proposed.held_by(bank, functions, spelling, latin)
 
     return held
 
@@ -170,64 +203,93 @@ def report(found: dict[str, dict[str, dict[str, Any]]]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _context(context: dict[str, Any]) -> tuple[Any, ...]:
-    """The word a proposal was for: its text, unit, spelling, form and neighbours."""
-    return (
-        context.get("document_id"),
-        context.get("unit"),
-        context.get("spelling_fa"),
-        context.get("written"),
-        context.get("before"),
-        context.get("after"),
-    )
+def _cell(text: Any) -> str:
+    """A value in a Markdown table cell."""
+    return str(text or "").replace("|", "\\|").replace("\n", " ")
 
 
-def _position(context: dict[str, Any]) -> tuple[Any, ...] | None:
-    """Its line and place in the line, sent since 2026-11-14."""
-    line, word = context.get("line"), context.get("word")
-    return None if line is None or word is None else (line, word)
+def _example(one: dict[str, Any]) -> str:
+    """One place a reading was proposed: its line, or the words around it, and where."""
+    for place in one["places"]:
+        said = place.get("text") or " ".join(
+            part
+            for part in (place.get("before"), place.get("written"), place.get("after"))
+            if part
+        )
+        where = place.get("heading") or place.get("document_id") or ""
+        return f"{said} — {where}" if said and where else said or where
+    return ""
 
 
-def latest(rows: list[Any]) -> list[Any]:
-    """Only the newest proposal for each word in a line, in the order given.
+def _decided_for(one: dict[str, Any]) -> str:
+    """What a reading was decided for, in a few words."""
+    said = []
+    for reach in one["decided"]:
+        if reach["scope"] == decisions.AFTER_WORD:
+            said.append(f"after {reach['word']}")
+        elif reach["scope"] == decisions.BEFORE_WORD:
+            said.append(f"before {reach['word']}")
+        else:
+            said.append("everywhere")
+    return "; ".join(said)
 
-    ``rows`` come oldest first. A later save replaces an earlier one only for
-    the same word — same text, unit, spelling, form and neighbours — at the
-    same position, so a word a corpus revision moved under old coordinates is
-    not taken for the one saved there. A save from before positions were sent
-    cannot say which of two like words it was for, and this export cannot see
-    the text, so a positioned save never replaces it (the review of
-    2026-11-14; the server held no such save when positions came in). A
-    proposal that names no text is kept as it is: nothing says it was replaced.
+
+def confirmed_report(rows: list[dict[str, Any]], snapshot: str | None = None) -> str:
+    """What the linguist confirmed, as the text of one karbon issue.
+
+    ``rows`` are :func:`murfulu.behnevis.proposed.waiting`'s; only those with
+    a confirmation in force are written, in two parts.
     """
-    newest: dict[tuple[Any, ...], int] = {}
-    for at, row in enumerate(rows):
-        context = row.context or {}
-        if context.get("document_id") and _here(context):
-            newest[(_context(context), _position(context))] = at
-    kept = set(newest.values())
-    return [
-        row
-        for at, row in enumerate(rows)
-        if not ((row.context or {}).get("document_id") and _here(row.context or {}))
-        or at in kept
+    said = [one for one in rows if one["confirmed"]]
+    missing = [one for one in said if one["kind"] == proposed.MISSING]
+    reading = [one for one in said if one["kind"] == proposed.READING]
+    lines = [
+        "# Readings the linguist confirmed on murfulu's reading screen",
+        "",
+        f"{len(said)} reading{'' if len(said) == 1 else 's'} the bank lacks"
+        + (f" (`{snapshot}`)" if snapshot else "")
+        + ", each confirmed by the linguist on murfulu's list for karbon.",
+        "*Proposed* counts the places readers saved it; *decided for* says where a",
+        "reader decided it for every like place. A reading marked *function word*",
+        "is one murfulu's own list reads the spelling as in running text.",
+        "Proposals only — nothing here was written into the bank.",
+        "",
+        f"## Spellings the bank does not hold ({len(missing)})",
+        "",
     ]
-
-
-def _good(row: Any) -> bool:
-    """A `good` record, or a decision (taken back with `unsure`)."""
-    context = row.context or {}
-    return row.verdict == "good" or context.get("kind") == decisions.KIND
-
-
-def _here(context: dict[str, Any]) -> bool:
-    """Whether a record is a reading for one word in a line.
-
-    A decision for every like place is not replaced by a later save at the
-    place it was made from: its own scope says what replaces it
-    (:func:`murfulu.behnevis.decided.current`).
-    """
-    return context.get("kind") != decisions.KIND
+    if missing:
+        lines += [
+            "| spelling | reading | proposed | decided for | example |",
+            "|---|---|---:|---|---|",
+        ]
+        lines += [
+            f"| {_cell(one['spelling_fa'])} | {_cell(one['latin'])}"
+            f"{' (function word)' if one['origin'] == proposed.FUNCTION else ''} "
+            f"| {one['times']} | {_cell(_decided_for(one))} | {_cell(_example(one))} |"
+            for one in missing
+        ]
+    else:
+        lines.append("None.")
+    lines += [
+        "",
+        f"## Spellings the bank holds, without this reading ({len(reading)})",
+        "",
+    ]
+    if reading:
+        lines += [
+            "| spelling | reading | the bank has | proposed | decided for | example |",
+            "|---|---|---|---:|---|---|",
+        ]
+        lines += [
+            f"| {_cell(one['spelling_fa'])} | {_cell(one['latin'])}"
+            f"{' (function word)' if one['origin'] == proposed.FUNCTION else ''} "
+            f"| {_cell(', '.join(one['bank']))} | {one['times']} "
+            f"| {_cell(_decided_for(one))} | {_cell(_example(one))} |"
+            for one in reading
+        ]
+    else:
+        lines.append("None.")
+    return "\n".join(lines) + "\n"
 
 
 def picks(rows: list[Any]) -> list[dict[str, Any]]:
@@ -267,10 +329,20 @@ def picks(rows: list[Any]) -> list[dict[str, Any]]:
 def main(argv: list[str] | None = None) -> int:
     """Print the list, or every proposal as JSON lines."""
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument(
+    kind = parser.add_mutually_exclusive_group()
+    kind.add_argument(
         "--jsonl", action="store_true", help="every proposal, for the model"
     )
+    kind.add_argument(
+        "--confirmed",
+        action="store_true",
+        help="only what the linguist confirmed, as the text of one karbon issue",
+    )
     args = parser.parse_args(argv)
+    held = bank_and_functions() if args.confirmed else None
+    if args.confirmed and held is None:
+        sys.stderr.write("no lexicon: set MURFULU_LEXICON_PATH\n")
+        return 2
     with session_scope() as session:
         rows = list(
             session.scalars(
@@ -288,6 +360,10 @@ def main(argv: list[str] | None = None) -> int:
         if args.jsonl:
             for one in picks(rows):
                 sys.stdout.write(json.dumps(one, ensure_ascii=False) + "\n")
+        elif held is not None:
+            sys.stdout.write(
+                confirmed_report(proposed.waiting(rows, *held), snapshot_id())
+            )
         else:
             sys.stdout.write(report(gather(rows, current_bank())))
     return 0

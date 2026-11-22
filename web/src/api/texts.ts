@@ -82,6 +82,13 @@ export interface AutoReading {
    * teaches the model; any other reading is a proposal for karbon.
    */
   known?: string[];
+  /**
+   * The readings the bank itself holds for this spelling — karbon's, the
+   * recorded ones (since 2026-11-22). A reading shown that is not among them
+   * is marked as not in the bank; absent from an older API, when nothing is
+   * marked.
+   */
+  bank?: string[];
 }
 
 export type LinePosition =
@@ -246,6 +253,11 @@ export interface MarkedWhere {
   /** The line in the unit and the word's place in it, to show a saved pick there. */
   line?: number;
   word?: number;
+  /**
+   * The line's own words, joined by spaces as the screen counts them: the
+   * example karbon is given with a reading the bank lacks (2026-11-22).
+   */
+  line_text?: string;
 }
 
 /** Record that one reading of one spelling is wrong. Append-only. */
@@ -313,6 +325,7 @@ export function proposeReading(
       unit: where.unit,
       line: where.line ?? null,
       word: where.word ?? null,
+      line_text: where.line_text ?? null,
       heading: where.heading,
     },
     corpus_version: where.corpus_version,
@@ -503,6 +516,7 @@ export function decideReading(
       unit: where.unit ?? null,
       line: where.line ?? null,
       word: where.word ?? null,
+      line_text: where.line_text ?? null,
       heading: where.heading ?? null,
     },
     corpus_version: where.corpus_version,

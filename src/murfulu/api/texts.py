@@ -5,6 +5,7 @@
     GET /texts/marked?kind=proposed    readings picked or typed for a word in a line
     GET /texts/unsure                  the spellings most often left to a person
     GET /texts/unsure/{spelling}       one of them, and the readings decided for it
+    GET /texts/karbon                  the readings the bank lacks, for the linguist
     GET /texts/{document_id}?start=0   one text, word by word, with readings
 
 Thin, like every route: the work is :mod:`murfulu.search.texts`.
@@ -32,6 +33,12 @@ then these routes only say what was decided.
 made (2026-11-22, :mod:`murfulu.behnevis.suggest`): a reading and how often a
 reading at its certainty was right in a test. It is only shown; nothing here
 decides by it.
+
+**A reading the bank lacks is confirmed by the linguist** (2026-11-22) the
+same way once more, with ``kind: reading_confirmed``
+(:mod:`murfulu.behnevis.proposed`); taken back, it is ``withdrawn`` with
+``verdict: unsure``. Only confirmed readings are written into karbon's issue
+(``tools/export_reading_proposals.py --confirmed``).
 """
 
 from __future__ import annotations
@@ -43,7 +50,7 @@ from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import func, or_, select
 
 from murfulu.api.auth import Caller, Store
-from murfulu.behnevis import decided
+from murfulu.behnevis import decided, proposed
 from murfulu.behnevis import serve as behnevis
 from murfulu.behnevis.transcribe import key
 from murfulu.behnevis.vowels import vocalise, vocalise_written
@@ -167,8 +174,15 @@ def marked(
         # A reading decided for every like place is not a pick for one word
         # (2026-11-21): it is listed by `/texts/unsure`, and a decision taken
         # back must not stay under the word it was made from.
+        # Nor is the linguist's confirmation of a reading for karbon
+        # (2026-11-22), which names no place at all.
         decision = ExpertFeedback.context["kind"].as_string()
-        where.append(or_(decision.is_(None), decision != decided.KIND))
+        where.append(
+            or_(
+                decision.is_(None),
+                decision.not_in((decided.KIND, proposed.CONFIRMED)),
+            )
+        )
     if document_id:
         # The reading screen asks for what was saved in the text it shows.
         where.append(ExpertFeedback.context["document_id"].as_string() == document_id)
@@ -308,6 +322,84 @@ def unsure_spelling(_who: Caller, session: Store, spelling: str) -> dict[str, An
         "spelling": keyed,
         "listed": listed,
         "decided": _decisions(session, {keyed}).get(keyed, []),
+    }
+
+
+#: How many of the readings for karbon one page of the list holds.
+KARBON_PAGE = 50
+
+
+@router.get("/texts/karbon")
+def for_karbon(
+    _who: Caller,
+    session: Store,
+    state: str = Query(
+        "all",
+        pattern="^(all|open|confirmed)$",
+        description="every reading, those not confirmed yet, or those confirmed",
+    ),
+    offset: int = Query(0, ge=0),
+    size: int = Query(KARBON_PAGE, ge=1, le=200),
+) -> dict[str, Any]:
+    """The readings the bank lacks, for the linguist, the most proposed first.
+
+    One row per spelling and reading: a reading readers typed or decided that
+    neither the bank nor the function-word list holds, and the function-word
+    list's own readings the bank lacks. Each says whether the bank lacks the
+    spelling altogether (``missing``) or only this reading (``reading``),
+    what the bank has, where it was proposed, and whether the linguist
+    confirmed it. A row leaves the list when the bank comes to hold the
+    reading.
+    """
+    found = behnevis.held()
+    if found is None:
+        raise HTTPException(503, "the word bank is not available")
+    rows = list(
+        session.scalars(
+            select(ExpertFeedback)
+            .where(
+                ExpertFeedback.target_type == "lexicon_entry",
+                # A decision or a confirmation taken back is stored with
+                # `unsure`; every other record read here is a `good` one.
+                ExpertFeedback.verdict.in_(("good", "unsure")),
+            )
+            .order_by(ExpertFeedback.id)
+        )
+    )
+    waiting = proposed.waiting(
+        proposed.latest([row for row in rows if proposed.good(row)]), *found
+    )
+    chosen = [
+        one
+        for one in waiting
+        if state == "all" or (one["confirmed"] is not None) == (state == "confirmed")
+    ]
+    page = chosen[offset : offset + size]
+    # A row with no line of its own borrows the measured list's examples for
+    # its spelling: places where the screen was unsure of it.
+    listed = behnevis.unsure_list()
+    examples = (
+        {one["spelling"]: one.get("examples") or [] for one in listed[1]}
+        if listed is not None
+        else {}
+    )
+    for one in page:
+        # The spelling with this reading's short vowels, for display only.
+        one["spelling_fa_marked"] = vocalise(one["spelling_fa"], one["latin"])
+        one["examples"] = (
+            []
+            if any(place.get("text") for place in one["places"])
+            else examples.get(one["spelling"], [])[: proposed.PLACES]
+        )
+    return {
+        "total": len(waiting),
+        "confirmed": sum(one["confirmed"] is not None for one in waiting),
+        "missing": sum(one["kind"] == proposed.MISSING for one in waiting),
+        "state": state,
+        "matching": len(chosen),
+        "offset": offset,
+        "size": size,
+        "rows": page,
     }
 
 

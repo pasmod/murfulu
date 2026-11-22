@@ -272,6 +272,14 @@
   font-weight: 700;
 }
 
+/* A reading the bank does not hold: a star before it, the linguist's mark
+   for a form that is not attested (2026-11-22). It takes the reading's own
+   colour, and stands at the Latin form's left: after it in a page that runs
+   right to left. */
+.star {
+  font-weight: 700;
+}
+
 /* A saved reading may be typed and long: it wraps rather than widen the page. */
 .word[data-level="mine"] .auto {
   flex-wrap: wrap;
