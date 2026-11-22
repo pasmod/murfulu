@@ -179,7 +179,9 @@ async function showForms(name?: RegExp) {
 async function openEvidence(word: string, field: RegExp) {
   const row = (await screen.findByText(word)).closest("li")!;
   await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
-  await userEvent.click(within(row).getByRole("button", { name: field }));
+  // «پیکره» is open already where the corpus has lines for the word.
+  const button = within(row).getByRole("button", { name: field });
+  if (button.getAttribute("aria-expanded") !== "true") await userEvent.click(button);
   return row;
 }
 
@@ -949,7 +951,7 @@ describe("the evidence", () => {
     renderApp(ROUTE);
     await showForms();
     await openEvidence("روش", /^پیکره/);
-    expect(screen.getByText(/شمار برای همین حروف است/)).toBeInTheDocument();
+    expect(screen.getByText(/شمار برای همین املا است/)).toBeInTheDocument();
   });
 
   it("distinguishes not-checked from not-found", async () => {
@@ -1235,7 +1237,7 @@ describe("a form that also reads as an inflection", () => {
     // corpus field.
     await openEvidence("رفتی", /^پیکره/);
     expect(
-      screen.getByText(/شکل صرف‌شدهٔ واژه‌ای دیگر باشند/),
+      screen.getByText(/شکل صرف‌شدهٔ واژه‌ای دیگر باشد/),
     ).toBeInTheDocument();
     expect(screen.getByText(/جور دیگری هم می‌شود خواند/)).toBeInTheDocument();
     expect(screen.getByText(/نمی‌شود گفت کدام منظور است/)).toBeInTheDocument();

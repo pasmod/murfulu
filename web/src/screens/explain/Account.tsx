@@ -45,7 +45,7 @@ export function Account({ account, form }: { account: Analysis; form: string }) 
           ) : (
             <>
               این پایه در <Num value={evidence.doc_count} /> متن آمده است
-              {evidence.level === "spelling" ? " — شمار برای همین حروف است" : null}.
+              {evidence.level === "spelling" ? " — شمار برای همین املا است" : null}.
             </>
           )}
         </p>

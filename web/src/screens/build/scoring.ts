@@ -34,7 +34,7 @@ export const BUILD_SAYS =
 
 /** What «در پیکره» means, in the ⓘ beside its filter. */
 export const CORPUS_SAYS =
-  "در چند متن از پیکره، با همین معنا، آمده است. پیکره بیشتر شعر کهن است؛ پس واژه‌ای که در آن نیامده، شاید امروز به کار برود یا واژهٔ تازهٔ خوبی باشد.";
+  "در چند متن از پیکره، با همین معنا، آمده است. «فقط همین املا» یعنی نوشتهٔ واژه در پیکره هست، ولی شاید آن‌جا واژه‌ای دیگر باشد، چون خط فارسی زیر و زبر را نمی‌نویسد. پیکره بیشتر شعر کهن است؛ پس واژه‌ای که در آن نیامده، شاید امروز به کار برود یا واژهٔ تازهٔ خوبی باشد.";
 
 /** What the candidates view shows, said above its rows. */
 export const CANDIDATES_SAY =
@@ -107,7 +107,7 @@ export const IN_CORPUS: Filter[] = [
   },
   {
     key: "letters",
-    label: "فقط همین حروف",
+    label: "فقط همین املا",
     keeps: (f) => corpusKind(f) === "letters" || corpusKind(f) === "other",
   },
   {

@@ -1,8 +1,9 @@
 /**
  * The verses under a built word's corpus figures.
  *
- * What is tested is what the panel promises: nothing is asked for until the
- * «پیکره» field opens; then the first texts come with the word marked and a
+ * What is tested is what the panel promises: where the corpus has lines, the
+ * «پیکره» field is open as soon as «شواهد» is (2026-11-22), and nothing is
+ * asked for before that press; the first texts come with the word marked and a
  * way to its unit; more opens the word page's own list in place, with its
  * author filter and its pages; and a word the corpus does not have, or the
  * letters of a function word, list nothing at all.
@@ -15,7 +16,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Evidence, EvidenceText } from "../../api/evidence";
 import type { Attestation, BuiltForm } from "../../api/generate";
+import { FeedbackProvider } from "../../feedback/context";
 import { renderWithRouter } from "../../test/render";
+import { FormRow } from "./FormRow";
 import { Signals } from "./Signals";
 
 function found(level: Attestation["level"], texts: number, extra: Partial<Attestation> = {}) {
@@ -116,15 +119,22 @@ function serve(total: number, by = authorOf) {
 beforeEach(() => serve(2));
 afterEach(() => vi.unstubAllGlobals());
 
+/** Opens the «پیکره» field where it is closed: it starts open where there are lines. */
 async function openCorpus() {
-  await userEvent.click(screen.getByRole("button", { name: /^پیکره/ }));
+  const field = screen.getByRole("button", { name: /^پیکره/ });
+  if (field.getAttribute("aria-expanded") !== "true") await userEvent.click(field);
 }
 
 describe("the verses under a built word's figures", () => {
-  it("asks for nothing until the field opens, then shows the texts with the word marked", async () => {
+  it("opens on the texts, with the word marked, and the field can be closed", async () => {
     renderWithRouter(<Signals form={built(found("reading", 2))} corpusVersion="v1" />);
-    expect(asked).toHaveLength(0);
-    await openCorpus();
+    // No press on «پیکره»: the reader pressed «شواهد» and the lines are it.
+    const field = screen.getByRole("button", { name: /^پیکره/ });
+    expect(field).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("button", { name: /^دستور/ })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
     expect(await screen.findByText(/به هر خوانشی که باشد/)).toBeInTheDocument();
     const links = await screen.findAllByRole("link", { name: "در متن ←" });
     expect(links).toHaveLength(2);
@@ -140,6 +150,25 @@ describe("the verses under a built word's figures", () => {
     expect(asked[0]!.get("count_lines")).toBe("0");
     // Two texts are all there is: nothing more to open.
     expect(screen.queryByRole("button", { name: "نشان دادن همهٔ شواهد" })).not.toBeInTheDocument();
+    await userEvent.click(field);
+    expect(screen.queryByText(/به هر خوانشی که باشد/)).not.toBeInTheDocument();
+  });
+
+  it("asks for nothing while the row's «شواهد» is closed", async () => {
+    // One request per row as the table loads is what the panel must never
+    // cost: fifty rows would be fifty searches nobody asked for.
+    renderWithRouter(
+      <FeedbackProvider>
+        <ul>
+          <FormRow form={built(found("spelling", 2))} corpusVersion="v1" />
+        </ul>
+      </FeedbackProvider>,
+    );
+    expect(screen.getByText("شاید واژه‌ای دیگر با همین املا")).toBeInTheDocument();
+    expect(asked).toHaveLength(0);
+    await userEvent.click(screen.getByRole("button", { name: "شواهد" }));
+    expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(2);
+    expect(asked).toHaveLength(1);
   });
 
   it("opens the whole list in place, with its authors and its pages", async () => {
@@ -220,7 +249,7 @@ describe("the verses under a built word's figures", () => {
         <Signals form={built(found("reading", 25), "بستگاه")} corpusVersion="v1" />
       </MemoryRouter>,
     );
-    expect(await screen.findByText(/حروف «بستگاه»/)).toBeInTheDocument();
+    expect(await screen.findByText(/املای «بستگاه»/)).toBeInTheDocument();
     expect(screen.queryByRole("combobox", { name: "نویسنده" })).not.toBeInTheDocument();
     expect(await screen.findAllByRole("link", { name: "در متن ←" })).toHaveLength(3);
   });

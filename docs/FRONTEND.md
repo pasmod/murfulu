@@ -69,8 +69,10 @@ word is in or by the alphabet instead.
 «همهٔ واژه‌ها» / «واژه‌های تازه»: the second shows only the words not in the
 corpus at all, best-built first, with a line saying so; its corpus
 filter is its own. The columns are word, class, ساخت (0–100 with a bar), در پیکره
-(texts, or «همین حروف», «به معنای واژه‌ای دیگر», «نیامده»), وند, buttons; the
-filters are ساخت's range and the corpus's three answers.
+(texts; for a count that is only the spelling's, the texts and under them
+«شاید واژه‌ای دیگر با همین املا»; «به معنای واژه‌ای دیگر»; «نیامده»), وند,
+buttons; the filters are ساخت's range and the corpus's three answers («با
+همین معنا آمده», «فقط همین املا», «نیامده»).
 
 **The compound screen has the same table (2026-11-21, fourth).** One entry of
 the spelling at a time (the switch above, best-evidenced first), and under it
@@ -79,7 +81,9 @@ the «ساخت» and «پیکره» chips, the sort, fifty rows. The columns are
 ساخت, در پیکره, «دو نیمه» (the two halves and the rule), buttons; «شواهد» says
 what the value rests on («‑دار» made 73 compounds after 21,688 words) and
 keeps the old row's marks, «راه ساخت» the three steps. «ساخت» here is the
-compounds' own (DECISIONS 2026-11-21, fourth), and its ⓘ says so.
+compounds' own (DECISIONS 2026-11-21, fourth), and its ⓘ says so. Since
+2026-11-22 «شواهد» also lists the corpus lines the count was made from, under
+its sentences — the build screen's own panel (*The verses*, below).
 
 **The table (2026-11-21, direction A of three drafts).** One card: the word
 classes as tabs (همه first, with counts), the chosen class's explanation and
@@ -109,15 +113,19 @@ the corpus says, then how often the chain's weakest rule makes a word the
 corpus has, as «از هر ۱٬۰۰۰ واژه‌ای که می‌سازد، حدود ۵ تا» — and three fields:
 پیکره (its points out of 70), دستور (out of 30), معنا (up to three dots; not
 in the score). A press on a field gives its figures with the corpus version.
+Where the corpus has lines for the word, «پیکره» is open already when «شواهد»
+opens (2026-11-22): the reader pressed for evidence, and the lines are it.
 
 **The verses (2026-11-14).** Under the «پیکره» field's figures stand the
-lines they were counted from: when the field opens, three texts by three
+lines they were counted from: when the field opens — with «شواهد» itself
+where there are lines, and never as the table loads — three texts by three
 authors — one voice each, as the six citations — each with author — work —
 title and every line holding the word (three, then the rest on a press), the
 word underlined, each line with «در متن ←». Above them, where there are more,
 one button «نشان دادن همهٔ شواهد», with no number beside the figures' own,
 opens the word page's own list in place — the author filter, ten texts to a
-page, its count and its sentence — and, open, reads «بستن همهٔ شواهد». A note says the lines are the spelling's, not one reading's. A word
+page, its count and its sentence — and, open, reads «بستن همهٔ شواهد». A note says the lines are the spelling's, not one reading's («در این سطرها
+املای «…» آمده است، به هر خوانشی که باشد»). A word
 the corpus does not have, and the letters of a function word, list nothing
 (DECISIONS 2026-11-14).
 

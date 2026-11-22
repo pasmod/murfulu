@@ -3,7 +3,8 @@
  *
  * «۲ بار، در ۲ متن از ۲ نویسنده» is a claim; the two lines are what a reader
  * can check it against, so they stand under the figures (the project lead's
- * wish, 2026-11-14). Three texts by three authors come when the panel opens —
+ * wish, 2026-11-14), and under a compound's «شواهد» as well (2026-11-22).
+ * Three texts by three authors come when the panel opens —
  * one voice each, the six citations' rule, because three poems of one poet
  * can be one rhyme — and never one request per row as the screen loads; each
  * with every line holding the word, marked, and the way to its unit on the
@@ -23,7 +24,6 @@
 
 import { useEffect, useId, useState } from "react";
 
-import type { BuiltForm } from "../../api/generate";
 import { evidence as fetchEvidence, type Evidence } from "../../api/evidence";
 import { EvidenceList } from "../../evidence/EvidenceList";
 import { EvidenceText } from "../../evidence/EvidenceText";
@@ -32,6 +32,7 @@ import { UNNAMED } from "../../evidence/AuthorFilter";
 import { Waiting } from "../../text/Waiting";
 import list from "../../evidence/Evidence.module.css";
 import styles from "./CorpusLines.module.css";
+import { hasLines, type Counted } from "./hasLines";
 
 /** Texts shown when the panel opens, each by another author. */
 const FIRST = 3;
@@ -40,9 +41,9 @@ const PAGE = 10;
 /** Lines a text shows before the rest are asked for: a panel is small. */
 const GLANCE = 3;
 
-export function CorpusLines({ form }: { form: BuiltForm }) {
+export function CorpusLines({ form }: { form: Counted }) {
   const found = form.attestation;
-  if (!found || found.level === "none" || found.function_word) return null;
+  if (!found || !hasLines(form)) return null;
   return (
     // Keyed by the spelling, so a row that comes to hold another word starts
     // its list afresh rather than on the last word's page and author.
@@ -101,7 +102,7 @@ function Lines({
 
   return (
     <div className={styles.lines}>
-      <p className={list.note}>در این سطرها حروف «{spelling}» آمده است، به هر خوانشی که باشد.</p>
+      <p className={list.note}>در این سطرها املای «{spelling}» آمده است، به هر خوانشی که باشد.</p>
       {/* One button in one place, above the list either way: replacing it
           as the list opens would drop the reader's focus on the page. */}
       {toggle}

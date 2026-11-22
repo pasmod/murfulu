@@ -2,6 +2,40 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-22 (third) — a spelling's count says what it is worth, and «شواهد» opens on the lines on both tables
+
+The project lead read «همین حروف در ۱۶۵ متن» in the «در پیکره» column, could
+not tell what it meant, and asked for clearer wording and for the evidence to
+be visible in that part of the screen too. Two choices, in the interface only
+— no API change, no new data. **Not served yet**: on this machine, the unit
+tests green, looked at against the local stack at desktop and phone width.
+
+- **The cell.** A count that is only the spelling's (`level: spelling`) reads
+  «۱۶۵ متن» and under it, smaller, «شاید واژه‌ای دیگر با همین املا» (one line
+  on a phone, where the cell has the row's width): the count first, as on
+  every other row, then what it is worth. The old wording said whose count it
+  was — the letters' — and left what follows from that to the reader.
+- **One word for it, «املا».** «حروف» and «املا» stood side by side on the
+  two tables and behind their «شواهد». Now: the chip «فقط همین املا», with a
+  sentence in its ⓘ saying what that is and why (the script does not write
+  the short vowels); the field's «۱۶۵ متن، شاید واژه‌ای دیگر»; the reason's
+  «املای این واژه در ۱۶۵ متن آمده است، ولی شاید آن‌جا واژه‌ای دیگر با همین
+  املا باشد»; «شمار برای همین املا است»; the note above the lines. Left as
+  they were, because they say something else and were not asked about: the
+  search screen's «فقط با همین حروف» and the word page's «حروفشان با این
+  واژه یکی است».
+- **The build table: «شواهد» opens on the lines.** Where the corpus has
+  lines for the word (`hasLines`: not level *none*, not a function word's
+  letters) the «پیکره» field is open already. Before, «شواهد» gave a sentence
+  and three closed fields, and the lines were a second press on one of them —
+  a reader pressing a button named *evidence* did not find any. Still one
+  request per row a reader opens and none as the table loads (tested); the
+  other two fields stay a press away.
+- **The compound table: the same lines.** Its «شواهد» said «املای «دلبر» در
+  ۲٬۹۲۳ متن از ۱۹۱ نویسنده آمده است» and listed nothing to check that
+  against. It now lists the build screen's own panel under its sentences
+  (`CorpusLines`, which takes any spelling with its count).
+
 ## 2026-11-22 (second) — a star on a reading the bank lacks, and the linguist's confirmation before a reading goes to karbon
 
 The project lead, 2026-11-22: the aim is a reading screen that is green

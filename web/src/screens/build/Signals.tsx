@@ -1,6 +1,7 @@
 /**
  * What a word's two values rest on: three fields behind «شواهد», each opening on
- * a press to the figures behind it.
+ * a press to the figures behind it. Where the corpus has lines for the word,
+ * «پیکره» is open already when «شواهد» opens (2026-11-22).
  *
  * **The project lead's choice of 2026-11-21**: the two values are on the
  * row; what they rest on stays one press away, and separate, because a single opaque number is
@@ -25,6 +26,7 @@ import { Num } from "../../text/Num";
 import { persianNumber, persianPercent } from "../../text/numbers";
 import { CorpusLines } from "./CorpusLines";
 import { Evidence } from "./Evidence";
+import { hasLines } from "./hasLines";
 import { BUILD_MAX, hasValues } from "./scoring";
 import styles from "./Signals.module.css";
 
@@ -64,7 +66,8 @@ function shown(
       return { mark: "به معنای واژه‌ای دیگر", said: "به معنای واژه‌ای دیگر" };
     if (found.level === "none") return { mark: "نیامده", said: "نیامده" };
     const texts = `${persianNumber(found.doc_count)} متن`;
-    const said = found.level === "reading" ? texts : `همین حروف، ${texts}`;
+    const said =
+      found.level === "reading" ? texts : `${texts}، شاید واژه‌ای دیگر`;
     return { mark: said, said };
   }
   const score = form.score;
@@ -100,7 +103,7 @@ function CorpusDetail({ form }: { form: BuiltForm }) {
           <span dir="rtl">{form.inflection.base}</span>.{" "}
           {form.inflection.shared_with.length > 0 ? (
             <>
-              همین حروف را دستور واژه‌سازی هم می‌سازد (
+              همین املا را دستور واژه‌سازی هم می‌سازد (
               {form.inflection.shared_with.map((id, index) => (
                 <span key={id}>
                   {index > 0 ? "، " : ""}
@@ -110,7 +113,7 @@ function CorpusDetail({ form }: { form: BuiltForm }) {
               )، پس از روی املا نمی‌شود گفت کدام منظور است.
             </>
           ) : (
-            "هیچ دستور واژه‌سازی این حروف را نمی‌سازد."
+            "هیچ دستور واژه‌سازی این املا را نمی‌سازد."
           )}
         </p>
       ) : null}
@@ -250,7 +253,12 @@ export function Signals({
   form: BuiltForm;
   corpusVersion: string | null;
 }) {
-  const [open, setOpen] = useState<Field | null>(null);
+  // «شواهد» opens on the lines where the corpus has any: the reader pressed
+  // for evidence, and three closed fields were not it — the project lead asked
+  // where the lines were (2026-11-22). The other two fields stay a press away.
+  const [open, setOpen] = useState<Field | null>(() =>
+    hasLines(form) ? "corpus" : null,
+  );
   const id = useId();
 
   return (

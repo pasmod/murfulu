@@ -29,6 +29,7 @@ import { Num } from "../../text/Num";
 import { Term } from "../../text/Term";
 import { FUNCTION_WORD_SHORT, LEXICON } from "../../text/lexicon";
 import { Chips, FIRST } from "../build/Build";
+import { CorpusLines } from "../build/CorpusLines";
 import { CorpusCell, ScoreCell, ScoreLegend } from "../build/Score";
 import {
   BUILD_RANGES,
@@ -317,9 +318,10 @@ export function CompoundTable({
  * One compound: the build table's row, with this page's evidence and steps.
  *
  * The two marks that mattered most on the old row stay, now behind «شواهد»
- * with the sentence for the value: **«این حروف را این‌طور هم می‌شود
+ * with the sentence for the value: **«این املا را این‌طور هم می‌شود
  * خواند»** — دلم is دل plus a possessive — and **«در واژه‌نامهٔ کاربن هست»**,
- * which is confirmation, not doubt.
+ * which is confirmation, not doubt. Under them stand the corpus lines the
+ * count was made from (`../build/CorpusLines.tsx`).
  */
 function CompoundRow({ row, classes }: { row: Pairing; classes: WordClass[] }) {
   const [showing, setShowing] = useState(false);
@@ -409,7 +411,7 @@ function CompoundRow({ row, classes }: { row: Pairing; classes: WordClass[] }) {
           ) : null}
           {row.also_an_inflection ? (
             <p className={styles.warning}>
-              این حروف را این‌طور هم می‌شود خواند: {row.also_an_inflection.base} +{" "}
+              این املا را این‌طور هم می‌شود خواند: {row.also_an_inflection.base} +{" "}
               {row.also_an_inflection.label_fa}؛ پس شاید این شمار از آنِ این ترکیب
               نباشد.
             </p>
@@ -417,6 +419,10 @@ function CompoundRow({ row, classes }: { row: Pairing; classes: WordClass[] }) {
           {row.already_a_word ? (
             <p className={styles.known}>در {LEXICON} هست</p>
           ) : null}
+          {/* The lines the count was made from, as on the build screen: the
+              sentence above is a claim, and until 2026-11-22 this page gave a
+              reader nothing to check it against. */}
+          <CorpusLines form={row} />
         </div>
       ) : null}
 

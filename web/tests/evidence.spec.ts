@@ -137,7 +137,11 @@ test.describe("the verses under a built word's figures", () => {
       .last();
     await showAll(page);
     await row.getByRole("button", { name: "شواهد" }).click();
-    await row.getByRole("button", { name: /^پیکره/ }).click();
+    // No second press: «شواهد» opens on the lines (2026-11-22).
+    await expect(row.getByRole("button", { name: /^پیکره/ })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
     await expect(row.locator("mark").first()).toHaveText("بسمان");
     expect(
       await page.evaluate(
@@ -166,7 +170,11 @@ test.describe("the verses under a built word's figures", () => {
     await showAll(page);
     test.skip(!(await row.isVisible()), "no row بنده here");
     await row.getByRole("button", { name: "شواهد" }).click();
-    await row.getByRole("button", { name: /^پیکره/ }).click();
+    // No second press: «شواهد» opens on the lines (2026-11-22).
+    await expect(row.getByRole("button", { name: /^پیکره/ })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
     const more = row.getByRole("button", { name: "نشان دادن همهٔ شواهد" });
     await more.click();
     // The same button, renamed: the reader's focus stays on it.
@@ -191,6 +199,48 @@ test.describe("the verses under a built word's figures", () => {
         44,
       );
     }
+    const result = await new AxeBuilder({ page })
+      .include("main")
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(
+      result.violations.map((one) => `${one.id}: ${one.nodes[0]?.target}`),
+    ).toEqual([]);
+  });
+
+  test("stand under a compound's «شواهد» too, inside the screen and with no violations", async ({
+    page,
+  }) => {
+    // Until 2026-11-22 the compound table said «املای «دلبر» در … متن» and
+    // listed nothing to check it against.
+    const answer = await page.request.get(
+      "/api/compound?word=%D8%AF%D9%84&limit=1",
+    );
+    test.skip(!answer.ok(), "no API, or no corpus ingested");
+    const lines = await page.request.get(
+      `/api/evidence?spelling=${encodeURIComponent("دلبر")}&size=1&count_lines=0`,
+    );
+    test.skip(
+      !lines.ok() || (await lines.json()).texts.length === 0,
+      "no corpus with دلبر",
+    );
+
+    await page.goto("/compound?word=%D8%AF%D9%84");
+    const row = page
+      .getByRole("listitem")
+      .filter({ has: page.getByText("dalbar", { exact: true }) })
+      .last();
+    await row.getByRole("button", { name: "شواهد" }).click();
+    await expect(row.getByText(/به هر خوانشی که باشد/)).toBeVisible();
+    await expect(row.locator("mark").first()).toHaveText(/دلبر/);
+    await expect(
+      row.getByRole("link", { name: "در متن ←" }).first(),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.body.scrollWidth - document.body.clientWidth,
+      ),
+    ).toBeLessThanOrEqual(1);
     const result = await new AxeBuilder({ page })
       .include("main")
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])

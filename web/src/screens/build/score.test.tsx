@@ -395,7 +395,7 @@ describe("the filters", () => {
       screen.getByRole("radio", { name: "با همین معنا آمده" }),
     );
     expect(order()).toEqual(["دانا", "داننده", "زیردانا"]);
-    await userEvent.click(screen.getByRole("radio", { name: "فقط همین حروف" }));
+    await userEvent.click(screen.getByRole("radio", { name: "فقط همین املا" }));
     expect(order()).toEqual(["رو"]);
     await userEvent.click(screen.getByRole("radio", { name: "نیامده" }));
     expect(order()).toEqual(["وادان"]);

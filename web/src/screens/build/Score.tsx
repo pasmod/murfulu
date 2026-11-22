@@ -58,9 +58,13 @@ export function CorpusCell({ form }: { form: Scored }) {
   if (found.level === "none")
     return <span className={styles.faint}>نیامده</span>;
   if (found.level === "spelling") {
+    // The count first, as on every other row, then what it is worth: «همین
+    // حروف در ۱۶۵ متن» said whose count it was and not what that means, and
+    // the project lead could not read it (2026-11-22).
     return (
       <span className={styles.letters}>
-        همین حروف در <Num value={found.doc_count} /> متن
+        <Num value={found.doc_count} /> متن{" "}
+        <span className={styles.maybe}>شاید واژه‌ای دیگر با همین املا</span>
       </span>
     );
   }
@@ -162,16 +166,17 @@ function corpusSays(form: BuiltForm): React.ReactNode {
   if (!found) return null;
   if (found.function_word) return FUNCTION_WORD_HOMOGRAPH;
   if (found.headword_homograph) {
-    return "این حروف در پیکره آمده‌اند، ولی همیشه به معنای واژه‌ای دیگر";
+    return "این املا در پیکره آمده است، ولی همیشه به معنای واژه‌ای دیگر";
   }
   if (found.level === "none") return "در پیکره نیامده است";
   if (found.level === "spelling") {
     return (
       <>
-        همین حروف در <Num value={found.doc_count} /> متن آمده‌اند، ولی شاید
+        املای این واژه در <Num value={found.doc_count} /> متن آمده است، ولی
+        شاید آن‌جا
         {form.inflection
-          ? " شکل صرف‌شدهٔ واژه‌ای دیگر باشند"
-          : " واژه‌ای دیگر باشند"}
+          ? " شکل صرف‌شدهٔ واژه‌ای دیگر باشد"
+          : " واژه‌ای دیگر با همین املا باشد"}
       </>
     );
   }

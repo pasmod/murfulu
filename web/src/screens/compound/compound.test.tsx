@@ -227,6 +227,68 @@ describe("compound words", () => {
     expect(said.textContent).toMatch(/املای «دلبر» در ۲٬۹۲۰ متن از ۲۱۰ نویسنده/);
   });
 
+  it("lists the lines the count was made from, under «شواهد»", async () => {
+    // The sentence above is a claim, and until 2026-11-22 the page gave a
+    // reader nothing to check it against; the build screen always had.
+    const asked: string[] = [];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation((url: string) => {
+        const address = new URL(String(url), "http://localhost");
+        const lines = address.pathname.endsWith("/evidence");
+        if (lines) asked.push(address.searchParams.get("spelling") ?? "");
+        const body = lines
+          ? {
+              spelling: address.searchParams.get("spelling"),
+              corpus_version: "v8",
+              total: 1,
+              authors: [{ author: "حافظ", texts: 1 }],
+              author: null,
+              unnamed: false,
+              matching: 1,
+              lines: null,
+              page: 0,
+              size: 3,
+              texts: [
+                {
+                  document_id: "fixture:1",
+                  author: "حافظ",
+                  title: "غزل",
+                  century: 8,
+                  work: "دیوان",
+                  section: [],
+                  lines: [{ unit: 4, kind: "couplet", parts: ["آن ", "دلبر", " که"] }],
+                  held: "counted",
+                },
+              ],
+            }
+          : ANSWER;
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          statusText: "",
+          json: async () => body,
+        } as Response);
+      }),
+    );
+    renderApp("/compound?word=%D8%AF%D9%84");
+    const row = (await screen.findByText("دلبر")).closest("li")!;
+    // The cell says what a spelling's count is worth, not «همین حروف».
+    expect(within(row).getByText("شاید واژه‌ای دیگر با همین املا")).toBeInTheDocument();
+    // Nothing is asked for while the row is closed.
+    expect(asked).toHaveLength(0);
+    await userEvent.click(within(row).getByRole("button", { name: "شواهد" }));
+    expect(
+      await within(row).findByText(/در این سطرها املای «دلبر» آمده است/),
+    ).toBeInTheDocument();
+    expect(within(row).getByRole("link", { name: "در متن ←" })).toHaveAttribute(
+      "href",
+      `/texts?text=fixture%3A1&unit=4&word=${encodeURIComponent("دلبر")}`,
+    );
+    expect(row.querySelector("mark")).toHaveTextContent("دلبر");
+    expect(asked).toEqual(["دلبر"]);
+  });
+
   it("says how many it built and how many were ever written", async () => {
     // ۴٬۶۵۲ built against ۲۲۰ attested. Without the first number the second
     // reads as the whole answer.
