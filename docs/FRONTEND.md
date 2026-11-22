@@ -492,7 +492,8 @@ is not said. The drafts' placeholder rule had put *dall* under دل.
 direction A, when `MURFULU_BEHNEVIS_PATH` names a model): the word's `auto`
 reading under it, a green line (sure), amber dots (mid) or a red dashed box
 (unsure); the legend shows the three with their edges, which come from the
-API. The panel opens with «در این سطر»: the reading, its estimate, the
+API (and nothing above them: its three opening sentences were removed on the
+project lead's word, 2026-11-22). The panel opens with «در این سطر»: the reading, its estimate, the
 readings to pick (native radio buttons drawn as buttons: one tab stop, arrow
 keys move the pick; the picked one filled with a check mark) and a field to type one — each clears the other — then a line
 saying what will be saved and what becomes of it, and «ثبت «…»». A saved

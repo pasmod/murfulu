@@ -2,6 +2,20 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-22 (fourth) — the reading screen's legend opens on its marks, without the three sentences above them
+
+The project lead asked for the paragraph above the legend's marks to be
+removed: «زیر هر واژه، خوانشی آمده که برنامه برای همین سطر پیشنهاد می‌کند.
+شکلِ آن نشان می‌دهد برنامه چقدر مطمئن است. روی هر واژه بزنید تا خوانش‌های
+دیگر را ببینید و خوانش درست را برگزینید یا خودتان بنویسید.» No reason was
+given, and none is guessed here. It is gone from the legend shown where the
+automatic reading is on (`Reader.tsx`); the four marks with their ranges and
+the star's sentence stay as they were. That a word can be pressed is still
+said once, in the screen's introduction («روی هر واژه بزنید تا خوانش‌هایش را
+ببینید»). The legend of a text without the automatic reading is unchanged.
+**Not served yet**: on this machine, the unit tests green, the reading screen
+looked at against the local stack at phone width.
+
 ## 2026-11-22 (third) — a spelling's count says what it is worth, and «شواهد» opens on the lines on both tables
 
 The project lead read «همین حروف در ۱۶۵ متن» in the «در پیکره» column, could

@@ -160,11 +160,6 @@ export function Reader({ documentId, unit, word, start, onPage }: ReaderProps) {
 
       {text.behnevis ? (
         <div className={styles.legend}>
-          <p>
-            زیر هر واژه، خوانشی آمده که برنامه برای همین سطر پیشنهاد می‌کند. شکلِ آن نشان
-            می‌دهد برنامه چقدر مطمئن است. روی هر واژه بزنید تا خوانش‌های دیگر را ببینید و
-            خوانش درست را برگزینید یا خودتان بنویسید.
-          </p>
           <p className={styles.levels}>
             <span>
               <span className={styles.auto} data-level="sure">
