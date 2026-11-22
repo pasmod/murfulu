@@ -5,6 +5,30 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-22 (automatic suggestions)
+
+### S53. The automatic suggestions beside the list: deploy, and what to measure next
+
+Built 2026-11-22 on a branch (DECISIONS 2026-11-22), **not deployed**. The
+project lead's calls:
+
+1. **Deploy?** The plan, with its rollback, is DEPLOY §25: one data file and
+   a code deploy, no migration, no `.env` change.
+2. **Measure them on these words.** The confidence shown was measured on
+   hard marked words, not on the frequent words it now stands beside. A
+   sample of the listed spellings read by a person (with the linguist's
+   timed sample, S47) would say how far the shares hold here.
+3. **Classical or today's reading.** In verse the suggestion gives today's
+   reading where the editions mark the classical one (بود *bud* against the
+   marks' *bovad*; FOR_THE_LINGUIST L50, L51.3). Asking for the classical
+   pronunciation in verse was not tried.
+4. **One line per spelling.** Reading all three example lines (or more)
+   would show whether a spelling reads one way, and could stand in place of
+   one line's reading for the spellings with several.
+5. **A suggestion accepted for a spelling the bank lacks** waits for karbon,
+   like any typed reading (S52.2): for the 1,400 missing spellings that is
+   most of what accepting saves.
+
 ## Opened 2026-11-21 (deciding once for every like place)
 
 ### S52. Three choices made under the working rule for decisions, and the deploy

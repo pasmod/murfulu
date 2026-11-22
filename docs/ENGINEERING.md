@@ -44,6 +44,21 @@ To learn what readers picked on the reading screen, fetch it first —
 build, measure, and send the model with `deploy/server.sh data`; the api
 reads the new file at the next text it serves.
 
+*Automatic suggestions (2026-11-22).* The list of unsure spellings
+(`behnevis-unsure-v22.json`) can carry a reading per spelling made offline
+(DECISIONS 2026-11-22). They are **not rebuilt with the model**: a list
+measured again needs a new offline run, and the api shows no suggestions made
+for another corpus version than the list's. The offline readings (a JSON file
+kept outside the repository) are checked against the list and the marked
+corpus and written beside the model, the report committed:
+
+```
+.venv/bin/python tools/import_reading_suggestions.py v22 READINGS.json \
+  > data/behnevis-suggest-v22.md
+```
+
+`deploy/server.sh data` sends `behnevis-suggest-v22.json` with the list.
+
 **Write the command down here every time it changes.** It was not recorded
 before v6, and rebuilding cost twenty minutes of reading v5's own output to
 work out which flags had produced it — which flags were defaults, how many

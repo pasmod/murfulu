@@ -3059,3 +3059,30 @@ most frequent: است، بود، سر، خود، کرد، کند، روی، شو
 spellings the screen would not offer «همه‌جا» for; (3) which readings go to
 karbon for the verb forms, and which the model reads them as.
 
+## L52. The automatic suggestion beside the most frequent unsure words: the words, and the capital
+
+Built 2026-11-22 (DECISIONS 2026-11-22); **not in the app's questions**, not
+blocking, not deployed.
+
+**What it is.** Beside each of the 2,000 spellings the reading screen most
+often leaves to a person, a reading made offline, with how often a reading
+at its certainty was right in a test. A person may take it up with the
+existing controls; nothing is decided by it.
+
+### The questions
+
+1. **The words on screen**, ours until ruled on: «پیشنهاد خودکار»، «در
+   آزمون، از هر ۱۰۰ پیشنهاد با این اطمینان ۸۸ تا درست بود»، «این پیشنهاد از
+   یک سطر آمده است»، «این پیشنهاد برای سطر دیگری است … ببینید اینجا هم درست
+   است یا نه»، «… را برگزین»، «… را در جای نوشتن بگذار»، «این پیشنهاد از کجا
+   آمده است؟».
+2. **The capital.** The suggestion writes no capitals; Behnevis marks a noun
+   with one. Where the bank holds the letters both ways (*Xod*, *xod*) the
+   screen leaves the choice to the person; where it is typed, the box says
+   «اگر این واژه نام است، پیش از ثبت حرف نخستش را بزرگ کنید». Is «نام» the
+   right word there for a reader who is not a linguist?
+3. **Today's reading or the classical one** for verse (*bud* or *bovad*):
+   the same question as L51.3, now with a suggestion that gives today's.
+
+**What changes with each answer**: (1) and (2) the wording only; (3) whether
+the suggestions for verse are read again for the classical form.

@@ -1068,3 +1068,37 @@ from the bank, so its guesses carry the same habit into the text (عالم
 **The request.** Write ع (and the hamza) with `ˈ` throughout, as the five
 readings above do, so a reading says how many syllables its word has. A9's
 `-āe` for ـاه is the same kind of fault for ه.
+
+### A20. 142 spellings whose one bank reading an automatic reading contradicts, 73 of them backed by the editions' marks
+
+Measured 2026-11-22 on corpus v22 and `lexicon-20261111` (karbon 1.3.2), with
+the automatic suggestions for the 2,000 most frequent unsure spellings
+(FINDINGS 2026-11-22; `data/behnevis-suggest-v22.md`, section 3). **Of the
+264 listed spellings the bank holds one reading for, the suggestion gives
+another for 142** (553,427 unsure running words), compared without case,
+accents, ezafe or the mark for ع. The suggestion alone proves nothing (it is
+right in about four in five on hard test words); weighed with the editions'
+vowel signs on the same spelling's marked places:
+
+| | spellings | unsure running words |
+|---|---:|---:|
+| the marks fit the suggestion better than the bank's reading (5+ places) | 73 | 357,726 |
+| the marks fit the bank's reading as well or better | 20 | — |
+| too few marked places to say | 49 | — |
+
+The clearest, by unsure places (bank → suggestion; marked places fitting
+each): شود *Ševed* → *šavad* 9 of 9 against 0; ره *Roh* → *rah* 152 of 157
+against 0; علی *oli* → *ˈalā* 1,818 of 1,822 against 2; اهل *Ohl* → *ahl*
+150 of 156 against 8; غیر *Qir* → *qeyr* 168 of 169 against 3; الا *alā* →
+*ellā* 1,593 of 1,794 against 203; رود *Rud* → *ravad* 54 of 54 against 0;
+افتد *afted* → *oftad* 31 of 31 against 0. **23 of the 73 are among B12's 45**
+(verb forms read as nouns); the other 50 are new, most of them another
+vowel: ره *Roh* for *rah*, گه *Goh* for *gah*, غیر *Qir* for *qeyr*, اهل
+*Ohl* for *ahl*, آخر *Āxor* for *āxer* (64 of 108 against 17). Where the
+bank's reading may be a real second sense, the fault is a missing reading
+rather than a wrong one (B2).
+
+**The request.** Check the 73 against the bank and add or correct the
+reading; the full list with its counts is the suggestions file beside the
+model (not in git: it quotes corpus words). Not opened; on the project
+lead's word.

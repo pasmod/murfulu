@@ -177,6 +177,10 @@ EOF
     # (behnevis-unsure-v22.json, tools/measure_unsure_spellings.py).
     unsure=${behnevis/behnevis-/behnevis-unsure-}
     [ -z "$behnevis" ] || [ ! -f "data/$unsure" ] || extra="$extra $unsure"
+    # And the automatic suggestions for that list (behnevis-suggest-v22.json,
+    # tools/import_reading_suggestions.py), made offline, not built here.
+    suggest=${behnevis/behnevis-/behnevis-suggest-}
+    [ -z "$behnevis" ] || [ ! -f "data/$suggest" ] || extra="$extra $suggest"
     (cd data && "${RSYNC[@]}" --info=progress2 $files $extra "$SERVER:$REMOTE_DIR/data/")
     ;;
   deploy)

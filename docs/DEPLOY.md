@@ -739,3 +739,38 @@ reads it without this code), or be removed.
 The site password was not used. No decision exists yet on the server: the
 model reads decisions at its next build (`deploy/server.sh proposals`, then
 `tools/build_behnevis.py`, then `data`).
+
+## 25. The automatic suggestions beside the most frequent unsure words — PLAN, NOT YET RUN
+
+**A plan, not a record: nothing below has been run.** It goes out only on the
+project lead's word (OPEN_QUESTIONS S53). The change is the branch
+`unsure-suggestions` on `main` at `6d7f2d1`, which is what the server runs
+(§24): a reading made offline for each listed spelling, shown beside the list
+and in the word panel, never applied (DECISIONS 2026-11-22). No migration, no
+`.env` change: `MURFULU_BEHNEVIS_SUGGEST` stays unset, so the suggestions show
+wherever their file is.
+
+**One data file goes with it**: `data/behnevis-suggest-v22.json` (about
+450 KB), gitignored and never committed — its rows quote corpus words. It is
+written on the Mac by `tools/import_reading_suggestions.py` (ENGINEERING) and
+was checked against `data/behnevis-unsure-v22.json` with md5
+`cb9fda79a8db9fe0b913c5bf2e4a6089`; the server's list must be that file, or
+the rows' examples and ranks may not be the ones served.
+
+| step | command | what it should show |
+|---|---|---|
+| 0 | from the branch's worktree, with the host files and the main checkout's untracked `uv.lock` copied beside it (as §22); the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options); `md5sum` on the server | only this change's files differ (the suggestion code, the split panels, `deploy/server.sh`, the docs); nothing deleted; `behnevis-unsure-v22.json` has the md5 above |
+| 1 | inside the api container, before | `/texts/unsure?size=1` has no `suggestions` key; Hafez's ghazal 3 on `/texts`: 100 sure, 16 mid, 43 unsure (§24) |
+| 2 | `rsync` of `data/behnevis-suggest-v22.json` alone | checksum the same on both sides. Not `data`: a worktree's `data/` does not hold every file `data` sends (from this change on, `data` sends the suggestions with the list) |
+| 3 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy |
+| 4 | `deploy/server.sh check` | all checks pass, corpus v22; the site answers 401 logged out |
+| 5 | inside the api container, after | `/texts/unsure?size=2`: `suggestions.spellings` 2,000; است *ast*, right_share 0.881; `/texts/unsure/بود`: the suggestion *bud* matches *Bud*; no decision anywhere; ghazal 3 still 100 / 16 / 43 |
+| 6 | the pages, through an SSH tunnel to the web container, at 375 and 1280 px | a row shows «پیشنهاد خودکار: …»; شود's panel shows the box with *šavad*; ghazal 3's آرد shows it «برای سطر دیگری»; nothing scrolls sideways; nothing is saved |
+
+**The rollback.** Hiding the suggestions needs no deploy: remove
+`data/behnevis-suggest-v22.json` on the server (the api reads its absence at
+the next request), or set `MURFULU_BEHNEVIS_SUGGEST=off` in the server `.env`
+after a backup and recreate the api (`… up -d api`; both compose files pass
+the variable to the api from this change on). Taking the code back is
+`deploy` from `6d7f2d1`; the file can stay, nothing else reads it. No
+decision is made by the suggestions, so nothing in the database needs undoing.

@@ -5,6 +5,73 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-22 — an automatic reading for each of the most frequent unsure spellings, and what the editions' marks say of it
+
+The project lead asked whether a reading made outside the app could be
+offered for each of the 2,000 spellings the reading screen most often leaves
+to a person (FINDINGS 2026-11-21), so that deciding one is a check rather
+than a reading from scratch. **A first measurement, not a result**; the
+figures are in `data/behnevis-suggest-v22.md`, the limits below.
+
+**How the readings were made.** Offline and blind, by a language model: each
+listed spelling with its two neighbours from its first example line in the
+list, vowel signs and answer hidden, read into Behnevis letters with the
+model's own certainty from 0 to 100. **What the certainty is worth was
+measured** on 1,200 vowel-marked words of the poets the reading screen's
+model did not learn from, a reading counted right when the editions' marks
+accept it (`harakat.fits`): right in 76 % of them overall, where the reading
+screen's own model is right in 37 % of the same words, and by the stated
+certainty:
+
+| stated certainty | test words | right | at least (95 %) | listed spellings |
+|---|---:|---:|---:|---:|
+| under 50 | 241 | 64 % | 58 % | 112 |
+| 50–70 | 352 | 69 % | 65 % | 267 |
+| 70–85 | 305 | 80 % | 76 % | 477 |
+| 85–100 | 302 | 88 % | 85 % | 1,144 |
+
+**What they offer.** Of the 336 spellings with a choice among the bank's
+readings, the reading is one of the bank's for 283. Of the 264 with one bank
+reading, it agrees with the bank for 122 and not for 142. The 1,400 the bank
+has no reading for get one for the first time; for 960 of them the model had
+offered the same reading among its own. Readings are compared without case,
+accents, the ezafe the line gave (*sar-e*) or the mark for ع: the reader
+writes no capitals, and karbon mostly writes ع with a vowel letter (A19).
+
+**Against the editions' marks, on these spellings.** Where a reading can be
+lined up with at least five of the spelling's marked places, the suggestion
+fits 63 % of them for the choice spellings (the bank's best single reading
+52 %), 62 % for the one-reading spellings (the bank's reading 10 %) and 82 %
+for the missing ones. **257 suggestions fit fewer than half**, and among them
+are the most frequent words: است 2 of 5, بود 115 of 1,465, خود 14 of 40, کرد
+7 of 31. The editions mark the rarer or the classical reading (*bovad*), and
+the suggestion gives today's (*bud*); so on a frequent word the marks say
+less about the one right reading than that a decision *everywhere* will be
+wrong somewhere. The screen says so beside such a suggestion.
+
+**The 142 where the bank holds one reading and the suggestion another**
+(553,427 unsure running words): the marks back the suggestion for 73 (357,726
+places; 23 of them are among B12's 45) — شود *Ševed* / *šavad* 9 of 9 marked
+places against 0, ره *Roh* / *rah* 152 of 157 against 0, غیر *Qir* / *qeyr*
+168 of 169 against 3, علی *oli* / *ˈalā* 1,818 of 1,822 against 2; they back
+the bank or neither for 20 (برو *baru* 23 of 40 against *borow* 18); 49 have
+too few marked places. A fault list for karbon: UPSTREAM A20.
+
+**Limits.** The test words are the hard ones editions mark, not these
+frequent words, which are mostly easier; one line was read per spelling, so
+for a spelling with several readings the suggestion is that line's reading;
+the reader writes no capitals, though Behnevis marks a noun with one; where
+karbon writes ع with a vowel letter (*doaā*), the reader's *doˈā* does not
+match it and is offered to type; Arabic phrases are the weak part (الله read
+*allāha* inside one).
+
+**What it means for murfulu.** A reading to check now stands beside every
+listed spelling, including the 1,400 the bank has none for; deciding stays
+with a person (DECISIONS 2026-11-22). The 73 spellings the marks back are the
+strongest list for karbon so far.
+
+---
+
 ## 2026-11-21 — the most frequent unsure words: a few thousand spellings hold two thirds of the work
 
 The project lead asked how to cut the work by hand on the reading screen. Every

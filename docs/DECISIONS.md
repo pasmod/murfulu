@@ -2,6 +2,70 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-22 — an automatic suggestion beside each of the most frequent unsure spellings, shown and never applied
+
+The project lead asked for a reading made offline for each of the 2,000
+listed unsure spellings, with its measured confidence, shown on the list and
+on each spelling's panels so a person can accept it with the existing decide
+controls (FINDINGS 2026-11-22). **Built on a branch, not deployed**; the
+plan is DEPLOY §25 (OPEN_QUESTIONS S53).
+
+- **Shown, never applied.** Nothing is decided, picked or saved by a
+  suggestion. A row of the list (`/texts?view=unsure`) shows «پیشنهاد
+  خودکار: *reading* (۸۸ از ۱۰۰)»; the row's panel and the reading screen's
+  word panel show a box with the reading, «در آزمون، از هر ۱۰۰ پیشنهاد با
+  این اطمینان ۸۸ تا درست بود», the three words it was read in, what the
+  editions' marks say of it, and, folded, how it was made and its limits.
+  The box's button only fills the panel's own controls; the person still
+  chooses the reach (only here, after or before a word, everywhere) and
+  presses ثبت. Decisions act at a model rebuild someone starts, as before.
+- **Taken up through the controls a person already has.** Where the panel
+  offers the reading, it is marked «پیشنهاد خودکار» among the choices and the
+  button picks it; where it does not, the button puts it in the field where
+  a person types a reading — as the bank writes it, where the bank holds it
+  (*Bud* for *bud*, so the model learns it), else as suggested, and then it
+  goes to karbon's list like any typed reading. Where several offered
+  readings match (*Xod*, *xod*: the suggestion writes no capitals), there is
+  no button and the box says the person must choose.
+- **Matched** without case, accents, the line's ezafe (*sar-e* → *sar*) or
+  the mark for ع (`suggest.folded`, and the same in `suggested.ts`), since
+  within one spelling the letters are the same.
+- **The confidence shown is the band's measured share**, rounded to a number
+  of 100; the 95 % lower bound is served and in the report, not on screen.
+- **The editions' marks** are quoted where the reading can be lined up with
+  at least five marked places, with a warning when it fits fewer than half;
+  not repeated where the panel's own note already gives the same count for
+  the same reading. Where the bank holds one reading and the suggestion another, the
+  box says so.
+- **The file** is `behnevis-suggest-v22.json` beside the model, gitignored
+  (its rows quote corpus words), written by `tools/import_reading_suggestions.py`
+  from the offline readings after checking each row against the list —
+  spelling, rank, kind, the example line, the certainty's band — and
+  measuring each reading on the marked corpus (`behnevis/offline.py`); the
+  report is `data/behnevis-suggest-v22.md`. `deploy/server.sh data` sends it
+  with the list. `MURFULU_BEHNEVIS_SUGGEST=off` hides the suggestions without
+  removing anything; a file for another corpus version than the list's, or
+  one that cannot be read, is not served and the list works as before.
+- **No model or vendor is named**, on screen or in the repository: the
+  screens say «پیشنهاد خودکار», the docs *a language model, offline and
+  blind*.
+- **Two files over 400 lines were split first**, unchanged: the list's
+  decide panel (`DecidePanel.tsx`, `DecideParts.tsx`, `ExampleLine.tsx`) and
+  the word panel's top (`Here.tsx`, then `HereParts.tsx`).
+
+- *The review of 2026-11-22* (Codex): the ezafe is taken off after case
+  and accents are folded (*Del-E*, *del-é* are *del*); the box's marks are
+  hidden only where the panel's note gives the same count for the same
+  reading (خود: 14 of 14 there, 14 of 40 here, and the warning stays);
+  contexts, places and marks of the wrong kind are refused by the import and
+  the reader; calibration bands must run in order within 0 to 100.
+
+**Decided here, under the working rule, unconfirmed:** showing the
+suggestion in the reading screen's word panel too, marked as read in another
+line where it was; the half-of-the-marks threshold for the warning; ignoring
+the ع mark when matching; the Persian words of the box (FOR_THE_LINGUIST
+L52).
+
 ## 2026-11-21 (fifth) — a reading decided once for every like place, and a list of the most frequent unsure words
 
 The project lead asked whether the reading screen learns from corrections and
