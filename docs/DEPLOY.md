@@ -759,7 +759,7 @@ the rows' examples and ranks may not be the ones served.
 
 | step | command | what it should show |
 |---|---|---|
-| 0 | from the branch's worktree, with the host files and the main checkout's untracked `uv.lock` copied beside it (as §22); the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options); `md5sum` on the server | only this change's files differ (the suggestion code, the split panels, `deploy/server.sh`, the docs); nothing deleted; `behnevis-unsure-v22.json` has the md5 above |
+| 0 | from the branch's worktree, with the host files and the main checkout's untracked `uv.lock` copied beside it (as §22); the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options); `md5sum` on the server | only this change's files differ (the suggestion code, the split panels, `deploy/server.sh`, both compose files, the docs); nothing deleted; `behnevis-unsure-v22.json` has the md5 above |
 | 1 | inside the api container, before | `/texts/unsure?size=1` has no `suggestions` key; Hafez's ghazal 3 on `/texts`: 100 sure, 16 mid, 43 unsure (§24) |
 | 2 | `rsync` of `data/behnevis-suggest-v22.json` alone | checksum the same on both sides. Not `data`: a worktree's `data/` does not hold every file `data` sends (from this change on, `data` sends the suggestions with the list) |
 | 3 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy |
