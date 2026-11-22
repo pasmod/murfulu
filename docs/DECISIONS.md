@@ -28,12 +28,14 @@ reading that says *e*.
   as editions print them.
 - **Unconfirmed**, as the whole rule is: L48 carries it as a third point, and
   the question's wording in the app says the new rule
-  (`rules/questions_fa.yaml`; to be loaded on the server with the deploy).
+  (`rules/questions_fa.yaml`; loaded on the server with the deploy).
 
 Display only, as before: nothing marked is stored or matched, and the API
-makes the marks at each request, so no data file changes. **Not served yet**:
-on this machine, the Python tests green, the reading screen looked at with a
-local api against the local stack at phone width.
+makes the marks at each request, so no data file changes. **Served since
+2026-11-22** on the project lead's «Yes, publish» (DEPLOY §29), the question's
+new wording loaded with it; before that, the Python tests green and the
+reading screen looked at with a local api against the local stack at phone
+width.
 
 ## 2026-11-22 (fourth) — the reading screen's legend opens on its marks, without the three sentences above them
 

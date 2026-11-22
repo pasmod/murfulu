@@ -862,3 +862,30 @@ The site password was not used. Not looked at on the server: the desktop
 width, a word's panel, and a text without the automatic reading (whose
 legend this change does not touch). The reading screen's first answer after
 the restart took more than six seconds.
+
+## 29. The mark before a diphthong follows the reading, and L48 reworded — run 2026-11-22
+
+The marks (DECISIONS 2026-11-22, *fifth*), on the project lead's word («Yes,
+publish»), from the main checkout at `d29b57a`, one commit on `97bc26c`,
+which was what the server ran (§28). One source file,
+`src/murfulu/behnevis/vowels.py`, and the wording of one open question; no
+migration, no `.env` change, no data file. **The rollback is `deploy` from
+`97bc26c`, then `questions --apply` from there** to put L48's old sentence
+back; nothing else is stored.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options) | 8 files differ: this change's 7 and `DEPLOY.md`; nothing deleted |
+| 1 | inside the api container, before | `vocalise`: *vey* وَی, *vay* وَی, *now* نَو, *peyvand* پَیوَند |
+| 2 | `deploy/server.sh deploy` | api rebuilt and recreated, healthy (53 s); web rebuilt, its container left as it was |
+| 3 | `deploy/server.sh check` | all checks passed, corpus v22, `lexicon-20261111`; the site answers 401 logged out |
+| 4 | inside the api container, after | *vey* وِی, *vay* وَی, *now* نُو, *peyvand* پِیوَند |
+| 5 | `deploy/server.sh questions`, then `--apply`, then again | dry run: 1 reworded (L48), 15 unchanged, 1 kept (L21, answered); applied; the second dry run: 16 unchanged, nothing to do. `/questions` serves L48 open, unanswered, with the new sentence |
+| 6 | the reading screen through an SSH tunnel to the web container, at 375 px (میبدی, کشف الاسرار, the first text) | all 46 وی read *vey* stand as وِی; مِی *Mey*, پِیوَستَم, نُو *now* beside them; nothing scrolls sideways. Nothing was saved |
+| 7 | the public address, logged out | 401 on `/` and on `/texts` |
+
+The site password was not used. Not looked at on the server: the build
+table, the compound table, the word bank and the search results, which take
+their marks from the same function (step 4), and the questions screen
+itself. The reading screen's first answer for that long text after the
+restart took 9.6 s.
