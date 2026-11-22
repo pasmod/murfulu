@@ -840,3 +840,25 @@ table's «ساخت» value (`layout.spec.ts`; the Mac's api has no
 the reading screen's panel for a word with several readings
 (`texts.spec.ts`; cause not looked into). Each fails at both widths, so
 four runs; the rest of the suite passed or skipped.
+
+## 28. The reading screen's legend without its three opening sentences — run 2026-11-22
+
+The removal (DECISIONS 2026-11-22, *fourth*), on the project lead's word
+(«آره، منتشر کن», a second time the same day), from the main checkout at
+`a27e14b`, one commit on `ee3735c`, which was what the server ran (§27). One
+source file, `web/src/screens/texts/Reader.tsx`; no migration, no `.env`
+change, no data file. **The rollback is `deploy` from `ee3735c`.**
+
+| step | command | what it did |
+|---|---|---|
+| 0 | the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options) | 4 files differ: `Reader.tsx`, and `DECISIONS.md`, `DEPLOY.md` and `FRONTEND.md`; nothing deleted |
+| 1 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy (37 s) |
+| 2 | `deploy/server.sh check` | all checks passed, corpus v22, `lexicon-20261111`; the site answers 401 logged out |
+| 3 | the served script, through an SSH tunnel to the web container | no longer holds «زیر هر واژه، خوانشی آمده»; still holds the legend's marks and §27's «شاید واژه‌ای دیگر با همین املا» |
+| 4 | Hafez's ghazal 3 on the reading screen, through the same tunnel, at 375 px | the legend opens on its four marks, then the star's sentence; the paragraph is gone; the words stand under it with their readings as before (160 buttons); nothing scrolls sideways. Nothing was saved |
+| 5 | the public address, logged out | 401 on `/` and on `/texts` |
+
+The site password was not used. Not looked at on the server: the desktop
+width, a word's panel, and a text without the automatic reading (whose
+legend this change does not touch). The reading screen's first answer after
+the restart took more than six seconds.

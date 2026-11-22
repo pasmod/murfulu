@@ -13,8 +13,9 @@ automatic reading is on (`Reader.tsx`); the four marks with their ranges and
 the star's sentence stay as they were. That a word can be pressed is still
 said once, in the screen's introduction («روی هر واژه بزنید تا خوانش‌هایش را
 ببینید»). The legend of a text without the automatic reading is unchanged.
-**Not served yet**: on this machine, the unit tests green, the reading screen
-looked at against the local stack at phone width.
+**Served since 2026-11-22** on the project lead's «آره، منتشر کن» (DEPLOY
+§28); before that, the unit tests green and the reading screen looked at
+against the local stack at phone width.
 
 ## 2026-11-22 (third) — a spelling's count says what it is worth, and «شواهد» opens on the lines on both tables
 
