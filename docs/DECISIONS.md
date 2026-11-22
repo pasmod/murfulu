@@ -2,6 +2,39 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-22 (fifth) — before a diphthong, the mark of the vowel the reading writes
+
+The project lead sent the reading screen's وَی with *vey* under it and asked
+whether it was a fault: «pronunciations. it should be vay — or with kasre».
+It was the rule of 2026-11-21 doing what it said (a zabar before *ow* and
+*ey*), and the rule was wrong by its own second condition, that the marks
+come from the reading so the two scripts always agree: a zabar stood over a
+reading that says *e*.
+
+- **The reading stays.** *vey* is the bank's reading for the pronoun (جانام);
+  *vay* is in the bank too, as a suffix and as a cry (FINDINGS 2026-11-22,
+  *third*). karbon's readings are the recorded ones and are not changed here.
+- **The mark follows the reading** (`murfulu/behnevis/vowels.py`): a zir
+  before *ey* (وِی، پِیوَند), a pish before *ow* (نُو، دُولَت), a zabar before
+  *ay* and *aw* (وَی *vay*, کَی *Kay*). So the bank's two words no longer look
+  alike, and shown side by side as variants they take no mark, as any two
+  readings that disagree.
+- **The pish before *ow* is our extension.** The project lead spoke of *ey*;
+  the same contradiction stood over every *ow*, so both are changed. The old
+  dictionaries mostly print a zabar there (FINDINGS), and it goes back in one
+  line if the project lead or the linguist wants it.
+- **Reading a source's own marks is unchanged** (`search/harakat.py`): a
+  text that writes وَی or نَو with a zabar is still matched to *vey* and *now*,
+  as editions print them.
+- **Unconfirmed**, as the whole rule is: L48 carries it as a third point, and
+  the question's wording in the app says the new rule
+  (`rules/questions_fa.yaml`; to be loaded on the server with the deploy).
+
+Display only, as before: nothing marked is stored or matched, and the API
+makes the marks at each request, so no data file changes. **Not served yet**:
+on this machine, the Python tests green, the reading screen looked at with a
+local api against the local stack at phone width.
+
 ## 2026-11-22 (fourth) — the reading screen's legend opens on its marks, without the three sentences above them
 
 The project lead asked for the paragraph above the legend's marks to be

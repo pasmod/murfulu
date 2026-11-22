@@ -2952,7 +2952,9 @@ whose vowels the script writes, or readings that do not line up with their
 letters, which are shown as written.
 
 **Our rule**: every unwritten short vowel (رَفتار، گُفتار), on ا or ع when they
-carry it (اَندیشه، عَلی); a zabar before *ow* and *ey* (نَو، پَیوَند); a tashdid
+carry it (اَندیشه، عَلی); before a diphthong the mark of the vowel Behnevis
+writes — a pish before *ow* (نُو), a zir before *ey* (پِیوَند، وِی), a zabar
+before *ay* (وَی *vay*) — changed on 2026-11-22, see below; a tashdid
 where Behnevis doubles a letter (مُعَلِّم); **no** sokun, no mark on a written
 long vowel, none on the last letter of the word or of a part before a joiner
 (a zir there reads as the ezafe), none for the silent ه of *-e* (خانه،
@@ -2967,6 +2969,20 @@ disagree about a mark, the mark is left off.
    writes (*taˈsir* تأثیر is shown unmarked, because ا with hamza does not line
    up); the linking vowel inside a compound (*maqtuaruzi*); and whether the
    tashdid should also be shown where Behnevis writes a doubled letter single.
+3. **The diphthongs** (added 2026-11-22). Until then a zabar stood before
+   every *ow* and *ey* (نَو، پَیوَند، وَی), as the old dictionaries often
+   print them. The project lead read وَی over the reading *vey* on the reading
+   screen and took it for a wrong pronunciation: «it should be vay, or with
+   kasre». The bank holds both — *vey* (جانام, the pronoun) and *vay* (پسوند;
+   صوت) — as separate entries, and the zabar showed them alike. The reading
+   is the bank's and stays; the mark now follows it (DECISIONS 2026-11-22,
+   *fifth*). The dictionary's own marks in the bank (`vowelized`) are split:
+   before ی read *ey*, a zabar on 288 entries and a zir on 276 (مَی but پِی);
+   before و read *ow*, a zabar on 792 and a pish on 55 (جَو but نُو) — a rough
+   count by pattern, `lexicon-20261111`. **Is a zir before *ey* and a pish
+   before *ow* right for him, or does he want the zabar back for either?**
+   The pish before *ow* is our extension of the project lead's word, which
+   was about *ey*.
 
 
 ## L49. دلبر twice: the doer (V-078) and the done-to (V-079)

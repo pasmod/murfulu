@@ -5,6 +5,34 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-22 (third) — *vey* and *vay* are two words in the bank, and the dictionary's own marks do not settle the diphthongs
+
+The project lead read وَی over *vey* on the reading screen and took the
+pronunciation for wrong (DECISIONS 2026-11-22 *fifth*). Looking it up gave
+three things worth keeping. All on `lexicon-20261111`, 58,983 readings.
+
+**The bank holds four entries for وی**: *vey* (جانام, the pronoun), *vay*
+twice (پسوند, and صوت, the cry) and *voy* (صوت). The reading screen picked
+*vey* at 0.9 from the function-word list. So *vey* was not the fault; the
+zabar over it was, and it also made *vey* and *vay* look alike. Behnevis
+keeps *ey* and *ay* apart elsewhere too: کی is *key* and *Kay*, پی *Pey* and
+*Pay*.
+
+**The dictionary's marks in the bank are split.** In `vowelized`, before ی
+read *ey*: a zabar on 288 entries, a zir on 276, no mark on 102 (مَی *Mey*,
+پِی *Pey*). Before و read *ow*: a zabar on 792, a pish on 55, no mark on 159
+(جَو *Jow*, نُو *now*). **A rough count by pattern**, not a reviewed one: it
+looks for the mark anywhere before a ی or و in the entry. What it shows is
+enough for the question: "as Dehkhoda prints them" does not name one rule
+for *ey*, and names the zabar for most of *ow*.
+
+**What the new rule changes**: 1,680 of the 58,983 readings get other marks
+— 993 with *ow*, 663 with *ey*, 24 with both or with *y* or *w* between
+vowels (*beyaxidan* بِیَخیدَن, which had no mark on its ب while the two ways
+of lining up disagreed). The 443 readings with *ay* or *aw* keep theirs.
+
+---
+
 ## 2026-11-22 (second) — which readings on the reading screen are the bank's: about half in one ghazal, and eleven function-word readings the bank lacks
 
 The project lead asked that the reading screen show whether a reading is one

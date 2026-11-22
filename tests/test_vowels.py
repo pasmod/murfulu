@@ -28,10 +28,14 @@ from murfulu.behnevis.vowels import strip, vocalise
         ("علی", "Ali", "عَلی"),
         # The vowel of a joined word's ا is the ا's, not the letter before.
         ("هم‌اندیشنده", "hamandišande", "هَم‌اَندیشَنده"),
-        # The diphthongs: a zabar before و and ی.
-        ("نو", "now", "نَو"),
-        ("دولت", "dowlat", "دَولَت"),
-        ("پیوند", "peyvand", "پَیوَند"),
+        # The diphthongs: the mark of the vowel the reading writes — a pish
+        # before *ow*, a zir before *ey*, a zabar before *ay* (2026-11-22;
+        # a zabar stood before all of them until then).
+        ("نو", "now", "نُو"),
+        ("دولت", "dowlat", "دُولَت"),
+        ("پیوند", "peyvand", "پِیوَند"),
+        ("کی", "key", "کِی"),
+        ("کی", "Kay", "کَی"),
         # A doubled letter Behnevis writes twice.
         ("معلم", "moˈallem", "مُعَلِّم"),
         ("شدت", "šeddat", "شِدَّت"),
@@ -101,8 +105,17 @@ class TestTheReviewOf20261121:
         """*lal*: لَعل or لعَل? The letters cannot say, so neither."""
         assert vocalise("لعل", "lal") == "لعل"
 
-    def test_a_consonant_vav_takes_the_diphthongs_zabar(self) -> None:
-        assert vocalise("وی", "vey") == "وَی"
+    def test_a_consonant_vav_takes_the_mark_of_the_diphthongs_vowel(self) -> None:
+        """*vey* and *vay* are two words in the bank, and must not look alike.
+
+        Both were shown وَی until 2026-11-22: the project lead read a zabar
+        over the reading *vey* on the reading screen and took it for a wrong
+        pronunciation.
+        """
+        assert vocalise("وی", "vey") == "وِی"
+        assert vocalise("وی", "vay") == "وَی"
+        # Shown side by side, they disagree about the mark, so there is none.
+        assert vocalise("وی", "vey", ("vay",)) == "وی"
 
     def test_the_tatweel_is_not_a_boundary(self) -> None:
         assert vocalise("کـتاب", "ketāb") == "کِـتاب"

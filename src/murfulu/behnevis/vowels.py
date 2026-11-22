@@ -19,8 +19,14 @@ the second and third:
    - zabar, zir or pish for every short vowel the script does not write —
      *a*, *e*, *o* after a letter, or carried by ا or ع themselves
      (اَندیشه، عَلی);
-   - a zabar before the diphthongs *ow* and *ey* (نَو، کَی), whose و and ی the
-     reader would otherwise read *u* and *i*;
+   - before a diphthong, whose و and ی the reader would otherwise read *u*
+     and *i*, **the mark of the vowel the reading itself writes**: a zir
+     before *ey* (وِی، پِیوَند), a pish before *ow* (نُو), a zabar before *ay*
+     and *aw* (وَی read *vay*). Until 2026-11-22 a zabar stood before all
+     four, as the old dictionaries often write them: the bank's *vey* (he)
+     and *vay* (the cry) are two words and both were shown وَی, and a zabar
+     stood over a reading that says *e* — which is what condition 2 rules
+     out, and what the project lead saw on the reading screen;
    - a tashdid where the reading doubles a letter (*taxxt* is rare; *ammā*,
      *Hażrat* no) — only where Behnevis writes the letter twice;
    - **never** a sokun, a mark on a long vowel the script already writes (ا،
@@ -55,7 +61,8 @@ MARK = {"a": FATHA, "e": KASRA, "o": DAMMA}
 #: Letters that may carry a short vowel themselves: ا of *andiše*, ع of *Ali*.
 _CARRIERS = {"ا", "ع", "ئ", "ء"}
 
-#: The diphthongs a zabar writes before و or ی.
+#: The diphthongs of و and ی, whose first letter is the vowel that is marked
+#: on the letter before.
 _DIPHTHONGS = ("ow", "ey", "ay", "aw")
 
 #: One step of an alignment: the letter's piece of the reading, from position
@@ -162,8 +169,8 @@ def _marks_at(
     if vowel and _gives_vowel_away(letter, piece, nxt):
         vowel = ""
     if vowel:
-        diphthong = nxt is not None and (nxt[0], nxt[1]) in (("و", "w"), ("ی", "y"))
-        marks.add(FATHA if diphthong and vowel in "oe" else MARK[vowel])
+        # Also before و read *w* or ی read *y*: the mark is the vowel's own.
+        marks.add(MARK[vowel])
     elif (
         nxt is not None
         and nxt[0] in ("و", "ی")
@@ -171,9 +178,9 @@ def _marks_at(
         and body
         and body[-1] not in _VOWELS
     ):
-        # و read *ow*, ی read *ey*: the consonant before takes a zabar — also
-        # a consonantal و, as in وَی (*vey*).
-        marks.add(FATHA)
+        # و read *ow*, ی read *ey*: the consonant before takes the mark of the
+        # diphthong's vowel — also a consonantal و, as in وِی (*vey*).
+        marks.add(MARK[nxt[1][0]])
     return frozenset(marks)
 
 

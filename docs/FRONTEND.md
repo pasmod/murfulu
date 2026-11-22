@@ -105,7 +105,10 @@ the search results, the word page, and on the reading screen a word with one
 reading or the model's — the Persian carries zabar, zir, pish and tashdid made
 from the reading (`form_fa_marked`, `spelling_fa_marked`, `fa_marked`), only
 the marks every shown pronunciation agrees on; the plain spelling stays the
-key for search, links, ids and tests. Quoted lines stay as written. The rule
+key for search, links, ids and tests. Before a diphthong the mark is the
+vowel the reading writes — وِی *vey*, وَی *vay*, نُو *now* — since 2026-11-22;
+a zabar stood before all of them until then, over readings that say *e* or
+*o* (DECISIONS 2026-11-22, *fifth*). Quoted lines stay as written. The rule
 is unconfirmed (L48).
 
 **The score's parts (2026-11-21).** «شواهد» opens a sentence of reason — what
