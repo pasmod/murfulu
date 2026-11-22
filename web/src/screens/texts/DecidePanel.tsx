@@ -154,7 +154,16 @@ export function Decide({
               onUse={take}
               busy={busy}
               bankOne={one.kind === "one" ? (one.known[0] ?? null) : null}
-              marksSaid={!!fit?.reading && folded(fit.reading) === folded(suggestion.latin)}
+              // Only where the panel's note gives the same count for the same
+              // reading: the note counts the places some offered reading fits,
+              // the box those the suggestion can be lined up with (خود: 14 of
+              // 14 there, 14 of 40 here), and must not hide a warning.
+              marksSaid={
+                !!fit?.reading &&
+                folded(fit.reading) === folded(suggestion.latin) &&
+                fit.best === suggestion.marked?.fit &&
+                fit.fitted === suggestion.marked?.checked
+              }
             />
           ) : null}
           <fieldset className={styles.choices}>

@@ -17,15 +17,18 @@ import type { Suggestion } from "../../api/texts";
  * apart.
  */
 export function folded(reading: string): string {
-  return reading
-    .trim()
-    .replace(/-(?:y?e)$/u, "")
-    .normalize("NFC")
-    .toLowerCase()
-    .replaceAll("é", "e")
-    .replaceAll("í", "i")
-    .replace(/[^\p{L}]/gu, "")
-    .replaceAll("ˈ", "");
+  return (
+    reading
+      .trim()
+      .normalize("NFC")
+      .toLowerCase()
+      .replaceAll("é", "e")
+      .replaceAll("í", "i")
+      // The ezafe after case and accents are folded: *Del-E*, *del-é* are *del*.
+      .replace(/-(?:y?e)$/u, "")
+      .replace(/[^\p{L}]/gu, "")
+      .replaceAll("ˈ", "")
+  );
 }
 
 /** The offered readings that are the suggestion, in their order. */
@@ -66,7 +69,8 @@ export function outOf100(share: number): number {
 export function contextOf(
   context: string | null,
 ): { before: string; word: string; after: string } | null {
-  const found = context?.match(/^(.*?)\[(.+?)\](.*)$/u);
+  if (typeof context !== "string") return null;
+  const found = context.match(/^(.*?)\[(.+?)\](.*)$/u);
   if (!found) return null;
   return { before: found[1]!.trim(), word: found[2]!.trim(), after: found[3]!.trim() };
 }

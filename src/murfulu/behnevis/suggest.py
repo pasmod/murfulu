@@ -56,7 +56,9 @@ A spelling the list offers no such reading for gets the suggestion to type.
 from __future__ import annotations
 
 import json
+import math
 import re
+import unicodedata
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
@@ -67,16 +69,20 @@ from murfulu.behnevis.letters import latin_key
 #: The file format this module writes and reads.
 FORMAT = 1
 
-#: The ezafe a reading carries in its line: *sar-e*, *xāne-ye*.
-_EZAFE = re.compile(r"-(?:y?e)$")
+#: The ezafe a reading carries in its line: *sar-e*, *xāne-ye*, in any case
+#: and with or without the accent Behnevis may write on it (*-é*).
+_EZAFE = re.compile(r"-(?:y?[eé])$", re.IGNORECASE)
 
 #: Behnevis's mark for ع and ء (*tabˈ*).
 _GLOTTAL = "ˈ"
 
 
 def without_ezafe(reading: str) -> str:
-    """The reading without the ezafe its line gave it: *sar-e* → *sar*."""
-    return _EZAFE.sub("", reading.strip())
+    """The reading without the ezafe its line gave it: *sar-e* → *sar*.
+
+    Composed first, so a decomposed accent (*e* and U+0301) is the same *é*.
+    """
+    return _EZAFE.sub("", unicodedata.normalize("NFC", reading.strip()))
 
 
 def folded(reading: str) -> str:
@@ -172,6 +178,12 @@ def bands_from(raw: Iterable[Mapping[str, Any]]) -> tuple[Band, ...]:
         if before.high != after.low:
             raise ValueError(f"a gap or overlap between bands at {before.high}")
     for band in bands:
+        # In order and of some width: a band running backwards would put one
+        # certainty in two bands, and band_of would take the first silently.
+        if not (math.isfinite(band.low) and math.isfinite(band.high)) or not (
+            0 <= band.low < band.high <= 100
+        ):
+            raise ValueError(f"band {band.low}-{band.high}: not in order within 0-100")
         if band.words <= 0 or not 0 <= band.right <= band.words:
             raise ValueError(f"band {band.low}-{band.high}: impossible counts")
         if abs(band.share - band.right / band.words) > 0.0005:
@@ -248,16 +260,44 @@ def path_beside(model: Path) -> Path:
     return model.with_name(f"{model.stem}.suggest.json")
 
 
+_PLACE = ("document_id", "unit", "line", "word")
+
+
 def _row_ok(spelling: Any, row: Any) -> bool:
-    """Whether a row holds what :meth:`Suggestions.of` reads."""
+    """Whether a row holds what :meth:`Suggestions.of` serves, of the right kinds.
+
+    The screens read every field it passes on, so a context that is not text
+    or a place without its four parts is refused here, not met in a browser.
+    """
+    if not (isinstance(spelling, str) and spelling and isinstance(row, dict)):
+        return False
+    latin, certainty = row.get("latin"), row.get("certainty")
+    context, place, marked = row.get("context"), row.get("place"), row.get("marked")
     return (
-        isinstance(spelling, str)
-        and bool(spelling)
-        and isinstance(row, dict)
-        and isinstance(row.get("latin"), str)
-        and bool(folded(row["latin"]))
-        and isinstance(row.get("certainty"), int | float)
-        and 0 <= row["certainty"] <= 100
+        isinstance(latin, str)
+        and bool(folded(latin))
+        and isinstance(row.get("as_read", latin), str)
+        and isinstance(certainty, int | float)
+        and not isinstance(certainty, bool)
+        and 0 <= certainty <= 100
+        and (context is None or (isinstance(context, str) and "[" in context))
+        and (
+            place is None
+            or (
+                isinstance(place, dict)
+                and isinstance(place.get("document_id"), str)
+                and all(isinstance(place.get(k), int) for k in _PLACE[1:])
+            )
+        )
+        and (
+            marked is None
+            or (
+                isinstance(marked, dict)
+                and isinstance(marked.get("checked"), int)
+                and isinstance(marked.get("fit"), int)
+                and 0 <= marked["fit"] <= marked["checked"]
+            )
+        )
     )
 
 

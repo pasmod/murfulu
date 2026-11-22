@@ -158,6 +158,11 @@ describe("matching a suggestion to the offered readings", () => {
     expect(folded("xāne-ye")).toBe("xāne");
     expect(folded("Bahré")).toBe("bahre");
     expect(folded("ˈElm")).toBe("elm");
+    // The ezafe in any case, with its accent composed or not (the review of 2026-11-22).
+    expect(folded("Del-E")).toBe("del");
+    expect(folded("del-é")).toBe("del");
+    expect(folded("del-e\u0301")).toBe("del");
+    expect(folded("xāne-YE")).toBe("xāne");
   });
 
   it("marks every offered reading that is the suggestion, in the panel's order", () => {
@@ -180,6 +185,8 @@ describe("matching a suggestion to the offered readings", () => {
     expect(contextOf("یک [دل] دو")).toEqual({ before: "یک", word: "دل", after: "دو" });
     expect(contextOf("[دل]")).toEqual({ before: "", word: "دل", after: "" });
     expect(contextOf("دل")).toBeNull();
+    expect(contextOf(null)).toBeNull();
+    expect(contextOf(42 as unknown as string)).toBeNull();
     expect(outOf100(0.881)).toBe(88);
     expect(readHere(SUGGESTED, { document_id: "fixture:a:1", unit: 0, line: 0, word: 0 })).toBe(true);
     expect(readHere(SUGGESTED, { document_id: "fixture:a:1", unit: 0, line: 1, word: 0 })).toBe(false);
@@ -207,7 +214,7 @@ describe("the suggestion on the list", () => {
     const box = within(panel).getByRole("region", { name: "پیشنهاد خودکار" });
     expect(box).toHaveTextContent("در آزمون، از هر ۱۰۰ پیشنهاد با این اطمینان ۸۸ تا درست بود.");
     expect(box).toHaveTextContent("این پیشنهاد از یک سطر آمده است: «یک دل دو».");
-    expect(box).toHaveTextContent("در ۴۰ جا اعراب گذاشته‌اند و اعرابِ ۳۰ جا با این پیشنهاد جور است.");
+    expect(box).toHaveTextContent("اعرابِ ویراستاران در ۳۰ جا از ۴۰ جا با این پیشنهاد جور است.");
     expect(within(box).getByText(/از کجا آمده/).closest("details")).toHaveTextContent(
       /روی ۱٬۲۰۰ واژهٔ اعراب‌دار/,
     );
@@ -264,13 +271,28 @@ describe("the suggestion on the list", () => {
     expect(within(box).queryByRole("button", { name: /برگزین|بگذار/ })).not.toBeInTheDocument();
   });
 
-  it("does not repeat the marks where the panel already gives them for this reading", async () => {
+  it("does not repeat the marks where the panel already gives the same count for this reading", async () => {
     listed = { ...LISTED, marked: { fitted: 40, best: 30, none: 0, reading: "Del" } };
     const { list, row } = await openRow();
     await userEvent.click(row);
     const box = within(list).getByRole("region", { name: "پیشنهاد خودکار" });
-    expect(box).not.toHaveTextContent("اعراب گذاشته‌اند");
+    expect(box).not.toHaveTextContent("اعرابِ ویراستاران");
     expect(within(list).getByText(/جایی که ویراستاران/)).toHaveTextContent("در ۴۰ جایی");
+  });
+
+  it("keeps its own count and warning where the panel's note counts other places", async () => {
+    // The note counts the places some offered reading fits (14 of 14); the
+    // suggestion is checked on 40 and fits 14 (the review of 2026-11-22).
+    listed = {
+      ...LISTED,
+      marked: { fitted: 14, best: 14, none: 26, reading: "Del" },
+      suggestion: { ...SUGGESTED, marked: { checked: 40, fit: 14 } },
+    };
+    const { list, row } = await openRow();
+    await userEvent.click(row);
+    const box = within(list).getByRole("region", { name: "پیشنهاد خودکار" });
+    expect(box).toHaveTextContent("اعرابِ ویراستاران در ۱۴ جا از ۴۰ جا با این پیشنهاد جور است.");
+    expect(within(box).getByText(/جور دیگری خوانده می‌شود/)).toHaveAttribute("data-weak", "true");
   });
 
   it("shows nothing where no suggestion was made", async () => {

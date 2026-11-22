@@ -119,11 +119,17 @@ def convert(
         if example is None:
             problems.append(f"{spelling}: its example line is not the list's")
             continue
+        context = row.get("context")
+        if context is not None and (
+            not isinstance(context, str) or f"[{spelling}]" not in context
+        ):
+            problems.append(f"{spelling}: its context does not hold the spelling")
+            continue
         out[spelling] = {
             "latin": suggest.without_ezafe(reading),
             "as_read": reading.strip(),
             "certainty": int(certainty) if certainty == int(certainty) else certainty,
-            "context": row.get("context"),
+            "context": context,
             "place": {k: example[k] for k in ("document_id", "unit", "line", "word")},
             "marked": None,
         }

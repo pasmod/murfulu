@@ -101,8 +101,8 @@ export function SuggestionBox({
       ) : null}
       {marked ? (
         <p className={styles.note} data-weak={marked.fit < marked.checked / 2 || undefined}>
-          ویراستاران این املا را در <Num value={marked.checked} /> جا اعراب گذاشته‌اند و اعرابِ{" "}
-          <Num value={marked.fit} /> جا با این پیشنهاد جور است.
+          اعرابِ ویراستاران در <Num value={marked.fit} /> جا از <Num value={marked.checked} /> جا
+          با این پیشنهاد جور است.
           {marked.fit < marked.checked / 2
             ? " ویراستاران بیشتر جاهای دشوار را اعراب می‌گذارند؛ یعنی این املا دست‌کم در برخی جاها جور دیگری خوانده می‌شود. پیش از «همه‌جا» نمونه‌ها را ببینید."
             : null}

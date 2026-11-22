@@ -96,6 +96,8 @@ def test_offline_rows_take_the_lists_place_and_lose_the_ezafe():
         ({"reader_certainty": 140}, "certainty"),
         ({"reader_reading": "-e"}, "no reading"),
         ({"measured_right_share": 0.6}, "not its band's"),
+        ({"context": 42}, "context does not hold"),
+        ({"context": "x [دل] y"}, "context does not hold"),
     ],
 )
 def test_an_offline_row_that_does_not_match_the_list_is_refused(

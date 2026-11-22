@@ -62,6 +62,11 @@ def _row(latin: str, certainty: float, **more: Any) -> dict[str, Any]:
 def test_a_reading_is_compared_without_ezafe_case_accents_or_the_ain_mark():
     assert suggest.without_ezafe("sar-e") == "sar"
     assert suggest.without_ezafe("xāne-ye") == "xāne"
+    # In any case, the accent composed or not (the review of 2026-11-22).
+    assert suggest.without_ezafe("Del-E") == "Del"
+    assert suggest.without_ezafe("del-é") == "del"
+    assert suggest.without_ezafe("del-e\u0301") == "del"
+    assert suggest.same("del-é", "Del") and suggest.same("Del-YE", "del")
     # Only a final ezafe: a hyphen inside is the reading's own.
     assert suggest.without_ezafe("ab-e-x") == "ab-e-x"
     assert suggest.same("bud", "Bud")
@@ -109,6 +114,10 @@ def test_a_certainty_falls_in_one_band_and_100_in_the_last():
         ({1: {"share": 0.8}}, "share is not right/words"),
         ({1: {"at_least": 0.9}}, "lower bound above share"),
         ({0: {"right": 11}}, "impossible counts"),
+        # Running backwards, or of no width: one certainty in two bands.
+        ({0: {"to": 85}, 1: {"from": 85, "to": 50}, 2: {"from": 50}}, "not in order"),
+        ({0: {"to": 0}, 1: {"from": 0}}, "not in order"),
+        ({0: {"to": float("nan")}}, "gap or overlap|not in order"),
     ],
 )
 def test_a_calibration_that_does_not_add_up_is_refused(
@@ -170,6 +179,16 @@ def test_a_file_without_readings_or_of_another_format_is_refused(tmp_path: Path)
     path.write_text(json.dumps({"format": 99, "meta": meta, "suggestions": {}}))
     with pytest.raises(ValueError, match="format"):
         suggest.read(path)
+    # Fields the screens read, of the wrong kind (the review of 2026-11-22).
+    for bad in (
+        {"context": 42},
+        {"context": "no brackets"},
+        {"place": {"document_id": "x", "unit": "0", "line": 0, "word": 0}},
+        {"marked": {"checked": 3, "fit": 5}},
+        {"certainty": True},
+    ):
+        with pytest.raises(ValueError, match="lack a reading"):
+            suggest.write(path, meta, {"بود": _row("bud", 95) | bad})
 
 
 # -- served beside the model --------------------------------------------------------
