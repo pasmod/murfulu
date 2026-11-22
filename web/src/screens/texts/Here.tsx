@@ -19,9 +19,11 @@ import {
   unsureSpelling,
 } from "../../api/texts";
 import { Latin } from "../../text/Latin";
-import { Num } from "../../text/Num";
 import { decidedFate, reach, replacing, scopeLabel } from "./decide";
 import { LEVEL_FA, type Saved, percent } from "./levels";
+import { InForce, ReachOption } from "./HereParts";
+import { SuggestedMark, SuggestionBox } from "./Suggestion";
+import { type Use, readHere, suggestedAmong, takeUpOf } from "./suggested";
 import styles from "./WordPanel.module.css";
 
 type Proposing = "idle" | "sending" | "done" | "failed";
@@ -145,6 +147,18 @@ export function Here({
     setState("idle");
   }
 
+  // The listed spelling's automatic suggestion (2026-11-22), read in one
+  // line, maybe another: marked among this line's readings, or offered to
+  // type, and taken up only by the reader's own press and save.
+  const suggestion = about?.listed?.suggestion ?? null;
+  const offered = auto.candidates.map(([latin]) => latin);
+  const among = suggestion ? suggestedAmong(suggestion, offered) : [];
+
+  function take(use: Use) {
+    setPicked(use.how === "pick" ? use.latin : "");
+    setTyped(use.how === "type" ? use.latin : "");
+  }
+
   return (
     <section className={styles.here} aria-label="خوانش در این سطر">
       <p className={styles.hereHead}>
@@ -195,6 +209,17 @@ export function Here({
               نسنجیده است.
             </p>
           )}
+          {suggestion ? (
+            <SuggestionBox
+              suggestion={suggestion}
+              among={among}
+              use={takeUpOf(suggestion, offered)}
+              onUse={take}
+              busy={busy}
+              bankOne={about?.listed?.kind === "one" ? (about.listed.known[0] ?? null) : null}
+              here={readHere(suggestion, where)}
+            />
+          ) : null}
           {/* Native radio buttons: one tab stop, arrow keys move the pick
               (the review of 2026-11-14); each looks like a button. */}
           <fieldset className={styles.choices}>
@@ -223,6 +248,7 @@ export function Here({
                   ) : null}
                   <Latin>{latin}</Latin>
                   {share === null ? null : <span className={styles.share}>{percent(share)}</span>}
+                  {among.includes(latin) ? <SuggestedMark /> : null}
                 </label>
               );
             })}
@@ -316,58 +342,6 @@ export function Here({
         </>
       )}
     </section>
-  );
-}
-
-/** One choice of how far a saved reading holds, with the places it reaches. */
-function ReachOption({
-  name,
-  on,
-  busy,
-  onPick,
-  label,
-  places,
-}: {
-  name: string;
-  on: boolean;
-  busy: boolean;
-  onPick: () => void;
-  label: string;
-  places: number | null;
-}) {
-  return (
-    <label className={styles.reach}>
-      <input type="radio" name={name} checked={on} disabled={busy} onChange={onPick} />
-      <span>
-        {label}
-        {places !== null ? (
-          <span className={styles.reachCount}>
-            {" "}
-            (<Num value={places} /> جا)
-          </span>
-        ) : null}
-      </span>
-    </label>
-  );
-}
-
-/** The decisions in force for this spelling, read before the model's next build. */
-function InForce({ decisions }: { decisions: Decision[] }) {
-  return (
-    <div className={styles.inForce}>
-      <p>برای این املا پیش‌تر تصمیم گرفته شده است:</p>
-      <ul>
-        {decisions.map((one) => (
-          <li key={one.id}>
-            {scopeLabel(one.scope, one.scope_word)}: <Latin>{one.latin}</Latin>
-          </li>
-        ))}
-      </ul>
-      <p className={styles.inForceNote}>
-        برنامه این تصمیم‌ها را در به‌روزرسانیِ بعدی‌اش به کار می‌بندد. تصمیم تازه برای همان
-        جاها جای تصمیم پیشین را می‌گیرد.
-      </p>
-    </div>
   );
 }
 

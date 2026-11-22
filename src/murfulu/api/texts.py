@@ -27,6 +27,11 @@ same way again, with ``kind: reading_decided`` and its scope in ``context``
 decision taken back is one more record, ``withdrawn``, with ``verdict:
 unsure``. The model reads the decisions in force at its next build; until
 then these routes only say what was decided.
+
+**An automatic suggestion** comes with each listed spelling where one was
+made (2026-11-22, :mod:`murfulu.behnevis.suggest`): a reading and how often a
+reading at its certainty was right in a test. It is only shown; nothing here
+decides by it.
 """
 
 from __future__ import annotations
@@ -257,19 +262,27 @@ def unsure_spellings(
 
     Measured by ``tools/measure_unsure_spellings.py`` over the whole corpus,
     as the screen reads it, and kept beside the model; each comes with the
-    readings decided for it so far.
+    readings decided for it so far, and its automatic suggestion, if any.
     """
     meta, listed = _listed()
     chosen = [one for one in listed if kind is None or one["kind"] == kind]
     page = chosen[offset : offset + size]
     decisions = _decisions(session, {one["spelling"] for one in page})
+    suggested = behnevis.suggestions()
     return {
         "meta": meta,
+        # What the suggestions are, once for the page; null without them.
+        "suggestions": suggested.about() if suggested else None,
         "total": len(chosen),
         "offset": offset,
         "size": size,
         "spellings": [
-            {**one, "decided": decisions.get(one["spelling"], [])} for one in page
+            {
+                **one,
+                "decided": decisions.get(one["spelling"], []),
+                "suggestion": suggested.of(one) if suggested else None,
+            }
+            for one in page
         ],
     }
 
@@ -279,7 +292,8 @@ def unsure_spelling(_who: Caller, session: Store, spelling: str) -> dict[str, An
     """One spelling: its place in the list, if it is listed, and its decisions.
 
     The reading screen's word panel asks for it, to say how many places a
-    decision would reach. A spelling outside the list, or a model without
+    decision would reach, and to show the automatic suggestion where the
+    listed spelling has one. A spelling outside the list, or a model without
     one, still answers, with ``listed: null``.
     """
     keyed = key(spelling)
@@ -287,6 +301,9 @@ def unsure_spelling(_who: Caller, session: Store, spelling: str) -> dict[str, An
     listed = None
     if found is not None:
         listed = next((one for one in found[1] if one["spelling"] == keyed), None)
+    if listed is not None:
+        suggested = behnevis.suggestions()
+        listed = {**listed, "suggestion": suggested.of(listed) if suggested else None}
     return {
         "spelling": keyed,
         "listed": listed,

@@ -116,6 +116,31 @@ test.describe("reading a text", () => {
     expect(await sideways(page)).toBeLessThanOrEqual(1);
   });
 
+  test("the automatic suggestion in a decision panel stays inside the screen", async ({ page }) => {
+    const answer = await page.request.get("/api/texts/unsure?size=1");
+    test.skip(!answer.ok(), "no list of unsure spellings served");
+    test.skip(!(await answer.json()).suggestions, "no automatic suggestions served");
+    await page.goto("/texts?view=unsure");
+    const row = page
+      .getByRole("button", { expanded: false })
+      .filter({ hasText: "پیشنهاد خودکار" })
+      .first();
+    await row.click();
+    const suggestion = page.getByRole("region", { name: "پیشنهاد خودکار" });
+    await expect(suggestion).toBeVisible();
+    await expect(suggestion).toContainText("در آزمون، از هر ۱۰۰ پیشنهاد");
+    await suggestion.getByText("این پیشنهاد از کجا آمده است؟").click();
+    const box = (await suggestion.boundingBox())!;
+    const view = page.viewportSize()!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(view.width + 1);
+    const use = suggestion.getByRole("button");
+    if ((await use.count()) > 0) {
+      expect((await use.first().boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    }
+    expect(await sideways(page)).toBeLessThanOrEqual(1);
+  });
+
   test("a citation on a word's page opens the text at its line", async ({ page }) => {
     test.skip(!(await units(page, GHAZAL)), "no corpus with units (v17 or later) served");
     const search = await page.request.get(`/api/search?q=${encodeURIComponent("دل")}&size=5`);

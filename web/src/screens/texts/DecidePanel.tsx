@@ -20,6 +20,8 @@ import { decidedFate, reach, replacing, scopeLabel } from "./decide";
 import { Decided, NearScope } from "./DecideParts";
 import { ExampleLine } from "./ExampleLine";
 import { percent } from "./levels";
+import { SuggestedMark, SuggestionBox } from "./Suggestion";
+import { type Use, folded, readHere, suggestedAmong, takeUpOf } from "./suggested";
 import styles from "./Unsure.module.css";
 
 type Sending = "idle" | "sending" | "done" | "failed";
@@ -64,6 +66,16 @@ export function Decide({
   const reached = reach(one, scope, word);
   const busy = state === "sending";
   const fit = one.marked && one.marked.fitted >= 5 ? one.marked : null;
+  const offered = readingsOf(one);
+  // The automatic suggestion (2026-11-22): marked among the readings, or
+  // offered to type; taken up only by the person's own press and save.
+  const suggestion = one.suggestion ?? null;
+  const among = suggestion ? suggestedAmong(suggestion, offered) : [];
+
+  function take(use: Use) {
+    setPicked(use.how === "pick" ? use.latin : "");
+    setTyped(use.how === "type" ? use.latin : "");
+  }
 
   function send() {
     if (!chosen || (scope !== "everywhere" && !word)) return;
@@ -134,9 +146,20 @@ export function Decide({
         </div>
       ) : (
         <>
+          {suggestion ? (
+            <SuggestionBox
+              suggestion={suggestion}
+              among={among}
+              use={takeUpOf(suggestion, offered)}
+              onUse={take}
+              busy={busy}
+              bankOne={one.kind === "one" ? (one.known[0] ?? null) : null}
+              marksSaid={!!fit?.reading && folded(fit.reading) === folded(suggestion.latin)}
+            />
+          ) : null}
           <fieldset className={styles.choices}>
             <legend className={styles.step}>این املا را چطور می‌خوانید؟</legend>
-            {readingsOf(one).map((latin) => {
+            {offered.map((latin) => {
               const on = !typed.trim() && picked === latin;
               return (
                 <label key={latin} className={styles.choice} data-checked={on || undefined}>
@@ -158,6 +181,7 @@ export function Decide({
                     </span>
                   ) : null}
                   <Latin>{latin}</Latin>
+                  {among.includes(latin) ? <SuggestedMark /> : null}
                 </label>
               );
             })}
@@ -275,6 +299,7 @@ export function Decide({
                   >
                     در متن ←
                   </Link>
+                  {suggestion && readHere(suggestion, place) ? " · پیشنهاد خودکار از این سطر است" : null}
                 </p>
               </li>
             ))}

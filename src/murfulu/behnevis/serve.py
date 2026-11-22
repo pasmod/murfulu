@@ -17,6 +17,11 @@ are a file beside the model, ``behnevis-metre-<version>.json`` beside
 ``behnevis-<version>.json`` (``tools/extract_metre_lines.py``), so a release
 of another version takes its own. ``MURFULU_BEHNEVIS_METRE=off`` turns the
 step off without removing anything; without the file it is off too.
+
+**The automatic suggestions** for the list of unsure spellings (2026-11-22,
+:mod:`murfulu.behnevis.suggest`) are a file beside the model too,
+``behnevis-suggest-<version>.json``; ``MURFULU_BEHNEVIS_SUGGEST=off`` hides
+them without removing it, and without the file the list shows none.
 """
 
 from __future__ import annotations
@@ -29,7 +34,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from murfulu.behnevis import unsure
+from murfulu.behnevis import suggest, unsure
 from murfulu.behnevis.inflect import Inflector
 from murfulu.behnevis.metre import Metre, patterns
 from murfulu.behnevis.transcribe import DECIDED, Transcriber, Word, bank_from, key
@@ -44,6 +49,8 @@ PATH_VARIABLE = "MURFULU_BEHNEVIS_PATH"
 #: ``off`` turns the metre step off; anything else, or nothing, leaves it on
 #: wherever the labels file is there.
 METRE_VARIABLE = "MURFULU_BEHNEVIS_METRE"
+#: ``off`` hides the automatic suggestions beside the list of unsure spellings.
+SUGGEST_VARIABLE = "MURFULU_BEHNEVIS_SUGGEST"
 
 #: The levels' lower edges. At 0.9 and above a reading is *sure*; from 0.7
 #: *mid*; below, *unsure*. Measured on held-out data (data/behnevis-eval-v17.md):
@@ -129,6 +136,50 @@ def unsure_list() -> tuple[dict[str, Any], list[dict[str, Any]]] | None:
     if table is None:
         return None
     return _unsure(str(table), table.stat().st_mtime)
+
+
+def suggest_path() -> Path | None:
+    """The automatic suggestions beside the model, unless they are switched off."""
+    if os.environ.get(SUGGEST_VARIABLE, "").strip().lower() == "off":
+        return None
+    model = path()
+    if model is None:
+        return None
+    found = suggest.path_beside(model)
+    return found if found.is_file() and found != model else None
+
+
+@lru_cache(maxsize=2)
+def _suggestions(table: str, changed: float) -> suggest.Suggestions:
+    del changed  # the cache key: a file replaced in place is read again
+    return suggest.read(Path(table))
+
+
+def suggestions() -> suggest.Suggestions | None:
+    """The automatic suggestions for the listed spellings, or None without them.
+
+    Served only for the corpus version the list was measured on. A file that
+    cannot be read is logged and treated as absent: the suggestions are an
+    addition, and the list must not fail for them.
+    """
+    table = suggest_path()
+    if table is None:
+        return None
+    try:
+        found = _suggestions(str(table), table.stat().st_mtime)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        _log.warning("suggestions unreadable, none shown: %s", table, exc_info=True)
+        return None
+    listed = unsure_list()
+    version = listed[0].get("corpus_version") if listed else None
+    if version is not None and found.meta.get("corpus_version") != version:
+        _log.warning(
+            "suggestions are for %s, the list for %s: none shown",
+            found.meta.get("corpus_version"),
+            version,
+        )
+        return None
+    return found
 
 
 def metre_path() -> Path | None:

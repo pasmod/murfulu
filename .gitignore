@@ -75,5 +75,8 @@ data/compound_heads-*.json
 # the most frequent unsure spellings with karbon's readings (tools/measure_unsure_spellings.py)
 /data/behnevis-unsure-v*.json
 /data/behnevis-unsure-tally-*.pickle
+# the automatic suggestions beside them: they quote corpus words and places
+# (tools/import_reading_suggestions.py; the report, behnevis-suggest-v*.md, is committed)
+/data/behnevis-suggest-v*.json
 # readings picked on the reading screen, fetched from the server
 /data/behnevis-proposals.jsonl

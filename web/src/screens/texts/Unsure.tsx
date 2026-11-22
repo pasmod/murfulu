@@ -12,6 +12,11 @@
  * decisions already in force, each of which can be taken back. Nothing
  * changes on screen before the model's next build; a reading the bank lacks
  * goes to karbon's list instead.
+ *
+ * Beside each spelling, where one was made, an **automatic suggestion**
+ * (2026-11-22, `Suggestion.tsx`): a reading and how often a reading at its
+ * certainty was right in a test. It is only shown; a person takes it up with
+ * the panel's own controls, or does not.
  */
 
 import { useEffect, useId, useRef, useState } from "react";
@@ -30,6 +35,7 @@ import { Waiting } from "../../text/Waiting";
 import { Decide } from "./DecidePanel";
 import { KIND_FA } from "./decide";
 import { percent } from "./levels";
+import { SuggestionTag } from "./Suggestion";
 import styles from "./Unsure.module.css";
 
 /** Spellings per page of the list. */
@@ -123,6 +129,14 @@ export function Unsure() {
           <p className={styles.note}>
             <Num value={page.total} /> املا، از آنکه بیشتر از همه به شما سپرده می‌شود.
           </p>
+          {page.suggestions ? (
+            <p className={styles.note}>
+              کنار هر املا یک «پیشنهاد خودکار» هم آمده است: خوانشی که یک بار، بیرون از این سایت و
+              بی‌آنکه پاسخ را ببیند، برای یکی از سطرهای آن داده شده، و اینکه در آزمون از هر ۱۰۰
+              پیشنهاد با همان اطمینان چند تا درست بود. پیشنهاد فقط پیشنهاد است: تا شما ثبتش نکنید،
+              چیزی عوض نمی‌شود.
+            </p>
+          ) : null}
           <ol className={styles.rows}>
             {rows.map((one) => (
               <Row
@@ -205,6 +219,7 @@ function Row({
             برنامه: <Latin>{usual}</Latin>
           </span>
         ) : null}
+        {one.suggestion ? <SuggestionTag suggestion={one.suggestion} /> : null}
         {decisions.length > 0 ? (
           <span className={styles.decidedBadge}>
             <span aria-hidden="true">✓ </span>

@@ -383,6 +383,39 @@ export interface UnsureSpelling {
   /** The marked corpus read against its readings; null where the editions never marked it. */
   marked?: { fitted: number; best: number; none: number; reading: string | null } | null;
   decided?: Decision[];
+  /** The automatic suggestion for it (2026-11-22): shown only, never applied; null without one. */
+  suggestion?: Suggestion | null;
+}
+
+/**
+ * An automatic suggestion for a listed spelling: one reading, read offline
+ * and blind from one of its lines, and how often a reading at its certainty
+ * was right in a test on held-out vowel-marked words. Unconfirmed; a person
+ * accepts it with the decide controls or does not.
+ */
+export interface Suggestion {
+  /** The reading as a spelling's reading: lower case, the line's ezafe taken off. */
+  latin: string;
+  /** As it was read in its line (with the ezafe, *sar-e*). */
+  as_read: string;
+  /** The reader's own certainty, 0 to 100. */
+  certainty: number;
+  /** How often a reading at this certainty was right in the test, and the 95 % lower bound. */
+  right_share: number | null;
+  right_at_least: number | null;
+  band: [number, number] | null;
+  /** How many held-out words the shares were measured on. */
+  tested_words: number | null;
+  /** The word with its two neighbours as read, the word in brackets: «x [word] y». */
+  context: string | null;
+  /** The list's example line it was read in, or null. */
+  place: { document_id: string; unit: number; line: number; word: number } | null;
+  /** The readings the list's panel offers that are this suggestion; empty: to type. */
+  matches: string[];
+  /** Whether the bank (or the function-word list) holds it. */
+  in_bank: boolean;
+  /** The spelling's vowel-marked places it can be lined up with, and those it fits. */
+  marked: { checked: number; fit: number } | null;
 }
 
 export interface UnsurePage {
@@ -393,6 +426,8 @@ export interface UnsurePage {
     metre: boolean;
     measured: string;
   };
+  /** What the automatic suggestions are, once for the page; null without them. */
+  suggestions?: { made: string | null; spellings: number; tested_words: number | null } | null;
   total: number;
   offset: number;
   size: number;
