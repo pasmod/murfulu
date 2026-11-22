@@ -3089,8 +3089,8 @@ the suggestions for verse are read again for the classical form.
 
 ## L53. A star on a reading the bank lacks, and your confirmation before it goes to karbon
 
-Built 2026-11-22 (DECISIONS 2026-11-22 *second*), on a branch, not served
-yet; **not in the app's questions**, not blocking.
+Built and served 2026-11-22 (DECISIONS 2026-11-22 *second*); **not in the
+app's questions**, not blocking.
 
 **What it is.** On the reading screen a reading the word bank does not hold
 now carries a star before it — *\*konam*, *\*Širāzi*, *\*va* — and a list

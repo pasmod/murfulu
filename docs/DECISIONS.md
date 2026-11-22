@@ -10,9 +10,9 @@ screen must show whether a reading is recorded there; and of what the
 linguist confirms in murfulu, the readings karbon lacks — the spelling
 altogether, or only this reading — are gathered with an example and given to
 karbon as an issue after a while, done officially with the linguist. «هر دو
-را بساز». **Built on the branch `karbon-official`, not deployed**; it needs no
-new data file and no new setting (FINDINGS 2026-11-22 *second*;
-OPEN_QUESTIONS S54).
+را بساز». **Served since 2026-11-22** on the project lead's «آره منتشر کن»
+(DEPLOY §26); it needed no new data file and no new setting (FINDINGS
+2026-11-22 *second*; OPEN_QUESTIONS S54).
 
 - **The star.** `/texts/{id}` says for each word which readings the bank
   itself holds (`auto.bank`, beside `known`, which also counts the

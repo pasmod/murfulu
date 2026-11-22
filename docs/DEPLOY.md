@@ -784,3 +784,28 @@ after a backup and recreate the api (`… up -d api`; both compose files pass
 the variable to the api from this change on). Taking the code back is
 `deploy` from `6d7f2d1`; the file can stay, nothing else reads it. No
 decision is made by the suggestions, so nothing in the database needs undoing.
+
+## 26. A star on a reading the bank lacks, and the list for karbon with the linguist's confirmation — run 2026-11-22
+
+The star and the list (DECISIONS 2026-11-22, *second*), on the project lead's
+word («آره منتشر کن»), from the worktree of the branch `karbon-official` at
+`e281c42`, two commits on `main` at `fca9862`, which was what the server ran
+(§25). No migration, no `.env` change, no data file. **The rollback is
+`deploy` from `fca9862`**; a confirmation saved meanwhile stays in the
+feedback store, where nothing else reads it.
+
+| step | command | what it did |
+|---|---|---|
+| 0 | from the branch's worktree, with the host files and the main checkout's untracked `uv.lock` copied beside it; the dry run (`rsync -n -c --itemize-changes`, `deploy`'s options) | 25 files differ: this change's 24 and `DEPLOY.md`, older on the server; nothing deleted |
+| 1 | inside the api container, before | Hafez's ghazal 3 on `/texts`: 100 sure, 16 mid, 43 unsure, no word says what the bank holds; `/texts/karbon` 404; `/texts/unsure` 2,000 spellings with their suggestions (§25) |
+| 2 | `deploy/server.sh deploy` | api and web rebuilt and recreated, both healthy (1 min 6 s) |
+| 3 | `deploy/server.sh check` | all checks passed, corpus v22, `lexicon-20261111`; the site answers 401 logged out |
+| 4 | inside the api container, after | ghazal 3 unchanged (100 / 16 / 43); each of its 159 words says what the bank holds, and 75 readings are not the bank's; `/texts/karbon` serves 11 rows, the function-word readings the bank lacks (5 with no reading for the spelling, 6 with another), none confirmed; `/texts/unsure` as before |
+| 5 | the pages, through an SSH tunnel to the web container, at 375 px and at the desktop width | ghazal 3 shows the stars (*\*Širāzi*, *\*rā*, *\*xāl*, *\*o*) and the legend's sentence; the list shows its two groups, eleven rows and eleven buttons; the opener links to the list; nothing scrolls sideways. Nothing was saved |
+| 6 | the public address, logged out | 401 on `/` and on `/texts?view=karbon` |
+
+The site password was not used. No confirmation exists yet on the server.
+Not checked on the server: a word's panel, and giving or taking back a
+confirmation (both checked on the local run before, against a throwaway
+store). The star's count differs from the local run's 74 because the server
+reads with the v22 model.

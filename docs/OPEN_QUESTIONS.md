@@ -9,12 +9,11 @@ Things we need answered before or during planning. Move each one to
 
 ### S54. The star, the list for karbon and the confirmation: four calls
 
-Built 2026-11-22 on the branch `karbon-official` (DECISIONS 2026-11-22
-*second*), not deployed. The project lead's calls:
+Built 2026-11-22 (DECISIONS 2026-11-22 *second*). The project lead's calls:
 
-1. **Deploy?** It needs no new data file and no setting; nothing changes for
-   the model. The stars appear at once; the list starts with the eleven
-   function-word readings.
+1. ~~Deploy?~~ **Settled 2026-11-22: «آره منتشر کن»**, served (DEPLOY §26).
+   The stars show at once; the list starts with the eleven function-word
+   readings, none confirmed.
 2. **Is a button enough to say the linguist confirmed?** The app has one
    account, so the record cannot say who pressed. The alternative is a
    sign-in of the linguist's own, which reverses the decision of 2026-08-17
