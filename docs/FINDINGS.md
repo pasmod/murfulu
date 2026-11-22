@@ -5,6 +5,47 @@ Each entry: what we looked at, what we found, what it means for Murfulu.
 
 ---
 
+## 2026-11-22 (second) — which readings on the reading screen are the bank's: about half in one ghazal, and eleven function-word readings the bank lacks
+
+The project lead asked that the reading screen show whether a reading is one
+karbon holds — its readings are the recorded ones — and that what the
+linguist confirms and the bank lacks be gathered with an example for one
+karbon issue (DECISIONS 2026-11-22 *second*). Building it gave three things worth
+keeping. **A first, rough look, not a result**: one poem, on this machine's
+stack (corpus v17, the v17 model, `lexicon-20261111`).
+
+**Sure is not the same as recorded.** Hafez's ghazal 3 has 159 counted words,
+and the model's reading is **not in the bank for 74 of them (47 %)**: 33 are
+guesses from the letters for a spelling the bank lacks, 22 a function word's
+reading, 19 an inflected form built from a stem. Of those 74 the screen shows
+25 *sure*, 18 *mid* and 31 *unsure*. خال is read *xāl* at 1.0 and شیرازی
+*Širāzi*, both without any reading in the bank. So the level says how sure
+the model is, never whether karbon holds the reading; a screen that is green
+everywhere could still be half unrecorded. One poem; the share over the
+corpus is not measured.
+
+**Eleven of the function-word list's readings are not in the bank**
+(`rules/function_word_readings.yaml` against `lexicon-20261111`): of its 45
+readings the bank holds 34. For five the bank has no reading for the spelling
+at all — و *va* and *o*, ز *ze*, بی *bi*, همی *hami*; for six it holds the
+spelling as another word — تا *tā* (the bank: *Tā*), را *rā* (*Rā*), مرا
+*marā* (*Merā*), ای *ey* (*i*, *ay*), مر *mar* (*Mar*, *Mer*), هر *har*
+(*Har*). They are among the most frequent words of any text, which is why
+they are 22 of the 74 above (UPSTREAM B13).
+
+**The app cannot say who confirmed.** It has one account and no roles
+(2026-08-17), so every feedback record has the same author: "what the
+linguist confirmed" cannot be read off a login. It has to be said in so many
+words by whoever saves it — a record of its own.
+
+**What it means for murfulu.** The reading screen now marks the readings the
+bank lacks, and a list gathers them for the linguist's confirmation
+(DECISIONS 2026-11-22 *second*). The eleven function-word readings are the cheapest
+large step toward a screen whose readings are all recorded: eleven
+confirmations, then one karbon issue.
+
+---
+
 ## 2026-11-22 — an automatic reading for each of the most frequent unsure spellings, and what the editions' marks say of it
 
 The project lead asked whether a reading made outside the app could be

@@ -653,6 +653,37 @@ file beside the model (`behnevis-unsure-v22.json`, not in git: it holds
 karbon's readings) and can be sent with the next batch. Not opened; on the
 project lead's word.
 
+### B13. Eleven readings of function words the bank does not hold, and how confirmed readings now reach karbon
+
+Measured 2026-11-22: `rules/function_word_readings.yaml` (45 readings of 43
+spellings, this project's proposals, FOR_THE_LINGUIST L41) against
+`lexicon-20261111` (karbon 1.3.2). The bank holds 34 and lacks 11:
+
+| spelling | reading | the bank has |
+|---|---|---|
+| و | *va*, *o* | no reading |
+| ز | *ze* | no reading |
+| بی | *bi* | no reading |
+| همی | *hami* | no reading |
+| تا | *tā* | *Tā* |
+| را | *rā* | *Rā* |
+| مرا | *marā* | *Merā* |
+| ای | *ey* | *i*, *ay* |
+| مر | *mar* | *Mar*, *Mer* |
+| هر | *har* | *Har* |
+
+They are among the most frequent words of any text: in Hafez's ghazal 3 they
+are 22 of 159 words (FINDINGS 2026-11-22 *second*). The reading screen stars them as
+readings the bank lacks, and they stand on the list for the linguist
+(`/texts?view=karbon`).
+
+**How readings go upstream from now on** (the project lead, 2026-11-22). The
+linguist confirms a reading on that list; `tools/export_reading_proposals.py
+--confirmed` writes the confirmed ones as the text of one issue, in two
+parts — spellings the bank lacks altogether, and readings it lacks for a
+spelling it holds — each with what the bank has and one example line. Not
+opened; on the project lead's word, with the linguist.
+
 ## C — built here, belongs in karbon eventually
 
 ### C1. The nine stem rules exist in both repositories

@@ -3086,3 +3086,34 @@ existing controls; nothing is decided by it.
 
 **What changes with each answer**: (1) and (2) the wording only; (3) whether
 the suggestions for verse are read again for the classical form.
+
+## L53. A star on a reading the bank lacks, and your confirmation before it goes to karbon
+
+Built 2026-11-22 (DECISIONS 2026-11-22 *second*), on a branch, not served
+yet; **not in the app's questions**, not blocking.
+
+**What it is.** On the reading screen a reading the word bank does not hold
+now carries a star before it — *\*konam*, *\*Širāzi*, *\*va* — and a list
+gathers every such reading that a reader saved, together with the readings
+this project uses for function words and the bank lacks. Beside each stands
+one button: you confirm the reading. Only what you confirmed is sent to
+karbon, as one issue, with a line it was read in.
+
+### The questions
+
+1. **The words on screen**, ours until ruled on: «ستاره یعنی این خوانش در
+   بانک واژه (کاربن) ثبت نشده است»، «خوانشِ بی‌ستاره در بانک واژه هست»،
+   «خوانش‌هایی که کاربن ندارد»، «املا در بانک واژه نیست»، «املا هست، این
+   خوانش نیست»، «واژهٔ دستوری»، «زبان‌شناس تأیید می‌کند»، «زبان‌شناس تأیید
+   کرده است»، «برداشتن تأیید»، «تأییدنشده»، «تأییدشده».
+2. **Is the star the right sign?** It is the asterisk linguists put before a
+   form that is not attested; here it says "not recorded in the bank", which
+   is close and not the same. Another sign, if this one misleads.
+3. **The eleven function-word readings the bank lacks** (L41, UPSTREAM B13):
+   و *va* and *o*, ز *ze*, بی *bi*, همی *hami*, تا *tā*, را *rā*, مرا *marā*,
+   ای *ey*, مر *mar*, هر *har*. Should karbon hold each, written so — lower
+   case, as words that are not nouns?
+
+**What changes with each answer**: (1) the wording only; (2) the sign on
+every screen that shows a reading in a text; (3) which of the eleven are
+confirmed on the list and go into the first issue for karbon.

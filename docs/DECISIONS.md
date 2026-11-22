@@ -2,6 +2,81 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-22 (second) — a star on a reading the bank lacks, and the linguist's confirmation before a reading goes to karbon
+
+The project lead, 2026-11-22: the aim is a reading screen that is green
+everywhere after a while; karbon's readings are the official ones, so the
+screen must show whether a reading is recorded there; and of what the
+linguist confirms in murfulu, the readings karbon lacks — the spelling
+altogether, or only this reading — are gathered with an example and given to
+karbon as an issue after a while, done officially with the linguist. «هر دو
+را بساز». **Built on the branch `karbon-official`, not deployed**; it needs no
+new data file and no new setting (FINDINGS 2026-11-22 *second*;
+OPEN_QUESTIONS S54).
+
+- **The star.** `/texts/{id}` says for each word which readings the bank
+  itself holds (`auto.bank`, beside `known`, which also counts the
+  function-word list). A reading shown under a word that is not among them —
+  the model's, or one a reader saved there — carries a star, *\*konam*, in
+  the reading's own colour; the word's label says «در بانک واژه نیست», the
+  legend says what the star means, and the word's panel says it in a
+  sentence. An API that does not send `bank` marks nothing.
+- **The list** (`GET /texts/karbon`, `/texts?view=karbon`, linked under the
+  opener, from the legend and from the panel's sentence;
+  `behnevis/proposed.py`): one row per spelling and reading the bank lacks —
+  a reading readers typed or decided that neither the bank nor the
+  function-word list holds, and the function-word list's own readings the
+  bank lacks. Two groups, by what the bank lacks: the spelling altogether
+  (`missing`), or this reading of a spelling it holds (`reading`, with what
+  the bank has). A row shows how often it was saved, what it was decided
+  for, and up to three lines with the word underlined and «در متن ←»; a row
+  with no line of its own borrows the measured list's examples for its
+  spelling. A row leaves the list when the bank comes to hold the reading.
+- **The confirmation.** A row's button, «زبان‌شناس تأیید می‌کند», writes one
+  more feedback record on `spelling:latin` (`verdict: good`, `kind:
+  reading_confirmed`); «برداشتن تأیید» writes one marked `withdrawn` (with
+  `verdict: unsure`) that names the confirmation it takes back. The newest
+  for a spelling and reading counts. The list filters by confirmed or not.
+- **Only what was confirmed goes to karbon.**
+  `tools/export_reading_proposals.py --confirmed` writes the text of one
+  issue: the confirmed readings in the list's two groups, each with what the
+  bank has, how often it was proposed, what it was decided for and one
+  example, and the lexicon it was checked against. The tool's list without
+  the flag is as before, for looking at everything proposed. Opening the
+  issue stays on the project lead's word.
+- **A saved reading carries its line** (`line_text`, the line's words joined
+  by spaces as the screen counts them), so the example is the line it was
+  read in. A reading saved before has the word between its two neighbours.
+
+**Decided here, under the working rule, unconfirmed:**
+
+- *The star marks the exception.* Asked for was a sign of what karbon holds;
+  the star marks what it does not, because the mark should be what is left
+  to do — a text all of whose readings are recorded shows none — and because
+  an asterisk before a form is the linguist's own sign for one that is not
+  attested. In one ghazal it stands on 47 % of the words (FINDINGS).
+- *A function word's own reading is starred, and is a row of the list*,
+  where the bank lacks it (11 of the list's 45). The rule of 2026-11-14
+  stands beside it: a pick of such a reading still teaches the model and is
+  not put on karbon's list by the pick; it is there because the list holds
+  it. Confirmed, it goes into the issue marked *function word*.
+- *A confirmation is a button, not an identity.* The app has one account
+  (2026-08-17) and cannot know who presses; the button says in words whose
+  confirmation it records, and it is kept apart from the proposals so that a
+  reader trying a reading out does not send it to karbon. Whether that is
+  enough is S54.
+- *It can be taken back, so it does not ask twice* — unlike «این خوانش
+  نادرست است», which cannot.
+- *The Persian words* of the star, the list and the button are ours
+  (FOR_THE_LINGUIST L53).
+- *The automatic suggestions* (the entry below, served the same night) put
+  a reading the bank lacks into the field where a person types one; saved,
+  it is a row of this list like any typed reading, and waits for the
+  linguist's confirmation like the rest.
+  — project lead (show what is karbon's; gather what the linguist confirms
+  and karbon lacks, with an example, for one issue); engineering (the star
+  on the exception, the function words, the button, the record, the list)
+
 ## 2026-11-22 — an automatic suggestion beside each of the most frequent unsure spellings, shown and never applied
 
 The project lead asked for a reading made offline for each of the 2,000

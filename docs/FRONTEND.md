@@ -553,6 +553,29 @@ each with «پس گرفتن». The panel reuses the word panel's choices, so a p
 looks the same on both. Phone width: everything wraps; nothing scrolls
 sideways (`tests/texts.spec.ts`).
 
+**Which readings are the bank's** (DECISIONS 2026-11-22 *second*). A
+reading under a word that the bank does not hold carries a star before it,
+*\*konam*, in the reading's own colour: a function word's own reading, a form
+built from a stem, a guess from the letters, a reading a reader typed. The
+star follows the reading in the markup — the page runs right to left, so
+that is where a Latin form's left side is — and is hidden from a screen
+reader, whose label for the word ends «در بانک واژه نیست». The legend says
+what it means; the word's panel says it in a sentence under the reading for
+this line. A reading without a star is one the bank holds.
+
+**The readings the bank lacks** (`?view=karbon`, linked under the opener,
+from the legend and from the panel's sentence; `ForKarbon.tsx`): one row per
+spelling and reading, in two groups — «املا در بانک واژه نیست» and «املا
+هست، این خوانش نیست». A row: the word with the reading's short vowels, the
+reading, «واژهٔ دستوری» where it is the function-word list's, «n بار ثبت
+شده», what the bank has, what it was decided for, up to three lines with the
+word underlined and «در متن ←» (the word between its two neighbours, with an
+ellipsis either side, where the save carried no line), and one button:
+«زبان‌شناس تأیید می‌کند». Confirmed, the row has a green edge and «✓
+زبان‌شناس تأیید کرده است» with the day, and «برداشتن تأیید». Three chips
+filter: همه، تأییدنشده، تأییدشده. Phone width: everything wraps, the button
+is a touch target, nothing scrolls sideways (`tests/karbon.spec.ts`).
+
 **A note is the source's own words** — in a tazkira, the next poet's name —
 shown in small type under «یادداشت سرچشمه», never split into words and never
 numbered, because it was never counted.

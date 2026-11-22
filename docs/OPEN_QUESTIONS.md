@@ -5,6 +5,29 @@ Things we need answered before or during planning. Move each one to
 
 ---
 
+## Opened 2026-11-22 (which readings are the bank's, and the linguist's confirmation)
+
+### S54. The star, the list for karbon and the confirmation: four calls
+
+Built 2026-11-22 on the branch `karbon-official` (DECISIONS 2026-11-22
+*second*), not deployed. The project lead's calls:
+
+1. **Deploy?** It needs no new data file and no setting; nothing changes for
+   the model. The stars appear at once; the list starts with the eleven
+   function-word readings.
+2. **Is a button enough to say the linguist confirmed?** The app has one
+   account, so the record cannot say who pressed. The alternative is a
+   sign-in of the linguist's own, which reverses the decision of 2026-08-17
+   (one account, no roles).
+3. **Should a function word's reading be starred?** It is the truth — the
+   bank does not hold it — and it is 22 of 159 words in one ghazal, on the
+   most frequent words of every text. The stars go when karbon takes the
+   eleven readings (UPSTREAM B13); until then they could be left unstarred
+   and kept on the list only.
+4. **How much of a text is not recorded?** One ghazal says 47 %. A count
+   over the corpus (`tools/measure_unsure_spellings.py` already reads every
+   text as the screen does) would say what "every reading recorded" takes,
+   beside "every word green".
 ## Opened 2026-11-22 (automatic suggestions)
 
 ### S53. The automatic suggestions beside the list: deploy, and what to measure next
