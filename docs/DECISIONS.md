@@ -2,6 +2,32 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-22 (sixth) — the pish before *ow* stays
+
+The entry below left one point to the project lead: whether *ow* keeps the
+pish (نُو) or takes the zabar back (نَو). Asked, the project lead left the
+choice to the agent: «You pick yourself». **The pish stays.** No code changes;
+this is what has been served since DEPLOY §29.
+
+- **It is the same rule as the zir before *ey*.** The project lead took وَی
+  over *vey* for a wrong pronunciation. نَو over *now* is the same sight: a
+  mark that says *a* over a reading that says *o*. One rule for both — the
+  mark is the vowel the reading writes — is easier to trust than a rule with
+  an exception.
+- **Inside the app the pish cannot be misread as a long *u*.** A long vowel
+  takes no mark: *nu* is نو and *dur* is دور, *now* is نُو and *dowr* is دُور.
+  So a pish before و only ever stands for *ow*. (In fully marked Arabic a
+  pish before و is the long vowel; here the Latin reading stands beside every
+  marked word.)
+- **Nothing in the bank needs the zabar to tell two readings apart.** *ey*
+  had *ay* beside it (*vey*, *vay*); for *ow* the bank holds one reading
+  written with *aw*, a name (*Nawid*), against 1,029 with *ow*.
+- **Against it**, and why this is not the last word: the dictionary's own
+  marks in the bank print a zabar before *ow* on 792 entries and a pish on 55
+  (FINDINGS 2026-11-22, *third*). That is the older convention, and the
+  linguist may want it. L48's third point asks him; his answer overrules
+  this, and the zabar goes back in one line of `murfulu/behnevis/vowels.py`.
+
 ## 2026-11-22 (fifth) — before a diphthong, the mark of the vowel the reading writes
 
 The project lead sent the reading screen's وَی with *vey* under it and asked

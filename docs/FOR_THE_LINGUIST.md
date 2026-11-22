@@ -2982,7 +2982,10 @@ disagree about a mark, the mark is left off.
    count by pattern, `lexicon-20261111`. **Is a zir before *ey* and a pish
    before *ow* right for him, or does he want the zabar back for either?**
    The pish before *ow* is our extension of the project lead's word, which
-   was about *ey*.
+   was about *ey*. Asked whether it should stay, the project lead left the
+   choice to the agent, and it stays until the linguist says otherwise
+   (DECISIONS 2026-11-22, *sixth*): one rule for both diphthongs, and no
+   clash with a long *u*, which takes no mark (*nu* نو, *now* نُو).
 
 
 ## L49. دلبر twice: the doer (V-078) and the done-to (V-079)
