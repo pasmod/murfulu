@@ -740,10 +740,20 @@ The site password was not used. No decision exists yet on the server: the
 model reads decisions at its next build (`deploy/server.sh proposals`, then
 `tools/build_behnevis.py`, then `data`).
 
-## 25. The automatic suggestions beside the most frequent unsure words — PLAN, NOT YET RUN
+## 25. The automatic suggestions beside the most frequent unsure words — run 2026-11-22
 
-**A plan, not a record: nothing below has been run.** It goes out only on the
-project lead's word (OPEN_QUESTIONS S53). The change is the branch
+**Run 2026-11-22 on the project lead's word («Yes, deploy»), from the
+worktree of the branch `unsure-suggestions`.** What it did: the dry run listed
+only this change's files and nothing to delete; the server's list had the md5
+below; before, `/texts/unsure?size=1` had no `suggestions` key; the
+suggestions file went alone (md5 `906f198f183f3a63e953b91bc42b6b91` on both
+sides); `deploy` rebuilt and recreated api and web, both healthy (60 s);
+`check` passed (corpus v22, 401 logged out); after, `/texts/unsure?size=2`
+served 2,000 suggestions (است *ast*, right_share 0.881), بود *bud* matching
+*Bud* and شود *šavad*, no decision anywhere; the list page through an SSH
+tunnel at 375 px showed the rows and شود's box, nothing scrolling sideways.
+Not checked on the server: ghazal 3's counts and the word panel (checked on the
+local run before). The table below is the plan as it was written. The change is the branch
 `unsure-suggestions` on `main` at `6d7f2d1`, which is what the server runs
 (§24): a reading made offline for each listed spelling, shown beside the list
 and in the word panel, never applied (DECISIONS 2026-11-22). No migration, no
