@@ -6130,8 +6130,8 @@ Six journeys, ten gaps — see [USER_JOURNEYS.md](USER_JOURNEYS.md). Three
 changed the design:
 
 - **Compounding was missing entirely.** The concept document names هم‌نهی as
-  one of the two main Persian word-formation processes and the NGI abstract
-  promises generation "by combining words"; we had designed only affixation.
+  one of the two main Persian word-formation processes and the project's own
+  plan calls for generation "by combining words"; we had designed only affixation.
   The flagship *Lichtung* → *Rowšantonoknā* example needs it. Now in scope,
   limited to the combinations the source grammar license.
 - **No way to search by meaning.** This is the founding complaint — a
