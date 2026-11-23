@@ -2,15 +2,21 @@
 
 [![check](https://github.com/pasmod/murfulu/actions/workflows/check.yml/badge.svg)](https://github.com/pasmod/murfulu/actions/workflows/check.yml)
 
+Murfulu is an engine for word formation that is not tied to one language. A
+language's rules go in as data: its stems and affixes, how they join, and what
+kind of word each step makes. The engine applies them, builds the words the
+rules allow, and shows for each word the steps that built it. Give it the
+rules of another language, and the same engine builds that language's words.
+
 Someone who knows the German verb *lesen*, "to read", understands *lesbar*
 and *Lesbarkeit* the first time they see them. Nobody had to teach them those
 two words. They know the stem *les-*, they know what the suffixes *-bar* and
-*-keit* do, and they put the pieces together.
+*-keit* do, and they put the pieces together. Most languages build words this
+way, and their speakers carry the same kind of knowledge.
 
 Murfulu writes that knowledge down as rules. Each rule says what a suffix or
 prefix attaches to, how the pieces join, and what kind of word comes out. The
-rules are data, not code, and an engine applies them. The aim is one
-description that works the same way for any language: the rules change, the
+rules are data, not code: the rules change from language to language, the
 engine stays.
 
 ## One pattern, three languages
@@ -24,7 +30,8 @@ engine stays.
 Each language uses its own pieces: German *-bar* and *-keit*, English *-able*
 and *-ity*, Persian *-ā* and *-i*. The build is the same. A stem, one suffix
 that makes an adjective, and a second suffix that turns the adjective into a
-noun.
+noun. That shared build is what Murfulu describes: one way to write the rules
+down, and one engine that applies them, whatever the language.
 
 The pieces do not always just line up. English writes *readabil-* before
 *-ity*. Persian puts a *y* between two vowels, so *xānā* and *-i* become
@@ -44,32 +51,39 @@ has been used, and a person judges the rest.
 
 ## What works today, and what does not
 
-**Persian works today.** The rule pack, version 0.2.0, holds 250 rules
-transcribed from the linguist's grammar of Persian word formation. They run
-on a word bank of 58,983 Persian words from karbon, a companion library, and
-every word the engine builds is looked up in a corpus of classical Persian
-poetry. A web prototype in Persian lets the linguist review the rules and
-what they build.
+**Persian is the first language, and it works today.** Its rule pack,
+version 0.2.0, holds 250 rules transcribed from the linguist's grammar of
+Persian word formation. They run on a word bank of 58,983 Persian words from
+karbon, a companion library, and every word the engine builds is looked up in
+a corpus of classical Persian poetry. A web prototype in Persian lets the
+linguist review the rules and what they build.
 
-**German is planned as the second real rule pack.** It does not exist
-yet. **English appears here only to illustrate**: Murfulu has
-no English rules.
+**German is planned as the second language.** Its rule pack does not exist
+yet; it is how we will show that the engine carries over. **English appears
+here only to illustrate**: there is no English rule pack.
 
-**What does not work yet.** The engine was written for Persian. The rules are
-plain data files, but their format still assumes Persian, and a second
-language would need changes in the code. A language-independent core, an
-open rule format and a checker that tests a rule pack are the next step, and
-German is how we will know they work. The engine also builds many forms that
-nobody would say. The corpus holds poetry only, so a modern word can be well
+**What does not work yet.** Persian came first, and parts of the code still
+assume it. The rule format names Persian word classes, and the engine writes
+every word in Persian script beside its Latin form, with joins only Persian
+needs. Moving those into the rule pack, so that the engine assumes nothing
+about a language, is the next step, together with an open description of the
+rule format and a checker that tests a rule pack. The engine also builds many
+forms that nobody would say. The corpus holds poetry only, so a modern word can be well
 formed and still be missing from it. And some of the linguist's rulings are
 still open; where we had to choose without one, the choice is marked as
 unconfirmed.
 
-## What this knowledge is good for
+## Why it is fundamental
 
-Knowing how a word is built helps wherever software meets a word it has not
-seen before. Most of what follows is not built yet; where the Persian
-prototype has a first version, the text says so.
+Every tool that reads, writes, speaks or searches a language meets words it
+has never seen: rare words, new words, words built on the spot. No dictionary
+lists them all. Rules that say how words are built can take such a word apart
+and put new ones together, and that one piece of knowledge serves many tools
+at once. Murfulu keeps it in one place, as data, so that each tool does not
+have to learn it again for each language.
+
+Most of what follows is not built yet. The examples are Persian, the first
+language; where the Persian prototype has a first version, the text says so.
 
 **Reading aloud.** Persian writes its long vowels as letters and leaves the
 short ones out. So کشنده can be کُشَنده *košande*, "deadly", or کِشَنده
@@ -121,20 +135,6 @@ Behnevis, the linguist's Latin script. Tajik Cyrillic is not built.
 than one more word to memorise. Children learning Persian abroad could put
 pieces together and see whether Persian would accept the result.
 
-## Kurz auf Deutsch
-
-Murfulu beschreibt, wie Wörter gebaut werden: ein Stamm und Affixe, als Regeln
-in Datendateien statt im Code. Wer weiß, wie *lesen*, *lesbar* und
-*Lesbarkeit* zusammenhängen, kann auch Wörter verstehen, die in keinem
-Wörterbuch stehen. Heute funktioniert Persisch: 250 Regeln aus der Grammatik
-unseres Linguisten, ein Wortbestand von 58.983 Wörtern und ein Korpus
-klassischer Dichtung. Deutsch ist als zweites echtes Regelpaket geplant und
-existiert noch nicht; Englisch steht hier nur zur Veranschaulichung. Das
-Wissen über den Bau von Wörtern hilft Sprachsynthese, Rechtschreibprüfung,
-Suche, Begriffsbildung, Schriftumwandlung und Lernwerkzeugen. Der Prototyp
-läuft hinter einem Passwort, weil das Korpus nicht frei weitergegeben werden
-darf; Zugang gibt es auf Anfrage.
-
 ## Try it
 
 **The engine, in a few minutes.** The rule pack is in the repository, so the
@@ -180,8 +180,8 @@ the whole system step by step, from input to presentation.
 
 ## How it works inside
 
-- **Three inputs:** a rule pack ([`rules/`](rules)), a lexicon, and a corpus.
-  The core never assumes more than those three.
+- **Three inputs per language:** a rule pack ([`rules/`](rules)), a lexicon,
+  and a corpus. The core reads nothing else.
 - **The rule pack** is YAML, built by a script from a transcription of the
   linguist's grammar: 241 rules that build words and 9 that find a verb's
   stems, 223 of them in use, plus 17 rules for how two pieces join. The

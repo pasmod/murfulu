@@ -2,7 +2,7 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
-## 2026-11-23 — the README tells one example in three languages
+## 2026-11-23 — the README: a language-independent engine, told through one example
 
 The project lead asked for a README that a first-time reader understands in
 two minutes: what murfulu describes (how words are built, stem and affixes as
@@ -29,6 +29,14 @@ examples (*dānā*, *Dānāyi*, *Tavānāyi*) are the ones the README cites.
 - **Counts brought up to date**: the word bank (58,983 words, karbon 1.3.2,
   for the 45,600 of the old lexicon) and the tests (more than 4,000, for
   about 2,900).
+- **The README presents Murfulu as a language-independent word-formation
+  engine** (project lead, the same day): its first paragraph says so, and
+  *Why it is fundamental* says why one engine with one rule pack per language
+  serves many tools. The limits stay beside the claim: Persian is the only
+  language that works; the rule format still names Persian word classes and
+  the engine still writes the Persian script with joins only Persian needs.
+- **The README is in English only** (project lead, the same day). The short
+  German summary that stood in it is gone.
 
 ## 2026-11-22 (sixth) — the pish before *ow* stays
 
