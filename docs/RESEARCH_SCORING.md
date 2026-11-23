@@ -44,7 +44,7 @@ Report "P = 0.31, corpus v3" — never a bare number.
 is trained on all attested stem → derived pairs for that affix. The model
 predicts human judgements of how meaningful a novel affixed word is.
 
-This dissolves the out-of-vocabulary problem stated in the NGI application: we
+This dissolves the out-of-vocabulary problem: we
 do not need a vector for a word nobody has written, we compute one.
 
 Follow-up work comparing FRACSS with LLM judgements of novel derived words
@@ -450,8 +450,8 @@ Dispersion matters more than the raw count.
 ## The gap
 
 None of this has been done for Persian, and there is no gold standard for an
-under-resourced language. That is a real contribution, and it is what the NGI
-application already promises under technical challenges 4 and 5.
+under-resourced language. That is a real contribution, and one the project set out
+to make.
 
 ## Rule for the interface
 

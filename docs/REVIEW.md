@@ -160,7 +160,7 @@ what makes the score mean anything.
   none rather than offering one that goes nowhere. The structured context is
   captured in full, and the reason not to add images is above.
 - **Export**: the feedback set must be exportable as a dataset. It is a
-  research artefact and the NGI application promises open outputs.
+  research artefact, and the project is committed to open outputs.
   **Built** (PLAN 8.3): `tools/export_feedback.py` writes JSON Lines plus a
   manifest. The author is a stable pseudonym, never an account name — which
   was all inter-rater agreement needed while there was more than one author.

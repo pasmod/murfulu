@@ -2010,17 +2010,17 @@ what they generate), and the 11 rows with no category at all.
 
 2. **Where do the rules live?** The ~200 rules are currently a Word table.
    Machine-readable format — YAML? JSON? A SQLite table the linguist can edit through
-   the workshop UI? The NGI proposal promises rules "editable by a linguist
+   the workshop UI? The plan calls for rules "editable by a linguist
    without programming", which points away from hardcoding them in Python.
 
 3. **How does Murfulu talk to karbon?** Import `karbon-nlp` as a dependency, or
    call it over HTTP? Import is simpler; it also means Murfulu inherits the
    lexicon-file problem.
 
-4. **Repo naming.** The NGI application says `github.com/pasmod/stemma`; the code
-   is `kp-multiverse/karbon`; this project is `murfulu`; the library the proposal
-   promises is `morphology-core`. Four names for three things. Pick the public
-   story before submission.
+4. **Repo naming.** An early plan named the repository `stemma`; the code
+   is `kp-multiverse/karbon`; this project is `murfulu`; the planned library
+   is `morphology-core`. Four names for three things. Pick the public
+   story.
 
 5. **Which Latin convention is canonical?** Confirmed: the later one
    (`š ž č j ˈ`), matching karbon. Worth writing down formally so it does not
@@ -2052,9 +2052,8 @@ what they generate), and the 11 rows with no category at all.
     adds a second review surface. Make sure he is not asked to use two tools
     without knowing which is for what.
 
-12. **Licence check.** karbon is marked CC0 but derives from Dehkhoda. NGI
-    requires open outputs and verifies claims. Confirm before it goes in an
-    application.
+12. **Licence check.** karbon is marked CC0 but derives from Dehkhoda.
+    Confirm that before any claim of open outputs rests on it.
 
 ## Still open in the design
 
@@ -2070,7 +2069,7 @@ what they generate), and the 11 rows with no category at all.
 
 ## Research / later
 
-6. **Scoring.** The proposal describes a four-part score (rule / corpus /
+6. **Scoring.** The plan describes a four-part score (rule / corpus /
    semantic / composite). What is the corpus, and what produces the semantic
    part for a word no model has ever seen?
 
@@ -2082,6 +2081,6 @@ what they generate), and the 11 rows with no category at all.
    software rather than typed by hand. karbon's lexicon has 1,752 مصدر. Where
    does the rest come from?
 
-9. **Corpus.** The proposal promises a multi-source open Persian corpus. The
+9. **Corpus.** The plan calls for a multi-source open Persian corpus. The
    research note in the archive already maps the options (Ganjoor, Naab,
    HPLT, FineWeb-2, MADLAD-400). Not started.

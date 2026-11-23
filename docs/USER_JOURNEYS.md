@@ -24,7 +24,7 @@ concept: "thinning a wood so light reaches the ground".
    (وندافزایی) and a few fixed stem+o+stem templates. Free compounding
    (هم‌نهی) of two arbitrary words is not modelled at all. The concept document
    names it as one of the two main Persian word-formation processes, and the
-   NGI abstract promises generation "by combining words". This is the largest
+   project's plan calls for generation "by combining words". This is the largest
    gap in the design.
 4. He wants to copy the result into his translation. Covered.
 
@@ -76,8 +76,8 @@ The headline use case: "show me every Persian word ending in *-nā*".
    medieval?
    **GAP 6 — no aggregate statistics over a result set.** We designed
    dispersion per word. She needs it per query.
-3. She exports the result set as a dataset. Not designed. Cheap to add; the NGI
-   application promises open outputs.
+3. She exports the result set as a dataset. Not designed. Cheap to add, and the
+   project is committed to open outputs.
 
 ---
 
@@ -129,7 +129,7 @@ permission levels on one mechanism.
 | # | Gap | Severity |
 |---|---|---|
 | 1 | Search by meaning / semantic tag | high — headline requirement |
-| 2 | **Compounding (هم‌نهی) not modelled** | **highest — promised in the proposal** |
+| 2 | **Compounding (هم‌نهی) not modelled** | **highest — part of the plan from the start** |
 | 3 | Rule edits have no round-trip back to YAML | high — blocks expert review |
 | 4 | Novel word as input not a first-class case | medium |
 | 5 | String suffix search ≠ affix search | high — flagship query |

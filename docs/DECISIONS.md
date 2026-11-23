@@ -9,8 +9,11 @@ which applications were made, amounts, deadlines, and where the papers are
 kept. FINDINGS lost the section that summed up an application, and IDEAS lost
 its paragraph on one and its funding wording. What those passages said about
 the work itself stays: a language-agnostic core with swappable rule packs and a
-small German pilot were part of the plan from the start. The git history still
-holds the old text.
+small German pilot were part of the plan from the start. Six more docs
+(FRONTEND, OPEN_QUESTIONS, RESEARCH_SCORING, REVIEW, SEARCH, USER_JOURNEYS)
+no longer name the application; where they cited it for a goal, such as open
+outputs, accessibility or compounding, they now give the goal as the project's
+own. The git history still holds the old text.
 
 ## 2026-11-23 — the README: a language-independent engine, told through one example
 

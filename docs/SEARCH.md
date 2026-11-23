@@ -89,8 +89,8 @@ author, by source, by category. ES gives this for free from the same query.
 ## Export
 
 Any result set is exportable as CSV or JSONL, with the query and corpus version
-recorded in the file. The NGI application promises open outputs, and this is
-the cheapest way to honour it.
+recorded in the file. The project is committed to open outputs, and this is
+the cheapest way to honour that.
 
 ## Index fields that make this work
 

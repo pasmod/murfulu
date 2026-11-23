@@ -260,7 +260,7 @@ explain itself without a manual.
 
 ## Accessibility
 
-WCAG 2.1 AA, promised in the funding application and cheaper to build in than
+WCAG 2.1 AA, part of the plan from the start and cheaper to build in than
 to retrofit. Real keyboard navigation, real focus states, contrast checked, and
 screen-reader labels in Persian.
 
@@ -319,11 +319,10 @@ separate. A single opaque number is exactly what the project is arguing
 against.
 
 Nice-to-have that follows from this: **weight sliders** on the Build screen, so
-the linguist can reweight the components and watch the ranking change. The NGI
-application promises the scoring is tunable and explainable; sliders make that
-literally true.
+the linguist can reweight the components and watch the ranking change. The scoring
+is meant to be tunable and explainable; sliders make that literally true.
 
-**Accessibility: WCAG 2.1 AA**, promised in the funding application. Cheaper to
+**Accessibility: WCAG 2.1 AA**, part of the plan from the start. Cheaper to
 build in than to retrofit.
 
 ## Settled when the shell was built (2026-08-12, PLAN 7.1)
