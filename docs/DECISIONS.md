@@ -2,6 +2,16 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-23 (second) — no funding details in the public docs
+
+The project lead asked that the public repository carry no funding details:
+which applications were made, amounts, deadlines, and where the papers are
+kept. FINDINGS lost the section that summed up an application, and IDEAS lost
+its paragraph on one and its funding wording. What those passages said about
+the work itself stays: a language-agnostic core with swappable rule packs and a
+small German pilot were part of the plan from the start. The git history still
+holds the old text.
+
 ## 2026-11-23 — the README: a language-independent engine, told through one example
 
 The project lead asked for a README that a first-time reader understands in

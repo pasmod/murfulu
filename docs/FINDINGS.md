@@ -6327,15 +6327,3 @@ Three things the documents insist on, which are really requirements:
 3. **Attested vs. new must be marked.** Ganjoor (203 poets, 119,061 poems, open
    API at `api.ganjoor.net`) is the intended check for whether a form already
    exists in classical Persian.
-
-### Funding context
-
-NGI Zero Commons Fund, €48,000, 12 months, 4 milestones, deadline 1 June 2026.
-Application is written and near-final. Requires everything to be open source.
-The proposal promises: an open Persian corpus, a curated rule base, a reusable
-Python library (`morphology-core`), a small German rule pack to prove the engine
-is language-agnostic, an open spec of Behnevis, and an accessible RTL web
-interface. EXIST is the fallback; a spreadsheet ranks 39 other programmes.
-
-The proposal points reviewers at `github.com/pasmod/stemma`. The actual code is
-at `kp-multiverse/karbon`. Those need to be reconciled before submission.

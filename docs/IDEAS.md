@@ -9,9 +9,6 @@ DECISIONS.md.
 
 ## Direction proposed 2026-10-19: one core, several languages
 
-**The project lead's principle (2026-10-19):** whenever the project is funded
-from Germany, it carries a German-language part.
-
 **Proposal.** Build the core language-independent, so that the rule pack, the
 lexicon and the corpus are inputs rather than assumptions. Persian stays the
 full showcase. German becomes a second, small showcase.
@@ -19,11 +16,9 @@ full showcase. German becomes a second, small showcase.
 **Decided 2026-10-19 (project lead):** German is a small pilot that shows the
 core carries over to a second language. It is not a second full showcase.
 
-**Not new:** the NGI application (submitted 2026-05-31, Drive
-`Förderung/NGI_Zero_Commons_Fund/01_Antrag/`) already proposed a
-language-agnostic core with swappable rule packs, a reusable library
-(`morphology-core`) and a small German rule pack in its milestone M4. What is
-new on 2026-10-19 is the Persian ↔ German bridge as the funded module.
+**Not new:** a language-agnostic core with swappable rule packs, a reusable
+library and a small German rule pack were part of the project's plan from the
+start. What is new on 2026-10-19 is the Persian ↔ German bridge.
 
 **Why German.**
 
@@ -36,14 +31,14 @@ new on 2026-10-19 is the Persian ↔ German bridge as the funded module.
   result** and must not be quoted as one: the linguist has not yet confirmed
   the rules, most of the attestation is at spelling level only, and the corpus
   is poetry only.
-- A German funder or jury sees the public benefit directly: German learners,
+- The public benefit in Germany is direct: German learners,
   plain-language German, German terminology work.
 - Persian-speaking people in Germany, Iranian and Afghan, live between the two
   languages. A bridge between Persian and German word formation serves them in
   both directions.
 
 **What already exists for German.** The novelty claim has to stay honest,
-because reviewers will know these resources:
+because people who work on German will know these resources:
 
 | Resource | What it covers |
 |---|---|
@@ -66,7 +61,7 @@ translation between the two languages.
 
 **Risks.**
 
-- The scope doubles inside one funding period.
+- The scope doubles in the same time.
 - The project has no German linguist yet; the linguist works in Persian.
 - karbon is Persian-only, so the core needs a lexicon interface that does not
   assume karbon.
