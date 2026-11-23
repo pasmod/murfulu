@@ -99,9 +99,9 @@ Step 6 against production is `docker compose -f docker-compose.prod.yml up -d
 the Mac's old stack, not production**: production runs on the server
 (DEPLOY.md §0), and a released version reaches it with `deploy/server.sh corpus vN`,
 `data` and `deploy` — see DEPLOY.md §0. **The two host paths
-moved**: `~/data/murfulu/` no longer exists. v12 read the Ganjoor dump from
-`~/Projects/mosaic/mana/data/ganjoor.s3db` and the centuries from
-`~/Projects/mosaic/stemma/data/poet_centuries.json`, accepted only after a
+moved**: `~/data/murfulu/` no longer exists. v12 read the Ganjoor dump and the poets' centuries
+from local copies outside the repository (`MURFULU_GANJOOR_PATH` and
+`MURFULU_GANJOOR_CENTURIES`), accepted only after a
 `--report-only` run reproduced all five of v11's figures and its lexicon
 snapshot id exactly. v12 is v11's recipe otherwise; it exists for L16 (V-003's
 verbs entered through their stems), and it also clears the 08-20 affix guard
@@ -122,8 +122,8 @@ what a build needs is not measured yet — OPEN_QUESTIONS), with the inputs in `
 
 ```bash
 . deploy/host.env                            # MURFULU_SSH_HOST, MURFULU_REMOTE_DIR (DEPLOY.md §0)
-rsync -az -e "ssh -F deploy/ssh_config" ~/Projects/mosaic/mana/data/ganjoor.s3db \
-  ~/Projects/mosaic/stemma/data/poet_centuries.json build/suspect-claims-v4.json \
+rsync -az -e "ssh -F deploy/ssh_config" "$MURFULU_GANJOOR_PATH" \
+  "$MURFULU_GANJOOR_CENTURIES" build/suspect-claims-v4.json \
   "$MURFULU_SSH_HOST:$MURFULU_REMOTE_DIR/build/inputs/"
 rsync -az -e "ssh -F deploy/ssh_config" data/lexicon-20261012.sqlite \
   "$MURFULU_SSH_HOST:$MURFULU_REMOTE_DIR/data/"
