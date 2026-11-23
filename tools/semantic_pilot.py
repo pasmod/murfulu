@@ -1,6 +1,6 @@
 r"""Do vectors from our own corpus put same-affix words together? Measure it.
 
-    MURFULU_EMBED_MODEL=~/Projects/mosaic/mana/data/models/bge-m3 \
+    MURFULU_EMBED_MODEL=/path/to/bge-m3 \
         python tools/semantic_pilot.py --corpus-version v3
 
 The go/no-go check before any semantic scoring (PLAN 5.6): if word vectors

@@ -12,8 +12,15 @@ V=${1:?usage: build_corpus_mac.sh v15 lexicon-20261111}
 L=${2:?usage: build_corpus_mac.sh v15 lexicon-20261111}
 cd "$(dirname "$0")/.."
 export MURFULU_LEXICON_PATH="$PWD/data/$L.sqlite"
-export MURFULU_GANJOOR_PATH="${MURFULU_GANJOOR_PATH:-$HOME/Projects/mosaic/mana/data/ganjoor.s3db}"
-export MURFULU_GANJOOR_CENTURIES="${MURFULU_GANJOOR_CENTURIES:-$HOME/Projects/mosaic/stemma/data/poet_centuries.json}"
+# The Ganjoor dump and the poets' centuries are host paths: taken from the
+# environment, else from .env (see .env.example), and the build stops if
+# neither has them.
+if [ -f .env ]; then
+  : "${MURFULU_GANJOOR_PATH:=$(sed -n 's/^MURFULU_GANJOOR_PATH=//p' .env | tail -n 1)}"
+  : "${MURFULU_GANJOOR_CENTURIES:=$(sed -n 's/^MURFULU_GANJOOR_CENTURIES=//p' .env | tail -n 1)}"
+fi
+export MURFULU_GANJOOR_PATH="${MURFULU_GANJOOR_PATH:?not set; put it in .env (.env.example)}"
+export MURFULU_GANJOOR_CENTURIES="${MURFULU_GANJOOR_CENTURIES:?not set; put it in .env (.env.example)}"
 export MURFULU_SEMANTIC_PATH="$PWD/data/semantic-v4.json"
 export MURFULU_ELASTICSEARCH_URL="${MURFULU_ELASTICSEARCH_URL:-http://127.0.0.1:9201}"
 PY=.venv/bin/python

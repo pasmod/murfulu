@@ -1,6 +1,6 @@
 r"""Build the semantic artefact: base vectors and per-rule base centroids.
 
-    MURFULU_EMBED_MODEL=~/Projects/mosaic/mana/data/models/bge-m3 \
+    MURFULU_EMBED_MODEL=/path/to/bge-m3 \
         python tools/build_semantic_vectors.py --corpus-version v1
 
 The question a semantic score answers is the one the pilot validated

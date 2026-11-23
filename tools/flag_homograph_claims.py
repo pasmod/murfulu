@@ -1,6 +1,6 @@
 r"""Measure which of a rule's claimed outputs are really another word.
 
-    MURFULU_EMBED_MODEL=~/Projects/mosaic/mana/data/models/bge-m3 \
+    MURFULU_EMBED_MODEL=/path/to/bge-m3 \
         python tools/flag_homograph_claims.py --corpus-version v2 \
             --sisters build/sisters-v2-all.json
 
