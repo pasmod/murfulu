@@ -2,6 +2,34 @@
 
 Settled choices, with the reason. Append; do not rewrite history.
 
+## 2026-11-23 — the README tells one example in three languages
+
+The project lead asked for a README that a first-time reader understands in
+two minutes: what murfulu describes (how words are built, stem and affixes as
+rules), that the description is meant for any language, and what the
+knowledge feeds. **It now opens with one pattern side by side**: *lesen*,
+*lesbar*, *Lesbarkeit*; *read*, *readable*, *readability*; خواندن، خوانا،
+خوانایی. The Persian chain is what the engine builds today (*xān* V-024 *xānā*,
+then V-025 with the glide G-02, *Xānāyi*), and V-024's and V-025's own
+examples (*dānā*, *Dānāyi*, *Tavānāyi*) are the ones the README cites.
+
+- **What it must not claim.** Persian is the only rule pack; German is said
+  to be planned and not to exist; English is an illustration. The uses are
+  said to be mostly unbuilt, with the prototype's first versions named (the
+  reading screen, the Windtelefon run of FINDINGS session 24). Speech: murfulu
+  proposes the readings the grammar allows and does not choose; the README
+  says that a language model read more words right than the reading screen's
+  own model in the first test (FINDINGS 2026-11-22), without the figures.
+- **The *Try it* block is unchanged**, because it is a test
+  (2026-11-07, `tests/test_readme_example.py`); its sentence now says 36, the
+  count the block prints, where the old text said 38.
+- **The AI-use sentence no longer says commits carry a `Co-Authored-By`
+  line.** None of the public history does; the sentence that remains says we
+  use AI assistants and who answers for each change.
+- **Counts brought up to date**: the word bank (58,983 words, karbon 1.3.2,
+  for the 45,600 of the old lexicon) and the tests (more than 4,000, for
+  about 2,900).
+
 ## 2026-11-22 (sixth) — the pish before *ow* stays
 
 The entry below left one point to the project lead: whether *ow* keeps the

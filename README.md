@@ -2,44 +2,138 @@
 
 [![check](https://github.com/pasmod/murfulu/actions/workflows/check.yml/badge.svg)](https://github.com/pasmod/murfulu/actions/workflows/check.yml)
 
-Murfulu generates the words a language *can* form, not only the ones its
-dictionaries already list: it applies word-formation rules to the stems of a
-lexicon and returns each possible word with the rule that built it, a composed
-meaning where the rule carries one, and whether the word occurs in a corpus.
-Today it is a working prototype for **Persian**, with 214 word-formation rules in use.
-The next step is a **language-independent Python library** with an open,
-testable rule format and a checker for rule packs, a **German rule pack** beside
-the Persian one, and the Persian pack as its reference.
+Someone who knows the German verb *lesen*, "to read", understands *lesbar*
+and *Lesbarkeit* the first time they see them. Nobody had to teach them those
+two words. They know the stem *les-*, they know what the suffixes *-bar* and
+*-keit* do, and they put the pieces together.
 
-**Kurz auf Deutsch:** Murfulu erzeugt aus den Wortbildungsregeln einer Sprache
-mögliche Wörter, jedes mit Herleitung, Bedeutung und Beleg im Korpus. Heute
-läuft ein Prototyp für Persisch mit 214 Regeln. Als Nächstes entstehen eine
-sprachunabhängige Python-Bibliothek mit einem offenen, prüfbaren Regelformat
-und einem Prüfwerkzeug sowie ein deutsches Regelpaket mit rund 40 produktiven
-Mustern; das persische Paket dient als Referenz. Der Prototyp läuft hinter
-einem Passwort, weil das Korpus nicht frei weitergegeben werden darf;
-Gutachterinnen und Gutachter erhalten Zugang auf Anfrage. Die Engine selbst lässt sich ohne Lexikon und Korpus in wenigen
-Minuten lokal ausprobieren (Abschnitt *Try it*).
+Murfulu writes that knowledge down as rules. Each rule says what a suffix or
+prefix attaches to, how the pieces join, and what kind of word comes out. The
+rules are data, not code, and an engine applies them. The aim is one
+description that works the same way for any language: the rules change, the
+engine stays.
 
-## What it does
+## One pattern, three languages
 
-One Persian verb, *angixtan* انگیختن «to stir, to rouse», gives 38 words in one
-step, built from its two stems. Four of them:
+| | German | English | Persian | Persian in Latin letters |
+|---|---|---|---|---|
+| the verb | lesen | to read | خواندَن | *xāndan* |
+| it can be read | lesbar | readable | خوانا | *xānā* |
+| how well it can be read | Lesbarkeit | readability | خوانایی | *xānāyi* |
 
-| Built from | Rule | Word |
-|---|---|---|
-| present stem *angiz* | V-022, suffix *-ande* | *angizande* انگیزنده |
-| present stem *angiz* | V-033, suffix *-eš* | *Angizeš* انگیزش |
-| present stem *angiz* | V-034, suffix *-e* | *Angize* انگیزه |
-| past stem *angixt* | V-008, suffix *-e* | *angixte* انگیخته |
+Each language uses its own pieces: German *-bar* and *-keit*, English *-able*
+and *-ity*, Persian *-ā* and *-i*. The build is the same. A stem, one suffix
+that makes an adjective, and a second suffix that turns the adjective into a
+noun.
 
-Some of the 38 are in every dictionary; others are words Persian could form
-and has not used. The rules do not decide which is which: the corpus search
-does, and the linguist judges the rest.
+The pieces do not always just line up. English writes *readabil-* before
+*-ity*. Persian puts a *y* between two vowels, so *xānā* and *-i* become
+*xānāyi*. And Persian builds on the verb's stem, not on the whole verb:
+*xāndan*, "to read", has the stem خوان *xān*, and *-ā* goes on that. These
+details are part of the rules too.
 
-Nothing in the idea is Persian. German *Lichtung* is *lichten* + *-ung*, and a
-German rule for *-ung* would propose the nouns German has not formed yet in the
-same way.
+A dictionary lists the words someone has already written down. Rules also
+cover the words nobody has listed. The Persian *-ā* and *-i* that make
+*xānā* and *xānāyi* also make دانا *dānā* and دانایی *dānāyi*, "knowing" and
+"wisdom", and تَوانا *tavānā* and تَوانایی *tavānāyi*, "able" and "ability".
+Given a Persian stem, Murfulu builds the words its rules allow, each with the
+steps that built it. Some of those words are in every dictionary. Some
+are words Persian could have formed and never used. Many are forms nobody
+would say. The rules say what is possible, a corpus of real texts shows what
+has been used, and a person judges the rest.
+
+## What works today, and what does not
+
+**Persian works today.** The rule pack, version 0.2.0, holds 250 rules
+transcribed from the linguist's grammar of Persian word formation. They run
+on a word bank of 58,983 Persian words from karbon, a companion library, and
+every word the engine builds is looked up in a corpus of classical Persian
+poetry. A web prototype in Persian lets the linguist review the rules and
+what they build.
+
+**German is planned as the second real rule pack.** It does not exist
+yet. **English appears here only to illustrate**: Murfulu has
+no English rules.
+
+**What does not work yet.** The engine was written for Persian. The rules are
+plain data files, but their format still assumes Persian, and a second
+language would need changes in the code. A language-independent core, an
+open rule format and a checker that tests a rule pack are the next step, and
+German is how we will know they work. The engine also builds many forms that
+nobody would say. The corpus holds poetry only, so a modern word can be well
+formed and still be missing from it. And some of the linguist's rulings are
+still open; where we had to choose without one, the choice is marked as
+unconfirmed.
+
+## What this knowledge is good for
+
+Knowing how a word is built helps wherever software meets a word it has not
+seen before. Most of what follows is not built yet; where the Persian
+prototype has a first version, the text says so.
+
+**Reading aloud.** Persian writes its long vowels as letters and leaves the
+short ones out. So کشنده can be کُشَنده *košande*, "deadly", or کِشَنده
+*kešande*, "pulling". A speech synthesizer has to pick one, and a wrong pick
+changes the meaning. Murfulu knows where both come from: the suffix *-ande*,
+"the one that does it", on the stem *koš* of کُشتَن *koštan*, "to kill", or on
+the stem *keš* of کِشیدَن *kešidan*, "to pull". So it can propose the readings
+the grammar allows. It does not choose between them; the sentence around the
+word does, or a model that reads the sentence. This matters most for rare and
+new words: a dictionary does not list them, and a model has seen them seldom
+or never. Murfulu is not a better vowel-adder than a large language model: in
+a first test of our own, a language model read more words right than the
+prototype's own reader did. What Murfulu adds is the list of readings the
+grammar allows. The prototype has a reading screen that shows a Persian text
+with a Latin reading under every word.
+
+**Spelling.** A spell checker that knows the rules can accept a well-formed
+word it has never seen, instead of marking every new word as an error. In
+Persian it can also place the half-space, the zero-width non-joiner that
+keeps two parts of a word apart without a full space, as in هَم‌خوانی
+*hamxāni*, "agreement". Whether one belongs depends on where one part ends
+and the next begins, and that is what the rules know.
+
+**Search by word family.** A search for *xāndan* could also find خوانَنده
+*xānande*, "reader" or "singer", خوانِش *xāneš*, "reading", and *xānāyi*,
+because each carries the stem *xān*. A search that only cuts off letters would
+also find خوان *xān*, "a laid table", a different word with the same letters.
+
+**New terms.** When a field needs a word its language does not have yet, the
+rules can propose candidates built from the language's own pieces, each with
+its meaning spelled out from those pieces. The prototype has a first version.
+Asked for a Persian word for the German *Windtelefon*, a phone booth where
+people speak to the dead through the wind, it built بادگو *bādgu*,
+"wind-speaker", with the rule that makes سُخَنگو *soxangu*, "spokesperson".
+It is a candidate for the linguist, not a decision. The most obvious
+candidate, بادگاه *bādgāh*, "wind-place", turned out to be an old word for a
+toilet. The rules cannot know that; the dictionary does, and someone has to
+read it. Carrying a term from one language into another works the same way:
+split it into its pieces, give each piece a meaning, and look for words with
+the same build on the other side.
+
+**Other scripts.** Persian is written in Arabic script in Iran and
+Afghanistan, in Cyrillic in Tajikistan, and often in Latin letters. Moving
+between them needs the vowels that Arabic script leaves out and the borders
+between the parts of a word. karbon already turns Persian script into
+Behnevis, the linguist's Latin script. Tajik Cyrillic is not built.
+
+**Learning.** A learner can see a new word as pieces they already know rather
+than one more word to memorise. Children learning Persian abroad could put
+pieces together and see whether Persian would accept the result.
+
+## Kurz auf Deutsch
+
+Murfulu beschreibt, wie Wörter gebaut werden: ein Stamm und Affixe, als Regeln
+in Datendateien statt im Code. Wer weiß, wie *lesen*, *lesbar* und
+*Lesbarkeit* zusammenhängen, kann auch Wörter verstehen, die in keinem
+Wörterbuch stehen. Heute funktioniert Persisch: 250 Regeln aus der Grammatik
+unseres Linguisten, ein Wortbestand von 58.983 Wörtern und ein Korpus
+klassischer Dichtung. Deutsch ist als zweites echtes Regelpaket geplant und
+existiert noch nicht; Englisch steht hier nur zur Veranschaulichung. Das
+Wissen über den Bau von Wörtern hilft Sprachsynthese, Rechtschreibprüfung,
+Suche, Begriffsbildung, Schriftumwandlung und Lernwerkzeugen. Der Prototyp
+läuft hinter einem Passwort, weil das Korpus nicht frei weitergegeben werden
+darf; Zugang gibt es auf Anfrage.
 
 ## Try it
 
@@ -62,43 +156,46 @@ for word in words[:5]:
     print(word.shortest_path[-1].rule_id, word.latin, word.fa)
 ```
 
+The two stems of انگیختن *angixtan*, "to stir, to rouse", give 36 words in
+one step. Four of them:
+
+| Built from | Rule | Word |
+|---|---|---|
+| present stem *angiz* | V-022, suffix *-ande* | *angizande* انگیزنده |
+| present stem *angiz* | V-033, suffix *-eš* | *Angizeš* انگیزش |
+| present stem *angiz* | V-034, suffix *-e* | *Angize* انگیزه |
+| past stem *angixt* | V-008, suffix *-e* | *angixte* انگیخته |
+
 Each result keeps its derivation path: the rule, the base it was applied to,
 and the join between them. The lexicon and the corpus add the rest, meaning
-and attestation.
+and attestation. The capitals are Behnevis: like German, it writes nouns with
+a capital letter.
 
-**The running prototype** is in Persian and behind a password. The password is there because of the corpus, not the code:
-the site shows Ganjoor's poetry verse by verse, and that corpus may not be
-passed on (see *Licence*). Reviewers get access on request from the project
-lead. Without it, [WALKTHROUGH_RAFTAN.md](docs/WALKTHROUGH_RAFTAN.md) follows
-one verb through the whole system step by step, from input to presentation.
+**The running prototype** is in Persian and behind a password. The password is
+there because of the corpus, not the code: the site shows Ganjoor's poetry
+verse by verse, and that corpus may not be passed on (see *Licence*).
+Reviewers get access on request from the project lead. Without it,
+[WALKTHROUGH_RAFTAN.md](docs/WALKTHROUGH_RAFTAN.md) follows one verb through
+the whole system step by step, from input to presentation.
 
-## Where it stands, and where it is going
-
-| | Today (Persian prototype) | Next |
-|---|---|---|
-| Core | an engine written for Persian; a second language would need code changes | a language-independent Python library, published on PyPI |
-| Rules | 241 Persian word-formation rules, 214 of them in use (plus 17 glide and 9 stem rules) as YAML in [`rules/`](rules), in a Persian-specific schema | an open rule format: each rule with a fixed id, a condition, a change of form, a meaning and its own test cases; a checker validates a pack against the schema and runs its tests, so linguists can write rules without touching the core |
-| Languages | Persian | a German pack with about 40 productive patterns, checked against the ~10,000 German Wikidata lexemes (CC0) that record how they are formed; the Persian pack moved into the new format as the reference |
-| Use case | — | carrying a term into another language: split it into its parts, give each part a meaning, and look for words with the same structure on the other side |
-
-The Persian prototype runs end to end: rule pack, engine, lexicon wrapper,
-corpus pipeline, HTTP API, and a web app in Persian in which the linguist
-reviews rules and results. The **Next** column is planned work, not yet built.
-
-## How it works today
+## How it works inside
 
 - **Three inputs:** a rule pack ([`rules/`](rules)), a lexicon, and a corpus.
   The core never assumes more than those three.
+- **The rule pack** is YAML, built by a script from a transcription of the
+  linguist's grammar: 241 rules that build words and 9 that find a verb's
+  stems, 223 of them in use, plus 17 rules for how two pieces join. The
+  schema is in [RULE_PACK.md](docs/RULE_PACK.md).
 - **Persian is handled in Latin script.** Arabic script leaves out the short
   vowels, which word formation depends on, so Murfulu works on the Behnevis
   transliteration and never on raw Arabic script.
 - **karbon** is the companion project that supplies the Latin forms, the stems
-  and the lexicon: Persian script to Latin phonemic form, a lexicon derived
-  from Dehkhoda's dictionary (about 45,600 entries, most of them reviewed),
-  and stem extraction. Murfulu reads its lexicon read-only and never edits it; faults
-  found here go to karbon as issues ([docs/UPSTREAM.md](docs/UPSTREAM.md)).
+  and the lexicon: Persian script to Latin phonemic form, the linguist's word
+  bank of 58,983 words built from Dehkhoda's dictionary (karbon 1.3.2), and
+  stem extraction. Murfulu reads its lexicon read-only and never edits it;
+  faults found here go to karbon as issues ([docs/UPSTREAM.md](docs/UPSTREAM.md)).
 - **The corpus** is classical Persian poetry from Ganjoor, indexed in
-  Elasticsearch. It is not part of this repository (see Licence).
+  Elasticsearch. It is not part of this repository (see *Licence*).
 - **Stack:** Python 3.11, FastAPI, PostgreSQL, Elasticsearch, a React web app,
   Docker.
 
@@ -150,9 +247,8 @@ by role:
 ## How we work
 
 - **We use AI coding assistants** to draft code, tests and documentation, and
-  we say so: commits made with one carry a `Co-Authored-By` line, and we leave
-  it in. A team member decides what each change does, reads the diff, runs the
-  tests and is responsible for what is committed.
+  we say so here. A team member decides what each change does, reads the
+  diff, runs the tests and is responsible for what is committed.
 - **Linguistic decisions are never left to a tool.** The rule pack is
   transcribed from the linguist's grammar and built from that transcription by
   a script; a ruling goes into `rules/decisions.yaml`, and a test fails if the
@@ -161,8 +257,8 @@ by role:
   [docs/FOR_THE_LINGUIST.md](docs/FOR_THE_LINGUIST.md) and the provisional
   choice is marked as unconfirmed.
 - **Every push is checked** in CI ([`.github/workflows/check.yml`](.github/workflows/check.yml)):
-  ruff, strict mypy, about 2,900 tests, the web app's lint, types, tests and
-  browser layout tests, and the tests again inside the container image.
+  ruff, strict mypy, more than 4,000 tests, the web app's lint, types, tests
+  and browser layout tests, and the tests again inside the container image.
 - **Nothing private reaches the repository.** A pre-commit hook
   ([`tools/public_check.py`](tools/public_check.py), installed with
   `make hooks`) refuses a commit that would publish a credential, a server's
